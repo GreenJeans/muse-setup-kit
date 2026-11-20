@@ -9,8 +9,8 @@ A personal agent's memory is a compiled wiki: raw material (conversations,
 logs, documents) is distilled into pages the agent actually loads. Compilation
 drifts. Pages accumulate stale claims stated in the present tense, figures
 copied from other summaries, and contradictions nobody noticed. This module
-is the discipline that keeps the compiled layer honest — distilled from a
-schema that survived a blind dual review by two frontier models.
+is the discipline that keeps the compiled layer honest, distilled from a
+schema in daily use in a working installation.
 
 ## The five ideas
 
@@ -33,7 +33,11 @@ schema that survived a blind dual review by two frontier models.
    candidates. A mind decides each one.
 5. **Fidelity is sampled, not assumed.** Weekly, pick a few compiled claims
    at random and check them against their sources. Keep one known
-   discrepancy as a standing test case: if your process can't catch the
+   discrepancy as a standing test case — planted in a dedicated test page
+   that is *excluded from the memory the agent loads*, and recorded only in
+   `memory/fidelity-test-log.md`. Never plant a false claim in a live
+   page: the test exists to check the sampler, and a sampler that reads
+   live pages would be trained on a lie. If the process can't catch the
    planted one, it isn't catching real ones either.
 
 ## Layout (adapt to your platform's conventions)
@@ -47,25 +51,28 @@ schema that survived a blind dual review by two frontier models.
 ## Install
 
 1. Copy `SCHEMA.template.md` to your memory workspace as `SCHEMA.md`.
-2. Stamp existing compiled pages with the header (schema version,
-   last_verified, sources). Pages without a stamp are legacy; migrate the
-   most-loaded ones first.
-3. Create the linter: start with three checks — (a) every compiled page
-   carries a header, (b) no live bullet contains a figure without a source
-   or verify pointer, (c) names of scheduled jobs mentioned in procedures
-   exist in the live scheduler. Keep it read-only; it writes only its
-   report. Schedule it weekly.
-4. Plant one fidelity test case (a known, harmless discrepancy between a
-   compiled page and its source, labeled in the test log only) and confirm
-   the weekly sample process is capable of finding that class of error.
+2. **Fresh install (interview Q5a):** create the store —
+   `memory/MEMORY.md` from `MEMORY.template.md`, a `memory/logs/` folder
+   for dated daily logs, and `memory/people/` + `memory/groups/` folders
+   with an `INDEX.md` in each. **Migrating (Q5b):** stamp existing
+   compiled pages with the header (schema version, last_verified,
+   sources) instead; pages without a stamp are legacy, and the
+   most-loaded ones migrate first.
+3. Install the reference linter (`tools/memory_lint.py` in this module —
+   adapt its paths): it runs three checks — (a) every compiled page
+   carries a provenance header, (b) live bullets containing figures carry
+   a source or `(verify: ...)` pointer, (c) job names in the procedures
+   exist in `JOBS.md`, the scheduler-of-record the wizard maintains. It
+   is read-only and writes only its report; every report opens with a
+   run receipt (timestamp, files scanned, checks run, findings count).
+   Schedule it weekly and record the job in `JOBS.md`.
+4. Create `memory/fidelity-test-log.md`; plant one fidelity test case in
+   a dedicated test page excluded from loaded memory (a harmless
+   discrepancy between the test page and its cited source), record the
+   true value in the test log, and confirm the weekly sample process
+   finds it.
 
 ## Verify
 
-- Change one fact in a daily log's domain (e.g. correct a date with the
-  user) and watch the compiled page: live bullet rewritten, old claim in
-  Superseded with date and source.
-- Run the linter; it produces a report with a run receipt, and modifies
-  nothing.
-- Ask the agent for an exact figure that lives only in a compiled page
-  without a verify pointer. It should go to the source or say it can't
-  verify — not recite the compiled number.
+See `VERIFY.md` in this module's folder for the checks, split into
+at-install and deferred.

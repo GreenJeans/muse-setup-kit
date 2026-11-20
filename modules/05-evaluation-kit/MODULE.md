@@ -27,7 +27,11 @@ whose findings the user adopts or rejects one by one.
    different models (the Exchange, module 04, is the natural channel) —
    get the identical packet and brief: find contradictions, stale
    references, gates that don't bind, rules the documents claim but the
-   machinery doesn't implement. Neither sees the other's work.
+   machinery doesn't implement. Neither sees the other's work. *Degraded
+   mode:* with only one reviewer available (no second model, no
+   Exchange), run a single blind review and record the audit as
+   single-reviewer in the adoption record — the convergence signal is
+   lost, and the user should know the audit was weaker.
 4. **Ingest and adjudicate.** The maintainer compares the reviews against
    the *live* system (some findings will be artifacts of the packet —
    export mangling, stale copies; verify before crediting). Convergent
@@ -55,7 +59,5 @@ never runs one inside the brief.
 
 ## Verify
 
-- One completed audit exists: packet, two blind outputs, an ingest record
-  with disputes, and an adoption record signed off by the user.
-- The canary was caught by at least one reviewer — or the miss is recorded
-  and the reviewer brief improved.
+See `VERIFY.md` in this module's folder for the checks, split into
+at-install and deferred.

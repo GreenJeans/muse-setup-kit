@@ -8,13 +8,25 @@
 - Scrub pass: no instance data anywhere (grep-verified against a denylist
   kept *outside* this repo).
 
-## Phase 2 — hardening
+## Phase 2 — hardening (completed 2026-11-20)
 
-- Dry run: execute the wizard in a fresh session with no memory loaded and
-  confirm it produces a coherent setup from zero. Fix what it trips on.
-- Fill remaining template gaps found by the dry run.
-- Add a `VERIFY.md` per module: the checks an installer runs to prove the
-  module works (the kit's own "done means verified" rule, applied to itself).
+- Dry run executed: a fresh, memory-free agent persona (solo user, no
+  second person, no host, no other agents) ran the wizard end to end into
+  a sandbox. Gating was correct (household-hq, ai-exchange, and
+  infra-patterns withheld), the leak check passed, and the run produced
+  16 friction findings (3 high, 5 medium, 8 low), all fixed in this
+  phase: module 06 gained an Install section and a vetting-log template;
+  module 01 gained a fresh-store install path, a memory template, and a
+  shipped reference linter; verification is now split at-install vs.
+  deferred with a ledger in the plan; the procedures template gained a
+  Local configuration section; the brief template marks conditional
+  blocks; the wizard gained a capability→token mapping, a workstreams
+  question, and degraded-mode offers; the fidelity plant now lives on an
+  excluded test page, reconciling it with the schema's truthfulness rule.
+- `VERIFY.md` added per module: at-install and deferred checks (the kit's
+  own "done means verified" rule, applied to itself).
+- Still open: a second dry run with a different persona (a two-person
+  household) to exercise modules 03–04 before publication.
 
 ## Phase 3 — publication (separate decision)
 

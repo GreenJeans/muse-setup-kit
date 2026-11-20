@@ -66,7 +66,5 @@ is a rumor, and a monitor that can fail silently will.
 
 ## Verify
 
-- Verify pass reports OK with an integrity pass per guest.
-- A restore from the offsite layer reproduces a file byte-identically.
-- Kill a watched service: an alert arrives; restart it: a recovery note
-  follows, and no repeat alerts fire.
+See `VERIFY.md` in this module's folder for the checks, split into
+at-install and deferred.

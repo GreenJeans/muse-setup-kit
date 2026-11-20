@@ -8,17 +8,22 @@ tight: the user reads this in two minutes. Failures first, always.
 - Decision queue: <path>
 - Calendar: today and tomorrow
 - Mailbox: since the last brief
-- Task lists: <shared and personal lists>
-- Watches: <each watch's state file / last run record>
+- [IF a task app is connected] Task lists: <shared and personal lists>
+- [IF watches exist] Watches: <each watch's state file / last run record>
 - Memory: yesterday's daily log; the reconciliation rotation file
+
+Blocks marked [IF ...] are conditional: include them only when the
+condition holds for this install, and drop them silently when it doesn't.
+A section whose sources don't exist is omitted — never reported as clear.
 
 ## Steps
 
 0. **Failures.** (a) Jobs that owed output in the last 24h and produced
    none. (b) Sources above that could not be read — name them; do not
    report their sections as clear. (c) Watch anomalies and detector
-   silence: any watch with no run record 48h past its cadence. (d) Past-due
-   shared tasks (from the third consecutive flag, fold to a count).
+   silence: any watch with no run record 48h past its cadence.
+   (d) [IF shared lists exist] Past-due shared tasks (from the third
+   consecutive flag, fold to a count).
 1. **Watch findings.** Anything flagged since the last brief.
 2. **Decision queue.** Print new, resurfacing, and firing-default items in
    full; count the rest. Never invent a default for an item; defaults are

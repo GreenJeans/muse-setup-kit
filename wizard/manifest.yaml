@@ -30,7 +30,8 @@ modules:
     title: Morning Brief & Inbox Triage
     pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules, and silent-by-design watches.
     depends_on: [core-procedures]
-    requires: [scheduling]
+    requires: []
+    degrades_without: [scheduling]   # installs as an on-demand brief instead
     reads: "Calendar, mailbox, task lists, watch outputs (whatever you connect)."
     writes: "One brief message per day; draft replies only with approval."
     network: "Your connected accounts only."
@@ -42,7 +43,7 @@ modules:
     pitch: Two people, two agents, one shared coordination system — shared task layer, shared memory layer, a notebook protocol, and a principles doc.
     depends_on: [core-procedures]
     requires: [second-person, shared-docs, shared-tasks]
-    reads: "The shared surfaces both households members agree to."
+    reads: "The shared surfaces both household members agree to."
     writes: "Shared lists, a shared notebook doc, a shared ops sheet."
     network: "Your shared accounts only."
     jobs: "A change-detector on the shared surfaces (optional)."
@@ -64,6 +65,7 @@ modules:
     pitch: Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.
     depends_on: [core-procedures, memory-architecture]
     requires: []
+    degrades_without: [other-agents]   # single-reviewer mode; say so when offering
     reads: "Your procedures and memory (frozen into an audit packet)."
     writes: "Audit packets, findings, adoption records."
     network: "A second model/agent if you use one for blind review."
@@ -78,7 +80,7 @@ modules:
     reads: "Anything you are about to install, at a pinned version, in full."
     writes: "Vetting records; standing-rule additions."
     network: "Only the source of what you are vetting."
-    jobs: "Monthly standing-grants inventory (with the brief)."
+    jobs: "Monthly standing-grants inventory — rides the morning brief if installed, otherwise its own monthly job."
 
   - id: infra-patterns
     dir: modules/07-infra-patterns

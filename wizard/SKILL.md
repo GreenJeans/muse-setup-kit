@@ -30,8 +30,13 @@ and approved.**
    them only from what the user tells you in this setup. Never carry over
    any example content as if it were the user's data.
 7. **Verify each module after installing it**, using the checks in its
-   `MODULE.md`, and report the result before moving on. "Installed" means
-   verified, not written.
+   `VERIFY.md`, and report the result before moving on. Checks split into
+   *at-install* and *deferred*: a check that needs live operation (a
+   scheduled brief arriving, a fresh session, days of data) is recorded in
+   the plan's verification ledger as DEFERRED with a due date, and the
+   brief (or a follow-up) surfaces it when due. "Installed" means every
+   at-install check passed and every deferred check is ledgered — never
+   that a check was skipped silently.
 
 ## Step 1 — Capability check
 
@@ -44,6 +49,20 @@ the answers for the gating step:
 - Does the user have a host they control (a home server, a VPS)?
 - Is this setup for one person, or will a second person with their own
   Muse participate?
+- Does the user work with other AI agents (other vendors' models, coding
+  agents) they might exchange work with?
+
+Map the answers to the manifest's requirement tokens:
+
+| Capability answer | Token |
+|---|---|
+| Scheduling available | `scheduling` |
+| A second participating person | `second-person` |
+| Shared documents (e.g. Drive) | `shared-docs` |
+| A shared task app | `shared-tasks` |
+| Shared cloud storage | `shared-storage` |
+| Other agents in use | `other-agents` |
+| A host the user controls | `own-host` |
 
 Do not guess: if you cannot check a capability, ask.
 
@@ -59,7 +78,12 @@ user's answers verbatim in the plan.
    (send/buy/book/file/delete) need my approval each time — *the kit's
    recommended default, implemented by the ticket rule.* (c) Broad autonomy
    with after-the-fact reporting. *(If they pick (c), explain what the
-   ticket rule protects against and confirm they mean it.)*
+   ticket rule protects against and confirm they mean it.)* The answer
+   changes the installed procedures: (b) installs §2 as written; (a)
+   additionally requires tickets for drafts and internal writes the user
+   names; (c) replaces pre-approval with a same-day reporting duty for
+   the classes the user names, and the plan records that deviation in
+   the user's words. Module 00's Install step applies the variant.
 3. **Daily rhythm?** (a) A morning brief. (b) A morning brief plus inbox
    triage during the day. (c) No routine messages; on-demand only.
 4. **Other AI agents?** Do you use other AI assistants (other vendors'
@@ -70,6 +94,11 @@ user's answers verbatim in the plan.
    existing memory files into the schema. (c) Leave my memory alone.
 6. **Infrastructure:** (a) I have a host/server I control and want backup
    and health patterns. (b) Cloud only, skip infra. (c) Later.
+7. **Existing work:** Name any ongoing workstreams or projects the agent
+   should treat as separate topics (each gets a SCOPE.md), and point to
+   the file the agent reads as its main instructions, if one exists. If
+   none exists, the install creates one (`INSTRUCTIONS.md`) and module 00
+   adds the procedures pointer to it.
 
 ## Step 3 — Module selection
 
@@ -83,6 +112,10 @@ From `manifest.yaml`, compute the offerable set:
   on-demand brief instead of a scheduled one; no second person →
   household-hq is not offerable; no shared storage or no other agents →
   ai-exchange is not offerable; no host → infra-patterns is not offerable.
+- If a module's manifest entry lists `degrades_without` and the user lacks
+  that capability, offer the module in its degraded mode and say plainly
+  what won't work (for example: evaluation-kit without other agents runs
+  single-reviewer; the morning brief without scheduling runs on demand).
 - Present the offerable modules as a checklist with their one-line pitches
   and disclosures. The user picks: all, none-but-core, or by number.
 
@@ -109,9 +142,13 @@ For each module:
 
 1. Re-read its `MODULE.md` install section.
 2. Copy/adapt its templates, filling placeholders from the approved plan.
-3. Create its scheduled jobs with the cadences the user chose.
-4. Run its verification checks. If a check fails, stop, report, and ask —
-   do not improvise a fix that changes the plan.
+3. Create its scheduled jobs with the cadences the user chose, and record
+   each one in `JOBS.md` at the workspace root (name, cadence, what it
+   owes, where it delivers). `JOBS.md` is the kit's scheduler-of-record:
+   the brief's detector-silence check and the memory linter read it.
+4. Run its `VERIFY.md` at-install checks. If a check fails, stop, report,
+   and ask — do not improvise a fix that changes the plan. Ledger every
+   deferred check in `SETUP-PLAN.md` with its due date.
 5. Log the module, its source commit, and the verification result in
    `SETUP-PLAN.md`.
 

@@ -47,6 +47,18 @@
 ## The linter (deterministic, read-only)
 
 Minimum checks: header presence; figures without pointers in live
-sections; scheduled-job names in procedure documents vs. the live
-scheduler; review-by dates passed. Every run writes a report and a run
-receipt; a run that produces no report is a failure, not a pass.
+sections; scheduled-job names in procedure documents vs. `JOBS.md` (the
+scheduler-of-record the wizard maintains); review-by dates passed. A
+reference implementation ships with this module
+(`tools/memory_lint.py`). Every run writes a report that opens with a
+run receipt — timestamp, files scanned, checks run, findings count —
+and a run that produces no report is a failure, not a pass. Findings are
+candidates for a mind to adjudicate, never auto-fixes.
+
+## The fidelity test case
+
+One planted discrepancy is kept as a standing test of the weekly sample:
+it lives on a dedicated test page that is excluded from the memory the
+agent loads, and its true value is recorded in
+`memory/fidelity-test-log.md`. It is never planted in a live page — live
+sections state only what is true now (rules 1–2 admit no exceptions).

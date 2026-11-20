@@ -71,9 +71,5 @@ only thing worth a message.
 
 ## Verify
 
-- First brief arrives at the chosen time, failures section first, queue
-  items numbered.
-- Send a test message from a VIP address with a question: it interrupts.
-  A newsletter does not.
-- Disable a watch for two days (tell the user first): the brief flags the
-  detector silence.
+See `VERIFY.md` in this module's folder for the checks, split into
+at-install and deferred.

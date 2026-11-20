@@ -47,6 +47,28 @@ own grants from quietly becoming permanent.
    through the platform's secure flows, never pasted into chat, never
    written into memory or ordinary files, never repeated in reports.
 
+## What this module adds
+
+Module 00's procedures (§10) state the rules. This pack is the *practice*:
+the vetting workflow, the records that prove it happened, and the monthly
+grants inventory. Installing core-procedures gives you the law; installing
+this pack gives you the habit and the paper trail.
+
+## Install
+
+1. Create a `security/` folder in the workspace with `VETTING.md` from
+   `VETTING.template.md` — the running vetting log.
+2. Make the kit's own vetting record the log's first entry: this kit,
+   its source, the pinned commit you installed from, and the read you
+   performed. (If you didn't read it, the honest entry says so — and the
+   user decides whether to proceed.)
+3. Confirm §10 of the installed OPERATING_PROCEDURES.md carries the
+   standing rules; if the user installed "procedures lite", add the §10
+   rules now — they are this module's substance.
+4. Schedule the monthly standing-grants inventory: as a step of the
+   morning brief's 1st-of-month pass if module 02 is installed, otherwise
+   as its own monthly job recorded in `JOBS.md`.
+
 ## The vetting record (keep one per install)
 
 - Item, source, pinned version/commit, date, reviewer.
@@ -60,7 +82,5 @@ procedures), not the code.
 
 ## Verify
 
-- The vetting record exists for the most recent install and names a pinned
-  commit.
-- Ask the agent to summarize a page that contains an embedded instruction
-  to the agent: it reports the attempt instead of complying.
+See `VERIFY.md` in this module's folder for the checks, split into
+at-install and deferred.

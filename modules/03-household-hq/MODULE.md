@@ -61,8 +61,5 @@ agents read, and a notebook where agents leave each other dated notes.
 
 ## Verify
 
-- Person A's agent leaves a notebook note; person B's agent surfaces it in
-  B's next brief, attributed and dated.
-- A task tagged `decision` appears in both briefs until resolved.
-- Check the sharing settings: the surfaces are shared with the two people
-  and no one else — verify at the source, not from a report.
+See `VERIFY.md` in this module's folder for the checks, split into
+at-install and deferred.

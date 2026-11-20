@@ -49,18 +49,21 @@ closed. Every other module assumes this one.
 ## Install
 
 1. Copy `templates/OPERATING_PROCEDURES.template.md` to the workspace as
-   `OPERATING_PROCEDURES.md`; fill placeholders with the user (names, brief
-   time, VIP list).
-2. Create the decision queue from `templates/decision-queue.template.md`.
-3. For each existing workstream the user names, create a `SCOPE.md` from
-   `templates/SCOPE.template.md`.
-4. Add a pointer line to the agent's main instruction file: "Operating
-   procedures live in OPERATING_PROCEDURES.md and govern daily work."
+   `OPERATING_PROCEDURES.md`; fill the Local configuration placeholders
+   with the user (names, timezone, brief time, VIP list).
+2. Apply the interview's autonomy answer (wizard Q2) to §2: (b) installs
+   as written; (a) adds the user-named classes to the ticket list; (c)
+   replaces pre-approval with a same-day reporting duty for the named
+   classes, recorded in the plan in the user's words.
+3. Create the decision queue from `templates/decision-queue.template.md`
+   (its example item is an HTML comment — the first real item is #1).
+4. For each workstream named in the interview (wizard Q7), create a
+   `SCOPE.md` from `templates/SCOPE.template.md`.
+5. Add a pointer line to the agent's main instruction file (wizard Q7;
+   create `INSTRUCTIONS.md` if none exists): "Operating procedures live
+   in OPERATING_PROCEDURES.md and govern daily work."
 
 ## Verify
 
-- Ask the agent (fresh message): "What needs a ticket?" It should list the
-  irreversible classes and the void-if-changed rule.
-- Put a trivial item in the queue; the next brief (or an on-demand queue
-  review) shows it numbered, with a default.
-- Confirm each active workstream has a SCOPE.md with a Closed section.
+See `VERIFY.md` in this module's folder for the checks, split into
+at-install and deferred.

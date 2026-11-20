@@ -24,7 +24,8 @@ Every working setup has two layers:
 Rule for contributors and adapters: if a file would embarrass or endanger the
 original user when published, it is instance data, whatever its format.
 Templates ship with `<PLACEHOLDERS>`, never with filled-in examples drawn
-from a real life. Worked examples are invented and obviously so.
+from a real life. Where worked examples are included, they are invented
+and obviously so.
 
 ## The defensive-wizard principle
 

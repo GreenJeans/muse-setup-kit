@@ -74,7 +74,5 @@ confident errors.
 
 ## Verify
 
-- Canary outputs exist in each outbox, written by the right agent.
-- Sharing audit: every folder's sharing matches the protocol (participants
-  see their own inbox/outbox and Published; nothing else).
-- A completed task's queue row shows provenance and where it was ingested.
+See `VERIFY.md` in this module's folder for the checks, split into
+at-install and deferred.

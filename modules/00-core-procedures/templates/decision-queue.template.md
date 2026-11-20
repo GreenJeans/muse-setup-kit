@@ -16,10 +16,14 @@ move it to Resolved below and keep its number.
 
 ## Open
 
-1. **<Short title>** — <context in one or two lines>
+<!-- Item shape (delete this comment once the first real item lands;
+     numbering starts at 1 with the first real item):
+
+N. **<Short title>** — <context in one or two lines>
    Decision: <the exact question>
    Default if no reply: <low-stakes default>, resurface <YYYY-MM-DD>.
    Smallest ask: "<the one-line reply that settles it>"
+-->
 
 ## Resolved
 
