@@ -1,0 +1,10 @@
+.DS_Store
+*.local
+.env
+*credentials*
+*secret*
+*.key
+*.pem
+# Instance data never belongs in this repo. If you adapt the kit, keep your
+# filled-in copies somewhere else.
+instance/

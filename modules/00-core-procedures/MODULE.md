@@ -1,0 +1,66 @@
+# Module 00 — Core Procedures
+
+**Reads:** your existing agent instructions and workspace layout.
+**Writes:** an operating-procedures file, a decision queue, SCOPE notes.
+**Network:** none. **Jobs:** none.
+
+## Purpose
+
+Give the agent a constitution: what it may do on its own, what needs a
+ticket, how decisions are batched, how it knows a fact, what it does when
+reality doesn't match the record, and how workstreams are opened and
+closed. Every other module assumes this one.
+
+## Concepts
+
+- **One home per topic.** Each workstream lives in exactly one place (a
+  chat, a workspace folder) with a `SCOPE.md`: what it owns, what it must
+  never do, what done looks like, its source of truth, and a Closed list of
+  things already tried and rejected — so dead ends stay dead.
+- **The ticket rule.** Reversible work inside scope is pre-authorized:
+  finish it, don't re-ask. Irreversible or externally visible actions —
+  sends, purchases, bookings, filings, cancellations, deletions,
+  submissions — need a *ticket*: the exact action, the exact total, the
+  exact fallback, and a content-exclusion list for messages, approved by the
+  user in the topic's home. A ticket authorizes exactly one execution and
+  is void if any detail changes.
+- **The decision queue.** Non-urgent decisions go into a numbered queue
+  file. The user clears them by number in one reply ("3: yes, 7: park").
+  An item may print a low-stakes default; silence is consent only to that
+  printed default, never to an irreversible action. Time-sensitive,
+  security, money-deadline, and key-person items bypass the queue and
+  interrupt.
+- **Ground truth.** Every fact has an address. Claims come from the live
+  source or the original record; summaries are locators only. Anything the
+  agent will act on is re-read at the original in the same session, or it
+  stays marked unverified. In document work: quote ambiguous passages
+  verbatim, and mark unread sections "not verified", never summarized.
+- **Abort on mismatch.** Unexpected state from a live system — a wrong
+  account, an unfamiliar screen, a balance that doesn't match — means stop
+  and report, not improvisation. Before acting inside a signed-in system,
+  canary-check whose session it is.
+- **Room close-out.** When a workstream ends, audit its outstanding work,
+  complete it or re-home it, repoint or retire its machinery, sync drifted
+  copies, report once, then archive. Nothing open may live only in a
+  transcript.
+- **Done means verified.** Completion is checked against live state or the
+  original record, never accepted from a worker's report alone.
+
+## Install
+
+1. Copy `templates/OPERATING_PROCEDURES.template.md` to the workspace as
+   `OPERATING_PROCEDURES.md`; fill placeholders with the user (names, brief
+   time, VIP list).
+2. Create the decision queue from `templates/decision-queue.template.md`.
+3. For each existing workstream the user names, create a `SCOPE.md` from
+   `templates/SCOPE.template.md`.
+4. Add a pointer line to the agent's main instruction file: "Operating
+   procedures live in OPERATING_PROCEDURES.md and govern daily work."
+
+## Verify
+
+- Ask the agent (fresh message): "What needs a ticket?" It should list the
+  irreversible classes and the void-if-changed rule.
+- Put a trivial item in the queue; the next brief (or an on-demand queue
+  review) shows it numbered, with a default.
+- Confirm each active workstream has a SCOPE.md with a Closed section.

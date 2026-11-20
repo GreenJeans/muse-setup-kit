@@ -1,0 +1,92 @@
+# Module manifest — the wizard reads this to drive the interview.
+# Each module: id, title, one-line pitch, dependencies, capability gates,
+# and the disclosure the wizard shows before installing.
+version: 1
+modules:
+  - id: core-procedures
+    dir: modules/00-core-procedures
+    title: Core Procedures
+    pitch: Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules.
+    depends_on: []
+    requires: []
+    reads: "Your existing agent instructions and workspace layout (to merge, not overwrite)."
+    writes: "An OPERATING_PROCEDURES.md, a decision queue file, SCOPE.md files per workstream."
+    network: none
+    jobs: none
+
+  - id: memory-architecture
+    dir: modules/01-memory-architecture
+    title: Memory Architecture
+    pitch: Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.
+    depends_on: [core-procedures]
+    requires: []
+    reads: "Your memory files."
+    writes: "A SCHEMA.md, header stamps on memory files, a linter script and its reports."
+    network: none
+    jobs: "One weekly linter run."
+
+  - id: morning-brief
+    dir: modules/02-morning-brief
+    title: Morning Brief & Inbox Triage
+    pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules, and silent-by-design watches.
+    depends_on: [core-procedures]
+    requires: [scheduling]
+    reads: "Calendar, mailbox, task lists, watch outputs (whatever you connect)."
+    writes: "One brief message per day; draft replies only with approval."
+    network: "Your connected accounts only."
+    jobs: "One daily brief; optional 30-minute inbox triage scan."
+
+  - id: household-hq
+    dir: modules/03-household-hq
+    title: Household HQ
+    pitch: Two people, two agents, one shared coordination system — shared task layer, shared memory layer, a notebook protocol, and a principles doc.
+    depends_on: [core-procedures]
+    requires: [second-person, shared-docs, shared-tasks]
+    reads: "The shared surfaces both households members agree to."
+    writes: "Shared lists, a shared notebook doc, a shared ops sheet."
+    network: "Your shared accounts only."
+    jobs: "A change-detector on the shared surfaces (optional)."
+
+  - id: ai-exchange
+    dir: modules/04-ai-exchange
+    title: AI Exchange
+    pitch: Multiple AI agents exchanging work through shared storage — protocol, queue, blind reviews, published pages, ingest discipline.
+    depends_on: [core-procedures, memory-architecture]
+    requires: [shared-storage, other-agents]
+    reads: "The exchange folders and queue."
+    writes: "Exchange protocol doc, queue sheet, per-agent inboxes/outboxes, published pages."
+    network: "Your cloud storage only."
+    jobs: "Optional outbox polling during the brief."
+
+  - id: evaluation-kit
+    dir: modules/05-evaluation-kit
+    title: Evaluation Kit
+    pitch: Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.
+    depends_on: [core-procedures, memory-architecture]
+    requires: []
+    reads: "Your procedures and memory (frozen into an audit packet)."
+    writes: "Audit packets, findings, adoption records."
+    network: "A second model/agent if you use one for blind review."
+    jobs: "Monthly (while churning) or quarterly audit reminder."
+
+  - id: security-pack
+    dir: modules/06-security-pack
+    title: Security Pack
+    pitch: Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share.
+    depends_on: [core-procedures]
+    requires: []
+    reads: "Anything you are about to install, at a pinned version, in full."
+    writes: "Vetting records; standing-rule additions."
+    network: "Only the source of what you are vetting."
+    jobs: "Monthly standing-grants inventory (with the brief)."
+
+  - id: infra-patterns
+    dir: modules/07-infra-patterns
+    title: Infra Patterns
+    pitch: Layered backups with a verification pass, health watches, disk tripwires, and an alert channel that reaches your phone.
+    depends_on: [core-procedures]
+    requires: [own-host]
+    reads: "Host and backup status."
+    writes: "Backup jobs, watch scripts, alert configuration."
+    network: "Your hosts and your offsite storage."
+    jobs: "Nightly backups; periodic health watches."
