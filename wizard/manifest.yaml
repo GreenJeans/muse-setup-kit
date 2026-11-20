@@ -20,6 +20,7 @@ modules:
     pitch: Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.
     depends_on: [core-procedures]
     requires: []
+    degrades_without: [scheduling, shell-python]   # linter run by hand; without shell/python, manual header/figure review
     reads: "Your memory files."
     writes: "A SCHEMA.md, header stamps on memory files, a linter script and its reports."
     network: none
@@ -33,7 +34,7 @@ modules:
     requires: []
     degrades_without: [scheduling]   # installs as an on-demand brief instead
     reads: "Calendar, mailbox, task lists, watch outputs (whatever you connect)."
-    writes: "One brief message per day; draft replies only with approval."
+    writes: "One brief message per day; draft replies only, sent only with approval."
     network: "Your connected accounts only."
     jobs: "One daily brief; optional 30-minute inbox triage scan."
 
@@ -43,6 +44,7 @@ modules:
     pitch: Two people, two agents, one shared coordination system — shared task layer, shared memory layer, a notebook protocol, and a principles doc.
     depends_on: [core-procedures]
     requires: [second-person, shared-docs, shared-tasks]
+    degrades_without: [morning-brief]   # the notebook is written but surfaced only on demand until a brief exists
     reads: "The shared surfaces both household members agree to."
     writes: "Shared lists, a shared notebook doc, a shared ops sheet."
     network: "Your shared accounts only."
@@ -65,7 +67,7 @@ modules:
     pitch: Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.
     depends_on: [core-procedures, memory-architecture]
     requires: []
-    degrades_without: [other-agents]   # single-reviewer mode; say so when offering
+    degrades_without: [other-agents, scheduling]   # single-reviewer mode; audit reminder becomes an on-demand chore
     reads: "Your procedures and memory (frozen into an audit packet)."
     writes: "Audit packets, findings, adoption records."
     network: "A second model/agent if you use one for blind review."
@@ -77,6 +79,7 @@ modules:
     pitch: Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share.
     depends_on: [core-procedures]
     requires: []
+    degrades_without: [scheduling]   # grants inventory becomes a manual monthly chore
     reads: "Anything you are about to install, at a pinned version, in full."
     writes: "Vetting records; standing-rule additions."
     network: "Only the source of what you are vetting."
@@ -99,8 +102,20 @@ modules:
     pitch: A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, and a deterministic curator that archives unused skills but never deletes.
     depends_on: [core-procedures, memory-architecture]
     requires: []
-    degrades_without: [scheduling]   # the sweep and curator run on demand instead
+    degrades_without: [scheduling, shell-python]   # sweep and curator on demand; without shell/python the curator is a manual ledger review
     reads: "Session transcripts, your custom skills, the decision queue, scheduled-job records."
     writes: "Staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills."
     network: none
     jobs: "One nightly session-review sweep; one weekly curator run."
+
+  - id: cost-guardrails
+    dir: modules/09-cost-guardrails
+    title: Cost & Billing Guardrails
+    pitch: Bucket discipline for agent spending — know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.
+    depends_on: [core-procedures]
+    requires: []
+    degrades_without: [scheduling]   # the monthly spend check becomes a manual chore
+    reads: "Your model/provider usage and billing pages (with you present), the plan's bucket register."
+    writes: "A bucket register in the procedures; spend-check entries in the decision queue when a cap is approached."
+    network: "Your providers' billing pages only, with you present."
+    jobs: "One monthly spend check (rides the brief if installed)."

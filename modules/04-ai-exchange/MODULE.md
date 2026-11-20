@@ -22,7 +22,8 @@ confident errors.
 
 - **One top-level folder**, deliberately *outside* any household-shared
   tree, so it doesn't inherit sharing the participants didn't choose.
-  Verify `shared = false` on every piece at build time.
+  Verify at build time that each piece is shared with exactly the
+  accounts in the protocol's Participants table, and no one else.
 - **Protocol doc** — the constitution (template included): admission,
   one-writer-per-surface, the output contract, ingest rules.
 - **Queue sheet** — one row per agent-task, with the canonical column
@@ -63,6 +64,10 @@ confident errors.
   adoption decisions are never delegated to it.
 - **Stale discipline.** An output unclaimed after 72 hours is flagged once,
   and again when it's finally ingested or rejected — not nagged about daily.
+  The mirror case matters as much: a queue row whose output *never
+  arrives* is flagged once at 72 hours after assignment, and again when
+  the output lands. Silence from a participant is a finding, not a gap
+  in the record.
 
 ## Install
 
@@ -84,6 +89,12 @@ confident errors.
 6. Run one small blind review as the pilot (two reviewers, one short
    document, one Group ID). Once evaluation-kit is installed, its audit
    packet becomes the grown-up version of this pilot.
+7. **Wire the read path.** Outputs nobody polls are work nobody did.
+   If a morning brief is installed, add the `[IF ai-exchange installed]`
+   source block from module 02's `brief.template.md` to the installed
+   brief job: open queue rows checked against their owners' outboxes,
+   with the 72-hour stale flags above. Without a brief, record outbox
+   polling as a named chore in `JOBS.md` with an owner.
 
 ## Verify
 

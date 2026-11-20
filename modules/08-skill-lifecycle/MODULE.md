@@ -117,10 +117,15 @@ Hard rules:
 
 If the platform runs its own background skill-review loop, it stays
 unchanged — this module complements it rather than replacing it.
-Staging is the single funnel: before staging, check the staging
-folder and the decision queue for an open item on the same skill and
-the same lesson; a hit means append evidence (date, session, quote)
-to the existing proposal instead of opening a second item. If the
+Staging is the single funnel. There is at most **one open proposal
+per skill**: before staging, check the staging folder and the decision
+queue for an open item on the same skill. A hit on an *unfiled*
+proposal means append evidence (date, session, quote) to it. A hit on
+a *filed* item — or a new lesson for a skill that already has one —
+means restage: build a fresh proposal that supersedes the old diff
+(with the added evidence or lesson folded in), void the old item, and
+note the supersession on it. A filed proposal is never edited in
+place; that is what makes approval bind to bytes (Pattern 2). If the
 platform loop writes a skill directly for a lesson that also has a
 staged proposal, mark the proposal superseded by that write and close
 it — noted where the user will see it, never silently dropped.
@@ -134,8 +139,12 @@ number.
 
 ### Staging area
 
-One folder per proposal, `staged/<queue-number>-<skill-name>/` under
-this module's workstream folder, containing:
+One folder per proposal under this module's workstream folder. The
+reviewer stages under `staged/draft-<skill-name>-<date>/` — it cannot
+know the queue number yet, and pretending otherwise corrupts the
+naming. The main agent renames the folder to
+`staged/<queue-number>-<skill-name>/` when it files the queue item.
+Contents:
 
 - `proposal.md` — the signal; verbatim evidence (the user's correction
   quoted, with chat and date, or the verified fix and how it was
@@ -146,11 +155,16 @@ this module's workstream folder, containing:
   support file), or the complete proposed `SKILL.md` plus a file list
   (create).
 - `base.json` — target path(s); the sha256 of each live file at review
-  time (the read-before-write attestation); reviewer identity
-  (in-session / nightly sweep / platform loop); session reference.
+  time (the read-before-write attestation); `diff_sha256`, the sha256
+  of `diff.patch` itself; reviewer identity (in-session / nightly
+  sweep / platform loop); session reference.
 
 Staging expires undecided after **14 days**: expiry auto-rejects the
-proposal (logged), it never applies it.
+proposal (logged), it never applies it. Expiry has a runner: the
+nightly sweep checks `staged/` on every run, and the weekly curator
+run backstops it (`tools/stage_check.py` is the mechanical helper).
+An expired item moves to `staged/expired/` and its queue item is
+marked expired, freeing its cap slot.
 
 ### Queue items
 
@@ -162,25 +176,36 @@ work:
 
 - **Silence is never consent** — restated on every skill item. Its
   only default is *stay staged*, then expire.
-- **Approval is the ticket.** "N: approve" authorizes exactly the
-  staged diff, one application: exact action = the diff, exact target
-  = the base-hashed file, fallback = abort on hash mismatch. It is
-  not a standing approval — a changed diff, a changed target, or an
-  expired item needs a new item. "N: edit: <change>" voids the item;
-  the agent restages as a new numbered item (queue numbers are never
-  reused).
-- **Executable content escalates out of the queue.** A proposal that
-  adds a script, any network call, any credential use, or a new skill
-  rather than a patch leaves the queue path and needs the
+- **Approval is the ticket.** "N: approve" authorizes exactly one
+  application: exact action = the diff whose sha256 is printed on the
+  item (and stored as `diff_sha256` in `base.json`), exact target =
+  the base-hashed file, fallback = abort if *either* hash changed.
+  The item shows the diff itself: 20 lines or fewer inline in full;
+  longer diffs show their first 20 lines and the total, and approval
+  of a longer diff must quote the diff hash's first six characters
+  ("N: approve 3fa9c1"). It is not a standing approval — a changed
+  diff, a changed target, or an expired item needs a new item.
+  "N: edit: <change>" voids the item; the agent restages as a new
+  numbered item (queue numbers are never reused).
+- **Executable content escalates out of the queue — judged by effect,
+  not file type.** A proposal escalates if it creates a skill, touches
+  anything under `scripts/` or any code block, or adds text that tells
+  the agent to run a command, call a service, use a credential, send,
+  share, delete, or spend. (A skill body is instructions the agent
+  follows: a prose line can be executable in effect while looking like
+  a text patch.) The verbs bind on actions the text *instructs*, not
+  topics it touches: an ordering or wording preference (cheapest-first
+  results, terser output) is presentation, not spending, even though
+  it is adjacent to money. Escalated proposals need the
   verify-before-install record (module 06) plus an explicit ticket.
-  The queue is for text-level skill changes; executable content gets
-  the heavier gate, same as a third-party install.
+  When unsure, escalate.
 
 ### Apply procedure (on approval, in session)
 
-1. Re-read the target live file; compare its sha256 to `base.json`.
-   **Mismatch → abort, report, restage fresh.** No silent rebase —
-   this is module 00's abort-on-mismatch rule applied to skills.
+1. Re-read the target live file and the staged diff; compare both
+   sha256 values to `base.json`. **Either mismatch → abort, report,
+   restage fresh.** No silent rebase — this is module 00's
+   abort-on-mismatch rule applied to skills.
 2. Apply the diff (or the move, for curator items). One item, one
    application.
 3. Verify: re-read the result; for a patch, confirm the changed lines
@@ -203,7 +228,9 @@ automatic consolidation or merging of skills.
 
 ### Usage ledger
 
-One record per custom skill: name, created date, pinned flag,
+One record per custom skill: name, `created` date (or null),
+`seeded_on` (the day the ledger first carried the record — the
+curator stamps it onto any record that lacks it), pinned flag,
 `last_viewed` / `last_used` / `last_patched`, view / use / patch
 counts, exemptions, and lifecycle state. Counts are best-effort and
 will under-report — a skill applied from the prompt index may leave no
@@ -233,8 +260,13 @@ proposals, not automatic moves. The reference implementation is
 - **Exemptions** (never stale, never archive candidates; still listed
   in the ledger with their reason):
   - Pinned by the user in the ledger (the agent never pins on its own).
-  - Referenced by any scheduled job — checked against live job records
-    at each curator run.
+  - Referenced by any scheduled job — matched against `JOBS.md`, the
+    scheduler-of-record, at each curator run: a job entry whose name
+    is the skill's name, or the skill's name plus a suffix
+    (`tax-docs-prep` runs `tax-docs`). When two skill names could
+    match one job, the longest wins. (A prose mention of the name
+    inside a job's description does not count; references in the
+    procedures and other skills are matched as whole tokens.)
   - Referenced by the operating procedures or the agent's main
     instructions.
   - Linked as an amendment to a system skill whose own managed review
@@ -248,6 +280,8 @@ proposals, not automatic moves. The reference implementation is
 A weekly scheduled job runs the script: rescan the skills folder (new
 skills get ledger records), recompute exemptions from live sources,
 update states, and file at most **one** batched queue item per run
+(the install hand run excepted — it files nothing; the user reviews
+its report directly)
 covering all stale and archive candidates. Each candidate in a
 batched item is individually approvable ("N: approve <skill> only") —
 approval applies per skill, never all-or-nothing by default. No
@@ -257,10 +291,11 @@ re-listing.
 
 Deliberate deviation from the source system, which auto-archives at
 30 days: here archive is gated because the counts are lossy and the
-posture is approval-before-self-modification throughout. If the first
-archive cycles prove the counts trustworthy, the user can flip
-archiving to automatic-with-a-warning as a one-line change to this
-module — their call, recorded as an option, not a default.
+posture is approval-before-self-modification throughout. There is no
+pre-written path to automatic archiving. A user who wants it must
+first meet an evidence bar — at least 90 days of curator history, at
+least 10 archive decisions, and no archive restored within 30 days of
+its move — and the flip itself is a ticket, not a one-line edit.
 
 ### Reporting
 
@@ -278,39 +313,70 @@ Do not switch the sweep on live. Roll out in phases:
    conventions live; ledger built and seeded; curator script written
    and run once by hand, its first output reviewed by the user before
    any job exists. Nothing archives; stale flags only.
-2. **Shadow week.** The in-session staging discipline starts. The
-   nightly sweep runs in **shadow mode for 7 days**: it stages to
-   `staged/shadow-*`, files no queue items, and reports only to this
-   module's home — the user judges its precision before its proposals
-   count. Shadow lifts only on the user's say-so, recorded as a job
-   change.
+2. **Shadow week.** For 7 days, *both* staging triggers — the nightly
+   sweep and in-session staging — stage only to `staged/shadow-*`,
+   file no queue items, and report only to this module's home. The
+   user judges each shadow proposal keep-or-noise. **Pass bar:** at
+   least 2 shadow proposals, at least half judged keep. Below the bar,
+   tighten the rubric and run another shadow week; fewer than 2
+   proposals extends the week by 7 days; two failed weeks means
+   recommend in-session-only staging and drop the sweep. Shadow lifts
+   only on the user's explicit say-so, recorded as a job change.
+   During the shadow week the `shadow-` naming replaces Pattern 2's
+   `draft-` naming — everything stages to
+   `staged/shadow-<skill-name>-<date>/`. Shadow folders do not expire
+   during the week (the expiry runner skips them); at the lift
+   decision each is judged — keepers are re-staged as real proposals
+   with fresh base hashes and filed, noise moves to
+   `staged/expired/`. Nothing shadow-staged is left in limbo.
 3. **Curator gating live.** Archive proposals start flowing as queue
    items (still approval-gated).
-4. **Review at 30 days.** Acceptance rate (the success bar: at least
+4. **Review at 30 days** (counted from the day shadow lifts — the
+   day the sweep goes live). Acceptance rate (the success bar: at least
    half of staged items approved or edited — below that, the rubric
    is too loose and gets tightened before any expansion), false-stale
    count (an archive restored within 7 days counts as one), restage
    rate (if more than about 1 in 5 applies aborts on hash drift, the
    staging window is too long — shorten the expiry), and queue load.
+   Two warnings are read as warnings, not health: **zero rejections
+   and zero edits** across the window suggests rubber-stamping, and
+   the reviewer reports corrections it saw in transcripts that never
+   became proposals (the recall gap) alongside its precision.
 
 ## Install
 
 1. Choose the module's home: a workstream folder with a `SCOPE.md`
    (module 00), holding `staged/`, the ledger, the curator script, and
-   run logs.
+   run logs. Defaults, unless the plan renames them: home folder
+   `skill-lifecycle/`, ledger `skill-lifecycle/skill-usage.json`. The
+   ledger's record format is the one `tools/curator.py` writes —
+   fields listed under Pattern 3 — and the installer's seeding matches
+   it exactly.
 2. Add the two item types to the decision queue's header, using the
    definitions in `templates/skill-queue-items.template.md`, and
    confirm the queue template's never-consent rule is stated there.
-3. Create the staging area and the `staged/applied/` holding folder;
+3. Create the staging area with its `staged/applied/` and
+   `staged/expired/` holding folders;
    copy `templates/staged-proposal.template.md` where reviewers will
    find it.
 4. Seed the usage ledger: one record per existing custom skill,
-   created dates from verifiable records only, counts null or zero
-   where unverifiable.
-5. Copy `tools/curator.py` into the module home, point it at your
+   created dates from verifiable records only — the skills folder's
+   own records, a git history, dated session logs (a date asserted
+   only inside the skill's own file is taken as given, and recorded
+   as taken-as-given, not dressed up as verified) (null when no record
+   exists — the curator anchors those to the `seeded_on` stamp it
+   writes on every record, and reports dateless records as unseeded),
+   counts zero where unverifiable — counts are never null (a null
+   count reads as "used" to the curator and defeats the grace floor;
+   null is for dates only).
+5. Copy `tools/curator.py` and `tools/stage_check.py` into the module
+   home, point the curator at your
    skills folder, ledger, procedures/instructions files, and job
    records; run it once by hand and show the user its first report.
-   Do not schedule it yet.
+   Do not schedule it yet. "Pointing" the curator is command-line
+   flags — there is no config file — so record the full invocation,
+   flags included, in the `JOBS.md` entries when the jobs are created
+   (Install step 7 / Rollout); the flags live there.
 6. Add a pointer line to the agent's main instruction file: skill
    self-modification stages through this module; nothing writes a
    live skill without the user's approval of the staged diff.

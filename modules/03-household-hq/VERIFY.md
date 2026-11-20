@@ -3,7 +3,9 @@
 ## At install
 
 - [ ] The shared folder, Agents' Notebook, Ops sheet, and Principles doc
-      exist, and the Principles doc is approved by both people.
+      exist, and the Principles doc is approved by both people — OR the
+      partner checkpoint is ledgered as DEFERRED in `SETUP-PLAN.md` with
+      the partner named as owner and the surfaces still unshared.
 - [ ] Sharing verified *at the source* (not from a report): each surface
       is shared with exactly the two people and no one else.
 - [ ] Shared lists exist with the `waiting`, `decision`, and `urgent`

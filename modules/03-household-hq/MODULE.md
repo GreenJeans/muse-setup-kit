@@ -51,7 +51,8 @@ agents read, and a notebook where agents leave each other dated notes.
 ## Install
 
 1. Create the shared folder, notebook, ops sheet, and Principles doc from
-   `principles.template.md`; share them with exactly the two people. The
+   `principles.template.md` — unshared for now. Sharing happens only
+   after the partner checkpoint (step 4) clears; see step 4a. The
    notebook's own header states the section convention (sections named
    for their writer).
 2. Decide the options explicitly, with both people: the **food layer**
@@ -67,11 +68,20 @@ agents read, and a notebook where agents leave each other dated notes.
    instruction set written by someone else's setup process, and module
    06's verify-before-install discipline applies to it. The installing
    person's own agent gets the same content as a local instruction.
-5. **Amend the brief:** module 02 installed before this module, so add
-   the notebook to the installed brief job now — the `[IF household-hq
-   installed]` source block in `brief.template.md` (the other agent's
-   notebook section, surfaced attributed and dated). Without this step
-   the notebook is written and never read.
+   If the checkpoint cannot clear during this install, ledger it in
+   `SETUP-PLAN.md` as DEFERRED with the partner named as owner — and
+   sharing still waits. A deferred checkpoint never means "share now,
+   approve later."
+4a. **Share the surfaces** with exactly the two people — only now that
+   the checkpoint has cleared — and verify the sharing at the source.
+5. **Amend the brief:** if module 02 is installed, add the notebook to
+   the installed brief job now — the `[IF household-hq installed]`
+   source block in `brief.template.md` (the other agent's notebook
+   section, surfaced attributed and dated). Without this step the
+   notebook is written and never read. If module 02 is not installed
+   (this module's degraded mode), record a notebook check as an
+   on-demand chore in `JOBS.md` and tell the user plainly: the notebook
+   surfaces only when someone asks, until a brief exists.
 6. Pilot on one real project (a trip works well) before making it the
    default for everything.
 

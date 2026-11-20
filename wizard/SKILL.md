@@ -11,14 +11,21 @@ and approved.**
 1. **Read before you act.** Read `../docs/DESIGN.md` and `manifest.yaml` in
    this folder, and the `MODULE.md` of every module the user selects,
    before presenting the plan.
-2. **Pinned source only.** Install from the files in this checkout, at its
-   current commit. Never fetch module content from a URL at install time.
-   Tell the user the commit hash you are installing from.
+2. **Pinned source only.** Before anything else, compare this checkout's
+   full commit hash with the hash the user gave you (from the release
+   page, not from inside this repo). If the user gave none, or the two
+   differ, stop and ask — never default to the current commit. Install
+   only from files at that commit, and never fetch module content from a
+   URL at install time.
 3. **Plan before changes.** Present one consolidated plan: every file you
    will create or edit, every scheduled job, every shared surface, with each
-   module's reads/writes/network disclosure from the manifest. Wait for
-   explicit approval. Approval covers exactly what was shown — if the plan
-   changes, show it again.
+   module's reads/writes/network disclosure from the manifest. List
+   externally visible items first, separately: every share or invite with
+   exact recipients, every job that messages anyone, every account
+   connection. Wait for explicit approval: approval must name what it
+   covers ("approve 00, 01, 02" or "approve all"); "ok" or "looks good"
+   is not approval — ask which parts. Approval covers exactly what was
+   shown — if the plan changes, show it again.
 4. **Merge, never overwrite.** The user may already have instructions,
    memory files, and habits. Read what exists, propose merges, and keep
    their wording where it doesn't conflict. A conflict is a question for the
@@ -26,15 +33,32 @@ and approved.**
 5. **No credentials in chat.** If a module needs an account connection, use
    the platform's secure connection flow. Never ask the user to paste a
    password, token, or key into the conversation.
-6. **Placeholders are not facts.** Templates contain `<PLACEHOLDERS>`. Fill
+6. **Vet the kit first.** Before the interview, draft a vetting entry
+   for this kit: its source, the full commit hash, which files you read
+   in full, and what the modules read, write, and contact over the
+   network. It becomes the plan's first item and is approved with the
+   plan, whether or not security-pack is selected. Any third-party
+   software a module installs gets its own vetting entry in the plan
+   before installation.
+7. **Placeholders are not facts.** Templates contain `<PLACEHOLDERS>`. Fill
    them only from what the user tells you in this setup. Never carry over
    any example content as if it were the user's data.
-7. **Verify each module after installing it**, using the checks in its
+8. **Verify each module after installing it**, using the checks in its
    `VERIFY.md`, and report the result before moving on. Checks split into
    *at-install* and *deferred*: a check that needs live operation (a
    scheduled brief arriving, a fresh session, days of data) is recorded in
-   the plan's verification ledger as DEFERRED with a due date, and the
-   brief (or a follow-up) surfaces it when due. "Installed" means every
+   the plan's verification ledger as DEFERRED with a due date and an
+   owner. A morning brief surfaces due checks — the kit's module 02
+   brief, or a brief-like daily job the user already runs (amend it,
+   with approval, to read the plan). Otherwise — and whenever it is
+   unclear whether anything brief-like will actually read the plan —
+   the install also adds one line to the main instruction file:
+   "At session start, check SETUP-PLAN.md for overdue deferred
+   checks." The line is harmless when a brief also surfaces them.
+   A deferred check with no way to surface is a failed check. Each
+   verification report shows its evidence (file listings, scheduler
+   output, hashes), not just PASS, and the handover names three checks
+   the user can run personally. "Installed" means every
    at-install check passed and every deferred check is ledgered — never
    that a check was skipped silently.
 
@@ -51,6 +75,8 @@ the answers for the gating step:
   Muse participate?
 - Does the user work with other AI agents (other vendors' models, coding
   agents) they might exchange work with?
+- Can you run local scripts (shell / Python 3) and read files on this
+  machine, including session transcripts where the platform keeps them?
 
 Map the answers to the manifest's requirement tokens:
 
@@ -63,6 +89,7 @@ Map the answers to the manifest's requirement tokens:
 | Shared cloud storage | `shared-storage` |
 | Other agents in use | `other-agents` |
 | A host the user controls | `own-host` |
+| Shell / Python 3 execution | `shell-python` |
 
 Do not guess: if you cannot check a capability, ask.
 
@@ -72,7 +99,11 @@ Ask these as short multiple-choice questions, one topic at a time. Use the
 user's answers verbatim in the plan.
 
 1. **Who is this for?** (a) Just me. (b) Me and one other person, who has
-   (or will have) their own Muse. (c) A small group.
+   (or will have) their own Muse. (c) A small group. *(If (c):
+   household-hq installs in its two-person shape for the user plus one
+   named coordinator, with a partner checkpoint per additional person;
+   if the shared surfaces cannot support the group, say so at selection
+   time rather than improvising a group mode.)*
 2. **How much autonomy should the agent have by default?** (a) Ask before
    almost everything. (b) Reversible work on its own; irreversible actions
    (send/buy/book/file/delete) need my approval each time — *the kit's
@@ -92,6 +123,9 @@ user's answers verbatim in the plan.
    briefly, then re-ask.)*
 5. **Memory:** (a) Start fresh with the kit's schema. (b) Migrate my
    existing memory files into the schema. (c) Leave my memory alone.
+   *(If (c): the modules that depend on the memory schema —
+   ai-exchange, evaluation-kit, skill-lifecycle — are not offerable;
+   say so plainly at selection time.)*
 6. **Infrastructure:** (a) I have a host/server I control and want backup
    and health patterns. (b) Cloud only, skip infra. (c) Later.
 7. **Existing work:** Name any ongoing workstreams or projects the agent
@@ -109,8 +143,11 @@ From `manifest.yaml`, compute the offerable set:
   other modules assume it, and offer "procedures lite" (ticket rule +
   decision queue only) rather than nothing.
 - Gate by capabilities: no scheduling → morning-brief installs as an
-  on-demand brief instead of a scheduled one, and skill-lifecycle's
-  sweep and curator run on demand; no second person →
+  on-demand brief instead of a scheduled one, skill-lifecycle's
+  sweep and curator run on demand, memory-architecture's linter runs
+  by hand, and security-pack's grants inventory is a manual monthly
+  chore; no shell/python → the linter and the curator degrade to
+  manual reviews against the same checklists; no second person →
   household-hq is not offerable; no shared storage or no other agents →
   ai-exchange is not offerable; no host → infra-patterns is not offerable.
 - If a module's manifest entry lists `degrades_without` and the user lacks
@@ -141,8 +178,11 @@ Produce one plan document (show it in chat; also save it as
 - Anything in the user's existing setup that conflicts, with your proposed
   resolution.
 
-Wait for approval. Do not begin Step 5 on partial approval — ask which
-parts are approved.
+Collect every placeholder answer first, then re-render the plan in its
+final form with zero `<PLACEHOLDER>` tokens remaining. Placeholder
+answers are not approval. Ask for explicit approval of that exact final
+plan. Do not begin Step 5 on partial approval — ask which parts are
+approved.
 
 ## Step 5 — Install, in dependency order
 

@@ -24,7 +24,7 @@ run, findings count. Exit code 0 = no high-severity findings, 1 = some.
 
 Usage:
   memory_lint.py --memory-dir ~/memory --procedures ~/OPERATING_PROCEDURES.md \
-                 --jobs ~/JOBS.md --report ~/memory/lint-report.md
+                 --jobs ~/JOBS.md --report ~/memory/reports/lint-report.md
 All arguments optional; defaults suit a kit-style workspace layout.
 This is a starting point — adapt the heuristics to your store.
 """
@@ -114,6 +114,12 @@ def main():
             return True
         if "fidelity-test" in parts[-1]:
             return True
+        if parts[-1] == "INDEX.md":
+            return True  # generated listings, stamped by the tools that rebuild them
+        if parts[-1] == "lint-report.md":
+            return True  # this tool's own output, wherever the user keeps it
+        if args.report and os.path.abspath(path) == os.path.abspath(args.report):
+            return True  # never lint the report this run is writing
         return any(fnmatch.fnmatch(rel, pat) for pat in ignore)
 
     pages = []
@@ -152,6 +158,7 @@ def main():
     report = "\n".join(lines) + "\n"
 
     if args.report:
+        os.makedirs(os.path.dirname(os.path.abspath(args.report)), exist_ok=True)
         with open(args.report, "w", encoding="utf-8") as fh:
             fh.write(report)
     sys.stdout.write(report)

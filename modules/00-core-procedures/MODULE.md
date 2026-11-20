@@ -62,6 +62,10 @@ closed. Every other module assumes this one.
 5. Add a pointer line to the agent's main instruction file (wizard Q7;
    create `INSTRUCTIONS.md` if none exists): "Operating procedures live
    in OPERATING_PROCEDURES.md and govern daily work."
+6. Create `JOBS.md` at the workspace root, empty apart from its header.
+   Every later module records its scheduled jobs there; the morning
+   brief and the memory linter read it. (This module's VERIFY checks
+   for it — a step that creates what the check requires.)
 
 ## Verify
 
