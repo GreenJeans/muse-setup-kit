@@ -40,10 +40,12 @@
   an at-install check; the linter learned exclusions and a one-direction
   jobs check, so a textbook install can lint quiet.
 
-## Phase 3 — publication (separate decision)
+## Phase 3 — publication — DONE 2026-11-20
 
-- Final scrub + license review.
-- Publish as a public git repository; tag v0.1.0.
+- Final scrub + license review: done (denylist-verified; MIT).
+- Published as a public git repository:
+  https://github.com/GreenJeans/muse-setup-kit — tagged **v0.1**
+  (commit 171781064ce1fddde4f97478adebb0500953a39b).
 - Optional: submit the wizard to community skill directories, following the
   kit's own verify-before-install discipline in reverse — publish the pinned
   commit hash alongside any listing.
