@@ -109,7 +109,8 @@ From `manifest.yaml`, compute the offerable set:
   other modules assume it, and offer "procedures lite" (ticket rule +
   decision queue only) rather than nothing.
 - Gate by capabilities: no scheduling → morning-brief installs as an
-  on-demand brief instead of a scheduled one; no second person →
+  on-demand brief instead of a scheduled one, and skill-lifecycle's
+  sweep and curator run on demand; no second person →
   household-hq is not offerable; no shared storage or no other agents →
   ai-exchange is not offerable; no host → infra-patterns is not offerable.
 - If a module's manifest entry lists `degrades_without` and the user lacks

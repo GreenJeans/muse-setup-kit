@@ -55,6 +55,7 @@ dropped the safety properties.
 | 05 | **Evaluation kit** | Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks | 00, 01 |
 | 06 | **Security pack** | Verify-before-install, one-time permission grants, content-exclusion lists, session canary, retitle-before-share | 00 |
 | 07 | **Infra patterns** | Layered backups with a verification pass, health watches, an alert channel that reaches your phone | A host you control (optional) |
+| 08 | **Skill lifecycle** | A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, a curator that archives unused skills but never deletes — gates on, unlike the system it adapts | 00, 01 |
 
 ## Design principles
 
@@ -98,6 +99,16 @@ This kit is a distillation, and some of its best ideas started elsewhere:
   sections "not verified"), **Home Maintenance** (the declare-equipment /
   mark-hire-out / state-your-skips checklist shape), and **Lifeboat**
   (the backup coverage guard that became a linter check).
+- **[Hermes Agent](https://github.com/NousResearch/hermes-agent)**
+  (Nous Research, MIT) — the source of module 08's skill-learning loop:
+  a background reviewer with an explicit rubric (corrections as
+  first-class signals, patch the in-play skill before creating, class-
+  level names, read-before-write) and a curator that archives unused
+  skills without deleting them. Studied at source and adapted, not
+  adopted as-is: Hermes ships its write-approval gates off and biases
+  its reviewer to "be active"; the kit's version is gates-on, with
+  staged diffs the user approves, and "nothing to save" as a neutral
+  outcome.
 
 Where a technique came from somewhere else, the module says so. The
 procedures, templates, and the wizard itself are original to this kit.
@@ -117,6 +128,7 @@ modules/
   05-evaluation-kit/       MODULE.md · VERIFY.md
   06-security-pack/        MODULE.md · VERIFY.md · vetting-log template
   07-infra-patterns/       MODULE.md · VERIFY.md
+  08-skill-lifecycle/      MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator)
 ```
 
 ## Status

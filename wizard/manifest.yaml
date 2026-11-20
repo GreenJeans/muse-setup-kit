@@ -92,3 +92,15 @@ modules:
     writes: "Backup jobs, watch scripts, alert configuration."
     network: "Your hosts and your offsite storage."
     jobs: "Nightly backups; periodic health watches."
+
+  - id: skill-lifecycle
+    dir: modules/08-skill-lifecycle
+    title: Skill Lifecycle
+    pitch: A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, and a deterministic curator that archives unused skills but never deletes.
+    depends_on: [core-procedures, memory-architecture]
+    requires: []
+    degrades_without: [scheduling]   # the sweep and curator run on demand instead
+    reads: "Session transcripts, your custom skills, the decision queue, scheduled-job records."
+    writes: "Staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills."
+    network: none
+    jobs: "One nightly session-review sweep; one weekly curator run."
