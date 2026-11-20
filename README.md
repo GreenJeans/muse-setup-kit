@@ -15,7 +15,7 @@ or personal data from the original setup appear anywhere in this repo.
 Tell your Muse:
 
 ```
-Clone https://github.com/<owner>/muse-setup-kit, check out the commit I
+Clone https://github.com/GreenJeans/muse-setup-kit, check out the commit I
 give you, read wizard/SKILL.md, and run the setup wizard.
 ```
 
