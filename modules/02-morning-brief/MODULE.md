@@ -47,7 +47,8 @@ A frequent lightweight scan that interrupts only for:
 - a VIP sender (the user's named people — partner, counsel, key services);
 - a direct question to the user;
 - a deadline inside 24 hours;
-- a security or account alert.
+- a security or account alert;
+- a shared task tagged `urgent` (if household-hq is installed).
 
 Everything else accrues to the next brief. The scan never sends mail and
 never creates drafts. Delivery window: the user's waking hours only.

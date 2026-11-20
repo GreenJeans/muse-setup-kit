@@ -16,6 +16,9 @@
 - [ ] **Cross-note test** (due: first morning after setup): a note from
       agent A surfaces in person B's brief, attributed and dated.
 - [ ] **Decision-tag test** (due: first week): a task tagged `decision`
-      appears in both briefs until a human resolves it.
+      appears in the installing agent's brief until a human resolves it.
+      Partner-side surfacing is confirmed by the partner (via the
+      notebook or at the first joint review) — one wizard run installs
+      only one brief, so record who confirmed the other side.
 - [ ] **Boundary test** (due: first month): confirm no gift, finance, or
       health detail has landed on a shared surface.

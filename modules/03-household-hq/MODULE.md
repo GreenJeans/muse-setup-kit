@@ -19,11 +19,12 @@ agents read, and a notebook where agents leave each other dated notes.
   other person), `decision` (needs a human call), `urgent`. Field
   discipline: every task has done-criteria; comments carry the per-task
   context so the list stays scannable.
-- **Memory layer** — shared cloud docs: an **Agents' Notebook** (each
-  agent has a section; dated entries; the other agent reads it in their
-  morning routine), an **Ops sheet** (standing reference: trips, expiry
-  dates, projects), and a **Principles & Autonomy** doc (template included)
-  stating what each agent may do on shared surfaces without asking.
+- **Memory layer** — shared cloud docs: an **Agents' Notebook** (sections
+  named for their writer — "From <AGENT A>" is A's outbox, read by B;
+  dated entries; the other agent reads it in their morning routine), an
+  **Ops sheet** (standing reference: trips, expiry dates, projects), and
+  a **Principles & Autonomy** doc (template included) stating what each
+  agent may do on shared surfaces without asking.
 - **Food layer (optional)** — a shared recipe/meal-plan app if the
   household cooks from one library.
 
@@ -50,13 +51,28 @@ agents read, and a notebook where agents leave each other dated notes.
 ## Install
 
 1. Create the shared folder, notebook, ops sheet, and Principles doc from
-   `principles.template.md`; share them with exactly the two people.
-2. Create the shared lists and the three tags in the task app.
-3. Each person pastes a short setup prompt into *their own* agent (the
-   wizard generates it): it names the surfaces, the notebook section, and
-   the principles doc, and instructs the agent to check the notebook in
-   its morning routine.
-4. Pilot on one real project (a trip works well) before making it the
+   `principles.template.md`; share them with exactly the two people. The
+   notebook's own header states the section convention (sections named
+   for their writer).
+2. Decide the options explicitly, with both people: the **food layer**
+   (a shared recipe/meal app) in or out, and the **change detector** job
+   in or out. Record both decisions in the plan; neither is a default.
+3. Create the shared lists and the three tags in the task app. The
+   `urgent` tag is consumed by the brief/triage machinery (module 02):
+   an urgent-tagged task interrupts like a triage item.
+4. Generate the partner's setup prompt from
+   `partner-setup-prompt.template.md`. **Partner checkpoint:** the
+   partner reads the prompt and the Principles doc and approves both
+   before pasting anything into their agent — the prompt is an
+   instruction set written by someone else's setup process, and module
+   06's verify-before-install discipline applies to it. The installing
+   person's own agent gets the same content as a local instruction.
+5. **Amend the brief:** module 02 installed before this module, so add
+   the notebook to the installed brief job now — the `[IF household-hq
+   installed]` source block in `brief.template.md` (the other agent's
+   notebook section, surfaced attributed and dated). Without this step
+   the notebook is written and never read.
+6. Pilot on one real project (a trip works well) before making it the
    default for everything.
 
 ## Verify

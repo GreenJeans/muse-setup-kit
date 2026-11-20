@@ -9,6 +9,9 @@ tight: the user reads this in two minutes. Failures first, always.
 - Calendar: today and tomorrow
 - Mailbox: since the last brief
 - [IF a task app is connected] Task lists: <shared and personal lists>
+- [IF household-hq installed] Agents' Notebook: entries in the *other*
+  agent's "From ..." section since the last brief — surface them in a
+  short Notebook block, attributed and dated
 - [IF watches exist] Watches: <each watch's state file / last run record>
 - Memory: yesterday's daily log; the reconciliation rotation file
 
@@ -23,7 +26,9 @@ A section whose sources don't exist is omitted — never reported as clear.
    report their sections as clear. (c) Watch anomalies and detector
    silence: any watch with no run record 48h past its cadence.
    (d) [IF shared lists exist] Past-due shared tasks (from the third
-   consecutive flag, fold to a count).
+   consecutive flag, fold to a count). (e) [IF shared lists exist] Tasks
+   tagged `urgent` — these also interrupt between briefs, like a triage
+   item.
 1. **Watch findings.** Anything flagged since the last brief.
 2. **Decision queue.** Print new, resurfacing, and firing-default items in
    full; count the rest. Never invent a default for an item; defaults are

@@ -128,8 +128,15 @@ Produce one plan document (show it in chat; also save it as
 - For each: files created/edited (paths), jobs scheduled (cadence,
   delivery), shared surfaces created, and the manifest disclosure lines.
 - Every `<PLACEHOLDER>` that needs a user-supplied value, listed as
-  questions (names to use, brief time and timezone, VIP senders for triage,
-  household members, storage locations).
+  questions (names to use — including the agent's own name, the partner's
+  name and their agent's name, and other agents' names for the Exchange —
+  brief time and timezone, VIP senders for triage, household members,
+  storage locations, HQ options: food layer and change detector in/out).
+- For two-person installs, **partner checkpoints** are plan items in
+  their own right: the partner approves the Principles doc, and reads
+  their agent's setup prompt in full before pasting it. Module 03 is not
+  installed until those clear or are ledgered as deferred with the
+  partner named as the owner.
 - Anything in the user's existing setup that conflicts, with your proposed
   resolution.
 

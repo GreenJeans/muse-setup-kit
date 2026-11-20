@@ -25,12 +25,19 @@ confident errors.
   Verify `shared = false` on every piece at build time.
 - **Protocol doc** — the constitution (template included): admission,
   one-writer-per-surface, the output contract, ingest rules.
-- **Queue sheet** — one row per task: ID, created, task, requester, owner
-  agent, status, input link, output link, provenance/sources, ingested
-  into, rejected/disputed.
-- **Per-agent Inbox/Outbox folders.** The maintaining agent (yours) drops
-  briefs in inboxes and polls outboxes; participant agents only ever write
-  their own outbox.
+- **Queue sheet** — one row per agent-task, with the canonical column
+  list in the protocol (rule 2). A logical task with two reviewers is
+  two rows sharing one **Group** ID, so the pairing is structural, not
+  prose.
+- **Per-agent Inbox/Outbox folders.** Participant agents only ever write
+  their own outbox. The maintaining agent has no inbox/outbox: it drops
+  briefs in inboxes, polls outboxes, and keeps its *own* outputs (e.g.
+  its half of a blind review) in a `Work/` folder inside the tree.
+- **Snapshots folder + ingest memos.** At ingest, the maintainer copies
+  the output into `Snapshots/` (immutable, named by task ID) and writes
+  an ingest memo beside it: claims verified, claims rejected with the
+  verbatim text, convergence and disputes. This is the artifact that
+  makes disagreement visible later.
 - **Published folder** — read-only pages the maintainer distills from
   ingested work (e.g. a context card other agents can load). Only compiled
   material from an allowlist of safe categories is ever published.
@@ -59,18 +66,24 @@ confident errors.
 
 ## Install
 
-1. Create the folder tree and the protocol doc from
+1. Create the folder tree — per-agent Inbox/Outbox, `Work/`,
+   `Snapshots/`, and the Published folder — and the protocol doc from
    `protocol.template.md`; fill in the agents and the maintainer.
-2. Create the queue sheet with the columns above.
+2. Create the queue sheet with the protocol's canonical columns.
 3. For each participant agent, create its Inbox/Outbox and write its
    onboarding note: how to read a brief, the output contract, where to
    write. (Some agents join via a project/skill that points at the
    Published folder; the wizard notes the per-agent mechanics.)
-4. Run a canary: one trivial task per participant ("confirm you can read
+4. Publish the first Published page — "Agent lanes & how to task us",
+   from the protocol's allowlist — so participants have something to
+   read on day one.
+5. Run a canary: one trivial task per participant ("confirm you can read
    your inbox; write the word CANARY and today's date to your outbox").
-   Verify at the source.
-5. Run one real blind dual review as the pilot (module 05's audit packet
-   is the natural first task).
+   Verify at the source. The canary is an at-install check: a failed
+   canary stops the install like any other.
+6. Run one small blind review as the pilot (two reviewers, one short
+   document, one Group ID). Once evaluation-kit is installed, its audit
+   packet becomes the grown-up version of this pilot.
 
 ## Verify
 

@@ -8,10 +8,16 @@ Deterministic and read-only: it writes only its report. Three checks:
   B. Live-section bullets that state a figure (money, dates, counts)
      carry a source: a "(verify: ...)" pointer or a "Source:" note.
      "Live" means above the page's History/Superseded section.
-  C. Job names agree between JOBS.md (the scheduler-of-record) and the
-     operating procedures: every job in JOBS.md should be mentioned in
-     the procedures, and backticked job-like names in the procedures
-     should exist in JOBS.md. Mismatches are findings, either way.
+  C. Jobs named in the operating procedures exist in JOBS.md (the
+     scheduler-of-record): a backticked name on a procedures line that
+     mentions "job" is treated as a job name and must have a JOBS.md
+     entry. (One direction only — operational jobs in JOBS.md need not
+     be named in the procedures.)
+
+Exclusions: files under logs/, reports/, or tools/ directories, files
+with "fidelity-test" in the name (schema-mandated fixtures, not compiled
+pages), and anything matching a glob in a `.lintignore` file in the
+memory directory are not treated as compiled pages.
 
 Every report opens with a run receipt: timestamp, files scanned, checks
 run, findings count. Exit code 0 = no high-severity findings, 1 = some.
@@ -75,9 +81,12 @@ def check_jobs(procedures_path, jobs_path):
         m = re.match(r"\s*[-|]\s*`?([a-z0-9][a-z0-9\-_]{2,})`?", line)
         if m:
             job_names.add(m.group(1))
-    mentioned = set(BACKTICK.findall(proc))
-    for name in sorted(job_names - mentioned):
-        findings.append(("low", f"C: job '{name}' in JOBS.md not mentioned in procedures"))
+    for line in proc.splitlines():
+        if "job" in line.lower():
+            for name in BACKTICK.findall(line):
+                if name not in job_names:
+                    findings.append(
+                        ("med", f"C: job '{name}' named in procedures has no JOBS.md entry"))
     return findings
 
 
@@ -90,11 +99,30 @@ def main():
     ap.add_argument("--report", default=None)
     args = ap.parse_args()
 
+    import fnmatch
+
+    ignore = []
+    ignore_text = read(os.path.join(args.memory_dir, ".lintignore"))
+    if ignore_text:
+        ignore = [ln.strip() for ln in ignore_text.splitlines()
+                  if ln.strip() and not ln.startswith("#")]
+
+    def excluded(path):
+        rel = os.path.relpath(path, args.memory_dir)
+        parts = rel.split(os.sep)
+        if any(p in ("logs", "reports", "tools") for p in parts[:-1]):
+            return True
+        if "fidelity-test" in parts[-1]:
+            return True
+        return any(fnmatch.fnmatch(rel, pat) for pat in ignore)
+
     pages = []
     for root, _dirs, files in os.walk(args.memory_dir):
         for name in sorted(files):
-            if name.endswith(".md") and "logs" not in root:
+            if name.endswith(".md"):
                 path = os.path.join(root, name)
+                if excluded(path):
+                    continue
                 text = read(path)
                 if text is not None:
                     pages.append((path, text))

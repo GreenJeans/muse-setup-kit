@@ -25,8 +25,20 @@
   excluded test page, reconciling it with the schema's truthfulness rule.
 - `VERIFY.md` added per module: at-install and deferred checks (the kit's
   own "done means verified" rule, applied to itself).
-- Still open: a second dry run with a different persona (a two-person
-  household) to exercise modules 03–04 before publication.
+- Second dry run (same day): a two-person household persona exercised
+  modules 03–04 end to end — notebook cross-note surfaced in the
+  partner's brief, Exchange canary round-tripped, and a blind dual
+  review converged while ingest rejected one reviewer's confident
+  misreading with the verbatim text. Gating correct again (only
+  infra-patterns withheld); leak check passed. Its 16 findings
+  (3 high, 6 medium, 7 low) are fixed: notebook sections are named for
+  their writer ("From <AGENT>"); a partner setup-prompt template ships
+  with a partner-review checkpoint in the wizard; the brief template
+  gained the notebook source block and module 03 now amends the brief
+  at install; the Exchange gained `Work/` and `Snapshots/` with ingest
+  memos, one canonical 13-column queue (with Group), and the canary as
+  an at-install check; the linter learned exclusions and a one-direction
+  jobs check, so a textbook install can lint quiet.
 
 ## Phase 3 — publication (separate decision)
 

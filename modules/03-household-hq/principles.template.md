@@ -5,14 +5,17 @@ Agents read it; only humans change the rules in it. -->
 
 ## Who is who
 
-- <PERSON A> — agent: <AGENT A NAME>
-- <PERSON B> — agent: <AGENT B NAME>
+- <PERSON A> — agent: <AGENT A>
+- <PERSON B> — agent: <AGENT B>
 
 ## Shared surfaces
 
 - Task layer: <app>, lists: <list names>
-- Notebook: <doc name> — section "For <AGENT A>" written by <AGENT A>;
-  section "For <AGENT B>" written by <AGENT B>
+- Notebook: <doc name>. Sections are named for their WRITER: the section
+  "From <AGENT A>" is written only by <AGENT A> and read by <AGENT B>;
+  the section "From <AGENT B>" is written only by <AGENT B> and read by
+  <AGENT A>. The notebook itself carries this convention in its header,
+  so nobody has to guess which section is whose outbox.
 - Ops sheet: <sheet name>
 - Food layer (optional): <app or "none">
 
@@ -39,10 +42,11 @@ NEVER on shared surfaces:
 
 ## Standing authorizations
 
-<!-- Dated, in the grantor's words. Example shape:
-- <YYYY-MM-DD>, <PERSON B>: "A book request from me in the notebook means
+Dated, in the grantor's words. Entries look like this (this example is
+fictional — delete it when the first real entry lands):
+
+- 2026-01-15, <PERSON B>: "A book request from me in the notebook means
   <AGENT A> delivers it to my e-reader. No per-book approval needed."
--->
 
 ## Changes
 

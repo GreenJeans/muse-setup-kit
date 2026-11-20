@@ -46,14 +46,22 @@
 
 ## The linter (deterministic, read-only)
 
-Minimum checks: header presence; figures without pointers in live
-sections; scheduled-job names in procedure documents vs. `JOBS.md` (the
-scheduler-of-record the wizard maintains); review-by dates passed. A
-reference implementation ships with this module
+**Compiled pages** — the files the linter checks — are the curated
+long-term file and the person/group pages. Daily logs, lint reports, and
+test fixtures (the fidelity test page and log) live alongside them but
+are not compiled pages and are excluded, as is anything matched by a
+`.lintignore` file in the memory directory.
+
+Minimum checks: header presence on compiled pages; figures without
+pointers in live sections; jobs named in the procedures exist in
+`JOBS.md` (the scheduler-of-record the wizard maintains); review-by
+dates passed. A reference implementation ships with this module
 (`tools/memory_lint.py`). Every run writes a report that opens with a
 run receipt — timestamp, files scanned, checks run, findings count —
 and a run that produces no report is a failure, not a pass. Findings are
-candidates for a mind to adjudicate, never auto-fixes.
+candidates for a mind to adjudicate, never auto-fixes. A healthy store
+lints quiet: persistent findings mean the linter or the store is wrong,
+and either way the discrepancy gets fixed, not tolerated.
 
 ## The fidelity test case
 
