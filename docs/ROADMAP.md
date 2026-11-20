@@ -50,6 +50,22 @@
   kit's own verify-before-install discipline in reverse — publish the pinned
   commit hash alongside any listing.
 
+## Phase 4 — Module 08: Skill Lifecycle — DONE 2026-11-20
+
+- Module 08 added via PR #1 (merged the same day it opened): a
+  session-review rubric that stages skill lessons instead of writing
+  them live, staged-diff approval through the decision queue
+  (`[type: skill-write]` / `[type: skill-curator]`, base-hash voiding,
+  14-day staging expiry), and a deterministic curator (stale 14d,
+  archive candidate 30d, never deletes) — adapted from Hermes Agent
+  with the gates-on divergence, plus a shadow-week rollout. Ships the
+  staged-proposal and queue-item templates and a reference curator
+  script (fixture-tested).
+- Manifest, README (module table, layout, attribution), and the
+  wizard's gating list updated in the same PR.
+- Tagged **v0.2** at the merge commit
+  (7e15e075b3873e019357f9fddde0df8c7a80478e).
+
 ## Ideas parking lot
 
 - A "diff my setup" tool: compare an existing installation against the kit
