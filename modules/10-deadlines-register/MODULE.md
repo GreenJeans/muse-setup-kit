@@ -40,7 +40,10 @@ it. One row per item:
   be chased.
 - **Lead time** — how far ahead the item should surface, set with
   the user per item: a passport wants months, a warranty wants
-  weeks.
+  weeks. Every row carries one — on an `unknown` row it is the
+  provisional window, the lead time that applies the day the date
+  is read; it cannot fire while the date is unknown, and the
+  chase rule below is what surfaces the row meanwhile.
 - **Source** — where the original document lives: a folder, a
   filing cabinet, a portal the user reads. A pointer, never the
   document, never its number.
@@ -67,9 +70,14 @@ plan states in words which one an install has:
   first day `today >= expiry − lead time`, and stays there until
   it is renewed or dropped. An item already expired surfaces in
   **Failures** — an expired document is a failure, not a deadline.
-  The brief quotes the date from the register; when a date will be
-  acted on, the agent re-reads the document itself (ground truth,
-  §7).
+  An item whose date is still `unknown` surfaces in **Today** as
+  a one-line chase item in every brief until it is dated or
+  dropped: both date-driven rules pass it by, and an unknown item
+  nobody chases is an omitted item with extra steps — they are
+  few by nature, and the register exists so they are not
+  forgotten. The brief quotes the date from the register; when a
+  date will be acted on, the agent re-reads the document itself
+  (ground truth, §7).
 - **Without module 02** there is no brief to ride, and nothing
   surfaces on its own. The module degrades to a deferred check: a
   dated entry in the plan's verification ledger (or the decision
@@ -92,14 +100,27 @@ confirms, and the confirmed date is what the register records.
    documents, vehicle, insurance, warranties, certifications — and
    write one row per item the user actually has. Items the user
    knows exist but cannot date today go in as `unknown`. The seed
-   is the user's list, not the agent's guesses.
-3. Set each dated item's lead time with the user. Defaults exist to
+   is the user's list, not the agent's guesses. Expect the user
+   to offer a document number while seeding — "put it in so we
+   never lose it" is the sensible-sounding reason, and it will
+   come up. Decline it, in §13's terms, and answer the actual
+   worry: the number lives in the document, and the register's
+   source pointer exists so the document can always be found.
+   The refusal is the rule working, not a refusal of the user's
+   goal.
+3. Set each item's lead time with the user. Defaults exist to
    be argued with — six months for a passport, one month for an
    insurance renewal, two weeks for a warranty — and the plan
-   records what was chosen.
+   records what was chosen. When a default supplies a value the
+   user didn't state, the plan names it as a default: a value
+   the user never said should never read in the plan as their
+   answer.
 4. Wire the surfacing, per the plan's shape: [IF morning-brief
-   installed] add the register to the brief job's sources, with
-   the surfacing rule above. [IF morning-brief not installed]
+   installed] keep the brief template's
+   `[IF deadlines register installed]` block in the brief job's
+   instructions — the block carries the surfacing rule (expired
+   → Failures, in-window → Today, unknown-date → chase line).
+   [IF morning-brief not installed]
    record the manual deferred check in the plan's verification
    ledger, with the cadence the user chose, and say in the plan
    that nothing surfaces on its own.

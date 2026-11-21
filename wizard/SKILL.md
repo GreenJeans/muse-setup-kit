@@ -17,7 +17,11 @@ and approved.**
 2. **Pinned source only.** Before anything else, establish what this
    checkout is, one of two ways. If the user gave you a full commit
    hash (from the release page, not from inside this repo), compare it
-   with `git rev-parse HEAD`: a mismatch stops the install. If the
+   with `git rev-parse HEAD`: a mismatch stops the install. An
+   abbreviated hash is not a user-supplied hash: anything short of
+   the full hash takes the no-hash path below, even when the
+   abbreviation uniquely prefixes HEAD — a prefix match proves
+   nothing about where the abbreviation came from. If the
    user gave no hash, the checkout must sit exactly on a release tag
    (`git describe --tags --exact-match`): resolve the tag and the full
    hash, and state both in the plan ("installing v0.6, commit <full
@@ -65,7 +69,11 @@ and approved.**
    the entry says so and names what was not read — and what the
    modules read, write, and contact over the network. It becomes
    the plan's first item and is approved with the
-   plan, whether or not security-pack is selected. Any third-party
+   plan, whether or not security-pack is selected. Where the entry
+   lives: in module 06's vetting log when security-pack is installed;
+   otherwise in `SETUP-PLAN.md` itself, as the plan's first item — an
+   install without module 06 creates no other vetting file, and the
+   entry is not homeless. Any third-party
    software a module installs gets its own vetting entry in the plan
    before installation.
 7. **Placeholders are not facts.** Templates contain `<PLACEHOLDERS>`. Fill
@@ -78,7 +86,11 @@ and approved.**
    the plan's verification ledger as DEFERRED, with its due date
    written as `due: YYYY-MM-DD` and an owner named (Step 5 item 4
    gives the ledger row format; kit_doctor reads the due date from
-   that field). A morning brief surfaces due checks — the kit's module 02
+   that field). A check whose due is an *event* — "the first renewal
+   after install", "the user's next conversation" — is ledgered with
+   the event named in the row **and** a fallback `due:` date computed
+   at install; the `due:` date is the binding one kit_doctor reads,
+   and the event is what the check is actually waiting for. A morning brief surfaces due checks — the kit's module 02
    brief, or a brief-like daily job the user already runs (amend it,
    with approval, to read the plan). Otherwise — and whenever it is
    unclear whether anything brief-like will actually read the plan —
@@ -135,15 +147,23 @@ the answers for the gating step:
 - Can you run local scripts (shell / Python 3) and read files on this
   machine, including session transcripts where the platform keeps them?
 - **Which billing bucket does this session draw on?** An install is
-  heavy work: a full one reads on the order of 29,000 words of kit and
-  writes dozens of files; a Starter install is about 12,000 of that.
+  heavy work: a full one reads on the order of 34,000 words of kit and
+  writes dozens of files; a Starter install is about 15,000 of that.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
   rule 2 applied to the kit itself, and it is a stop condition, not a
   footnote. You usually cannot verify the bucket from inside the
   session — there is no source to read and no canary to run — so the
   user's word is the source here: name the bucket, and record it in
-  the plan as user-stated, not verified.
+  the plan as user-stated, not verified. If the bucket still cannot
+  be named after checking, the unknown path is this: record it in
+  the plan as UNKNOWN, flagged as a standing stop-condition item.
+  The interview, planning, and an EVALUATION install may proceed;
+  a production install may complete only with the flag carried in
+  the plan and named at handover; and no heavy run beyond the
+  install itself starts until the bucket is named. The flag, not
+  silence, is the path — an unrecorded UNKNOWN is a failed check,
+  not a footnote.
 
 Map the answers to the manifest's requirement tokens:
 
@@ -289,6 +309,14 @@ docs/REHEARSALS.md the same way as a module's, and the plan states
 it — a component with no rehearsal row is offered as unrehearsed,
 by name.
 
+When a plan-time answer is unavailable — the user doesn't know
+yet, or a scripted run has no one to ask — the value used is
+recorded in the plan as an *assumption*, marked as one, never
+presented as the user's answer. Kit defaults cover the mechanical
+values (brief at 07:00 in the user's timezone; the triage window
+is the user's waking hours); an assumption the user later corrects
+is a plan edit, re-approved like any other.
+
 Collect every placeholder answer first, then re-render the plan in its
 final form with zero `<PLACEHOLDER>` tokens remaining. Placeholder
 answers are not approval. Ask for explicit approval of that exact final
@@ -316,7 +344,11 @@ For each module:
    the module, the check, its owner, and the due date written as
    `due: YYYY-MM-DD`. kit_doctor reads the due date from that field,
    so keep other dates out of the row — a completion note's date
-   belongs in the install log, not the ledger row.
+   belongs in the install log, not the ledger row. Where a VERIFY
+   due is an event rather than a date (a first renewal, a next
+   conversation), the row names the event in the check text and
+   `due:` carries the fallback date the VERIFY names — computed at
+   install, never left for the reader to invent.
 5. Log the module, its source commit, and the verification result in
    `SETUP-PLAN.md`. For every file the install created or copied from
    the kit (procedures, filled templates, copied tools — not

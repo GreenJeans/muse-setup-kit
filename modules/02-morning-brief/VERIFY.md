@@ -12,8 +12,12 @@ watch checks.
       not exist for this install are recorded as dropped in the plan;
       and the instructions contain the rule that an unread source is
       reported as unread — never as clear.
-- [ ] If triage was installed: the VIP list and interrupt rules are
-      filled in, and the delivery window matches the user's waking hours.
+- [ ] If triage was installed: the triage job file exists, built
+      from `triage-job.template.md`, with the VIP list, the
+      interrupt rules, and the shield's immediacy set (the VIPs
+      plus the institutions named at install) filled in; the
+      shield check is ordered before the interrupt rules; and the
+      delivery window matches the user's waking hours.
 - [ ] If the money watch was installed: the baseline file exists in a
       local workspace file and was built from user-supplied exports
       (no credentials stored anywhere in the workspace); every
@@ -24,9 +28,14 @@ watch checks.
       file exists; and the job is recorded in `JOBS.md`.
 - [ ] If the promises ledger was installed: the ledger file exists
       in its canonical shape (I owe / Waiting on sections); every
-      seeded entry carries a verbatim quote and a source locator,
-      or is marked unverified; it is a local workspace file, not on
-      any shared surface; and the brief job's sources name it.
+      seeded entry carries its grade — a verbatim quote with a
+      source locator, the user's own record with its wording
+      marked unverified, or unverified with the paraphrase
+      recorded as a note, never as a quote; an entry with no date
+      reads `Due: not set`; it is a local workspace file, not on
+      any shared surface; and the brief job's instructions keep
+      the template's `[IF promises ledger installed]` block,
+      which names the ledger as a source.
 
 ## Deferred
 
@@ -50,7 +59,8 @@ watch checks.
       an entry seeded with a past due date appears in the brief's
       Today section, quoted from the ledger with its due date; a
       follow-up draft, if one was prepared, exists as a draft —
-      nothing was sent.
+      nothing was sent. A `Due: not set` entry, if any was
+      seeded, is named in the first monthly pass after install.
 - [ ] **Shield fixture drill** (due: first month; triage installs
       only): run the scan over five scam fixtures — an impersonated
       bank notice, a toll text, a package-fee notice, a

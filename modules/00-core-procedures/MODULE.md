@@ -138,9 +138,14 @@ Registry, as shipped:
    `continuity-handover.md` at the workspace root — a file whose
    purpose is to be found later, by a stressed human or a fresh
    agent, gets a findable name. The user may name another home; the
-   plan records the path and who the handover is for either way. An
-   unfilled handover is ledgered as a deferred check, never silently
-   skipped.
+   plan records the path and who the handover is for either way. A
+   handover filled in part is a normal state, not a failure: the
+   load-bearing fields — who picks things up if the user is
+   unavailable, and how to pause the agent — are filled at install;
+   the rest (account details, further contacts, the open-threads
+   list) may be marked not-yet-supplied in the file, with the
+   completion ledgered as a deferred check. An unfilled handover is
+   ledgered as a deferred check, never silently skipped.
 
 ## Verify
 

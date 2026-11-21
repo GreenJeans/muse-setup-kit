@@ -14,8 +14,10 @@
 - [ ] No row, and no other text in the register, contains a
       document number: no passport, policy, licence, or ID numbers
       anywhere in the file. Document types and dates only.
-- [ ] Every dated row has a lead time, set with the user and
-      recorded on the row.
+- [ ] Every row has a lead time, set with the user and recorded
+      on the row. On an `unknown` row the lead time is the
+      provisional window that applies the day the date is read —
+      required, not decorative.
 - [ ] If the seed includes an item already past its expiry, its
       state reads expired — not current, not clear.
 - [ ] Surfacing is wired as the plan states: the brief job's
@@ -27,17 +29,29 @@
 ## Deferred
 
 - [ ] **Lead-time crossing** (due: the first item's lead-time date
-      after install): the item surfaces in the brief's Today
+      after install; if an item is already inside its window at
+      install, due at the first brief after install instead — the
+      ledger row names the event and `due:` carries the operative
+      date): the item surfaces in the brief's Today
       section on the day it crosses, carrying the expiry date as
       recorded in the register — and, before anything is acted on,
       the date is re-read from the source document. For a no-brief
       install, the manual check is what fires, on its recorded
       cadence.
-- [ ] **Renewal drill** (due: the first renewal after install): the
+- [ ] **Renewal drill** (due: the first renewal after install, or
+      install + 6 months, whichever comes first — the ledger row
+      names the event and `due:` carries the earlier date): the
       renewed item's row shows the new expiry as current state,
       the old expiry sits in History with the renewal date, and
       the item stops surfacing.
 - [ ] **Expired handling** (due: the first item to expire after
-      install): the expired item appears in the brief's Failures
+      install; an item already expired at install makes it due at
+      the first brief after install): the expired item appears in
+      the brief's Failures
       section — never in Today, never described as clear — and
       keeps appearing until it is renewed or dropped.
+- [ ] **Unknown-date chase** (due: the first brief after install;
+      brief installs only, and only when the seed holds an
+      `unknown` item): the item appears in the brief's Today
+      section as a one-line chase item, and keeps appearing in
+      every brief until it is dated or dropped.

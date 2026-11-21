@@ -17,11 +17,14 @@ use and is inventoried in the install baseline, never diffed. -->
   <where the original lives>. State: current.
 
 <!-- An item whose date nobody has read yet is recorded as
-unknown, never omitted. Surfacing, when module 02 is installed:
-an item appears in the brief's Today section on the first day
-today >= expiry − lead time, and stays until renewed or dropped;
-an item past its expiry appears in Failures. Without a brief,
-this file is read by hand on the cadence recorded in the plan. -->
+unknown, never omitted. Its lead time is the provisional window
+that applies the day the date is read. Surfacing, when module 02
+is installed: an item appears in the brief's Today section on
+the first day today >= expiry − lead time, and stays until
+renewed or dropped; an item past its expiry appears in Failures;
+an unknown item appears in Today as a one-line chase item in
+every brief until it is dated or dropped. Without a brief, this
+file is read by hand on the cadence recorded in the plan. -->
 
 ## History
 

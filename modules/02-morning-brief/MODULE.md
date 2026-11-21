@@ -46,7 +46,10 @@ A frequent lightweight scan that interrupts only for:
 
 - a VIP sender (the user's named people — partner, counsel, key services);
 - a direct question to the user;
-- a deadline inside 24 hours;
+- a deadline inside 24 hours *on the user* — an action the user
+  owes by then. A deadline in marketing copy ("offer ends
+  tonight"), or inside a message the shield has flagged, is not
+  one;
 - a security or account alert;
 - a shared task tagged `urgent` (if household-hq is installed).
 
@@ -82,13 +85,19 @@ sender names and addresses are exactly what impersonation forges.
   message, never reply to it to check. Verification goes through a
   channel the user already has: the bank's own app, the number on
   the card, the relative's known number.
-- A flagged message never interrupts as VIP mail. If it
-  impersonates a VIP or an institution the user relies on, it
-  surfaces *immediately as a shield flag* — the user hears "this
-  claims to be your bank; it looks wrong because X" right away,
-  because the user may meet the message in their own inbox hours
-  before the brief lands, and the flag's value decays fast. Other
-  flags accrue to the brief, in Failures, with the reason attached.
+- A flagged message never interrupts as VIP mail. Whether it
+  surfaces immediately turns on the **immediacy set**, and the set
+  is named at install, not judged in the moment: the user's VIPs,
+  plus the institutions collected in the triage interview — their
+  bank, toll operator, package carrier, and key services. If a
+  flag impersonates a member of that set, it surfaces
+  *immediately as a shield flag* — the user hears "this claims to
+  be your bank; it looks wrong because X" right away, because the
+  user may meet the message in their own inbox hours before the
+  brief lands, and the flag's value decays fast. A flag
+  impersonating anything else — a bank that is not the user's
+  bank, a carrier they don't use — accrues to the brief, in
+  Failures, with the reason attached.
 - The reason is one line and specific: "sender domain is
   <look-alike>, not <the real one>", "asks for payment by gift
   card", "the number in the message is not the number on the
@@ -185,15 +194,24 @@ party and quote their words (procedures §13). The ledger lives in
 a local workspace file kept for the purpose, never on a shared
 surface.
 
-- **The quote is the record.** Every entry carries the commitment
-  in the words as actually said or written — a verbatim quote —
-  with a source locator: the message, email, or note it came from,
-  and its date. A paraphrase is not an entry. If the words cannot
-  be recovered, the entry says so and is marked unverified rather
-  than reconstructed from memory.
+- **The quote is the record — and entries carry a grade.** Every
+  entry names how its words are held, one of three grades:
+  *verbatim* — the commitment in the words as actually said or
+  written, with a source locator (the message, email, or note it
+  came from, and its date); *user's own record* — the commitment
+  rests on the user's own note or receipt (an in-store return on a
+  paper receipt, a phone call the user logged): firm as to fact,
+  with the wording marked unverified, and the source locator is
+  the user's record; *unverified* — the words cannot be
+  recovered: the entry records the paraphrase as a note, explicitly
+  not in quotes, marked unverified. A paraphrase is never dressed
+  as a quote, and nothing is reconstructed from memory.
 - **Direction and due date.** Each entry is *I owe* or *waiting
   on*, names the other party, and carries a due date — the date in
   the quote, or the date the user sets when the quote names none.
+  `Due: not set` is a legal state: an entry nobody could date.
+  A dateless entry cannot surface by date, so it resurfaces the
+  other way (below) until the user dates or drops it.
 - **States: open, done, dropped.** Done means verified: the quote
   arrived, the refund posted, the thing was seen to happen — not
   assumed, not "probably". A dropped entry records who dropped it
@@ -203,6 +221,10 @@ surface.
   for items the user clears by number, and a ledger entry is not
   cleared, it is chased, done, or dropped. The brief quotes the
   entry's quote and due date from the ledger, never from memory.
+  Open entries with `Due: not set` are named in the brief's
+  monthly (1st-of-the-month) pass, alongside the grants
+  inventory, until each is dated or dropped — a dateless entry is
+  never invisible just because the date-driven rule can't see it.
 - **Follow-ups are drafts.** For a waiting-on entry that comes
   due, the brief may prepare a follow-up draft, the way Waiting
   replies prepares drafts: a real draft, never sent. Sending one
@@ -211,9 +233,13 @@ surface.
 
 **Worked example — returns and refunds.** A purchase return is a
 waiting-on entry: the merchant owes the refund. The entry's quote
-is the return confirmation's own words, its source the
-confirmation message, and its due date the return window's close —
-the last day the return can still be made. Drop-off is not done:
+is the return confirmation's own words when there are words to
+quote, its source the confirmation message, and its due date the
+return window's close — the last day the return can still be
+made. An in-store return on a paper receipt the agent never sees
+is entered on the user's own record instead: firm as to the
+refund owed, wording unverified, source locator the user's note.
+Drop-off is not done:
 the entry stays open after the package is mailed, until the
 refund is verified — posted to the account, or confirmed in the
 merchant's own record. That is the ledger's whole discipline in
@@ -226,7 +252,7 @@ is finished when the other side's part is seen to have happened.
    time (user's morning, their timezone) and delivery (main chat).
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
-4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional.
+4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected in the interview (the user's bank, toll operator, package carrier, key services). The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional.
 5. Optional: the money watch — weekly cadence. Build the baseline
    with the user from their exports into
    `finance/money-watch-baseline.md`, from
@@ -243,10 +269,12 @@ is finished when the other side's part is seen to have happened.
 6. Optional: the promises ledger — create
    `commitments/promises-ledger.md` from
    `promises-ledger.template.md` (the plan may choose another
-   path; it records it), add the ledger to the brief job's
-   sources so overdue and due-today entries surface in Today, and
-   record the decision (installed / not installed) in the plan
-   either way.
+   path; it records it), and keep the brief template's
+   `[IF promises ledger installed]` block in the brief job's
+   instructions — the block carries the surfacing rules (overdue
+   and due-today entries in Today; `Due: not set` entries named
+   in the monthly pass). Record the decision (installed / not
+   installed) in the plan either way.
 
 ## Verify
 
