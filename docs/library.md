@@ -102,6 +102,18 @@ of three classes:
 The classes are what make repair (below) a mechanical question
 instead of a judgment call.
 
+Module 10 (the deadlines & expiry register, v0.9) is the first
+module designed under this spec, ahead of the `module.yaml`
+implementation: its `MODULE.md` declares its data class
+(`personal` — document types and expiry dates, never a document's
+number, per procedures §13) and names its one installed file's
+class — the register is accumulating, inventoried in the baseline
+and never diffed. Module 02's promises & waiting-on ledger, in the
+same release, declares its classes the same way (`personal`,
+`third-party`). Until the library phase lands, the declarations
+live in the module text; afterwards they move into `module.yaml`
+and the selfcheck asserts the two agree.
+
 ## Gates (what replaces the cap)
 
 1. **Reading cost.** Budgets bind per profile and per module,

@@ -32,7 +32,7 @@ modules:
     dir: modules/02-morning-brief
     rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); changed since (friction fixes), re-rehearsal pending"
     title: Morning Brief & Inbox Triage
-    pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules, and silent-by-design watches.
+    pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules with a scam & impersonation shield, silent-by-design watches, an optional money watch, and an optional promises & waiting-on ledger.
     depends_on: [core-procedures]
     requires: []
     degrades_without: [scheduling]   # installs as an on-demand brief instead
@@ -121,21 +121,34 @@ modules:
     network: "Your providers' billing pages only, with you present."
     jobs: "One monthly spend check (rides the brief if installed)."
 
+  - id: deadlines-register
+    dir: modules/10-deadlines-register
+    rehearsed_at: null   # never rehearsed — v0.9 ships it unrehearsed and says so
+    title: Deadlines & Expiry Register
+    pitch: One register of what expires — passports, licences, warranties, policies, certifications — each with a lead time and a pointer to the original; no document numbers are stored.
+    depends_on: [core-procedures]
+    requires: []
+    degrades_without: [morning-brief]   # no brief to ride: surfacing becomes a manual deferred check on a cadence the user picks, and the plan says nothing surfaces on its own
+    reads: "The register file; a source document when its date needs re-reading at the original."
+    writes: "One local register file (accumulating): rows added, renewals updated in place, old expiries moved to its History."
+    network: none
+    jobs: none
+
 # Install profiles — the wizard offers these first (Step 3), then the
 # per-module checklist. Audit cost = wizard + manifest + every file
 # an install reads in the profile's modules (MODULE.md, VERIFY.md,
-# templates, tools), counted at v0.8; tools/kit_selfcheck.py
+# templates, tools), counted at v0.9; tools/kit_selfcheck.py
 # recomputes them and asserts the README's figures match these.
 profiles:
   - id: starter
     title: Starter
     modules: [core-procedures, morning-brief, cost-guardrails]
-    audit_words: 12100
+    audit_words: 13600
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
-    audit_words: 17000
+    audit_words: 18600
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle) is offered per module after the profiles.

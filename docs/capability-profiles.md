@@ -11,16 +11,16 @@ Legend: **required** = the module will not install without it.
 **degrades** = installs and works; the named function weakens.
 **—** = unaffected.
 
-| Capability | 00 Procedures | 01 Memory | 02 Brief | 03 HQ | 04 Exchange | 05 Evaluation | 06 Security | 08 Skill lifecycle | 09 Cost |
-|---|---|---|---|---|---|---|---|---|---|
-| scheduling | — | degrades | degrades | — | — | degrades | degrades | degrades (Full only) | degrades |
-| shell + python | — | degrades | — | — | — | — | — | degrades (Full only) | — |
-| second person | — | — | — | required | — | — | — | — | — |
-| shared docs | — | — | — | required | — | — | — | — | — |
-| shared tasks | — | — | — | required | — | — | — | — | — |
-| shared storage | — | — | — | — | required | — | — | — | — |
-| other agents | — | — | — | — | required | degrades | — | — | — |
-| module 02 installed | — | — | — | degrades | — | — | — | — | — |
+| Capability | 00 Procedures | 01 Memory | 02 Brief | 03 HQ | 04 Exchange | 05 Evaluation | 06 Security | 08 Skill lifecycle | 09 Cost | 10 Deadlines |
+|---|---|---|---|---|---|---|---|---|---|---|
+| scheduling | — | degrades | degrades | — | — | degrades | degrades | degrades (Full only) | degrades | — |
+| shell + python | — | degrades | — | — | — | — | — | degrades (Full only) | — | — |
+| second person | — | — | — | required | — | — | — | — | — | — |
+| shared docs | — | — | — | required | — | — | — | — | — | — |
+| shared tasks | — | — | — | required | — | — | — | — | — | — |
+| shared storage | — | — | — | — | required | — | — | — | — | — |
+| other agents | — | — | — | — | required | degrades | — | — | — | — |
+| module 02 installed | — | — | — | degrades | — | — | — | — | — | degrades |
 
 ## What each degradation means
 
@@ -56,9 +56,11 @@ Legend: **required** = the module will not install without it.
   they are.
 - **No module 02.** Module 03 installs, but its decision and waiting
   items surface only when someone opens the task layer; the brief is
-  what makes them arrive. Nothing else degrades — module 04's output
-  polling riding the brief, where both are installed, is a synergy,
-  not a dependency.
+  what makes them arrive. Module 10 installs, but its register
+  surfaces only through a manual deferred check on a cadence the
+  user picks — nothing arrives on its own, and the plan says so.
+  Nothing else degrades — module 04's output polling riding the
+  brief, where both are installed, is a synergy, not a dependency.
 
 ## Three common platform shapes
 
