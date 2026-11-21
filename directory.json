@@ -1,12 +1,12 @@
 {
-  "generated_from": "e13f9fc0c5a5ff91ca8bfc383fb60853e8729f46",
+  "generated_from": "4e6bd9950c9e044bdff8545c7e92b283f5eb1b89",
   "library": "core",
   "modules": [
     {
       "action_classes": [
         "none"
       ],
-      "audit_words": 1681,
+      "audit_words": 1685,
       "data_classes": [
         "personal",
         "third-party"
@@ -38,6 +38,8 @@
         "shared-storage",
         "other-agents"
       ],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "AI Exchange",
       "version": "0.3",
       "writes": "a protocol doc, a queue sheet, per-agent inboxes/outboxes, published pages."
@@ -46,7 +48,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 4037,
+      "audit_words": 4188,
       "data_classes": [
         "personal"
       ],
@@ -87,6 +89,8 @@
       "reads": "your existing agent instructions and workspace layout.",
       "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending",
       "requires": [],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "Core Procedures",
       "version": "0.9",
       "writes": "an operating-procedures file, a decision queue, SCOPE notes."
@@ -95,7 +99,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 1450,
+      "audit_words": 1454,
       "data_classes": [
         "financial"
       ],
@@ -124,6 +128,8 @@
       "reads": "your model/provider usage and billing pages (with you present), the bucket register.",
       "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending",
       "requires": [],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "Cost & Billing Guardrails",
       "version": "0.8",
       "writes": "a bucket register in the procedures; decision-queue items when a cap is approached."
@@ -132,7 +138,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2036,
+      "audit_words": 2040,
       "data_classes": [
         "personal"
       ],
@@ -161,6 +167,8 @@
       "reads": "the register file; a source document when its date needs re-reading at the original.",
       "rehearsed_at": "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending",
       "requires": [],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "Deadlines & Expiry Register",
       "version": "0.9",
       "writes": "the register \u2014 one local file, updated in place."
@@ -169,7 +177,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2285,
+      "audit_words": 2335,
       "data_classes": [
         "personal",
         "third-party"
@@ -205,6 +213,8 @@
       "reads": "your procedures and memory, frozen into an audit packet.",
       "rehearsed_at": null,
       "requires": [],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "Evaluation Kit",
       "version": "0.8",
       "writes": "packets, findings, adoption records."
@@ -213,7 +223,7 @@
       "action_classes": [
         "contact"
       ],
-      "audit_words": 1934,
+      "audit_words": 1938,
       "data_classes": [
         "personal",
         "third-party"
@@ -251,6 +261,8 @@
         "shared-docs",
         "shared-tasks"
       ],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "Household HQ",
       "version": "0.8",
       "writes": "shared lists, a shared notebook, a shared ops sheet."
@@ -259,7 +271,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2534,
+      "audit_words": 2538,
       "data_classes": [
         "personal",
         "third-party"
@@ -298,6 +310,8 @@
       "reads": "your memory files.",
       "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending",
       "requires": [],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "Memory Architecture",
       "version": "0.8",
       "writes": "a schema file, header stamps, a linter and its reports."
@@ -306,7 +320,7 @@
       "action_classes": [
         "send"
       ],
-      "audit_words": 5516,
+      "audit_words": 5616,
       "data_classes": [
         "personal",
         "third-party"
@@ -356,6 +370,8 @@
       "reads": "calendar, mailbox, task lists, decision queue, watch outputs.",
       "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending",
       "requires": [],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "Morning Brief & Inbox Triage",
       "version": "0.9",
       "writes": "one brief per day; draft replies only, sent only with approval."
@@ -364,7 +380,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2674,
+      "audit_words": 2678,
       "data_classes": [
         "none"
       ],
@@ -397,6 +413,8 @@
       "reads": "anything you are about to install, in full, at a pinned version.",
       "rehearsed_at": "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending",
       "requires": [],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "title": "Security Pack",
       "version": "0.9",
       "writes": "vetting records; standing-rule additions."
@@ -405,7 +423,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 6885,
+      "audit_words": 6889,
       "data_classes": [
         "personal",
         "third-party"
@@ -449,6 +467,8 @@
       "reads": "session transcripts, your custom skills, the decision queue, scheduled-job records.",
       "rehearsed_at": "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run",
       "requires": [],
+      "reviewed_at": null,
+      "reviewed_by": null,
       "tiers": [
         {
           "description": "In-session + explicit staging and staged-diff approval. No tools, no jobs, no ledger.",
