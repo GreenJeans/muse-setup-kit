@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 29,000
+install is heavy work — a full one reads on the order of 32,000
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -78,9 +78,9 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~12,100 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~17,000 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all nine modules | ~29,100 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~13,600 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~18,600 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all ten modules | ~32,200 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -106,13 +106,14 @@ pin — you would be the first" where that is true.
 |---|--------|-------------------|-------|
 | 00 | **Core procedures** | Ticket rule for irreversible actions, a numbered decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover | Nothing — the foundation |
 | 01 | **Memory architecture** | A compiled-memory schema (current state + superseded history, provenance, verify pointers), a deterministic linter, weekly fidelity sampling | 00 |
-| 02 | **Morning brief** | A failures-first daily brief, inbox triage with interrupt rules, silent-by-design watches whose silence is itself checked, an optional money watch | 00; a mailbox/calendar helps |
+| 02 | **Morning brief** | A failures-first daily brief, inbox triage with interrupt rules and a scam & impersonation shield, silent-by-design watches whose silence is itself checked, an optional money watch, an optional promises & waiting-on ledger | 00; a mailbox/calendar helps |
 | 03 | **Household HQ** | Two people, two agents, one shared coordination system: task layer, memory layer, a notebook protocol, a principles doc | 00; a second person with their own Muse; shared docs/tasks |
 | 04 | **AI Exchange** | Several AI agents exchanging work through shared storage — protocol, queue, blind reviews, ingest discipline | 00, 01; shared cloud storage; at least one other agent |
 | 05 | **Evaluation kit** | Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks | 00, 01 |
 | 06 | **Security pack** | Verify-before-install (with the connector/MCP vetting pack: provenance tiers, scope audits, tool-manifest pinning), one-time permission grants, content-exclusion lists, session canary, retitle-before-share | 00 |
 | 08 | **Skill lifecycle** | A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, a curator that archives unused skills but never deletes — gates on, unlike the system it adapts | 00, 01 |
 | 09 | **Cost & billing guardrails** | Bucket discipline for agent spending: know whether a run draws on a subscription, an API key, or a router before it starts; hard caps set in advance; a monthly spend check | 00 |
+| 10 | **Deadlines & expiry register** | One local register of what expires — passports, licences, warranties, policies, certifications — each with a lead time and a pointer to the original; no document numbers stored | 00; 02 surfaces it in the brief (manual check without) |
 
 Not a module: **infra patterns** (layered backups, health watches,
 alert discipline for people with a host) live in
@@ -191,13 +192,14 @@ wizard/              ← SKILL.md (the wizard) · manifest.yaml (modules)
 modules/
   00-core-procedures/      MODULE.md · VERIFY.md · templates/
   01-memory-architecture/  MODULE.md · VERIFY.md · SCHEMA + MEMORY templates · tools/ (reference linter)
-  02-morning-brief/        MODULE.md · VERIFY.md · brief template
+  02-morning-brief/        MODULE.md · VERIFY.md · brief, money-watch, and ledger templates
   03-household-hq/         MODULE.md · VERIFY.md · principles + partner-prompt templates
   04-ai-exchange/          MODULE.md · VERIFY.md · protocol template
   05-evaluation-kit/       MODULE.md · VERIFY.md · templates/ (fictional seeds) · tools/ (kit doctor)
   06-security-pack/        MODULE.md · VERIFY.md · vetting-log template
   08-skill-lifecycle/      MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator, stage check)
   09-cost-guardrails/      MODULE.md · VERIFY.md · templates/ (bucket register)
+  10-deadlines-register/   MODULE.md · VERIFY.md · register template
 tools/               ← kit_selfcheck.py (the kit lints itself) · tests/ (tool fixtures)```
 
 ## Status
@@ -205,12 +207,15 @@ tools/               ← kit_selfcheck.py (the kit lints itself) · tests/ (tool
 Rehearsed, and then audited — repeatedly, by fresh agents in
 sandboxes and by two outside models in blind review rounds. The
 record, including what has *not* been rehearsed, is
-`docs/REHEARSALS.md`; the history is `docs/ROADMAP.md`. v0.8 adds:
-the connector/MCP vetting pack in module 06 (provenance tiers,
-scope audits, tool-manifest hash pinning), module 02's money
-watch, the sensitive-records rule and continuity handover in
-module 00, named extension anchors for modules that amend core
-files, and `docs/library.md` — the design for the module library
-the next phases implement.
+`docs/REHEARSALS.md`; the history is `docs/ROADMAP.md`. v0.9 adds:
+module 10, the deadlines & expiry register — the first module
+designed under the library spec in `docs/library.md`, its data
+class declared and its register an accumulating file; it ships
+unrehearsed and is labeled that way until a fresh agent installs
+it. Module 02 gains the promises & waiting-on ledger (the
+return-and-refund tracker is its worked example) and the scam &
+impersonation shield in triage — module 06's
+content-is-not-instructions rule turned outward, with a pointer
+from module 06.
 
 License: MIT (see `LICENSE`).

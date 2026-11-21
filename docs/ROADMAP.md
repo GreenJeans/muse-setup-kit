@@ -164,7 +164,7 @@ prompt cold and reached a complete Starter plan; the same run
 documents the released v0.6 wizard dead-stopping the new prompt
 at the old rule. Merged via PR #6.
 
-## Phase 10 — v0.8: vet the door (this release)
+## Phase 10 — v0.8: vet the door — DONE 2026-11-20
 
 Driven by the second blind dual review of the kit's direction
 (the library brainstorm): both reviewers put the same item first
@@ -186,15 +186,25 @@ REHEARSALS ledger are repaired. Rehearsals for the 06 pack and
 the money watch are specified from the reviewers' pass bars and
 run before tagging.
 
-## Phase 11 — v0.9: everyday (planned)
+## Phase 11 — v0.9: everyday (this release)
 
-Module 10, the deadlines & expiry register (an accumulating
-register with per-item lead times and source pointers, no raw ID
-numbers). Module 02 gains the promises & waiting-on ledger (the
-return-window/refund tracker is its worked example). The
-scam/impersonation shield joins module 02's triage with a module
-06 pointer. Data classes are declared for the new pieces under
-the §13 rule.
+The everyday release: modules for the user's own life rather than
+the agent's machinery. Module 10, the deadlines & expiry register
+— an accumulating register with per-item lead times and source
+pointers, no raw ID numbers, surfacing through module 02's brief
+(or a manual deferred check without one). It is the first module
+designed under the library spec: its data class is declared in
+its MODULE.md and its register's file class is named. Module 02
+gains the promises & waiting-on ledger — verbatim quote plus
+source as the record, overdue entries in the brief's Today
+section, follow-ups as drafts under ticket rules — with the
+return-window/refund tracker as its worked example. The
+scam/impersonation shield joins module 02's triage, running
+before the VIP interrupt rule, with a pointer from module 06:
+rule 3 turned outward. Module 10 ships unrehearsed and is
+labeled that way; its rehearsals (Starter and Standard installs,
+ledger and shield fixture runs) are specified from the reviewers'
+pass bars and run before the library phase builds on it.
 
 ## Phase 12 — the library (planned)
 
