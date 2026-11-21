@@ -199,8 +199,8 @@ surfacing path for local holdings, and the §13 pointers are
 completed across modules 01, 04, 05, 08, and 09. Two findings
 were maintainer decisions, since taken: a user may accept
 excess scopes as a recorded decision — official tier only, in
-their own words, naming each scope accepted — and an official
-hosted connector whose source cannot be read is vetted on its
+their own words, naming each scope accepted — and a hosted
+connector whose source cannot be read is vetted on its
 observable surface with the user's decision recorded, floored
 by a full read of the presented manifest.
 

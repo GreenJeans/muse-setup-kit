@@ -14,7 +14,7 @@ Legend: **required** = the module will not install without it.
 | Capability | 00 Procedures | 01 Memory | 02 Brief | 03 HQ | 04 Exchange | 05 Evaluation | 06 Security | 08 Skill lifecycle | 09 Cost | 10 Deadlines |
 |---|---|---|---|---|---|---|---|---|---|---|
 | scheduling | — | degrades | degrades | — | — | degrades | degrades | degrades (Full only) | degrades | — |
-| shell + python | — | degrades | — | — | — | — | — | degrades (Full only) | — | — |
+| shell + python | — | degrades | — | — | — | degrades | — | degrades (Full only) | — | — |
 | second person | — | — | — | required | — | — | — | — | — | — |
 | shared docs | — | — | — | required | — | — | — | — | — | — |
 | shared tasks | — | — | — | required | — | — | — | — | — | — |
@@ -29,7 +29,8 @@ Legend: **required** = the module will not install without it.
   something actually fires them on cadence (a scheduler, a
   heartbeat, a session hook); job files that nothing runs are this
   row, not a degraded form of scheduling. Module 01's weekly lint becomes a manual run.
-  Module 02's brief is generated when asked instead of arriving.
+  Module 02's brief is generated when asked instead of arriving,
+  and its money watch runs only on demand.
   Module 05's scheduled audit reminders become manual; the audits
   themselves run on demand. Module 06's periodic re-checks (grants
   inventory, watch liveness) become manual. Module 08 Full's sweep
@@ -38,7 +39,9 @@ Legend: **required** = the module will not install without it.
   fails loudly; the risk is that manual steps get skipped, which is
   why JOBS.md separates scheduled jobs from planned ones.
 - **No shell + python.** The kit's four tools (memory linter,
-  curator, kit_doctor, stage_check) cannot run. Modules 01 and 08
+  curator, kit_doctor, stage_check) cannot run. Module 05 loses
+  kit_doctor — the mechanical half of an audit — and freezes
+  packets without the drift check. Modules 01 and 08
   Full keep their paper discipline — the schema, the staging format,
   the approval gate — and lose the mechanical checks: module 01's
   lint becomes a manual header and figure review against the schema

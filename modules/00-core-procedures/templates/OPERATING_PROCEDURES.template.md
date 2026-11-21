@@ -120,6 +120,13 @@ stays however the user keeps it, and this section is inert.)*
   pack: pin the exact version or commit, read the full text at that pin,
   record its reads, writes, network use, credential needs, and removal
   path. Approval is per item per pinned version and never covers an update.
+  Where the source cannot be read — a hosted connector whose code the
+  vendor does not publish is the common case — vetting runs on the
+  observable surface instead, the entry records the source as not
+  readable, and proceeding on that basis is the user's recorded
+  decision. One floor is not the user's to waive: for a connector or
+  an MCP server, the full presented tool manifest must have been read
+  before anything is installed (module 06 carries the practice).
 - Retitle sensitive files and artifacts to neutral titles before sharing;
   titles leak through previews and logs.
 - Verify access at the source with a live read, never by an agent's
@@ -200,11 +207,17 @@ downstream renumbers.)*
   no bank logins, no portal passwords, no card numbers in chat (§10).
   Data arrives as exports the user downloads, files the user places,
   or the user's own reads — or it does not arrive.
-- Applications of this rule: module 02's money watch (financial)
-  and promises ledger (third-party), module 03's shared-surface
-  exclusions (all classes), module 04's exchange hygiene
-  (financial and health records stay out of the exchange
-  entirely), module 06's vetting records (what a tool would
-  hold), module 00's continuity handover (the third-party
-  contacts it names), and module 10's deadlines register
-  (identifiers — document numbers are never recorded).
+- Applications of this rule: module 01's compiled memory
+  (existence pointers only — §13 figures are never copied in),
+  module 02's money watch (financial) and promises ledger
+  (third-party), module 03's shared-surface exclusions (all
+  classes), module 04's exchange hygiene (financial and health
+  records stay out of the exchange entirely), module 05's review
+  packets (§13 records are redacted to existence pointers — they
+  do not travel), module 06's vetting records (what a tool would
+  hold), module 08's skill proposals (a §13-class record is
+  never quoted into a proposal or a queue item), module 09's
+  billing data (a financial record), module 10's deadlines
+  register (identifiers — document numbers are never recorded),
+  and module 00's continuity handover (the third-party contacts
+  it names).
