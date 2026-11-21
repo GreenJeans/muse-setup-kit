@@ -94,6 +94,12 @@ HTML comments of the form `<!-- ext:<name> -->`. The rules:
   runs from the anchor comment to the matching
   `<!-- /ext:<name> -->` marker. The install plan (SETUP-PLAN.md)
   records which module owns each anchor it uses.
+- One anchor is a *registration* anchor: `ext:brief-sources` in
+  the brief job file. Module 02 owns the anchor itself; each
+  module that registers a block inside it owns that block,
+  recorded in the plan like any other ownership. Registration
+  there is the only way contributed surfacing enters the brief —
+  a module never free-edits the brief job file.
 - Uninstalling the owner removes its block, and nothing else.
 - A new anchor is added by editing this registry and the target file
   in the same change. An anchor with no registry entry is a defect;
@@ -107,6 +113,7 @@ Registry, as shipped:
 | Anchor | File | Purpose | Owner |
 |---|---|---|---|
 | `ext:billing-buckets` | OPERATING_PROCEDURES.md (from this module's procedures template) | Module 09 inserts its bucket register and declare-before-heavy-work rule as §12 | module 09 (cost-guardrails), when installed |
+| `ext:brief-sources` | The brief job file (from module 02's brief template) | Modules whose surfacing rides the brief register their source lines here, each in its own `[IF ... installed]` block | module 02 (host); each registered block is owned by the module that registered it |
 
 ## Install
 

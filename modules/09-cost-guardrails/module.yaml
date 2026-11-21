@@ -17,6 +17,8 @@ writes: "a bucket register in the procedures; decision-queue items when a cap is
 network: "your providers' billing pages only, with you present."
 jobs: "one monthly spend check (rides the brief if installed)."
 rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending"
+reviewed_at: null
+reviewed_by: null
 data_classes: [financial]
 action_classes: [none]
 files:

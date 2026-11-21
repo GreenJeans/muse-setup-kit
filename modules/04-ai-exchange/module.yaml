@@ -17,6 +17,8 @@ writes: "a protocol doc, a queue sheet, per-agent inboxes/outboxes, published pa
 network: "your cloud storage."
 jobs: "optional outbox polling in the brief."
 rehearsed_at: "v0.1 household dry run"
+reviewed_at: null
+reviewed_by: null
 data_classes: [personal, third-party]
 action_classes: [none]
 files:

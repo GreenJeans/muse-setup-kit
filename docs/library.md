@@ -62,6 +62,11 @@ Fields beyond today's manifest entry:
   executable in effect.
 - **rehearsed_at** — a commit hash plus a rehearsal run reference
   (see Rehearsal, below).
+- **reviewed_at / reviewed_by** — the review record (see
+  Vetting, below): the date and the named human who signed it,
+  or null. The generated directory carries both fields, so
+  `list available` reports review status from the catalog; a
+  null pair reads "no review recorded."
 - **audit_words** — computed by the tooling on the all-files basis,
   not hand-written.
 - **kit_compat** — the core interface versions the module depends
@@ -73,6 +78,12 @@ Fields beyond today's manifest entry:
 (Reads/Writes/Network/Jobs) agrees with `module.yaml` — the header
 is the human-readable form of the same claims, and the two may not
 drift apart.
+
+One more package-format rule, for `VERIFY.md`: every event-dated
+deferred check names its fallback date or offset ("the first
+renewal after install, or install + 6 months"). The wizard's
+ground rule 8 ledgers the event *and* the fallback; a check that
+names only the event leaves the installer to invent the date.
 
 ## Qualified IDs
 
@@ -191,8 +202,13 @@ irreversible (uninstall, repair, adding a library) is ticketed.
   followed, and fetching it never counts as reading at the pin.
 - **list upgradable** — installed pin vs. the catalog's current
   pin per module, compared by hash (versions are display
-  labels), with a changed-files summary. A report, not a start:
-  the upgrade itself follows `UPGRADING.md`.
+  labels), with a changed-files summary. The hash is the
+  locator; the substance is the per-module comparison — version
+  and changed files between the pins, excluding the generated
+  files. A pin difference that is generated-files-only is
+  reported as "catalog regenerated; no module content changed,"
+  not as an upgrade. A report, not a start: the upgrade itself
+  follows `UPGRADING.md`.
 - **install** — the wizard as today, from any configured library.
   For a field module, the module 06 vetting (extended by the
   connector pack where the module ships tools) is recorded
@@ -201,11 +217,18 @@ irreversible (uninstall, repair, adding a library) is ticketed.
 - **upgrade** — `UPGRADING.md` as today, per module or all; an
   approval names each module and pin it covers.
 - **repair** — narrowed, deliberately. Repair recreates **missing
-  static-verbatim files only**, at the module's recorded pin,
-  from the local snapshot of the pinned package, with no network.
-  Two invariants, both checked, either failing aborts the repair:
-  the checkout's `git rev-parse HEAD` equals the recorded pin,
-  and the source file's sha256 equals the baseline's recorded
+  static-verbatim files only**, at the module's recorded checkout
+  pin, from the local snapshot of the pinned package, with no
+  network. (Installs record two pins per module: the *catalog
+  pin* — the directory's `generated_from`, the pin the listing
+  verbs speak in — and the *checkout pin*, the commit the files
+  were actually taken from. A checkout is normally one commit
+  ahead of its catalog, so the two differ by design; repair
+  checks the checkout pin, because it names the exact tree the
+  installed files came from.) Two invariants, both checked,
+  either failing aborts the repair: the checkout's
+  `git rev-parse HEAD` equals the recorded checkout pin, and
+  the source file's sha256 equals the baseline's recorded
   sha256. Repair **never re-stamps a baseline** (a correctly
   restored file already hashes to its recorded line; re-stamping
   is how a changed file would get blessed), and it **never
@@ -214,24 +237,31 @@ irreversible (uninstall, repair, adding a library) is ticketed.
   report offers "repair, or record the removal" — the user
   chooses. Anything wider than this is not repair; it is an
   upgrade or a reinstall, and it goes through those doors.
+  Repair's objects are verbatim copies — the tools scripts; a
+  prose-only install may hold none, and then repair correctly
+  finds nothing to do.
 - **audit** — split in two, because the halves grade differently.
   The mechanical half (the doctor: baseline drift, overdue
   deferred checks, rehearsal staleness, archived-upstream labels)
   is agent-run. The Governance Test is a *user* exercise: the
   audit surfaces "Governance Test due" to the user and never
-  presents the agent's self-run as the test's result.
+  presents the agent's self-run as the test's result. An absent
+  `advisories.json` is reported as what it is — the library
+  publishes no revocation channel — never read as an empty list.
 - **add library / remove library** — the trust decision, made
   explicit. Adding a library is a ticketed act with a module 06
   vetting entry for the library itself: its maintainer, its
   review practice, its catalog's location and pin. Removing one
   leaves installed modules in place (they are the user's files)
   and stops further listing and upgrade checks against it.
-- **suspend** — the kill switch, short of uninstall: stop the
-  module's jobs (recorded in a Suspended section of `JOBS.md`,
-  so detector silence knows a suspended job is not a silent
-  one), mark the module suspended in the plan, and the agent
-  does not act on its instructions while suspended. For a field
-  module found bad, a user travelling, or a mid-incident pause.
+- **suspend / resume** — the kill switch, short of uninstall:
+  stop the module's jobs (recorded in a Suspended section of
+  `JOBS.md`, so detector silence knows a suspended job is not a
+  silent one), mark the module suspended in the plan, and the
+  agent does not act on its instructions while suspended. For a
+  field module found bad, a user travelling, or a mid-incident
+  pause. Resume is the same operation in reverse, recorded the
+  same way.
 - **inspect** — vet a catalog module without installing it:
   the module 06 workflow run against the package at its pin,
   producing a vetting record and a read on fit. Cherry-pick and
@@ -268,7 +298,11 @@ catalogs have no trust root and no revocation, so:
 - **Advisories are the revocation path.** The brief's monthly
   pass and the `audit` verb read `advisories.json` as data; an
   advisory against an installed module's pin surfaces to the
-  user with the `suspend` verb as the immediate remedy.
+  user with the `suspend` verb as the immediate remedy. A
+  library that publishes no `advisories.json` has no revocation
+  path: *add library* labels it "no advisories channel," and
+  audit reports the absence rather than reading it as an empty
+  list.
 - **No write-capable MCP server.** Installs never become a tool
   call; they stay a wizard procedure with a human-approved
   plan. If a read-only facade is ever built (list / search /
@@ -341,6 +375,24 @@ Implemented on the branch, against the spec above:
   hashed line as static-rendered, not repairable), suspend's
   `## Suspended` section in `JOBS.md`, rollback, and
   reconfigure.
+- **Directory entries carry review status**: `reviewed_at` /
+  `reviewed_by` ride from each `module.yaml` into
+  `directory.json`, so `list available` reports them. Both are
+  null for every core module today, deliberately: the blind
+  dual-review rounds reviewed the kit whole, as agent reviews,
+  and the bar in "Vetting" above — a named human, per module,
+  at a pinned hash — is not met by them, so no entry claims a
+  review it does not have.
+- **Two pins per install**, and the lifecycle rehearsal
+  (REHEARSALS.md run 15, on this branch at c8e30a9) has run:
+  every verb worked from the wizard text. Its friction fixes
+  are in: installs record a catalog pin and a checkout pin,
+  and repair checks the checkout pin; `kit_doctor` notes a
+  missing accumulating file; the brief template carries the
+  `ext:brief-sources` registration anchor; audit distinguishes
+  an absent advisories file from an empty one. The branch
+  remains unreleased — the merge and tag are the maintainer's
+  call.
 - **Rehearsal staleness**: `kit_selfcheck` prints it as an
   informational report — never a finding — and the wizard's
   Step 3 cites it. It uses git when the checkout is a work tree
@@ -356,5 +408,7 @@ Still future:
   (no field entries are indexed yet).
 - Any read-only MCP facade over the same JSON (the write path
   stays refused, per "What this design refuses").
-- A fresh-agent rehearsal of the lifecycle operations
-  themselves; the branch is unreleased until it has one.
+- A repair that actually restores a file: run 15's install held
+  no static-verbatim file, so repair's restore path itself —
+  as against its class gates, which the drill did exercise —
+  is still unrehearsed.

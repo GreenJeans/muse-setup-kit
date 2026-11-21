@@ -27,6 +27,15 @@ tight: the user reads this in two minutes. Failures first, always.
   the ledger; open entries with no date set are named in the
   monthly pass (step 7)
 - [IF memory-architecture installed] Memory: yesterday's daily log; the reconciliation rotation file
+<!-- ext:brief-sources — extension anchor (registered in module
+00's registry). A module whose surfacing rides this brief — a
+field module, typically — registers its source lines between
+these markers, and nowhere else in this file: its install
+writes its block here, inside its own [IF ... installed]
+marker, and its uninstall removes that block. The anchor
+comments are structural: they survive rendering and are never
+dropped as template comments. -->
+<!-- /ext:brief-sources -->
 
 Blocks marked [IF ...] are conditional. The test is whether the
 source exists in the user's setup, not whether it is connected
@@ -38,7 +47,9 @@ does not exist for this install at all — the user has no
 calendar, no task app, no second agent — and record the drops in
 the plan, so the installed instructions and the plan agree about
 what was left out. A section whose sources don't exist is
-omitted — never reported as clear.
+omitted — never reported as clear. The `ext:brief-sources`
+anchor pair above is not a conditional block: it stays in every
+rendering, empty until a module registers into it.
 
 ## Steps
 

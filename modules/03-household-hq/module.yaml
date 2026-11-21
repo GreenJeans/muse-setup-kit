@@ -17,6 +17,8 @@ writes: "shared lists, a shared notebook, a shared ops sheet."
 network: "your shared accounts."
 jobs: "an optional change detector."
 rehearsed_at: "v0.1 household dry run; changed in v0.8, re-rehearsal pending"
+reviewed_at: null
+reviewed_by: null
 data_classes: [personal, third-party]
 action_classes: [contact]
 files:

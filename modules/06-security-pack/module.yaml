@@ -17,6 +17,8 @@ writes: "vetting records; standing-rule additions."
 network: "only the source of what you are vetting."
 jobs: "monthly grants inventory (in the brief)."
 rehearsed_at: "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending"
+reviewed_at: null
+reviewed_by: null
 data_classes: [none]
 action_classes: [none]
 files:

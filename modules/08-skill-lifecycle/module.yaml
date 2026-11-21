@@ -17,6 +17,8 @@ writes: "staged proposals (never live skills directly), a skill-usage ledger, de
 network: "none."
 jobs: "none at the Lite tier; at Full, one nightly session-review sweep and one weekly curator run."
 rehearsed_at: "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run"
+reviewed_at: null
+reviewed_by: null
 tiers:
   - id: lite
     description: "In-session + explicit staging and staged-diff approval. No tools, no jobs, no ledger."

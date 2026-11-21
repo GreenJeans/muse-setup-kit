@@ -89,6 +89,12 @@ def main():
             print(f"error: {exc}", file=sys.stderr)
             return 1
         entry = dict(meta)
+        # Review status is part of the catalog contract
+        # (docs/library.md): an entry whose records omit the fields
+        # still reports them, as null — list available reads "no
+        # review recorded" from the null pair.
+        entry.setdefault("reviewed_at", None)
+        entry.setdefault("reviewed_by", None)
         entry["audit_words"] = kit_selfcheck.count_module_words(mdir)
         modules.append(entry)
     modules.sort(key=lambda e: e.get("id", ""))

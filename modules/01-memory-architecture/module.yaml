@@ -17,6 +17,8 @@ writes: "a schema file, header stamps, a linter and its reports."
 network: "none."
 jobs: "one weekly linter run."
 rehearsed_at: "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending"
+reviewed_at: null
+reviewed_by: null
 data_classes: [personal, third-party]
 action_classes: [none]
 files:

@@ -17,6 +17,8 @@ writes: "an operating-procedures file, a decision queue, SCOPE notes."
 network: "none."
 jobs: "none."
 rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending"
+reviewed_at: null
+reviewed_by: null
 data_classes: [personal]
 action_classes: [none]
 files:

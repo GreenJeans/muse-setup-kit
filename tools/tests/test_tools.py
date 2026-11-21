@@ -13,8 +13,9 @@ found, so the fix cannot silently regress:
     dead grace floor, and job-name matching (tax-docs vs
     tax-docs-prep);
   - stage_check expiry and the shadow-folder exemption;
-  - kit_doctor going blind on mixed pins and missing overdue
-    deferred checks.
+  - kit_doctor going blind on mixed pins, missing overdue
+    deferred checks, and deleted accumulating files (run 15: a
+    deleted service log passed the doctor without a word).
 
 Run: python3 -m unittest discover -s tools/tests
 """
@@ -320,6 +321,31 @@ class KitDoctorTest(unittest.TestCase):
                                  for n in rep["notes"]))
             self.assertTrue(any("1 hashed, 0 accumulating" not in n and
                                 "accumulating" in n for n in rep["notes"]))
+
+    def test_missing_accumulating_file_is_noted_not_a_problem(self):
+        # Run 15 friction: deleting an accumulating file (a service
+        # log) produced no doctor output at all, while a missing
+        # hashed file was a PROBLEM. Absence is noted, never diffed,
+        # and not a problem.
+        with tempfile.TemporaryDirectory() as td:
+            with open(os.path.join(td, "SETUP-PLAN.md"), "w") as fh:
+                fh.write("# Plan\n- install — commit aaaaaaa1111\n"
+                         "## Installed files (baseline)\n"
+                         "- installed: queue.md accumulating\n")
+            with open(os.path.join(td, "JOBS.md"), "w") as fh:
+                fh.write("# Jobs\n")
+            with open(os.path.join(td, "OPERATING_PROCEDURES.md"), "w") as fh:
+                fh.write("# Procedures\n")
+            rep = json.loads(run(DOCTOR, "--workspace", td, "--json").stdout)
+            self.assertTrue(any("accumulating file missing" in n and
+                                "queue.md" in n for n in rep["notes"]))
+            self.assertFalse(any("queue.md" in p for p in rep["problems"]))
+            # And a present accumulating file draws no such note.
+            with open(os.path.join(td, "queue.md"), "w") as fh:
+                fh.write("item 1\n")
+            rep = json.loads(run(DOCTOR, "--workspace", td, "--json").stdout)
+            self.assertFalse(any("accumulating file missing" in n
+                                 for n in rep["notes"]))
 
 MODULE_YAML = os.path.join(REPO, "tools", "module_yaml.py")
 

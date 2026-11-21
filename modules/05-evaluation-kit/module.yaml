@@ -17,6 +17,8 @@ writes: "packets, findings, adoption records."
 network: "a second model if used for blind review."
 jobs: "an audit reminder on cadence."
 rehearsed_at: null
+reviewed_at: null
+reviewed_by: null
 data_classes: [personal, third-party]
 action_classes: [none]
 files:

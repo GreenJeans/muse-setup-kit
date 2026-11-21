@@ -25,7 +25,10 @@ Checks, in the workspace:
      is legitimate; UPGRADING.md consumes the list as its conflict
      list). A baselined file that no longer exists is a problem.
      Lines ending in "accumulating" name files that grow by design
-     (the queue, JOBS.md, ledgers): inventoried, never diffed.
+     (the queue, JOBS.md, ledgers): inventoried, never diffed. A
+     baselined accumulating file that no longer exists is reported
+     as a note — not diffed and not a problem, but visible: a
+     deleted queue or ledger should not pass silently.
      A hashed line may carry a trailing file class —
      "static-verbatim" or "static-rendered" (docs/library.md);
      lines written before the class vocabulary existed carry none
@@ -118,8 +121,12 @@ def main():
     baselined = 0
     accumulating = 0
     for line in plan_text.splitlines():
-        if acc_re.match(line.strip()):
+        am = acc_re.match(line.strip())
+        if am:
             accumulating += 1
+            if not os.path.isfile(os.path.join(ws, am.group(1))):
+                notes.append(f"accumulating file missing "
+                             f"(inventoried, not diffed): {am.group(1)}")
             continue
         m = base_re.match(line.strip())
         if not m:

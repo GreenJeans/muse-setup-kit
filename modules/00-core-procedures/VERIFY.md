@@ -18,9 +18,13 @@
       (who picks things up, how to pause the agent), the remainder
       marked not-yet-supplied in the file and its completion
       ledgered as a deferred check; or ledgered whole as a
-      deferred check with the user named as its owner. The middle
-      state is a pass, stated as what it is — not silently read
-      as "filled".
+      deferred check with the user named as its owner. A skeleton
+      file created from the template, its unfilled fields marked
+      not-yet-supplied, is the normal form of the ledgered-whole
+      state — the file's existence does not promote it to the
+      middle state; the load-bearing fields decide which state
+      it is in. The middle state is a pass, stated as what it
+      is — not silently read as "filled".
 
 ## Deferred
 
