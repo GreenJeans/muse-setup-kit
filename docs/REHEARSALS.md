@@ -38,3 +38,4 @@ known and no more.
 - A Lite → Full upgrade of module 08 (the F-steps are written
   from the Full install's steps; no agent has yet walked them
   from a live Lite install).
+| 9 | v0.6 candidate | Capability matrix scored blind against the manifest (3 personas × 9 modules) + canonical-reference check | Matrix table 27/27 cells; verdicts 26/27 — the miss (module 08 × shell) and four prose mismatches found and fixed, incl. an invented Lite degradation and a kit_doctor self-contradiction; canonical table: 9 pass, 1 partial (exclusions pointer), §5/§6/§11 rows added; module 06 and README summaries labeled with governing pointers |

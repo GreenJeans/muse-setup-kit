@@ -184,18 +184,11 @@ From `manifest.yaml`, compute the offerable set:
   other module depends on it. If the user declines it, explain that the
   other modules assume it, and offer "procedures lite" (ticket rule +
   decision queue only) rather than nothing.
-- Gate by capabilities: no scheduling → morning-brief installs as an
-  on-demand brief instead of a scheduled one, skill-lifecycle's
-  sweep and curator run on demand, memory-architecture's linter runs
-  by hand, and security-pack's grants inventory is a manual monthly
-  chore; no shell/python → the linter and the curator degrade to
-  manual reviews against the same checklists; no second person →
-  household-hq is not offerable; no shared storage or no other agents →
-  ai-exchange is not offerable.
-- If a module's manifest entry lists `degrades_without` and the user lacks
-  that capability, offer the module in its degraded mode and say plainly
-  what won't work (for example: evaluation-kit without other agents runs
-  single-reviewer; the morning brief without scheduling runs on demand).
+- Gate by capabilities, per `docs/capability-profiles.md` (the matrix
+  of what each capability buys, generated from the manifest): a module
+  whose `requires` are unmet is not offerable; a module whose
+  `degrades_without` is unmet is offered in its degraded mode, saying
+  plainly what won't work, per the matrix's degradation notes.
 - Offer the manifest's **profiles first** (Starter, then Standard),
   each with its audit word count from the manifest, then the full
   checklist. First time, the sensible default is Starter; modules can

@@ -13,6 +13,11 @@ closed. Every other module assumes this one.
 
 ## Concepts
 
+Summaries, for orientation. The operative text of every rule below
+is the operating-procedures template this module installs; where a
+summary here and the template differ, the template governs, and the
+summary has a bug.
+
 - **One home per topic.** Each workstream lives in exactly one place (a
   chat, a workspace folder) with a `SCOPE.md`: what it owns, what it must
   never do, what done looks like, its source of truth, and a Closed list of
@@ -43,6 +48,32 @@ closed. Every other module assumes this one.
   complete it or re-home it, repoint or retire its machinery, sync drifted
   copies, report once, then archive. Nothing open may live only in a
   transcript.
+
+## Where each rule lives (canonical text)
+
+Each constitutional rule has exactly one operative statement — in
+the procedures template, at the section named here. Other modules
+apply the rules to their own subject (module 08's gate applies the
+ticket rule; module 02's watches apply the silence rules) and point
+back rather than restating. Edit a rule in its home section only;
+if an application elsewhere seems to disagree, the home section
+governs and the application has a bug.
+
+| Rule | Operative text |
+|---|---|
+| Homes and scope | procedures §1 |
+| Ticket rule; one execution per ticket; content-exclusion lists | procedures §2 |
+| Decision queue; silence never consents to an irreversible action | procedures §3 |
+| Silence rules; detector silence is a failure | procedures §4 |
+| The brief; "done" requires a verified deliverable | procedures §5 |
+| Memory discipline (application: module 01) | procedures §6 |
+| Ground truth; summaries are locators | procedures §7 |
+| Abort on mismatch; session canary | procedures §8 |
+| Room close-out | procedures §9 |
+| Standing rules (grants, retitle-before-share, install-page instructions) | procedures §10 |
+| Audit cadence | procedures §11 |
+| Verify-before-install (application: module 06) | procedures §10 |
+| Billing buckets; declare before heavy work (application: module 09) | procedures §12 |
 - **Done means verified.** Completion is checked against live state or the
   original record, never accepted from a worker's report alone.
 
