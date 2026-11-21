@@ -25,7 +25,10 @@ or fixture in this job reaches them.
    "sender domain is <look-alike>, not <the real one>");
    *unverified sender* when the message claims a VIP or
    immediacy-set identity and its sender cannot be confirmed
-   against the recorded senders — never graded scam on a hunch,
+   against the recorded senders — and a message that matches a
+   pattern with no concrete tell and claims no identity that
+   would settle it grades unverified too: pattern-shaped is
+   never passed. Never graded scam on a hunch,
    and not ordinary mail either: it earns no interrupt of any
    class and is written to the flag log (below) with the
    identity it claimed; *passed* when the sender matches the
@@ -87,20 +90,22 @@ Everything else accrues to the next brief.
 Impersonation of any of these surfaces immediately as a shield
 flag; impersonation of anything else accrues to the brief.
 
-Record *every* known sending domain and number per institution,
+Record *every* known sending domain and address per institution,
 one per line — institutions send genuine mail from several
 domains (alerts, statements, and marketing rarely share one),
 and a genuine alert from an unlisted domain is the shield's
 likeliest misgrade. A genuine sender the scan finds unlisted is
 proposed for this set through the decision queue; the scan never
-adds to the set itself.
+adds to the set itself. The proposal carries no accepting
+default — the set changes only when the user clears the item
+with a yes, and silence leaves the sender unlisted.
 
 - VIPs: the list above.
-- Bank: <INSTITUTION — SENDING DOMAIN OR NUMBER, one line per
+- Bank: <INSTITUTION — SENDING DOMAIN OR ADDRESS, one line per
   known sender>
-- Toll operator: <INSTITUTION — SENDING DOMAIN OR NUMBER, one
+- Toll operator: <INSTITUTION — SENDING DOMAIN OR ADDRESS, one
   line each>
-- Package carrier: <INSTITUTION — SENDING DOMAIN OR NUMBER, one
+- Package carrier: <INSTITUTION — SENDING DOMAIN OR ADDRESS, one
   line each>
-- Key services: <INSTITUTION — SENDING DOMAIN OR NUMBER, one
+- Key services: <INSTITUTION — SENDING DOMAIN OR ADDRESS, one
   line each>

@@ -185,8 +185,8 @@ downstream renumbers.)*
   passports, two vehicles — they are disambiguated by the holder's
   name or a label the user chooses, never by a partial number: no
   last-four, no plate fragment.
-- They may live only in local workspace files kept for that purpose —
-  a named folder or file the user chose. Nowhere else: never on
+- Records in these classes may live only in local workspace files
+  kept for that purpose — a named folder or file the user chose. Nowhere else: never on
   shared surfaces (module 03's sharing rules), never in a
   multi-agent exchange or on published pages (module 04),
   never pasted into a chat with a third party.

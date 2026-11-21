@@ -16,7 +16,7 @@ watch checks.
       from `triage-job.template.md`, with the VIP list, the
       interrupt rules, and the shield's immediacy set (the VIPs
       plus the institutions named at install, each with every
-      known sending domain and number recorded) filled in; the
+      known sending domain and address recorded) filled in; the
       shield check is ordered before the interrupt rules; the
       delivery window matches the user's waking hours; and the
       run-record and flag-log files exist at the paths the job

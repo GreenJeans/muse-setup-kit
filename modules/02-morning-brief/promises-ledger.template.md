@@ -3,7 +3,7 @@
 <!-- Template from the Muse Setup Kit (module 02). One entry per
 commitment between the user and another person: what the user
 owes, and what the user is waiting on. Every entry carries an
-explicit Grade: marker on its own line — how its words are held:
+explicit Grade: marker at its end — how its words are held:
 
 - verbatim: the commitment in the words as actually said or
   written, in quotes, with a source locator. Verbatim requires

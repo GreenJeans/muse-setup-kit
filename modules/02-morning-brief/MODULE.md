@@ -2,13 +2,13 @@
 
 **Reads:** calendar, mailbox, task lists, decision queue, watch outputs;
 for the money watch, the statement/CSV exports the user supplies.
-**Writes:** one brief per day; draft replies only, sent only with
-approval; the promises & waiting-on ledger, when installed (other
-people's commitments, in their words); the triage flag log and the
-scan's run records, when the scan is installed; for the money watch,
-its baseline and run-record files and its job file.
-**Data classes:** personal; third-party (the ledger's entries and
-the triage flag log name other people — procedures §13).
+**Writes:** one brief per day; draft replies only, sent only with approval; the
+promises & waiting-on ledger, when installed (other people's commitments, in
+their words); the triage flag log and the scan's run records, when the scan is
+installed; for the money watch, its baseline and run-record files and its job
+file; the deadlines register's state transitions, when module 10 is installed.
+**Data classes:** personal; financial (the money watch's baseline and exports);
+third-party (the ledger's entries and the triage flag log name other people) — procedures §13.
 **Network:** your connected accounts. **Jobs:** daily brief; optional
 30-minute triage scan; optional weekly money watch.
 
@@ -124,28 +124,38 @@ urgent its own text claims to be.
   card". "Looks suspicious" alone is not a flag.
 
 **What counts as a tell.** A concrete tell is evidence checked
-against a known-good record: the sender's domain or number
+against a known-good record: the sender's domain or address
 against the immediacy set's recorded senders, a number in the
 message against the number on the card, a link's destination
 against the institution's real domain. The pattern's own
 features are never the tell — urgency, secrecy, a demand to act
 now are what the pattern *is*, and a genuine message can carry
 all of them. And a sender simply absent from the set, imitating
-nobody in it, is not a scam: at most it is unverified, below,
-and only when it claims an identity the shield cares about. The
-likeliest misgrade is the user's own bank's genuine alert,
+nobody in it, is not a scam: at most it is unverified, on the
+terms below. The likeliest misgrade is the user's own bank's
+genuine alert,
 arriving from a sending domain the set has not recorded yet —
-the set records *every* known sending domain and number per
+the set records *every* known sending domain and address per
 institution for exactly this reason, and a genuine sender the
 scan finds unlisted is proposed for the set through the decision
-queue, never added by the scan itself.
+queue, never added by the scan itself. The proposal carries no
+accepting default: the set changes only when the user clears
+the queue item with a yes, and silence leaves the sender
+unlisted — the same guard the money watch's baseline carries
+(below), because this set decides what may interrupt.
 
 **Three grades, honestly named.** *Scam* is for messages that
 meet a pattern above with a concrete tell. *Unverified sender*
 is for messages that claim an identity the shield cares about —
 a VIP, the user's bank, a key service — and whose sender cannot
 be confirmed against the recorded senders: no concrete tell,
-but no match either. *Passed* is everything else: the sender
+but no match either. It is also the grade for a message that
+meets a pattern but offers no concrete tell and claims no
+identity that would settle it: pattern-shaped and unproven is
+unverified, never passed. The three grades are a partition —
+every graded message lands in exactly one — and "everything
+else" below never sweeps a pattern into the interrupt-eligible
+grade. *Passed* is everything else: the sender
 matches the recorded senders for the identity it claims, or the
 message claims no identity that needs confirming and meets no
 pattern.
@@ -377,7 +387,7 @@ seen to have happened.
    time (user's morning, their timezone) and delivery (main chat).
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
-4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and number, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the scan appends on every run, and a flag log the brief reads (the template names both).
+4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and address, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the scan appends on every run, and a flag log the brief reads (the template names both).
 5. Optional: the money watch — weekly cadence. Build the baseline
    with the user from their exports into
    `finance/money-watch-baseline.md`, from

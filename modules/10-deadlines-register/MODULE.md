@@ -78,9 +78,11 @@ item is never described as clear, handled, or fine.
 
 When the user drops an item — no longer held, no longer worth
 tracking — its row moves to History with the drop date and the
-user's reason, in their words. Dropped is a recorded state, not a
-deletion, and a dropped item stops surfacing the day it is
-dropped.
+user's reason, in their words. A drop is a recorded disposition,
+not a deletion — and not a fourth state: the State vocabulary
+above (current, expired, undated) covers the rows still in the
+register, and "dropped" names the item's History record. A
+dropped item stops surfacing the day it is dropped.
 
 ## Surfacing
 
