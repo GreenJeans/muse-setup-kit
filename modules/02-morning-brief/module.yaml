@@ -1,0 +1,34 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/morning-brief
+dir: modules/02-morning-brief
+title: Morning Brief & Inbox Triage
+pitch: "A failures-first daily brief, a numbered decision queue review, inbox interrupt rules with a scam & impersonation shield, silent-by-design watches, an optional money watch, and an optional promises & waiting-on ledger."
+version: "0.9"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures]
+requires: []
+degrades_without: [scheduling]
+reads: "calendar, mailbox, task lists, decision queue, watch outputs."
+writes: "one brief per day; draft replies only, sent only with approval."
+network: "your connected accounts."
+jobs: "daily brief; optional 30-minute triage scan."
+rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending"
+data_classes: [personal, third-party]
+action_classes: [send]
+files:
+  - path: brief.template.md
+    class: static-rendered
+  - path: triage-job.template.md
+    class: static-rendered
+  - path: money-watch-job.template.md
+    class: static-rendered
+  - path: money-watch-baseline.template.md
+    class: accumulating
+  - path: money-watch-runs.template.md
+    class: accumulating
+  - path: promises-ledger.template.md
+    class: accumulating

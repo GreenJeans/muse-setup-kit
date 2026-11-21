@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 34,000
+install is heavy work — a full one reads on the order of 36,000
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -62,7 +62,8 @@ reads/writes/network disclosed — and installs only what you approved,
 verifying each module as it goes.
 
 One honest request, from the kit's own security rules: **read
-`wizard/SKILL.md`, `wizard/manifest.yaml`, and the `MODULE.md`,
+`wizard/SKILL.md`, `wizard/manifest.yaml`, each module's
+`module.yaml`, and the `MODULE.md`,
 `VERIFY.md`, templates, and any `tools/` scripts of the modules you
 plan to install, at your pinned commit, before you approve the plan.** A setup wizard is an instruction
 surface, and reading only the entry point leaves the actual payload —
@@ -78,9 +79,9 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~15,400 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~20,300 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all ten modules | ~34,300 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~16,000 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~21,300 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all ten modules | ~36,100 words | Module 08 at Full is ~6,900 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -188,19 +189,20 @@ README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
 docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
-wizard/              ← SKILL.md (the wizard) · manifest.yaml (modules)
+wizard/              ← SKILL.md (the wizard) · manifest.yaml (profiles + library data)
+directory.json       ← generated catalog of the core library (tools/build_directory.py) · advisories.json (generated; advisories.yaml is its human-maintained source)
 modules/
-  00-core-procedures/      MODULE.md · VERIFY.md · templates/
-  01-memory-architecture/  MODULE.md · VERIFY.md · SCHEMA + MEMORY templates · tools/ (reference linter)
-  02-morning-brief/        MODULE.md · VERIFY.md · brief, money-watch, and ledger templates
-  03-household-hq/         MODULE.md · VERIFY.md · principles + partner-prompt templates
-  04-ai-exchange/          MODULE.md · VERIFY.md · protocol template
-  05-evaluation-kit/       MODULE.md · VERIFY.md · templates/ (fictional seeds) · tools/ (kit doctor)
-  06-security-pack/        MODULE.md · VERIFY.md · vetting-log template
-  08-skill-lifecycle/      MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator, stage check)
-  09-cost-guardrails/      MODULE.md · VERIFY.md · templates/ (bucket register)
-  10-deadlines-register/   MODULE.md · VERIFY.md · register template
-tools/               ← kit_selfcheck.py (the kit lints itself) · tests/ (tool fixtures)```
+  00-core-procedures/      module.yaml · MODULE.md · VERIFY.md · templates/
+  01-memory-architecture/  module.yaml · MODULE.md · VERIFY.md · SCHEMA + MEMORY templates · tools/ (reference linter)
+  02-morning-brief/        module.yaml · MODULE.md · VERIFY.md · brief, money-watch, and ledger templates
+  03-household-hq/         module.yaml · MODULE.md · VERIFY.md · principles + partner-prompt templates
+  04-ai-exchange/          module.yaml · MODULE.md · VERIFY.md · protocol template
+  05-evaluation-kit/       module.yaml · MODULE.md · VERIFY.md · templates/ (fictional seeds) · tools/ (kit doctor)
+  06-security-pack/        module.yaml · MODULE.md · VERIFY.md · vetting-log template
+  08-skill-lifecycle/      module.yaml · MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator, stage check)
+  09-cost-guardrails/      module.yaml · MODULE.md · VERIFY.md · templates/ (bucket register)
+  10-deadlines-register/   module.yaml · MODULE.md · VERIFY.md · register template
+tools/               ← kit_selfcheck.py (the kit lints itself) · module_yaml.py (the strict package parser) · build_directory.py (generates directory.json + advisories.json) · tests/ (tool fixtures)```
 
 ## Status
 
@@ -217,5 +219,19 @@ return-and-refund tracker is its worked example) and the scam &
 impersonation shield in triage — module 06's
 content-is-not-instructions rule turned outward, with a pointer
 from module 06.
+
+On the unreleased **library branch**, the design in
+`docs/library.md` is implemented: a `module.yaml` per module
+(strict flat subset, fail-loud parser, MODULE.md header parity
+checked by the selfcheck) replaces the manifest fragments;
+qualified ids (`core/<module>`) throughout; `directory.json` and
+`advisories.json` are generated at the repo root by
+`tools/build_directory.py`; and the wizard gains the lifecycle
+verbs — list installed / available / upgradable, suspend, the
+narrowed repair, inspect, rollback, reconfigure, add/remove
+library. A one-module field library (home operations) pilots the
+package format from a separate local repository. The branch is
+not a release: the verbs have not yet had a fresh-agent
+rehearsal, and the merge is the maintainer's call.
 
 License: MIT (see `LICENSE`).

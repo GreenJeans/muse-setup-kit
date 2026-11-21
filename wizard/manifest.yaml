@@ -1,154 +1,30 @@
-# Module manifest — the wizard reads this to drive the interview.
-# Each module: id, title, one-line pitch, dependencies, capability gates,
-# and the disclosure the wizard shows before installing.
+# Library manifest — library-level data only: this library's id and
+# version, and the install profiles. Per-module data lives in each
+# module's own module.yaml (modules/<dir>/module.yaml), the single
+# authored source for that module; a module field appearing here is
+# a defect and tools/kit_selfcheck.py fails on it. The wizard reads
+# the profiles here and the module data from the module.yaml files.
+library: core
 version: 1
-modules:
-  - id: core-procedures
-    dir: modules/00-core-procedures
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11–12 at df56774; v0.9 runs 13–14 at abb9f86; changed since (friction fixes), re-rehearsal pending"
-    title: Core Procedures
-    pitch: Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.
-    depends_on: []
-    requires: []
-    reads: "Your existing agent instructions and workspace layout (to merge, not overwrite)."
-    writes: "An OPERATING_PROCEDURES.md, a decision queue file, SCOPE.md files per workstream, a continuity handover."
-    network: none
-    jobs: none
-
-  - id: memory-architecture
-    dir: modules/01-memory-architecture
-    rehearsed_at: "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending"
-    title: Memory Architecture
-    pitch: Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.
-    depends_on: [core-procedures]
-    requires: []
-    degrades_without: [scheduling, shell-python]   # linter run by hand; without shell/python, manual header/figure review
-    reads: "Your memory files."
-    writes: "A SCHEMA.md, header stamps on memory files, a linter script and its reports."
-    network: none
-    jobs: "One weekly linter run."
-
-  - id: morning-brief
-    dir: modules/02-morning-brief
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13–14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending"
-    title: Morning Brief & Inbox Triage
-    pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules with a scam & impersonation shield, silent-by-design watches, an optional money watch, and an optional promises & waiting-on ledger.
-    depends_on: [core-procedures]
-    requires: []
-    degrades_without: [scheduling]   # installs as an on-demand brief instead
-    reads: "Calendar, mailbox, task lists, watch outputs (whatever you connect)."
-    writes: "One brief message per day; draft replies only, sent only with approval."
-    network: "Your connected accounts only."
-    jobs: "One daily brief; optional 30-minute inbox triage scan; optional weekly money watch."
-
-  - id: household-hq
-    dir: modules/03-household-hq
-    rehearsed_at: "v0.1 household dry run; changed in v0.8, re-rehearsal pending"
-    title: Household HQ
-    pitch: Two people, two agents, one shared coordination system — shared task layer, shared memory layer, a notebook protocol, and a principles doc.
-    depends_on: [core-procedures]
-    requires: [second-person, shared-docs, shared-tasks]
-    degrades_without: [morning-brief]   # the notebook is written but surfaced only on demand until a brief exists
-    reads: "The shared surfaces both household members agree to."
-    writes: "Shared lists, a shared notebook doc, a shared ops sheet."
-    network: "Your shared accounts only."
-    jobs: "A change-detector on the shared surfaces (optional)."
-
-  - id: ai-exchange
-    dir: modules/04-ai-exchange
-    rehearsed_at: "v0.1 household dry run"
-    title: AI Exchange
-    pitch: Multiple AI agents exchanging work through shared storage — protocol, queue, blind reviews, published pages, ingest discipline.
-    depends_on: [core-procedures, memory-architecture]
-    requires: [shared-storage, other-agents]
-    reads: "The exchange folders and queue."
-    writes: "Exchange protocol doc, queue sheet, per-agent inboxes/outboxes, published pages."
-    network: "Your cloud storage only."
-    jobs: "Optional outbox polling during the brief."
-
-  - id: evaluation-kit
-    dir: modules/05-evaluation-kit
-    rehearsed_at: null   # method exercised on the kit itself; install unrehearsed
-    title: Evaluation Kit
-    pitch: Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.
-    depends_on: [core-procedures, memory-architecture]
-    requires: []
-    degrades_without: [other-agents, scheduling]   # single-reviewer mode; audit reminder becomes an on-demand chore
-    reads: "Your procedures and memory (frozen into an audit packet)."
-    writes: "Audit packets, findings, adoption records."
-    network: "A second model/agent if you use one for blind review."
-    jobs: "Monthly (while churning) or quarterly audit reminder."
-
-  - id: security-pack
-    dir: modules/06-security-pack
-    rehearsed_at: "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending"
-    title: Security Pack
-    pitch: Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share.
-    depends_on: [core-procedures]
-    requires: []
-    degrades_without: [scheduling]   # grants inventory becomes a manual monthly chore
-    reads: "Anything you are about to install, at a pinned version, in full."
-    writes: "Vetting records; standing-rule additions."
-    network: "Only the source of what you are vetting."
-    jobs: "Monthly standing-grants inventory — rides the morning brief if installed, otherwise its own monthly job."
-
-  - id: skill-lifecycle
-    dir: modules/08-skill-lifecycle
-    rehearsed_at: "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run"
-    title: Skill Lifecycle
-    pitch: A session-review rubric that stages skill lessons instead of writing them live, plus staged-diff approval through the decision queue. Installs at the Lite tier by default; the Full tier adds a nightly sweep and a deterministic curator that archives unused skills but never deletes.
-    tiers:
-      lite: "In-session + explicit staging and staged-diff approval. No tools, no jobs, no ledger."
-      full: "Adds the nightly sweep, the curator with its usage ledger and reference tools, the shadow-week rollout, and the 30-day review. Offer at 5+ custom skills."
-    depends_on: [core-procedures, memory-architecture]
-    requires: []
-    degrades_without: [scheduling, shell-python]   # Full tier: sweep and curator on demand; without shell/python the curator is a manual ledger review. Lite needs neither.
-    reads: "Session transcripts, your custom skills, the decision queue, scheduled-job records (Full)."
-    writes: "Staged proposals (never live skills directly), decision-queue items; at Full also a skill-usage ledger and an archive folder for retired skills."
-    network: none
-    jobs: "None at Lite. At Full: one nightly session-review sweep; one weekly curator run."
-
-  - id: cost-guardrails
-    dir: modules/09-cost-guardrails
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending"
-    title: Cost & Billing Guardrails
-    pitch: Bucket discipline for agent spending — know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.
-    depends_on: [core-procedures]
-    requires: []
-    degrades_without: [scheduling]   # the monthly spend check becomes a manual chore
-    reads: "Your model/provider usage and billing pages (with you present), the plan's bucket register."
-    writes: "A bucket register in the procedures; spend-check entries in the decision queue when a cap is approached."
-    network: "Your providers' billing pages only, with you present."
-    jobs: "One monthly spend check (rides the brief if installed)."
-
-  - id: deadlines-register
-    dir: modules/10-deadlines-register
-    rehearsed_at: "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending"
-    title: Deadlines & Expiry Register
-    pitch: One register of what expires — passports, licences, warranties, policies, certifications — each with a lead time and a pointer to the original; no document numbers are stored.
-    depends_on: [core-procedures]
-    requires: []
-    degrades_without: [morning-brief]   # no brief to ride: surfacing becomes a manual deferred check on a cadence the user picks, and the plan says nothing surfaces on its own
-    reads: "The register file; a source document when its date needs re-reading at the original."
-    writes: "One local register file (accumulating): rows added, renewals updated in place, old expiries moved to its History."
-    network: none
-    jobs: none
+interface_version: 1
 
 # Install profiles — the wizard offers these first (Step 3), then the
 # per-module checklist. Audit cost = wizard + manifest + every file
 # an install reads in the profile's modules (MODULE.md, VERIFY.md,
-# templates, tools), counted at v0.9; tools/kit_selfcheck.py
-# recomputes them and asserts the README's figures match these.
+# module.yaml, templates, tools), counted on the library branch;
+# tools/kit_selfcheck.py recomputes them and asserts the README's
+# figures match these.
 profiles:
   - id: starter
     title: Starter
-    modules: [core-procedures, morning-brief, cost-guardrails]
-    audit_words: 15400
+    modules: [core/core-procedures, core/morning-brief, core/cost-guardrails]
+    audit_words: 16000
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
-    modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
-    audit_words: 20300
+    modules: [core/core-procedures, core/morning-brief, core/cost-guardrails, core/memory-architecture, core/security-pack]
+    audit_words: 21300
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
-  # skill-lifecycle) is offered per module after the profiles.
+  # skill-lifecycle, deadlines-register) is offered per module after
+  # the profiles, from its module.yaml.

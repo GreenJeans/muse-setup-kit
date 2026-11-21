@@ -1,11 +1,11 @@
 # The library: module distribution and lifecycle
 
-Status: **design, adopted 2026-11-20** (from the blind dual review
-EX-016/EX-017 and the maintainer's decisions on their open forks).
-This document is the spec. v0.8 ships the spec only; the
-implementation — `module.yaml`, the directory tooling, the wizard's
-verbs — is the phase that follows v0.9 (see `docs/ROADMAP.md`).
-Nothing here is installed by the wizard yet.
+Status: **adopted 2026-11-20; implemented on the library branch
+(unreleased)** — from the blind dual review EX-016/EX-017 and the
+maintainer's decisions on their open forks. The design below is
+the adopted spec, unchanged; "As built" at the end of this
+document records what the branch implements, where it differs
+from the spec, and what is still future.
 
 The problem it solves: the kit is becoming a library, not a single
 product. Other people will write modules (a housing operator's
@@ -110,9 +110,11 @@ number, per procedures §13) and names its one installed file's
 class — the register is accumulating, inventoried in the baseline
 and never diffed. Module 02's promises & waiting-on ledger, in the
 same release, declares its classes the same way (`personal`,
-`third-party`). Until the library phase lands, the declarations
-live in the module text; afterwards they move into `module.yaml`
-and the selfcheck asserts the two agree.
+`third-party`). On the library branch the declarations live in
+each module's `module.yaml` — the single authored source — and
+`kit_selfcheck` asserts the package metadata and the `MODULE.md`
+header agree on the fields they share; the MODULE.md lines stay
+as the human-readable form.
 
 ## Gates (what replaces the cap)
 
@@ -299,3 +301,60 @@ section number, because neither may write outside its anchor.
   vetting outcome.
 - Reaching into an existing install from outside — no push, no
   remote disable. Advisories inform; the user's own agent acts.
+
+## As built (library branch, unreleased)
+
+Implemented on the branch, against the spec above:
+
+- **`module.yaml` per module** for all ten core modules, in the
+  strict flat subset, parsed by `tools/module_yaml.py` — which
+  fails loud, naming file and line, on nested maps, anchors,
+  block scalars, tabs, and duplicate keys. `wizard/manifest.yaml`
+  keeps only the library id, the interface version, and the
+  profiles. `kit_selfcheck` asserts the required fields, the
+  qualified ids, that `depends_on` and module-valued
+  `degrades_without` entries resolve, that every declared file
+  exists with a valid class, and MODULE.md header parity; a
+  `modules:` section in the manifest is a finding (duplication
+  is a defect).
+- **Qualified ids throughout**: profiles, dependency fields, and
+  the wizard's lifecycle operations all name `core/<module>`.
+- **`tools/build_directory.py`** generates `directory.json` and
+  `advisories.json` at the repo root from the repository's own
+  records — the module.yaml files, and `advisories.yaml` (empty
+  at first) — deterministically, with `generated_from` naming
+  the commit the records were read at. Two differences from the
+  spec's sketch, named: the core `directory.json` catalogs the
+  core library itself (for its entries, `generated_from` is the
+  pin — the entries describe this repository at that commit),
+  and entries carry each module's declared files and classes but
+  no per-file hash list; hashes live in an install's baseline,
+  where they are used. Indexing field libraries by reviewed pull
+  request — their records stored in this repo, their own pins
+  per entry — is the future step that makes the same file the
+  trust root for field modules.
+- **The wizard's lifecycle section** defines every verb above as
+  a wizard operation — what it reads, what it writes, what needs
+  a ticket — including the narrowed repair (the baseline now
+  names each static file's class; `kit_doctor` accepts classed
+  and pre-class lines alike, and repair treats an unclassed
+  hashed line as static-rendered, not repairable), suspend's
+  `## Suspended` section in `JOBS.md`, rollback, and
+  reconfigure.
+- **Rehearsal staleness**: `kit_selfcheck` prints it as an
+  informational report — never a finding — and the wizard's
+  Step 3 cites it. It uses git when the checkout is a work tree
+  and skips silently otherwise.
+- **A field-library pilot** — one home-operations module in the
+  package format, in a separate local repository — exists to
+  prove the format from the outside. It is unpublished and is
+  not an index entry.
+
+Still future:
+
+- Field libraries entering the index by reviewed pull request
+  (no field entries are indexed yet).
+- Any read-only MCP facade over the same JSON (the write path
+  stays refused, per "What this design refuses").
+- A fresh-agent rehearsal of the lifecycle operations
+  themselves; the branch is unreleased until it has one.

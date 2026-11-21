@@ -206,16 +206,29 @@ labeled that way; its rehearsals (Starter and Standard installs,
 ledger and shield fixture runs) are specified from the reviewers'
 pass bars and run before the library phase builds on it.
 
-## Phase 12 — the library (planned)
+## Phase 12 — the library (implemented on the library branch, 2026-11-20 — unreleased)
 
-Implements `docs/library.md` on top of v0.9: `module.yaml` per
+Implemented on a branch off v0.9 — a branch, not a release, and
+the latest release remains v0.9. What landed: `module.yaml` per
 module replaces the manifest fragments (strict flat subset,
-fail-loud parser, MODULE.md header parity check); qualified ids
-(`<library>/<module>`) throughout; `tools/build_directory.py`
-generates `directory.json` + `advisories.json` in the core repo;
-the wizard gains the named verbs (list installed / available /
-upgradable, add/remove library, suspend, narrowed repair,
-inspect, rollback, reconfigure); the selfcheck flags rehearsal
-staleness against the `rehearsed_at` pin. First field library: a
-home-operations pilot in a separate repository, installed into a
-sandbox through the new verbs — a format pilot, not a launch.
+fail-loud parser in `tools/module_yaml.py`, MODULE.md header
+parity asserted by the selfcheck, which also fails on any
+per-module field left in the manifest); the manifest keeps the
+library id, the interface version, and the profiles. Qualified
+ids (`core/<module>`) throughout. `tools/build_directory.py`
+generates `directory.json` + `advisories.json` in the core repo
+from the module.yaml files and `advisories.yaml`. The wizard
+gains a lifecycle section defining the named verbs (list
+installed / available / upgradable, add/remove library,
+suspend, narrowed repair, inspect, rollback, reconfigure,
+audit), each with its reads, writes, and ticket rule; installed-
+file baseline lines now name each static file's class, and
+kit_doctor accepts classed and pre-class lines alike. The
+selfcheck prints rehearsal staleness against each module's
+`rehearsed_at` pin as an informational report, not a finding.
+A home-operations field library pilots the package format from
+a separate local repository — unpublished, and not installed
+anywhere yet. Held for the next phase: a fresh-agent rehearsal
+of the lifecycle verbs (including a pilot install through them),
+field libraries entering the index by reviewed PR, and the
+merge/release decision, which is the maintainer's.

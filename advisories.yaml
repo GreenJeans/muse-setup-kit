@@ -1,0 +1,20 @@
+# Advisories source — human-maintained, in the same strict flat
+# subset as module.yaml (tools/module_yaml.py parses it).
+# tools/build_directory.py generates advisories.json from this file;
+# advisories.json is never hand-edited.
+#
+# An advisory is the revocation path (docs/library.md): a module or
+# pin found bad after publication. One entry per advisory:
+#
+# advisories:
+#   - id: ADV-YYYY-NNN
+#     module: core/<module id> (or the library id alone)
+#     pin: the full commit hash the advisory applies to, or "all"
+#     date: YYYY-MM-DD
+#     reason: what was found, in one or two sentences
+#     remedy: what an install should do (e.g. "suspend core/<id>")
+#
+# An advisory against an installed module's pin surfaces to the user
+# through the audit verb and the brief's monthly pass, with suspend
+# as the immediate remedy. Nothing here reaches into an install.
+advisories: []

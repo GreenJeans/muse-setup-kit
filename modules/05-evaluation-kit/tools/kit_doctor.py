@@ -26,6 +26,11 @@ Checks, in the workspace:
      list). A baselined file that no longer exists is a problem.
      Lines ending in "accumulating" name files that grow by design
      (the queue, JOBS.md, ledgers): inventoried, never diffed.
+     A hashed line may carry a trailing file class —
+     "static-verbatim" or "static-rendered" (docs/library.md);
+     lines written before the class vocabulary existed carry none
+     and are read the same way. The class is what the wizard's
+     repair verb reads: only static-verbatim lines are repairable.
 
 Usage:
     python3 kit_doctor.py [--workspace ~/workspace] [--json]
@@ -108,7 +113,7 @@ def main():
     if not os.path.isfile(os.path.join(ws, "OPERATING_PROCEDURES.md")):
         problems.append("OPERATING_PROCEDURES.md missing")
 
-    base_re = re.compile(r"^-\s+installed:\s+(\S+)\s+sha256:([0-9a-f]{64})\s*$")
+    base_re = re.compile(r"^-\s+installed:\s+(\S+)\s+sha256:([0-9a-f]{64})(?:\s+(?:static-verbatim|static-rendered))?\s*$")
     acc_re = re.compile(r"^-\s+installed:\s+(\S+)\s+accumulating\s*$")
     baselined = 0
     accumulating = 0

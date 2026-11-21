@@ -1,0 +1,26 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/security-pack
+dir: modules/06-security-pack
+title: Security Pack
+pitch: "Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share."
+version: "0.9"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures]
+requires: []
+degrades_without: [scheduling]
+reads: "anything you are about to install, in full, at a pinned version."
+writes: "vetting records; standing-rule additions."
+network: "only the source of what you are vetting."
+jobs: "monthly grants inventory (in the brief)."
+rehearsed_at: "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending"
+data_classes: [none]
+action_classes: [none]
+files:
+  - path: VETTING.template.md
+    class: accumulating
+  - path: standing-grants-inventory-job.template.md
+    class: static-rendered

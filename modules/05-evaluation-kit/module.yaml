@@ -1,0 +1,26 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/evaluation-kit
+dir: modules/05-evaluation-kit
+title: Evaluation Kit
+pitch: "Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow."
+version: "0.8"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures, core/memory-architecture]
+requires: []
+degrades_without: [other-agents, scheduling]
+reads: "your procedures and memory, frozen into an audit packet."
+writes: "packets, findings, adoption records."
+network: "a second model if used for blind review."
+jobs: "an audit reminder on cadence."
+rehearsed_at: null
+data_classes: [personal, third-party]
+action_classes: [none]
+files:
+  - path: templates/fictional-seeds.md
+    class: static-verbatim
+  - path: tools/kit_doctor.py
+    class: static-verbatim

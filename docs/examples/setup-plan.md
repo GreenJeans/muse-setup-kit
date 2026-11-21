@@ -308,9 +308,9 @@ plan, and by the session-start line in INSTRUCTIONS.md).
 Stamped per wizard Step 5 item 5 — every file this install created
 or copied from the kit, at its last approved state:
 
-- installed: OPERATING_PROCEDURES.md sha256:ae60268d4ea687de73031bd9e73d6a4a7f873b10e1c96753326e2fbf42191325
+- installed: OPERATING_PROCEDURES.md sha256:ae60268d4ea687de73031bd9e73d6a4a7f873b10e1c96753326e2fbf42191325 static-rendered
 - installed: decision-queue.md accumulating
-- installed: freelance-projects/SCOPE.md sha256:924f04d778492a2e81f87660686a9e9cc11d68726b1c9f7c5a82ba9cc92d2146
+- installed: freelance-projects/SCOPE.md sha256:924f04d778492a2e81f87660686a9e9cc11d68726b1c9f7c5a82ba9cc92d2146 static-rendered
 - installed: INSTRUCTIONS.md accumulating
 - installed: JOBS.md accumulating
-- installed: jobs/morning-brief.md sha256:fe04f4f756638b4570bac0e1242c26c81aa5a6688d54f0de95de5d4d7c21bb13
+- installed: jobs/morning-brief.md sha256:fe04f4f756638b4570bac0e1242c26c81aa5a6688d54f0de95de5d4d7c21bb13 static-rendered

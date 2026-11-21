@@ -273,6 +273,32 @@ class KitDoctorTest(unittest.TestCase):
             self.assertTrue(any("baselined file missing: gone.md" in p
                                 for p in rep["problems"]))
 
+    def test_baseline_class_tokens_are_accepted(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as td:
+            tool = os.path.join(td, "tool.py")
+            with open(tool, "w") as fh:
+                fh.write("tool\n")
+            h = hashlib.sha256(b"tool\n").hexdigest()
+            with open(os.path.join(td, "SETUP-PLAN.md"), "w") as fh:
+                fh.write("# Plan\n- install — commit aaaaaaa1111\n"
+                         "## Installed files (baseline)\n"
+                         f"- installed: tool.py sha256:{h} static-verbatim\n")
+            with open(os.path.join(td, "JOBS.md"), "w") as fh:
+                fh.write("# Jobs\n")
+            with open(os.path.join(td, "OPERATING_PROCEDURES.md"), "w") as fh:
+                fh.write("# Procedures\n")
+            rep = json.loads(run(DOCTOR, "--workspace", td, "--json").stdout)
+            self.assertTrue(any("1 hashed, 0 accumulating" in n
+                                for n in rep["notes"]))
+            self.assertFalse(any("edited since install" in n
+                                 for n in rep["notes"]))
+            with open(tool, "w") as fh:
+                fh.write("tampered\n")
+            rep = json.loads(run(DOCTOR, "--workspace", td, "--json").stdout)
+            self.assertTrue(any("edited since install: tool.py" in n
+                                for n in rep["notes"]))
+
     def test_accumulating_files_are_inventoried_not_diffed(self):
         import hashlib
         with tempfile.TemporaryDirectory() as td:
@@ -294,6 +320,106 @@ class KitDoctorTest(unittest.TestCase):
                                  for n in rep["notes"]))
             self.assertTrue(any("1 hashed, 0 accumulating" not in n and
                                 "accumulating" in n for n in rep["notes"]))
+
+MODULE_YAML = os.path.join(REPO, "tools", "module_yaml.py")
+
+
+class ModuleYamlTest(unittest.TestCase):
+    def _write(self, td, name, text):
+        p = os.path.join(td, name)
+        with open(p, "w") as fh:
+            fh.write(text)
+        return p
+
+    def test_valid_document_parses(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "module.yaml",
+                            'id: core/example\n'
+                            'title: Example\n'
+                            'pitch: "A pitch: with a colon, quoted."\n'
+                            'version: "0.9"\n'
+                            'depends_on: [core/core-procedures]\n'
+                            'requires: []\n'
+                            'rehearsed_at: null\n'
+                            'kit_compat: [kit-1]\n'
+                            'files:\n'
+                            '  - path: tools/x.py\n'
+                            '    class: static-verbatim\n'
+                            '  - path: register.template.md\n'
+                            '    class: accumulating\n')
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            doc = json.loads(r.stdout)
+            self.assertEqual(doc["id"], "core/example")
+            self.assertEqual(doc["pitch"], "A pitch: with a colon, quoted.")
+            self.assertEqual(doc["version"], "0.9")
+            self.assertEqual(doc["depends_on"], ["core/core-procedures"])
+            self.assertEqual(doc["requires"], [])
+            self.assertIsNone(doc["rehearsed_at"])
+            self.assertEqual(doc["files"][1],
+                             {"path": "register.template.md",
+                              "class": "accumulating"})
+
+    def test_nested_map_fails_loud(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "bad.yaml",
+                            "id: core/example\n"
+                            "tiers:\n"
+                            "  lite: the nested form\n")
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("bad.yaml:3", r.stderr)
+
+    def test_anchor_fails_loud(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "bad.yaml",
+                            "id: core/example\n"
+                            "title: &anchor Example\n")
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("bad.yaml:2", r.stderr)
+            self.assertIn("anchor", r.stderr)
+
+    def test_block_scalar_and_tab_fail_loud(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "bad.yaml",
+                            "id: core/example\n"
+                            "pitch: |\n"
+                            "  a multi-line pitch\n")
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("bad.yaml:2", r.stderr)
+            p = self._write(td, "bad2.yaml",
+                            "id: core/example\n"
+                            "\ttitle: Example\n")
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("bad2.yaml:2", r.stderr)
+            self.assertIn("tab", r.stderr)
+
+    def test_parity_mismatch_is_named(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(td, "module.yaml",
+                        'id: core/example\n'
+                        'reads: "the files."\n'
+                        'writes: "a register."\n'
+                        'network: "none."\n'
+                        'jobs: "none."\n')
+            self._write(td, "MODULE.md",
+                        "# Module — Example\n\n"
+                        "**Reads:** the files. **Writes:** something "
+                        "else entirely.\n**Network:** none. "
+                        "**Jobs:** none.\n")
+            r = run(MODULE_YAML, "--parity", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("writes disagrees", r.stderr)
+            self._write(td, "MODULE.md",
+                        "# Module — Example\n\n"
+                        "**Reads:** the files. **Writes:** a register.\n"
+                        "**Network:** none. **Jobs:** none.\n")
+            r = run(MODULE_YAML, "--parity", td)
+            self.assertEqual(r.returncode, 0, r.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

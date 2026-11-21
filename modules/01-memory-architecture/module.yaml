@@ -1,0 +1,28 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/memory-architecture
+dir: modules/01-memory-architecture
+title: Memory Architecture
+pitch: "Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample."
+version: "0.8"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures]
+requires: []
+degrades_without: [scheduling, shell-python]
+reads: "your memory files."
+writes: "a schema file, header stamps, a linter and its reports."
+network: "none."
+jobs: "one weekly linter run."
+rehearsed_at: "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending"
+data_classes: [personal, third-party]
+action_classes: [none]
+files:
+  - path: SCHEMA.template.md
+    class: static-rendered
+  - path: MEMORY.template.md
+    class: accumulating
+  - path: tools/memory_lint.py
+    class: static-verbatim

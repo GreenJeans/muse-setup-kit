@@ -3,8 +3,8 @@
 The kit's claim is "done means verified." This ledger is where
 that claim is cashed: every rehearsal a fresh agent has run
 against the kit, what it covered, and what it found. The wizard
-states rehearsal status at selection time from the manifest's
-`rehearsed_at` field, which this ledger backs: "rehearsed at this
+states rehearsal status at selection time from each module's
+`module.yaml` `rehearsed_at` field, which this ledger backs: "rehearsed at this
 pin" when a row names the checkout, "rehearsed at <tag>; changed
 since" when the module changed after its row, and "unrehearsed at
 this pin — you would be the first" only when there is no row at

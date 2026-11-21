@@ -1,0 +1,24 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/ai-exchange
+dir: modules/04-ai-exchange
+title: AI Exchange
+pitch: "Multiple AI agents exchanging work through shared storage — protocol, queue, blind reviews, published pages, ingest discipline."
+version: "0.3"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures, core/memory-architecture]
+requires: [shared-storage, other-agents]
+degrades_without: []
+reads: "the exchange folders and queue."
+writes: "a protocol doc, a queue sheet, per-agent inboxes/outboxes, published pages."
+network: "your cloud storage."
+jobs: "optional outbox polling in the brief."
+rehearsed_at: "v0.1 household dry run"
+data_classes: [personal, third-party]
+action_classes: [none]
+files:
+  - path: protocol.template.md
+    class: static-rendered

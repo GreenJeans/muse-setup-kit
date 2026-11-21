@@ -1,0 +1,35 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/skill-lifecycle
+dir: modules/08-skill-lifecycle
+title: Skill Lifecycle
+pitch: "A session-review rubric that stages skill lessons instead of writing them live, plus staged-diff approval through the decision queue. Installs at the Lite tier by default; the Full tier adds a nightly sweep and a deterministic curator that archives unused skills but never deletes."
+version: "0.5"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures, core/memory-architecture]
+requires: []
+degrades_without: [scheduling, shell-python]
+reads: "session transcripts, your custom skills, the decision queue, scheduled-job records."
+writes: "staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills."
+network: "none."
+jobs: "none at the Lite tier; at Full, one nightly session-review sweep and one weekly curator run."
+rehearsed_at: "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run"
+tiers:
+  - id: lite
+    description: "In-session + explicit staging and staged-diff approval. No tools, no jobs, no ledger."
+  - id: full
+    description: "Adds the nightly sweep, the curator with its usage ledger and reference tools, the shadow-week rollout, and the 30-day review. Offer at 5+ custom skills."
+data_classes: [personal, third-party]
+action_classes: [none]
+files:
+  - path: templates/staged-proposal.template.md
+    class: static-rendered
+  - path: templates/skill-queue-items.template.md
+    class: static-rendered
+  - path: tools/curator.py
+    class: static-verbatim
+  - path: tools/stage_check.py
+    class: static-verbatim

@@ -3,9 +3,10 @@
 The wizard's Step 1 establishes which capability tokens your platform
 has. This matrix is the reference behind those questions: for each
 capability, which modules need it, which degrade without it, and what
-the degradation actually is. It is generated from the manifest's
-`requires` and `degrades_without` fields; if the two ever disagree,
-the manifest wins and this page has a bug.
+the degradation actually is. It is generated from the modules'
+`module.yaml` files (their `requires` and `degrades_without`
+fields); if the two ever disagree, the `module.yaml` wins and this
+page has a bug.
 
 Legend: **required** = the module will not install without it.
 **degrades** = installs and works; the named function weakens.
