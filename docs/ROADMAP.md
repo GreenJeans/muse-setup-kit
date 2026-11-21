@@ -238,8 +238,10 @@ MODULE, template, and VERIFY, with a `Grade:` marker on every
 entry; the immediacy set records every known sender per
 institution and is collected as a plan question; module 10's
 deferred checks all carry event-plus-fallback due dates. One
-finding is a maintainer decision, left open on purpose: the
-interrupt treatment of a message graded "unverified sender".
+finding was a maintainer decision, since taken: a message
+graded "unverified sender" earns no interrupt of any class on
+its sender claim alone — it is written to the flag log and
+surfaces in the brief's Failures.
 
 ## Phase 12 — the library (planned)
 

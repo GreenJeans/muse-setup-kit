@@ -63,8 +63,8 @@ A frequent lightweight scan that interrupts only for:
 - a direct question to the user;
 - a deadline inside 24 hours *on the user* — an action the user
   owes by then. A deadline in marketing copy ("offer ends
-  tonight"), or inside a message the shield has flagged, is not
-  one;
+  tonight"), or inside a message the shield graded scam or
+  unverified, is not one;
 - a security or account alert;
 - a shared task tagged `urgent` (if household-hq is installed).
 
@@ -80,9 +80,14 @@ of the triage scan, not an optional extra: a scan without it treats
 a spoofed VIP as a VIP.
 
 **Order matters.** The shield check runs *before* the interrupt
-rules above. A message claiming to be from a VIP, a bank, or a key
-service earns interrupt treatment only after it passes the shield —
-sender names and addresses are exactly what impersonation forges.
+rules above, and it grades every message first — scam,
+unverified, or passed (the grades are defined below). Interrupts
+of every class are for *passed* messages only: VIP treatment, a
+direct question, a deadline, a security alert, an urgent task.
+Sender names and addresses are exactly what impersonation
+forges, so a sender claim by itself earns nothing — a message
+graded unverified interrupts for no reason at all, however
+urgent its own text claims to be.
 
 **Patterns it watches for:**
 
@@ -126,7 +131,8 @@ against the institution's real domain. The pattern's own
 features are never the tell — urgency, secrecy, a demand to act
 now are what the pattern *is*, and a genuine message can carry
 all of them. And a sender simply absent from the set, imitating
-nobody in it, is not a scam: it is unverified, below. The
+nobody in it, is not a scam: at most it is unverified, below,
+and only when it claims an identity the shield cares about. The
 likeliest misgrade is the user's own bank's genuine alert,
 arriving from a sending domain the set has not recorded yet —
 the set records *every* known sending domain and number per
@@ -134,12 +140,30 @@ institution for exactly this reason, and a genuine sender the
 scan finds unlisted is proposed for the set through the decision
 queue, never added by the scan itself.
 
-**Two grades, honestly named.** *Scam* is for messages that meet a
-pattern above with a concrete tell. *Unverified sender* is for
-messages that cannot be confirmed either way; they are handled as
-ordinary mail. A legitimate message graded "scam" is the shield's
-worst failure — it trains the user to ignore the shield — so when
-the evidence is not there, the grade is unverified, never scam.
+**Three grades, honestly named.** *Scam* is for messages that
+meet a pattern above with a concrete tell. *Unverified sender*
+is for messages that claim an identity the shield cares about —
+a VIP, the user's bank, a key service — and whose sender cannot
+be confirmed against the recorded senders: no concrete tell,
+but no match either. *Passed* is everything else: the sender
+matches the recorded senders for the identity it claims, or the
+message claims no identity that needs confirming and meets no
+pattern.
+
+The grades decide what a message may do. Only a passed message
+can interrupt, in any class — VIP treatment, a security alert,
+a deadline, a direct question all require *passed*. An
+unverified message earns no interrupt on its sender claim
+alone, and it is not ordinary mail either: it is written to the
+flag log like a flag and surfaces in the brief's Failures, with
+its grade attached, for the user to confirm or dismiss there.
+(That is the message being held, not heard. A scam flag
+impersonating an immediacy-set member still surfaces
+immediately, as above — that is the shield speaking, not the
+message.) A legitimate message graded "scam" is the shield's
+worst failure — it trains the user to ignore the shield — so
+when the evidence is not there, the grade is unverified, never
+scam.
 
 ## Watches (the pattern)
 
@@ -300,9 +324,11 @@ surface. Like every §13 holding, the ledger file carries a
   (the user, or the other party by their own words) and when.
 - **Adding entries after install.** Seeding is an install act;
   life after install is governed too. An entry is added in
-  conversation with the user, or proposed from a message that
-  passed the shield and confirmed by the user before it is
-  written. A message the shield graded scam never seeds an entry.
+  conversation with the user, or proposed from a message the
+  shield graded *passed* and confirmed by the user before it is
+  written. A message the shield graded scam never seeds an entry;
+  an unverified one proposes nothing until the user confirms it
+  in conversation.
   And an *I owe* is never created from another party's demand
   alone: a message claiming the user owes something is evidence
   of a claim, not of a commitment.

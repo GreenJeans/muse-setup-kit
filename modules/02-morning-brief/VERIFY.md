@@ -96,7 +96,8 @@ watch checks.
       all five scams flagged, each with its one-line reason; no
       legitimate message graded "scam" ("unverified sender" is an
       acceptable grade for the genuinely ambiguous); the
-      unlisted-domain alert is graded unverified, not scam, is
+      unlisted-domain alert is graded unverified, not scam, does
+      not interrupt in any class, is in the flag log, is
       proposed for the immediacy set through the decision queue,
       and the set itself is unchanged by the scan; every flag —
       immediate or not — is in the flag log; no fixture
