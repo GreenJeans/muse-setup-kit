@@ -148,7 +148,7 @@ profiles:
   - id: standard
     title: Standard
     modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
-    audit_words: 24700
+    audit_words: 25100
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle, deadlines-register) is offered per module

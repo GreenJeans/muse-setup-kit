@@ -108,9 +108,18 @@ allows fetching the source of what you are vetting; use it. A
 README or a listing page is a summary-shaped document and is not
 the full text — unless the item is a single document, in which
 case that document (a lone SKILL.md, say) is its own full text.
-If the source cannot be read, the entry records "read: supplied
-text only", "read in full" is honestly *no*, and the user decides
-whether to proceed on that basis.
+If the source cannot be read — a hosted connector whose code
+the vendor does not publish is the common case — the entry
+records it plainly ("read: supplied text only", or "read:
+source not readable — hosted"), "read in full" is honestly
+*no*, and vetting proceeds on the observable surface: the
+presented tool manifest, the scopes as observed, the published
+data terms. Whether to proceed on that basis is the user's
+decision, recorded in the entry. One floor is not the user's
+to waive: for a connector or an MCP server, the full presented
+tool manifest must have been read (see the pinning section
+below) before anything is installed — a manifest that cannot
+be read in full is a stop, whatever the tier.
 
 **What a pin is worth.** A pin you cannot resolve is a claim, not
 a pin. A short hash (eight characters, say) is flagged in the
@@ -180,19 +189,35 @@ at connection time — never on what the vendor's pages say the
 server needs. Vendor statements are claims; the consent screen is
 evidence. If the two differ, the screen governs and the difference
 goes in the entry. Map each observed scope to a feature the user
-actually wants. A narrow tool asking for broad scopes (a full
-mailbox, a full drive, admin) fails the audit. What happens next
-depends on whether the breadth is reducible *as observed*. If a
-narrower configuration is actually offered at connection time — a
-narrower scope set on the screen, a read-only variant, or the same
-job through a narrower official route — install narrowed to the
-scopes the job needs, and record what you settled for. If no
-narrower configuration is observed, that is a walk-away (see the
-criteria below): do not install; reach the service another way, or
-not at all. The silent-vendor case resolves the same way: a vendor
-that offers nothing narrower and states nothing as mandatory has
-shown you one configuration, and "no narrower configuration
-observed" is the finding — silence is not a narrower offer.
+actually wants. A scope that maps to no wanted feature fails the
+audit, whatever its size — a narrow tool asking for broad scopes
+(a full mailbox, a full drive, admin) is the obvious case, not
+the only one. A failed audit has three outcomes, and only these:
+
+(1) *Install narrowed.* A narrower configuration is actually
+offered at connection time — a narrower scope set on the
+screen, a read-only variant, or the same job through a narrower
+official route. Install narrowed to the scopes the job needs,
+and record the scopes it actually requested.
+
+(2) *Accept the excess — official tier only.* The user
+explicitly accepts the unmapped scopes. This is the user's
+decision, not an audit pass, and it is recorded like one: in
+the vetting entry, in the user's own words, as a ticket-shaped
+decision naming the connector, each scope accepted, and that a
+narrower configuration was unavailable or declined (the
+vetting template carries the field). The agent states the
+excess plainly; it does not soften it, and it never makes this
+decision itself. Community and unknown tiers have no such
+outcome — for them, excess is a walk-away.
+
+(3) *Walk away.* Every other case (see the criteria below): do
+not install; reach the service another way, or not at all. The
+silent-vendor case lands here: a vendor that offers nothing
+narrower and states nothing as mandatory has shown you one
+configuration, and "no narrower configuration observed" is the
+finding — silence is not a narrower offer, and it is not an
+acceptance either.
 
 **Token privilege, for servers with no scopes to audit.** A server
 that authenticates with a static API key or a personal access
@@ -200,8 +225,11 @@ token requests no scopes, so there is nothing to map — audit the
 token's breadth instead. Check whether a narrower or read-only
 token exists for the job (a scoped token, a read-only key, a
 separate key minted for this server). A mandatory account-wide key
-for a narrow job is treated exactly like a mandatory broad scope:
-if no narrower token is obtainable, walk away.
+for a narrow job is treated exactly like a mandatory broad scope,
+and the audit's outcomes apply to the key's breadth as they do to
+scopes: install narrowed where a narrower key is offered; accept
+the breadth only as the user's recorded decision on an
+official-tier item; otherwise walk away.
 
 Record the observed scopes (or the token's breadth) in the vetting
 entry; a later increase is a re-vet trigger, same as a version
@@ -255,12 +283,17 @@ cherry-pick the code — when any of these hold:
 - the item is unknown tier and fails the tier limit — it wants
   network access, credentials, or account scopes (see Provenance
   tiers);
-- the full text or the full tool manifest cannot be read;
+- the presented tool manifest cannot be read in full — for a
+  connector or server the manifest is the floor of the
+  observable surface, and no decision proceeds without it (see
+  "What 'full text' means" above);
 - credentials are wanted in chat, or in plaintext config outside the
   platform's vault;
-- the observed scopes (or a key's privilege) exceed the job the
-  user wants done *and* no narrower configuration is observed at
-  connection time (see the scope audit above);
+- the observed scopes (or a key's privilege) include any that
+  map to no wanted feature, no narrower configuration is
+  observed at connection time, and the user has not accepted
+  the excess as a recorded decision (official tier only — see
+  the scope audit above);
 - the project is abandoned *and* it would hold credentials or broad
   scopes;
 - agent-directed instructions appear anywhere in the item's text
