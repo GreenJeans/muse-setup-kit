@@ -78,7 +78,7 @@ def check_jobs(procedures_path, jobs_path):
         return [("med", f"C: cannot read {missing}; check skipped")]
     job_names = set()
     for line in jobs.splitlines():
-        m = re.match(r"\s*[-|]\s*`?([a-z0-9][a-z0-9\-_]{2,})`?", line)
+        m = re.match(r"\s*[-|]\s*(?:\*\*|`)?([a-z0-9][a-z0-9\-_]{2,})(?:\*\*|`)?", line)
         if m:
             job_names.add(m.group(1))
     for line in proc.splitlines():
