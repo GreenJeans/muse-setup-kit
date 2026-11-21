@@ -14,6 +14,12 @@ OPERATING_PROCEDURES.md).
 Status key: open / decided / parked. When an item is decided or parked,
 move it to Resolved below and keep its number.
 
+<!-- ext:queue-header — extension anchor (registered in module
+     00's extension-point registry). Module 08, when installed,
+     adds its queue item-type definitions between this comment
+     and the closing marker. -->
+<!-- /ext:queue-header -->
+
 ## Open
 
 <!-- Item shape (delete this comment once the first real item lands;

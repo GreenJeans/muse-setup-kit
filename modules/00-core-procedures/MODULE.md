@@ -1,7 +1,9 @@
 # Module 00 — Core Procedures
 
 **Reads:** your existing agent instructions and workspace layout.
-**Writes:** an operating-procedures file, a decision queue, SCOPE notes.
+**Writes:** an operating-procedures file, a decision queue, SCOPE notes,
+a JOBS.md, a continuity handover, and a pointer line in the agent's
+main instruction file.
 **Network:** none. **Jobs:** none.
 
 ## Purpose
@@ -40,6 +42,8 @@ summary has a bug.
   agent will act on is re-read at the original in the same session, or it
   stays marked unverified. In document work: quote ambiguous passages
   verbatim, and mark unread sections "not verified", never summarized.
+- **Done means verified.** Completion is checked against live state or the
+  original record, never accepted from a worker's report alone.
 - **Abort on mismatch.** Unexpected state from a live system — a wrong
   account, an unfamiliar screen, a balance that doesn't match — means stop
   and report, not improvisation. Before acting inside a signed-in system,
@@ -79,9 +83,7 @@ governs and the application has a bug.
 | Audit cadence | procedures §11 |
 | Verify-before-install (application: module 06) | procedures §10 |
 | Billing buckets; declare before heavy work (application: module 09) | procedures §12 |
-| Sensitive records — where financial, health, and third-party data may live (applications: modules 02, 03, 06) | procedures §13 |
-- **Done means verified.** Completion is checked against live state or the
-  original record, never accepted from a worker's report alone.
+| Sensitive records — where financial, health, and third-party data may live (applications: modules 02, 03, 04, 06, and this module's continuity handover) | procedures §13 |
 
 ## Extension points (anchors)
 
@@ -90,6 +92,11 @@ HTML comments of the form `<!-- ext:<name> -->`. The rules:
 
 - A module may amend a core file **only at a declared anchor** — it
   never appends wherever it likes, and it never renumbers sections.
+- Completing a section's own canonical text in its home section is
+  not an amendment and needs no anchor — module 06 confirming that
+  §10 is present in full, for instance. The canonical-location rule
+  above governs those edits. Anchors govern *inserted blocks*:
+  content a module adds to a file another module owns.
 - Each anchor has exactly **one owner** at a time. The owner's block
   runs from the anchor comment to the matching
   `<!-- /ext:<name> -->` marker. The install plan (SETUP-PLAN.md)
@@ -107,6 +114,8 @@ Registry, as shipped:
 | Anchor | File | Purpose | Owner |
 |---|---|---|---|
 | `ext:billing-buckets` | OPERATING_PROCEDURES.md (from this module's procedures template) | Module 09 inserts its bucket register and declare-before-heavy-work rule as §12 | module 09 (cost-guardrails), when installed |
+| `ext:queue-header` | The decision queue (from this module's queue template) | Module 08 adds its queue item-type definitions (`[type: skill-write]`, `[type: skill-curator]`) between the markers | module 08 (skill-lifecycle), when installed |
+| `ext:instruction-pointer` | The agent's main instruction file (the anchor pair is planted by this module's Install step 5 when the file is first created or amended) | Pointer lines other modules add: module 08's skill-lifecycle pointer, the wizard's session-start line. Each line inside is owned by the module that added it; uninstalling that module removes its line | module 00 (the anchor); lines as noted in Purpose |
 
 ## Install
 
@@ -126,7 +135,10 @@ Registry, as shipped:
    the user and approved as part of the plan, not invented after it.
 5. Add a pointer line to the agent's main instruction file (wizard Q7;
    create `INSTRUCTIONS.md` if none exists): "Operating procedures live
-   in OPERATING_PROCEDURES.md and govern daily work."
+   in OPERATING_PROCEDURES.md and govern daily work." Plant the
+   `ext:instruction-pointer` anchor pair (see the registry above)
+   around the line: later modules add their own pointer lines inside
+   the same markers, each line owned by the module that added it.
 6. Create `JOBS.md` at the workspace root from `templates/JOBS.template.md` — header and entry format, no jobs yet. The format is canonical: module 01's linter and module 08's curator both parse this file, and the brief's detector-silence check reads cadences from it. Do not improvise a different shape.
    Every later module records its scheduled jobs there; the morning
    brief and the memory linter read it. (This module's VERIFY checks
@@ -140,7 +152,10 @@ Registry, as shipped:
    agent, gets a findable name. The user may name another home; the
    plan records the path and who the handover is for either way. An
    unfilled handover is ledgered as a deferred check, never silently
-   skipped.
+   skipped. Record the handover in the plan's installed-file
+   baseline as `accumulating` — it is filled in and revised by
+   design, and hashing it would make ordinary updates read as
+   drift.
 
 ## Verify
 

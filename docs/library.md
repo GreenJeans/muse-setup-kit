@@ -54,7 +54,10 @@ Fields beyond today's manifest entry:
 - **files** — every installed file, each with its class (below).
 - **data_classes** — which sensitive classes the module reads:
   `none`, `personal`, `financial`, `health`, `third-party`
-  (procedures §13 names what each class demands).
+  (procedures §13 names what each class demands). Credentials are
+  not a data class: §10's credential rule governs them, and a
+  module that needs credentials declares that in its credentials
+  disclosure, not here.
 - **action_classes** — which ticket classes the module's
   instructions can set in motion: `send`, `file`, `spend`,
   `delete`, `contact`, or `none`. Judged by effect, not file type:

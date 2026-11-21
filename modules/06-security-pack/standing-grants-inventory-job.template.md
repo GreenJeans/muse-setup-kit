@@ -15,7 +15,13 @@ brief is installed.
    differently, and only one of them was ever a decision.
 2. Compare against last month's inventory. Flag anything new,
    anything widened, and anything no record explains.
-3. Record the inventory, dated, where the install keeps it (the
+3. Re-check installed MCP servers' manifests: re-capture each
+   server's presented manifest, re-hash it, and compare against
+   its vetting record. A hash that differs is a finding — the
+   server is not trusted again until the changed descriptions and
+   schemas are re-read in full and re-vetted (module 06) — and it
+   is reported with this inventory.
+4. Record the inventory, dated, where the install keeps it (the
    plan names the file — the vetting log's home, `security/`, is
    the default). One line per run in the run record: date, grants
    counted, flags raised (or "none").

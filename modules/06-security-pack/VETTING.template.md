@@ -27,19 +27,32 @@ Connectors and MCP servers add these fields (module 06's vetting pack):
 
 - **Provenance tier:** official / community / unknown
 - **Typosquat check:** <name and source compared character-by-character
-  against the official source — match, or the difference found>
-- **OAuth scopes:** <each scope requested, and the feature it maps to;
-  "none" for a local-only item>
-- **Tool-manifest hash:** <sha256 of the named manifest artifact: the
-  vendor-published manifest file (name it), or the tool list exactly
-  as presented at first connection, saved verbatim as the artifact;
-  a vendor-stated hash with no artifact behind it is recorded as
-  "vendor-stated, unverifiable"; MCP servers only>
+  against the official source — match, or the difference found;
+  "no official comparator" when no official item exists>
+- **Scopes / token privilege, as observed:** <each scope on the
+  consent screen (or requested-scope list) at connection time, and
+  the feature it maps to — vendor statements are not the record;
+  for key/PAT servers, the token's breadth and whether a narrower
+  or read-only token exists; "none" for a local-only item>
+- **Presented-manifest hash:** <sha256 of the presented manifest
+  captured at first connection — server instructions, every tool's
+  name, description, and input schema including parameter
+  descriptions, and prompt/resource descriptions — saved exactly
+  as received, in the order presented, as an artifact kept with
+  this log; name the capture method if it was anything else. A
+  vendor-published manifest file is compared against the capture,
+  never used as the pin; a vendor-stated hash with no artifact
+  behind it is recorded as "vendor-stated, unverifiable"; MCP
+  servers only>
 - **Re-vet trigger:** any version change; any scope increase; any
-  tool-manifest hash change
+  presented-manifest hash change (re-checked at session start
+  where the platform exposes it, and at the monthly inventory)
 
 Field modules (kit-library packages) replace the connector fields
-above with these (rules in `docs/library.md`):
+above with these (rules in `docs/library.md`). **Not applicable
+until the library phase ships the package format: a package
+without a `module.yaml` is vetted as a third-party skill pack
+under the standard record, not under this block.**
 
 - **Library / module:** <library-id>/<module-id>
 - **module.yaml fields present:** <the fields docs/library.md

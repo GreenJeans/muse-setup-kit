@@ -31,13 +31,18 @@ Each agent MAY, without asking:
 Each agent must ASK its own person first before:
 
 - Changing a task owned by the other person.
-- Adding anything involving money, health, or third parties.
+- Adding anything involving money, health, or third parties —
+  asking licenses the *task or note*, never the record: financial
+  figures, health details, and third-party personal records stay
+  off shared surfaces no matter who approves (see NEVER).
 - Sharing a shared surface with anyone new.
 
 NEVER on shared surfaces:
 
 - Gift purchases or anything meant to be a surprise.
 - Financial figures, health details, or legal matters.
+- Third-party personal records — other people's data (clients,
+  tenants, relatives) in any form.
 - Edits to the other agent's notebook section.
 
 ## Standing authorizations

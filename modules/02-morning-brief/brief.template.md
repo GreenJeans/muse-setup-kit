@@ -37,7 +37,10 @@ never reported as clear.
    consecutive flag, fold to a count). (e) [IF shared lists exist] Tasks
    tagged `urgent` — these also interrupt between briefs, like a triage
    item. (f) Deferred checks: SETUP-PLAN.md's verification ledger — any
-   check due today or overdue is named here, with its owner.
+   check due today or overdue is named here, with its owner. The
+   ledger is also where review-by dates for local §13 holdings are
+   recorded (procedures §13), so a holding past its review-by is
+   named here like any other due check.
 1. **Watch findings.** Anything flagged since the last brief.
 2. **Decision queue.** Print new, resurfacing, and firing-default items in
    full; count the rest. Never invent a default for an item; defaults are

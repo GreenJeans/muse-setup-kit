@@ -78,9 +78,9 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~12,100 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~17,000 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all nine modules | ~29,100 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~13,500 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~19,500 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all nine modules | ~31,900 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -186,16 +186,16 @@ procedures, templates, and the wizard itself are original to this kit.
 README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
-docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
+docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (modules)
 modules/
   00-core-procedures/      MODULE.md · VERIFY.md · templates/
   01-memory-architecture/  MODULE.md · VERIFY.md · SCHEMA + MEMORY templates · tools/ (reference linter)
-  02-morning-brief/        MODULE.md · VERIFY.md · brief template
+  02-morning-brief/        MODULE.md · VERIFY.md · brief template · money-watch templates (baseline, run records, job)
   03-household-hq/         MODULE.md · VERIFY.md · principles + partner-prompt templates
   04-ai-exchange/          MODULE.md · VERIFY.md · protocol template
   05-evaluation-kit/       MODULE.md · VERIFY.md · templates/ (fictional seeds) · tools/ (kit doctor)
-  06-security-pack/        MODULE.md · VERIFY.md · vetting-log template
+  06-security-pack/        MODULE.md · VERIFY.md · vetting-log template · grants-inventory job template
   08-skill-lifecycle/      MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator, stage check)
   09-cost-guardrails/      MODULE.md · VERIFY.md · templates/ (bucket register)
 tools/               ← kit_selfcheck.py (the kit lints itself) · tests/ (tool fixtures)```

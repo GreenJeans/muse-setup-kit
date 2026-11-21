@@ -5,19 +5,19 @@ version: 1
 modules:
   - id: core-procedures
     dir: modules/00-core-procedures
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11–12 at df56774; changed since (friction fixes), re-rehearsal pending"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11–12 at df56774; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
     title: Core Procedures
     pitch: Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.
     depends_on: []
     requires: []
     reads: "Your existing agent instructions and workspace layout (to merge, not overwrite)."
-    writes: "An OPERATING_PROCEDURES.md, a decision queue file, SCOPE.md files per workstream, a continuity handover."
+    writes: "An OPERATING_PROCEDURES.md, a decision queue file, SCOPE.md files per workstream, a JOBS.md, a continuity handover, and a pointer line in your main instruction file."
     network: none
     jobs: none
 
   - id: memory-architecture
     dir: modules/01-memory-architecture
-    rehearsed_at: "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending"
+    rehearsed_at: "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
     title: Memory Architecture
     pitch: Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.
     depends_on: [core-procedures]
@@ -30,20 +30,20 @@ modules:
 
   - id: morning-brief
     dir: modules/02-morning-brief
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); changed since (friction fixes), re-rehearsal pending"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
     title: Morning Brief & Inbox Triage
     pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules, and silent-by-design watches.
     depends_on: [core-procedures]
     requires: []
     degrades_without: [scheduling]   # installs as an on-demand brief instead
-    reads: "Calendar, mailbox, task lists, watch outputs (whatever you connect)."
-    writes: "One brief message per day; draft replies only, sent only with approval."
+    reads: "Calendar, mailbox, task lists, watch outputs (whatever you connect); for the money watch, statement/CSV exports you supply."
+    writes: "One brief message per day; draft replies only, sent only with approval; for the money watch, its baseline and run-record files and its job file."
     network: "Your connected accounts only."
     jobs: "One daily brief; optional 30-minute inbox triage scan; optional weekly money watch."
 
   - id: household-hq
     dir: modules/03-household-hq
-    rehearsed_at: "v0.1 household dry run; changed in v0.8, re-rehearsal pending"
+    rehearsed_at: "v0.1 household dry run; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
     title: Household HQ
     pitch: Two people, two agents, one shared coordination system — shared task layer, shared memory layer, a notebook protocol, and a principles doc.
     depends_on: [core-procedures]
@@ -56,13 +56,13 @@ modules:
 
   - id: ai-exchange
     dir: modules/04-ai-exchange
-    rehearsed_at: "v0.1 household dry run"
+    rehearsed_at: "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending"
     title: AI Exchange
     pitch: Multiple AI agents exchanging work through shared storage — protocol, queue, blind reviews, published pages, ingest discipline.
     depends_on: [core-procedures, memory-architecture]
     requires: [shared-storage, other-agents]
     reads: "The exchange folders and queue."
-    writes: "Exchange protocol doc, queue sheet, per-agent inboxes/outboxes, published pages."
+    writes: "Exchange protocol doc, queue sheet, per-agent inboxes/outboxes, published pages, a Work/ folder, Snapshots/ and ingest memos."
     network: "Your cloud storage only."
     jobs: "Optional outbox polling during the brief."
 
@@ -73,7 +73,7 @@ modules:
     pitch: Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.
     depends_on: [core-procedures, memory-architecture]
     requires: []
-    degrades_without: [other-agents, scheduling]   # single-reviewer mode; audit reminder becomes an on-demand chore
+    degrades_without: [other-agents, scheduling, shell-python]   # single-reviewer mode; audit reminder becomes an on-demand chore; without shell/python, kit_doctor cannot run and audits lose the mechanical drift check
     reads: "Your procedures and memory (frozen into an audit packet)."
     writes: "Audit packets, findings, adoption records."
     network: "A second model/agent if you use one for blind review."
@@ -81,7 +81,7 @@ modules:
 
   - id: security-pack
     dir: modules/06-security-pack
-    rehearsed_at: "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending"
+    rehearsed_at: "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
     title: Security Pack
     pitch: Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share.
     depends_on: [core-procedures]
@@ -94,7 +94,7 @@ modules:
 
   - id: skill-lifecycle
     dir: modules/08-skill-lifecycle
-    rehearsed_at: "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run"
+    rehearsed_at: "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run; changed by EX-018/019 review fixes, re-rehearsal pending"
     title: Skill Lifecycle
     pitch: A session-review rubric that stages skill lessons instead of writing them live, plus staged-diff approval through the decision queue. Installs at the Lite tier by default; the Full tier adds a nightly sweep and a deterministic curator that archives unused skills but never deletes.
     tiers:
@@ -104,13 +104,13 @@ modules:
     requires: []
     degrades_without: [scheduling, shell-python]   # Full tier: sweep and curator on demand; without shell/python the curator is a manual ledger review. Lite needs neither.
     reads: "Session transcripts, your custom skills, the decision queue, scheduled-job records (Full)."
-    writes: "Staged proposals (never live skills directly), decision-queue items; at Full also a skill-usage ledger and an archive folder for retired skills."
+    writes: "Staged proposals (never live skills directly), decision-queue items, a pointer line in your main instruction file (at the Lite install); at Full also a skill-usage ledger and an archive folder for retired skills."
     network: none
     jobs: "None at Lite. At Full: one nightly session-review sweep; one weekly curator run."
 
   - id: cost-guardrails
     dir: modules/09-cost-guardrails
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; changed since (friction fixes), re-rehearsal pending"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
     title: Cost & Billing Guardrails
     pitch: Bucket discipline for agent spending — know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.
     depends_on: [core-procedures]
@@ -130,12 +130,12 @@ profiles:
   - id: starter
     title: Starter
     modules: [core-procedures, morning-brief, cost-guardrails]
-    audit_words: 12100
+    audit_words: 13500
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
-    audit_words: 17000
+    audit_words: 19500
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle) is offered per module after the profiles.

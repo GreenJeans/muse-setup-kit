@@ -41,3 +41,8 @@ watch checks.
       watch installs only): the run's flags match a hand-check of the
       same period's exports, and a no-change week produces a run
       record and no flag.
+- [ ] **Baseline untouched by runs** (due: after the first flagged
+      money-watch run): the baseline's sha256 before the run equals
+      its sha256 after — a run never edits it. After the first
+      resolution, exactly the affected line has changed, and it
+      carries the decision and its date.

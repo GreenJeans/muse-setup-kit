@@ -186,6 +186,21 @@ REHEARSALS ledger are repaired. Rehearsals for the 06 pack and
 the money watch are specified from the reviewers' pass bars and
 run before tagging.
 
+Review fixes (EX-018/019 — the blind dual review of this
+release, run against the v0.8 tree before tagging): 39 distinct
+findings, every one verified against the tree, the fixes in this
+phase's tree. The scope audit now decides on the scopes as
+observed at connection time (and audits token privilege where
+there are no scopes); manifest pinning captures the presented
+manifest in full — schemas, annotations, server instructions —
+with a named capture method and a re-check cadence; money-watch
+queue items can never resolve by silence; §13's review-by has a
+surfacing path for local holdings, and the §13 pointers are
+completed across modules 01, 04, 05, 08, and 09. Two findings
+are maintainer decisions, left open on purpose: whether a user
+may accept excess scopes in their own words, and the default
+when an official hosted connector's source cannot be read.
+
 ## Phase 11 — v0.9: everyday (planned)
 
 Module 10, the deadlines & expiry register (an accumulating
