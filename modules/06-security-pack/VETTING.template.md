@@ -75,6 +75,31 @@ under the standard record, not under this block.**
 - **Risk gate:** <the package's data and action classes, and the
   evidence docs/library.md's gate 4 requires for them>
 
+A field *library* — the add library verb's object — gets its own
+entry shape, one per library:
+
+### Library <library-id> — <YYYY-MM-DD>
+
+- **Maintainer:** <a named person or agent — not the library, not
+  an org label>
+- **Review practice:** <who reviews its modules, and how a review
+  is recorded; "none" is a recordable answer, and a bad one>
+- **Git repo URL:** <where the library's repository is cloned
+  from>
+- **Catalog URL:** <where its directory.json is fetched from —
+  a separate field from the repo URL; the two are not assumed to
+  be the same place>
+- **Catalog pin:** <the directory's generated_from at vetting>
+- **Advisories channel:** published (advisories.json present) /
+  none (no advisories.json — the plan labels the library "no
+  advisories channel")
+- **Mechanical pass:** <the receipt line from
+  tools/kit_selfcheck.py --field <library-id> run on the fetched
+  checkout, or "no shell available" where it could not run>
+- **Indexed:** unindexed (until the core index carries
+  field-library entries, every added library is recorded
+  unindexed)
+
 ## Entries
 
 <!-- The first entry is the Muse Setup Kit itself. -->

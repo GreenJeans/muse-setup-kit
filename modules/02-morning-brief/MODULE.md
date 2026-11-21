@@ -7,10 +7,11 @@ approval; the promises & waiting-on ledger, when installed (other
 people's commitments, in their words); the triage flag log and the
 scan's run records, when the scan is installed; for the money watch,
 its baseline and run-record files and its job file.
-**Data classes:** personal; third-party (the ledger's entries and
-the triage flag log name other people — procedures §13).
 **Network:** your connected accounts. **Jobs:** daily brief; optional
 30-minute triage scan; optional weekly money watch.
+**Data classes:** personal; third-party (the ledger's entries and
+the triage flag log name other people — procedures §13).
+**Action classes:** send.
 
 ## Purpose
 

@@ -6,7 +6,8 @@ strict flat subset of YAML, parsed here with no third-party
 dependency. The subset is deliberately small:
 
   - top-level `key: value` scalars (bare, "double-quoted", or an
-    integer; the literal `null` means no value);
+    integer; the literal `null` — that exact spelling, lowercase —
+    means no value);
   - inline lists: `key: [a, b, c]` (and `key: []`);
   - block lists under a key, indented two spaces:
         key:
@@ -19,17 +20,23 @@ dependency. The subset is deliberately small:
 Everything outside the subset is an ERROR, never a silent misparse:
 nested maps, anchors and aliases, block (multi-line) scalars, flow
 maps, tabs, duplicate keys, inconsistent indentation, document
-markers. Every error names the file and the line. Generated files
-(directory.json, advisories.json) are JSON instead; this parser is
-only for files a human authors.
+markers — and the scalar spellings full YAML would reinterpret:
+inline comments (`value # note`), single-quoted scalars, tags
+(`!!str x`), nested lists in either form, YAML's other null and
+boolean spellings (`~`, `Null`, `true`, `false`, …), and unescaped
+double quotes inside a bare scalar. A scalar that needs one of
+those spellings gets double quotes and stays a string. Every error
+names the file and the line. Generated files (directory.json,
+advisories.json) are JSON instead; this parser is only for files a
+human authors.
 
 Usage:
     python3 tools/module_yaml.py FILE          print the parsed
                                                document as JSON
     python3 tools/module_yaml.py --parity DIR  check DIR/module.yaml
                                                against DIR/MODULE.md's
-                                               Reads/Writes/Network/Jobs
-                                               header block
+                                               header block (prose
+                                               fields and class sets)
 
 Exit code: 0 = ok, 1 = parse or parity failure, 2 = bad arguments.
 """
@@ -40,6 +47,22 @@ import sys
 
 KEY = re.compile(r"^([a-z][a-z0-9_]*):")
 INT = re.compile(r"^-?\d+$")
+
+# YAML spellings this subset refuses to reinterpret. Only the
+# literal `null` is a null here; the rest are strings a full YAML
+# parser would silently turn into booleans or nulls, so the subset
+# rejects them outright — quote the value if the string is meant.
+YAML_SPELLINGS = ("~", "Null", "NULL", "True", "TRUE", "False",
+                  "FALSE", "true", "false", ".nan", ".inf", "-.inf",
+                  "+.inf")
+
+# The class vocabularies module.yaml declares and MODULE.md
+# headers repeat (docs/library.md). kit_selfcheck imports these
+# from here so the two tools cannot drift apart.
+DATA_CLASSES = ("none", "personal", "financial", "health",
+                "third-party")
+ACTION_CLASSES = ("none", "send", "file", "spend", "delete",
+                  "contact")
 
 
 class ModuleYamlError(Exception):
@@ -52,11 +75,35 @@ def _fail(path, line, message):
     raise ModuleYamlError(path, line, message)
 
 
+def _reject_comment(raw, path, lineno):
+    """An inline comment (` #…`) outside double quotes is outside
+    the subset: it is how a value like `null # pending` would
+    otherwise be silently absorbed into the string."""
+    in_q = False
+    i = 0
+    while i < len(raw):
+        c = raw[i]
+        if in_q:
+            if c == "\\":
+                i += 2
+                continue
+            if c == '"':
+                in_q = False
+        elif c == '"':
+            in_q = True
+        elif c == "#" and (i == 0 or raw[i - 1] in " \t"):
+            _fail(path, lineno, "inline comments are outside the "
+                                "subset (put the note on its own "
+                                "line, starting with #)")
+        i += 1
+
+
 def _parse_scalar(raw, path, lineno):
     """Parse one scalar token (already stripped of outer spaces)."""
     if raw == "":
         _fail(path, lineno, "empty value (a key with no value must "
                             "introduce a block list)")
+    _reject_comment(raw, path, lineno)
     if raw[0] in "&*":
         _fail(path, lineno, "anchors and aliases are outside the subset")
     if raw[0] in "|>":
@@ -64,32 +111,54 @@ def _parse_scalar(raw, path, lineno):
                             "the subset")
     if raw[0] == "{":
         _fail(path, lineno, "flow maps are outside the subset")
+    if raw[0] == "!":
+        _fail(path, lineno, "tags (e.g. !!str) are outside the subset")
+    if raw[0] == "'":
+        _fail(path, lineno, "single-quoted scalars are outside the "
+                            "subset (use double quotes, or bare)")
     if raw[0] == "[":
         if not raw.endswith("]"):
             _fail(path, lineno, "unterminated inline list")
         inner = raw[1:-1].strip()
         if not inner:
             return []
-        return [_parse_scalar(part.strip(), path, lineno)
-                for part in _split_list(inner, path, lineno)]
+        items = []
+        for part in _split_list(inner, path, lineno):
+            part = part.strip()
+            if part.startswith("["):
+                _fail(path, lineno, "nested lists are outside the "
+                                    "subset")
+            items.append(_parse_scalar(part, path, lineno))
+        return items
     if raw[0] == '"':
-        if len(raw) < 2 or not raw.endswith('"'):
-            _fail(path, lineno, "unterminated double-quoted scalar")
-        body = raw[1:-1]
-        out, i = [], 0
-        while i < len(body):
-            if body[i] == "\\":
-                if i + 1 >= len(body) or body[i + 1] not in '"\\':
+        out, i = [], 1
+        while i < len(raw):
+            c = raw[i]
+            if c == "\\":
+                if i + 1 >= len(raw) or raw[i + 1] not in '"\\':
                     _fail(path, lineno, "unsupported escape in quoted "
                                         "scalar (only \\\" and \\\\)")
-                out.append(body[i + 1])
+                out.append(raw[i + 1])
                 i += 2
-            else:
-                out.append(body[i])
-                i += 1
-        return "".join(out)
+                continue
+            if c == '"':
+                if i != len(raw) - 1:
+                    _fail(path, lineno, "content after the closing "
+                                        "quote of a scalar")
+                return "".join(out)
+            out.append(c)
+            i += 1
+        _fail(path, lineno, "unterminated double-quoted scalar")
     if raw == "null":
         return None
+    if raw in YAML_SPELLINGS:
+        _fail(path, lineno, f"{raw!r} is a YAML null/boolean spelling "
+                            f"outside the subset (only the literal "
+                            f"'null' is a null; quote the value if "
+                            f"the string is meant)")
+    if '"' in raw:
+        _fail(path, lineno, "a bare scalar may not contain double "
+                            "quotes (quote the whole value)")
     if ": " in raw or raw.endswith(":"):
         _fail(path, lineno, "a bare scalar may not contain ': ' "
                             "(quote the value, or this is a nested "
@@ -184,6 +253,9 @@ def parse_text(text, path="<text>"):
                 break
             if indent == 2 and s2.startswith("- "):
                 item_text = s2[2:]
+                if item_text.startswith("- ") or item_text == "-":
+                    _fail(path, lineno2, "nested block sequences are "
+                                         "outside the subset")
                 i += 1
                 if KEY.match(item_text) and (
                         ": " in item_text or item_text.endswith(":")):
@@ -225,35 +297,63 @@ def parse_file(path):
 
 
 LABEL = re.compile(r"\*\*([A-Za-z ]+):\*\*")
+PROSE_FIELDS = ("reads", "writes", "network", "jobs")
+CLASS_FIELDS = ("data classes", "action classes")
+COMPARED_LABELS = PROSE_FIELDS + CLASS_FIELDS
 
 
 def header_fields(module_md_text):
-    """Extract the Reads/Writes/Network/Jobs header block of a
-    MODULE.md, whitespace-normalized, as a dict of lowercase keys.
-    Any other bolded label in the block (module 10's Data classes
-    line) terminates the preceding field's value."""
+    """Extract the compared header fields of a MODULE.md —
+    Reads/Writes/Network/Jobs plus Data classes / Action classes —
+    whitespace-normalized, as a dict of lowercase keys.
+
+    A field's value runs to the next *compared* label, not the
+    next bold label of any kind: an unrecognized bold label inside
+    a value is part of that value, so inserting one cannot
+    truncate what parity compares. A repeated compared label is
+    recorded under '<name> (duplicate)' so check_parity can fail
+    on it — last-wins would let a second label steer the check."""
     head_lines = []
     for line in module_md_text.splitlines():
         if line.startswith("## ") and head_lines:
             break
         head_lines.append(line)
     head = " ".join(head_lines)
+    labels = [(m.start(), m.end(), m.group(1).strip().lower())
+              for m in LABEL.finditer(head)]
+    compared = [t for t in labels if t[2] in COMPARED_LABELS]
     fields = {}
-    labels = list(LABEL.finditer(head))
-    for idx, m in enumerate(labels):
-        name = m.group(1).strip().lower()
-        if name not in ("reads", "writes", "network", "jobs"):
-            continue
-        end = labels[idx + 1].start() if idx + 1 < len(labels) \
+    for idx, (start, end, name) in enumerate(compared):
+        stop = compared[idx + 1][0] if idx + 1 < len(compared) \
             else len(head)
-        value = head[m.end():end].replace("**", " ")
-        fields[name] = re.sub(r"\s+", " ", value).strip()
+        value = head[end:stop].replace("**", " ")
+        value = re.sub(r"\s+", " ", value).strip()
+        if name in fields:
+            fields[name + " (duplicate)"] = value
+        else:
+            fields[name] = value
     return fields
+
+
+def _class_tokens(value, vocabulary):
+    """The vocabulary tokens a header class line names, as a set.
+    The line may carry prose around the tokens (module 02's line
+    explains itself); parity binds the token set, not the prose."""
+    found = set()
+    for token in vocabulary:
+        if re.search(r"(?<![a-z-])" + re.escape(token) +
+                     r"(?![a-z-])", value):
+            found.add(token)
+    return found
 
 
 def check_parity(module_dir):
     """Return a list of parity problems between DIR/module.yaml and
-    the Reads/Writes/Network/Jobs header of DIR/MODULE.md."""
+    the header block of DIR/MODULE.md: the four prose fields must
+    agree verbatim (whitespace-normalized), and the Data classes /
+    Action classes lines must name the same class sets the
+    module.yaml declares — those are the fields the risk-class
+    gate acts on, so they bind as sets, not as decoration."""
     problems = []
     yaml_path = os.path.join(module_dir, "module.yaml")
     md_path = os.path.join(module_dir, "MODULE.md")
@@ -267,7 +367,12 @@ def check_parity(module_dir):
         return [f"{md_path}: missing"]
     with open(md_path, encoding="utf-8", errors="replace") as fh:
         fields = header_fields(fh.read())
-    for name in ("reads", "writes", "network", "jobs"):
+    for name in COMPARED_LABELS:
+        if name + " (duplicate)" in fields:
+            problems.append(f"{md_path}: header repeats the "
+                            f"{name} label — parity cannot bind a "
+                            f"steered header")
+    for name in PROSE_FIELDS:
         if name not in fields:
             problems.append(f"{md_path}: header has no {name} field")
             continue
@@ -279,6 +384,24 @@ def check_parity(module_dir):
             problems.append(
                 f"{module_dir}: {name} disagrees — MODULE.md header "
                 f"says {fields[name]!r}, module.yaml says {yval!r}")
+    for name, vocab in (("data classes", DATA_CLASSES),
+                        ("action classes", ACTION_CLASSES)):
+        key = name.replace(" ", "_")
+        if name not in fields:
+            problems.append(f"{md_path}: header has no {name} field")
+            continue
+        yval = data.get(key)
+        if not isinstance(yval, list) or \
+                not all(isinstance(x, str) for x in yval):
+            problems.append(f"{yaml_path}: {key} is missing or not a "
+                            f"list of class names")
+            continue
+        header_set = _class_tokens(fields[name], vocab)
+        if header_set != set(yval):
+            problems.append(
+                f"{module_dir}: {name} disagree — MODULE.md header "
+                f"names {sorted(header_set)}, module.yaml declares "
+                f"{sorted(set(yval))}")
     return problems
 
 

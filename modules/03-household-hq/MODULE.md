@@ -3,6 +3,7 @@
 **Reads:** the shared surfaces both people agreed to share.
 **Writes:** shared lists, a shared notebook, a shared ops sheet.
 **Network:** your shared accounts. **Jobs:** an optional change detector.
+**Data classes:** personal, third-party. **Action classes:** contact.
 
 ## Purpose
 

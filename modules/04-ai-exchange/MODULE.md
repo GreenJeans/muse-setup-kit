@@ -5,6 +5,7 @@ queue sheet, per-agent inboxes/outboxes, published pages, a `Work/`
 folder for the maintainer's own outputs, and `Snapshots/` with ingest
 memos.
 **Network:** your cloud storage. **Jobs:** optional outbox polling in the brief.
+**Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose
 

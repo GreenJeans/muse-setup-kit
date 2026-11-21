@@ -10,6 +10,7 @@ expiry dates, the user's own and household members'. The register
 never holds a document's number (procedures §13); rows that would
 read alike are told apart by the holder's first name or a label
 the user chooses, never by a number or part of one.
+**Action classes:** none.
 
 ## Purpose
 

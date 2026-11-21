@@ -3,6 +3,7 @@
 **Reads:** your procedures and memory, frozen into an audit packet.
 **Writes:** packets, findings, adoption records. **Network:** a second
 model if used for blind review. **Jobs:** an audit reminder on cadence.
+**Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose
 

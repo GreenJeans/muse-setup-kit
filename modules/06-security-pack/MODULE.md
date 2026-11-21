@@ -3,6 +3,7 @@
 **Reads:** anything you are about to install, in full, at a pinned version.
 **Writes:** vetting records; standing-rule additions. **Network:** only the
 source of what you are vetting. **Jobs:** monthly grants inventory (in the brief).
+**Data classes:** none. **Action classes:** none.
 
 ## Purpose
 

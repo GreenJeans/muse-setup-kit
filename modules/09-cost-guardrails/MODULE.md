@@ -5,6 +5,7 @@ present), the bucket register. **Writes:** a bucket register in the
 procedures; decision-queue items when a cap is approached. **Network:**
 your providers' billing pages only, with you present. **Jobs:** one
 monthly spend check (rides the brief if installed).
+**Data classes:** financial. **Action classes:** none.
 
 ## Purpose
 

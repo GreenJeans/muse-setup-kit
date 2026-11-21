@@ -7,6 +7,7 @@ for retired skills, and a pointer line in the agent's main instruction
 file (added at the Lite install). **Network:** none. **Jobs:** none at the
 Lite tier; at Full, one nightly session-review sweep and one weekly
 curator run.
+**Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose
 

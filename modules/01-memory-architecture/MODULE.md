@@ -2,6 +2,7 @@
 
 **Reads:** your memory files. **Writes:** a schema file, header stamps,
 a linter and its reports. **Network:** none. **Jobs:** one weekly linter run.
+**Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose
 

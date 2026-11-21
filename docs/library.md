@@ -1,11 +1,14 @@
 # The library: module distribution and lifecycle
 
 Status: **adopted 2026-11-20; implemented on the library branch
-(unreleased)** — from the blind dual review EX-016/EX-017 and the
-maintainer's decisions on their open forks. The design below is
-the adopted spec, unchanged; "As built" at the end of this
-document records what the branch implements, where it differs
-from the spec, and what is still future.
+(unreleased); amended on the library branch** — from the blind
+dual review EX-016/EX-017 and the maintainer's decisions on
+their open forks, and amended by the EX-022/EX-023 review fixes
+(2026-11-21), including the maintainer's decision that packages
+carry no review fields. The design below is the adopted spec as
+amended; "As built" at the end of this document records what
+the branch implements, where it differs from the spec, and what
+is still future.
 
 The problem it solves: the kit is becoming a library, not a single
 product. Other people will write modules (a housing operator's
@@ -65,11 +68,17 @@ Fields beyond today's manifest entry:
   executable in effect.
 - **rehearsed_at** — a commit hash plus a rehearsal run reference
   (see Rehearsal, below).
-- **reviewed_at / reviewed_by** — the review record (see
-  Vetting, below): the date and the named human who signed it,
-  or null. The generated directory carries both fields, so
-  `list available` reports review status from the catalog; a
-  null pair reads "no review recorded."
+- **No review fields.** A package deliberately carries no
+  `reviewed_at` / `reviewed_by` (maintainer's decision,
+  2026-11-21, on the EX-022/EX-023 round). Review is conferred,
+  never self-asserted: a module's review record lives in the
+  core index (for core modules) or in the installer's own
+  vetting log (for field modules) — the two places a record can
+  be checked against someone other than the module's author.
+  A module.yaml carrying review fields is a defect:
+  `kit_selfcheck` fails on it, and the directory generator
+  refuses it. `list available` reads review status from those
+  records, never from the catalog entry itself.
 - **audit_words** — computed by the tooling on the all-files basis,
   not hand-written.
 - **kit_compat** — the core interface versions the module depends
@@ -118,8 +127,9 @@ instead of a judgment call.
 
 Module 10 (the deadlines & expiry register, v0.9) is the first
 module designed under this spec, ahead of the `module.yaml`
-implementation: its `MODULE.md` declares its data class
-(`personal` — document types and expiry dates, never a document's
+implementation: its `MODULE.md` declares its data classes
+(`personal`, `third-party` — document types and expiry dates,
+the user's own and household members', never a document's
 number, per procedures §13) and names its one installed file's
 class — the register is accumulating, inventoried in the baseline
 and never diffed. Module 02's promises & waiting-on ledger, in the
@@ -188,7 +198,11 @@ lapses on any change of hash — approval is per pinned version
 the label "unreviewed," cannot enter profiles, and need an
 explicit acknowledgement at selection time. Core modules are
 maintainer-authored and say so; their outside review is the blind
-dual-review record, cited by round in the entry.
+dual-review record, cited by round in the maintainer's review
+record (the rounds themselves are recorded in docs/ROADMAP.md).
+The record's home matters as much as its content: it lives in
+the core index or the installer's vetting log — never in the
+module's own package, where its author could write it.
 
 ## The verbs
 
@@ -228,17 +242,21 @@ irreversible (uninstall, repair, adding a library) is ticketed.
   were actually taken from. A checkout is normally one commit
   ahead of its catalog, so the two differ by design; repair
   checks the checkout pin, because it names the exact tree the
-  installed files came from.) Two invariants, both checked,
-  either failing aborts the repair: the checkout's
-  `git rev-parse HEAD` equals the recorded checkout pin, and
-  the source file's sha256 equals the baseline's recorded
-  sha256. Repair **never re-stamps a baseline** (a correctly
+  installed files came from.) Repair reads the source from the
+  clone's object store at the checkout pin (`git show
+  <pin>:<path>`) and never moves the shared clone's HEAD. Two
+  invariants, both checked before anything is written, either
+  failing aborts the repair: the clone is the library's own
+  work tree (`git rev-parse --show-toplevel` names the recorded
+  clone), and the source file's sha256 — read from the pinned
+  tree — equals the baseline's recorded sha256. Repair **never re-stamps a baseline** (a correctly
   restored file already hashes to its recorded line; re-stamping
   is how a changed file would get blessed), and it **never
   resurrects a recorded removal**: a file the user deleted on
-  purpose is recorded in the plan as removed, and the doctor's
-  report offers "repair, or record the removal" — the user
-  chooses. Anything wider than this is not repair; it is an
+  purpose is recorded in the plan as removed
+  (`- removed: <path> <date> <reason>` — the grammar lives in
+  UNINSTALL.md), and the doctor's report offers "repair, or
+  record the removal" — the user chooses. Anything wider than this is not repair; it is an
   upgrade or a reinstall, and it goes through those doors.
   Repair's objects are verbatim copies — the tools scripts; a
   prose-only install may hold none, and then repair correctly
@@ -346,14 +364,26 @@ Implemented on the branch, against the spec above:
 - **`module.yaml` per module** for all ten core modules, in the
   strict flat subset, parsed by `tools/module_yaml.py` — which
   fails loud, naming file and line, on nested maps, anchors,
-  block scalars, tabs, and duplicate keys. `wizard/manifest.yaml`
-  keeps only the library id, the interface version, and the
-  profiles. `kit_selfcheck` asserts the required fields, the
-  qualified ids, that `depends_on` and module-valued
-  `degrades_without` entries resolve, that every declared file
-  exists with a valid class, and MODULE.md header parity; a
-  `modules:` section in the manifest is a finding (duplication
-  is a defect).
+  block scalars, tabs, duplicate keys, and the scalar spellings
+  full YAML would reinterpret (inline comments, single quotes,
+  tags, nested lists, `~` / `Null` / `false` and their kin).
+  `wizard/manifest.yaml` keeps only the library id, the
+  interface version, and the profiles, and is read by the same
+  strict parser. `kit_selfcheck` asserts the required fields,
+  the qualified ids (unique — a duplicate id is a finding),
+  that `depends_on` and module-valued `degrades_without` entries
+  resolve, that every declared file exists with a valid class at
+  a path confined to its module directory, that every shipped
+  file under `templates/` or `tools/` is declared, that each
+  module's `kit_compat` names the manifest's interface version,
+  and MODULE.md header parity — prose fields verbatim, and the
+  Data classes / Action classes lines bound as sets, since
+  those are the fields the risk gate acts on; a `modules:`
+  section in the manifest is a finding (duplication is a
+  defect). A `--field <library-id>` mode runs the same package
+  checks against a field library's checkout, which is how the
+  wizard's inspect and add library verbs get a mechanical
+  receipt for a library that has no manifest of its own.
 - **Qualified ids throughout**: profiles, dependency fields, and
   the wizard's lifecycle operations all name `core/<module>`.
 - **`tools/build_directory.py`** generates `directory.json` and
@@ -378,24 +408,60 @@ Implemented on the branch, against the spec above:
   hashed line as static-rendered, not repairable), suspend's
   `## Suspended` section in `JOBS.md`, rollback, and
   reconfigure.
-- **Directory entries carry review status**: `reviewed_at` /
-  `reviewed_by` ride from each `module.yaml` into
-  `directory.json`, so `list available` reports them. Both are
-  null for every core module today, deliberately: the blind
-  dual-review rounds reviewed the kit whole, as agent reviews,
-  and the bar in "Vetting" above — a named human, per module,
-  at a pinned hash — is not met by them, so no entry claims a
-  review it does not have.
+- **Directory entries carry no review status** (EX-022/EX-023
+  fix, maintainer's decision 2026-11-21): the generator builds
+  each entry from an allowlist of package fields — an unknown
+  key stops generation — and review fields are not on it.
+  `list available` reads a module's review from the core index
+  or the installer's vetting log, and says "no review recorded"
+  where neither names one. No core module has a signed review
+  today: the blind dual-review rounds reviewed the kit whole,
+  as agent reviews, and the bar in "Vetting" above — a named
+  human, per module, at a pinned hash — is not met by them.
+- **Catalog discipline is enforced**: the generator refuses a
+  dirty working tree and a repo with no git HEAD, enforces the
+  `<library>/` id namespace, and validates advisories (id
+  shape, resolvable module, `pin` a full hash — the checkout
+  pin — or `all`, date, reason, remedy) before writing them.
+  It writes `advisories.json` only when `advisories.yaml`
+  exists; an absent source means no file, so audit's "no
+  advisories channel" stays a reportable fact. `kit_selfcheck`
+  fails on a stale catalog: `directory.json` must equal what
+  the generator produces from the current records.
+- **Baselines attribute their files**: a baseline line names
+  its owning module's qualified id and, for static-verbatim
+  files, the package path it was copied from (`from:`); the
+  doctor reports a path claimed by two modules, reports a
+  recorded removal (`- removed:` lines, grammar in
+  UNINSTALL.md) as a note, and offers "repair, or record the
+  removal" only for a missing static-verbatim file with no
+  removal line. Repair reads its source from the object store
+  at the checkout pin and never moves the shared clone's HEAD.
+- **Registered brief blocks are delimited**: a registration in
+  the brief job file is a block keyed by the module's qualified
+  id between `<!-- ext:brief-sources:block <id> -->` markers
+  (module 00's Registered blocks rule), the brief template
+  carries a second registration anchor (`ext:brief-steps`) for
+  step-shaped surfacing, and re-renders of the host file carry
+  every registered block across verbatim.
 - **Two pins per install**, and the lifecycle rehearsal
   (REHEARSALS.md run 15, on this branch at c8e30a9) has run:
-  every verb worked from the wizard text. Its friction fixes
-  are in: installs record a catalog pin and a checkout pin,
-  and repair checks the checkout pin; `kit_doctor` notes a
-  missing accumulating file; the brief template carries the
-  `ext:brief-sources` registration anchor; audit distinguishes
-  an absent advisories file from an empty one. The branch
-  remains unreleased — the merge and tag are the maintainer's
-  call.
+  the verbs it exercised — list installed, list available,
+  add library, inspect, install, list upgradable, suspend /
+  resume, a repair drill, audit — worked from the wizard text.
+  Upgrade, uninstall, rollback, reconfigure, and remove library
+  were not exercised, and neither were run 15's own friction
+  fixes (the two-pin rule, the `ext:brief-sources` anchor,
+  content-based upgradable comparison) nor the EX-022/EX-023
+  fixes above: the pilot's brief-registration path, in
+  particular, has never run — the anchor did not exist during
+  run 15. Its friction fixes are in: installs record a catalog
+  pin and a checkout pin, and repair checks the checkout pin;
+  `kit_doctor` notes a missing accumulating file; the brief
+  template carries the `ext:brief-sources` registration anchor;
+  audit distinguishes an absent advisories file from an empty
+  one. The branch remains unreleased — the merge and tag are
+  the maintainer's call.
 - **Rehearsal staleness**: `kit_selfcheck` prints it as an
   informational report — never a finding — and the wizard's
   Step 3 cites it. It uses git when the checkout is a work tree
@@ -408,7 +474,14 @@ Implemented on the branch, against the spec above:
 Still future:
 
 - Field libraries entering the index by reviewed pull request
-  (no field entries are indexed yet).
+  (no field entries are indexed yet). The directory schema
+  catalogs one library — its own; expressing a second, indexed
+  library in it is part of that step, not a defect in this one.
+- A second field library, onboarded: the composition fixes are
+  in (enforced namespaces, delimited brief blocks, attributed
+  baselines), but no second library has been exercised against
+  them, and neither reviewer would ship field-library use
+  until one has.
 - Any read-only MCP facade over the same JSON (the write path
   stays refused, per "What this design refuses").
 - A repair that actually restores a file: run 15's install held

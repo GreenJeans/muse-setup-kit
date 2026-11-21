@@ -5,6 +5,7 @@
 a JOBS.md, a continuity handover, and a pointer line in the agent's
 main instruction file.
 **Network:** none. **Jobs:** none.
+**Data classes:** personal. **Action classes:** none.
 
 ## Purpose
 
@@ -121,8 +122,36 @@ Registry, as shipped:
 |---|---|---|---|
 | `ext:billing-buckets` | OPERATING_PROCEDURES.md (from this module's procedures template) | Module 09 inserts its bucket register and declare-before-heavy-work rule as §12 | module 09 (cost-guardrails), when installed |
 | `ext:brief-sources` | The brief job file (from module 02's brief template) | Modules whose surfacing rides the brief register their source lines here, each in its own delimited block keyed by its qualified module id (see Registered blocks, below) | module 02 (host); each registered block is owned by the module that registered it |
+| `ext:brief-steps` | The brief job file (from module 02's brief template) | A module whose surfacing is an instruction to the brief (not a source to read) registers a step block here, in the same delimited form | module 02 (host); each registered block is owned by the module that registered it |
 | `ext:queue-header` | The decision queue (from this module's queue template) | Module 08 adds its queue item-type definitions (`[type: skill-write]`, `[type: skill-curator]`) between the markers | module 08 (skill-lifecycle), when installed |
 | `ext:instruction-pointer` | The agent's main instruction file (the anchor pair is planted by this module's Install step 5 when the file is first created or amended) | Pointer lines other modules add: module 08's skill-lifecycle pointer, the wizard's session-start line. Each line inside is owned by the module that added it; uninstalling that module removes its line | module 00 (the anchor); lines as noted in Purpose |
+
+### Registered blocks
+
+Inside a *registration* anchor (`ext:brief-sources`,
+`ext:brief-steps`), each module's contribution is a **delimited
+block**, keyed by the module's qualified id — never by its bare
+name, which another library's module could share:
+
+```
+<!-- ext:brief-sources:block <library>/<module> -->
+- [IF <library>/<module> installed] <the module's source lines>
+<!-- /ext:brief-sources:block <library>/<module> -->
+```
+
+The block's first content line is its own
+`[IF <qualified-id> installed]` line. The delimiters are what
+make the block mechanical to find: uninstall removes exactly the
+delimited block — from its opening marker to its closing marker —
+and nothing else in the file, and re-stamps the host file's
+baseline line in the same approved plan (a removal that leaves
+the old hash standing reads as drift on the next doctor run).
+Any re-render of the host file — an upgrade, a rollback, a
+reconfigure of the host module — extracts every registered block
+first and re-inserts each one verbatim at the anchor, shown in
+the diff the user approves, before the host's baseline line is
+re-stamped. A re-render that drops a block silently has deleted
+another module's surfacing; the extraction step is not optional.
 
 ## Install
 

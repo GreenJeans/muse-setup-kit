@@ -35,11 +35,16 @@ tight: the user reads this in two minutes. Failures first, always.
 <!-- ext:brief-sources — extension anchor (registered in module
 00's registry). A module whose surfacing rides this brief — a
 field module, typically — registers its source lines between
-these markers, and nowhere else in this file: its install
-writes its block here, inside its own [IF ... installed]
-marker, and its uninstall removes that block. The anchor
-comments are structural: they survive rendering and are never
-dropped as template comments. -->
+these markers, and nowhere else in this file. Each registration
+is a delimited block keyed by the module's qualified id:
+
+  <!-- ext:brief-sources:block <library>/<module> -->
+  - [IF <library>/<module> installed] <source lines>
+  <!-- /ext:brief-sources:block <library>/<module> -->
+
+and its uninstall removes exactly its delimited block. The
+anchor comments are structural: they survive rendering and are
+never dropped as template comments. -->
 <!-- /ext:brief-sources -->
 
 Blocks marked [IF ...] are conditional. The test is whether the
@@ -54,9 +59,27 @@ the plan, so the installed instructions and the plan agree about
 what was left out. A section whose sources don't exist is
 omitted — never reported as clear. The `ext:brief-sources`
 anchor pair above is not a conditional block: it stays in every
-rendering, empty until a module registers into it.
+rendering, empty until a module registers into it. The
+`ext:brief-steps` anchor pair in Steps below is the same: it
+stays in every rendering, and any re-render of this file carries
+every registered block in both anchors across verbatim
+(module 00's Registered blocks rule).
 
 ## Steps
+
+<!-- ext:brief-steps — extension anchor (registered in module
+00's registry). A module whose surfacing is an instruction to
+the brief rather than a source to read — its items belong in a
+named step, said in its block — registers a step block here, in
+the same delimited form as ext:brief-sources:
+
+  <!-- ext:brief-steps:block <library>/<module> -->
+  - [IF <library>/<module> installed] <step text>
+  <!-- /ext:brief-steps:block <library>/<module> -->
+
+Registered blocks run where their text says, in registration
+order. The anchor stays in every rendering. -->
+<!-- /ext:brief-steps -->
 
 0. **Failures.** (a) Jobs that owed output in the last 24h and produced
    none. (b) Sources above that could not be read — name them; do not

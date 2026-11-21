@@ -16,9 +16,7 @@ reads: "the shared surfaces both people agreed to share."
 writes: "shared lists, a shared notebook, a shared ops sheet."
 network: "your shared accounts."
 jobs: "an optional change detector."
-rehearsed_at: "v0.1 household dry run; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
-reviewed_at: null
-reviewed_by: null
+rehearsed_at: "v0.1 household dry run; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending"
 data_classes: [personal, third-party]
 action_classes: [contact]
 files:

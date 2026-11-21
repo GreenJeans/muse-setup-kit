@@ -23,7 +23,13 @@ Checks, in the workspace:
      file the wizard installed. A baselined file whose current hash
      differs is reported as edited since install (a note — editing
      is legitimate; UPGRADING.md consumes the list as its conflict
-     list). A baselined file that no longer exists is a problem.
+     list). A baselined file that no longer exists is a problem —
+     unless the plan also records its removal: a line of the form
+     "- removed: <relpath> <YYYY-MM-DD> <reason>" turns the absence
+     into a note (the file was deleted on purpose, and repair must
+     never resurrect it). For a missing static-verbatim file with
+     no removal line, the problem names the choice the wizard
+     offers: repair, or record the removal.
      Lines ending in "accumulating" name files that grow by design
      (the queue, JOBS.md, ledgers): inventoried, never diffed. A
      baselined accumulating file that no longer exists is reported
@@ -34,6 +40,13 @@ Checks, in the workspace:
      lines written before the class vocabulary existed carry none
      and are read the same way. The class is what the wizard's
      repair verb reads: only static-verbatim lines are repairable.
+     Current lines also carry the owning module's qualified id and,
+     for static-verbatim files, a "from:<library>/<module>:<path>"
+     token naming the package file the copy came from — that is
+     what repair reads, and what keeps two modules from claiming
+     the same workspace path unnoticed: a path claimed by two
+     different modules is a problem. Legacy lines without the
+     tokens are read as before and are not repairable.
 
 Usage:
     python3 kit_doctor.py [--workspace ~/workspace] [--json]
@@ -116,14 +129,31 @@ def main():
     if not os.path.isfile(os.path.join(ws, "OPERATING_PROCEDURES.md")):
         problems.append("OPERATING_PROCEDURES.md missing")
 
-    base_re = re.compile(r"^-\s+installed:\s+(\S+)\s+sha256:([0-9a-f]{64})(?:\s+(?:static-verbatim|static-rendered))?\s*$")
-    acc_re = re.compile(r"^-\s+installed:\s+(\S+)\s+accumulating\s*$")
+    removed_re = re.compile(r"^-\s+removed:\s+(\S+)\s+(20\d{2}-\d{2}-\d{2})\s+(.+)$")
+    removed = {}
+    for line in plan_text.splitlines():
+        rm = removed_re.match(line.strip())
+        if rm:
+            removed[rm.group(1)] = (rm.group(2), rm.group(3))
+
+    base_re = re.compile(r"^-\s+installed:\s+(\S+)\s+sha256:([0-9a-f]{64})(?:\s+(static-verbatim|static-rendered))?(?:\s+(\S+))?(?:\s+from:(\S+))?\s*$")
+    acc_re = re.compile(r"^-\s+installed:\s+(\S+)\s+accumulating(?:\s+(\S+))?\s*$")
     baselined = 0
     accumulating = 0
+    claimed = {}
     for line in plan_text.splitlines():
         am = acc_re.match(line.strip())
         if am:
             accumulating += 1
+            owner = am.group(2)
+            if owner:
+                if am.group(1) in claimed and \
+                        claimed[am.group(1)] != owner:
+                    problems.append(
+                        f"baseline path claimed by two modules: "
+                        f"{am.group(1)} ({claimed[am.group(1)]}, "
+                        f"{owner})")
+                claimed[am.group(1)] = owner
             if not os.path.isfile(os.path.join(ws, am.group(1))):
                 notes.append(f"accumulating file missing "
                              f"(inventoried, not diffed): {am.group(1)}")
@@ -133,9 +163,24 @@ def main():
             continue
         baselined += 1
         rel, want = m.group(1), m.group(2)
+        fclass, owner = m.group(3), m.group(4)
+        if owner:
+            if rel in claimed and claimed[rel] != owner:
+                problems.append(f"baseline path claimed by two "
+                                f"modules: {rel} ({claimed[rel]}, "
+                                f"{owner})")
+            claimed[rel] = owner
         fp = os.path.join(ws, rel)
         if not os.path.isfile(fp):
-            problems.append(f"baselined file missing: {rel}")
+            if rel in removed:
+                notes.append(f"recorded removal (repair will not "
+                             f"resurrect it): {rel} — removed "
+                             f"{removed[rel][0]}: {removed[rel][1]}")
+            elif fclass == "static-verbatim":
+                problems.append(f"baselined file missing: {rel} — "
+                                f"repair, or record the removal")
+            else:
+                problems.append(f"baselined file missing: {rel}")
             continue
         got = hashlib.sha256(open(fp, "rb").read()).hexdigest()
         if got != want:

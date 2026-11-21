@@ -264,8 +264,17 @@ kit_doctor accepts classed and pre-class lines alike. The
 selfcheck prints rehearsal staleness against each module's
 `rehearsed_at` pin as an informational report, not a finding.
 A home-operations field library pilots the package format from
-a separate local repository — unpublished, and not installed
-anywhere yet. Held for the next phase: a fresh-agent rehearsal
-of the lifecycle verbs (including a pilot install through them),
+a separate local repository — unpublished; it was installed
+through the lifecycle verbs in rehearsal run 15. The EX-022/023
+blind review of the branch and the maintainer's four decisions
+landed as a fix pass (2026-11-21): packages no longer carry
+review fields, the parser's scalar edge cases fail loud, parity
+binds the class fields, catalog generation enforces its pin
+discipline, advisories validate and are never fabricated,
+baselines attribute their files to a module, brief blocks are
+delimited by qualified id, and the selfcheck gained a
+field-library mode. Held for the next phase: rehearsal of the
+verbs run 15 did not exercise (upgrade, uninstall, rollback,
+reconfigure, remove library) and of the post-run-15 fixes,
 field libraries entering the index by reviewed PR, and the
 merge/release decision, which is the maintainer's.

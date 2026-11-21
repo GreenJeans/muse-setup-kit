@@ -16,10 +16,8 @@ reads: "the register file; a source document when its date needs re-reading at t
 writes: "the register — one local file, updated in place."
 network: "none."
 jobs: "none of its own; surfacing rides module 02's brief when installed."
-rehearsed_at: "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending"
-reviewed_at: null
-reviewed_by: null
-data_classes: [personal]
+rehearsed_at: "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending"
+data_classes: [personal, third-party]
 action_classes: [none]
 files:
   - path: register.template.md

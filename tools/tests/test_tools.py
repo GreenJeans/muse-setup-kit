@@ -347,7 +347,258 @@ class KitDoctorTest(unittest.TestCase):
             self.assertFalse(any("accumulating file missing" in n
                                  for n in rep["notes"]))
 
+    def test_recorded_removal_is_a_note_not_a_problem(self):
+        # EX-022/023: a file the user deleted on purpose, recorded
+        # with a "- removed:" line, must not be reported as damage
+        # forever — and repair must never resurrect it.
+        import hashlib
+        with tempfile.TemporaryDirectory() as td:
+            h = hashlib.sha256(b"gone\n").hexdigest()
+            rep = self._doctor_workspace(
+                td, "# Plan\n- install — commit aaaaaaa1111\n"
+                    "## Installed files (baseline)\n"
+                    f"- installed: gone.md sha256:{h} static-rendered"
+                    " core/example\n"
+                    "- removed: gone.md 2026-11-01 user deleted it"
+                    " on purpose\n")
+            self.assertFalse(any("gone.md" in p
+                                 for p in rep["problems"]))
+            self.assertTrue(any("recorded removal" in n and
+                                "gone.md" in n for n in rep["notes"]))
+
+    def test_missing_static_verbatim_offers_repair_or_removal(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as td:
+            h = hashlib.sha256(b"tool\n").hexdigest()
+            rep = self._doctor_workspace(
+                td, "# Plan\n- install — commit aaaaaaa1111\n"
+                    "## Installed files (baseline)\n"
+                    f"- installed: tool.py sha256:{h} static-verbatim"
+                    " core/example from:core/example:tools/tool.py\n")
+            self.assertTrue(any("repair, or record the removal" in p
+                                for p in rep["problems"]))
+
+    def test_two_modules_claiming_one_path_is_a_problem(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as td:
+            with open(os.path.join(td, "shared.md"), "w") as fh:
+                fh.write("shared\n")
+            h = hashlib.sha256(b"shared\n").hexdigest()
+            rep = self._doctor_workspace(
+                td, "# Plan\n- install — commit aaaaaaa1111\n"
+                    "## Installed files (baseline)\n"
+                    f"- installed: shared.md sha256:{h}"
+                    " static-rendered core/one\n"
+                    f"- installed: shared.md sha256:{h}"
+                    " static-rendered core/two\n")
+            self.assertTrue(any("claimed by two modules" in p
+                                for p in rep["problems"]))
+
+
 MODULE_YAML = os.path.join(REPO, "tools", "module_yaml.py")
+BUILD_DIR = os.path.join(REPO, "tools", "build_directory.py")
+SELFCHECK = os.path.join(REPO, "tools", "kit_selfcheck.py")
+
+MODULE_FIXTURE = (
+    'id: {mid}\n'
+    'dir: modules/{folder}\n'
+    'title: Example\n'
+    'pitch: "A pitch."\n'
+    'version: "0.1"\n'
+    'maintainer: A Person\n'
+    'license: MIT\n'
+    'kit_compat: [kit-1]\n'
+    'depends_on: []\n'
+    'requires: []\n'
+    'degrades_without: []\n'
+    'reads: "the files."\n'
+    'writes: "a register."\n'
+    'network: "none."\n'
+    'jobs: "none."\n'
+    'rehearsed_at: null\n'
+    'data_classes: [personal]\n'
+    'action_classes: [none]\n'
+    'files: []\n')
+
+
+def git(repo, *argv):
+    return subprocess.run(["git", "-C", repo] + list(argv),
+                          capture_output=True, text=True)
+
+
+def make_repo(td, modules):
+    """A git repo holding the given (folder, module-id) modules."""
+    os.makedirs(os.path.join(td, "modules"))
+    for folder, mid in modules:
+        mdir = os.path.join(td, "modules", folder)
+        os.makedirs(mdir)
+        with open(os.path.join(mdir, "module.yaml"), "w") as fh:
+            fh.write(MODULE_FIXTURE.format(mid=mid, folder=folder))
+    git(td, "init", "-q")
+    git(td, "config", "user.email", "t@example.com")
+    git(td, "config", "user.name", "Test")
+    git(td, "add", "-A")
+    git(td, "commit", "-qm", "fixture")
+    return td
+
+
+class BuildDirectoryTest(unittest.TestCase):
+    def test_clean_tree_generates_and_stamps_head(self):
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("example", "core/example")])
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            doc = json.load(open(os.path.join(td, "directory.json")))
+            head = git(td, "rev-parse", "HEAD").stdout.strip()
+            self.assertEqual(doc["generated_from"], head)
+            self.assertNotIn("reviewed_at", doc["modules"][0])
+
+    def test_dirty_tree_is_refused(self):
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("example", "core/example")])
+            with open(os.path.join(td, "modules", "example",
+                                   "module.yaml"), "a") as fh:
+                fh.write("# a note\n")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("dirty", r.stderr)
+
+    def test_no_git_fails_instead_of_a_null_pin(self):
+        with tempfile.TemporaryDirectory() as td:
+            mdir = os.path.join(td, "modules", "example")
+            os.makedirs(mdir)
+            with open(os.path.join(mdir, "module.yaml"), "w") as fh:
+                fh.write(MODULE_FIXTURE.format(mid="core/example",
+                                               folder="example"))
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertFalse(os.path.exists(
+                os.path.join(td, "directory.json")))
+
+    def test_review_fields_and_unknown_keys_stop_generation(self):
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("example", "core/example")])
+            p = os.path.join(td, "modules", "example", "module.yaml")
+            with open(p, "a") as fh:
+                fh.write("reviewed_by: A Person\n")
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "add review field")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("allowlist", r.stderr)
+
+    def test_namespace_and_duplicate_ids_are_enforced(self):
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("example", "other/example")])
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("namespace", r.stderr)
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("one", "core/example"),
+                           ("two", "core/example")])
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("duplicate", r.stderr)
+
+    def test_absent_advisories_source_means_no_file(self):
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("example", "core/example")])
+            stale = os.path.join(td, "advisories.json")
+            with open(stale, "w") as fh:
+                fh.write("{}\n")
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "stale fabricated advisories")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            self.assertFalse(os.path.exists(stale))
+
+    def test_advisories_validate(self):
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("example", "core/example")])
+            with open(os.path.join(td, "advisories.yaml"), "w") as fh:
+                fh.write("advisories:\n"
+                         "  - id: ADV-2026-001\n"
+                         "    module: core/example\n"
+                         "    pin: all\n"
+                         "    date: 2026-11-21\n"
+                         "    reason: a bad pin shipped\n"
+                         "    remedy: suspend core/example\n")
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "advisories")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            doc = json.load(open(os.path.join(td, "advisories.json")))
+            self.assertEqual(len(doc["advisories"]), 1)
+            with open(os.path.join(td, "advisories.yaml"), "w") as fh:
+                fh.write("advisories:\n"
+                         "  - id: ADV-2026-001\n"
+                         "    module: core/example\n"
+                         "    pin: shortpin\n"
+                         "    date: 2026-11-21\n"
+                         "    reason: a bad pin shipped\n"
+                         "    remedy: suspend core/example\n")
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "bad advisory")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+
+
+class SelfcheckFieldTest(unittest.TestCase):
+    def _field_repo(self, td, extra_yaml="", files_line="files: []\n"):
+        mdir = os.path.join(td, "modules", "home-operations")
+        os.makedirs(mdir)
+        with open(os.path.join(mdir, "module.yaml"), "w") as fh:
+            fh.write(MODULE_FIXTURE.format(
+                mid="field/home-operations",
+                folder="home-operations").replace(
+                    "files: []\n", files_line) + extra_yaml)
+        with open(os.path.join(mdir, "MODULE.md"), "w") as fh:
+            fh.write("# Module — Home Operations\n\n"
+                     "**Reads:** the files. **Writes:** a register.\n"
+                     "**Network:** none. **Jobs:** none.\n"
+                     "**Data classes:** personal. "
+                     "**Action classes:** none.\n\n"
+                     "## Install\n\n1. Do it.\n")
+        with open(os.path.join(mdir, "VERIFY.md"), "w") as fh:
+            fh.write("# Verify\n\n## At install\n\n- x\n\n"
+                     "## Deferred\n\n- y\n")
+        return td
+
+    def test_field_library_passes_without_a_manifest(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._field_repo(td)
+            r = run(SELFCHECK, "--repo", td, "--field", "field")
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertIn("findings=0", r.stdout)
+
+    def test_field_mode_flags_review_fields_and_path_escape(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._field_repo(td, extra_yaml="reviewed_by: A Person\n")
+            r = run(SELFCHECK, "--repo", td, "--field", "field")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("not package fields", r.stdout)
+        with tempfile.TemporaryDirectory() as td:
+            self._field_repo(
+                td, files_line="files:\n"
+                               "  - path: ../outside.md\n"
+                               "    class: static-verbatim\n")
+            r = run(SELFCHECK, "--repo", td, "--field", "field")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("escapes the module directory", r.stdout)
+
+    def test_field_mode_flags_a_duplicate_id(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._field_repo(td)
+            other = os.path.join(td, "modules", "home-operations-2")
+            os.makedirs(other)
+            src = open(os.path.join(
+                td, "modules", "home-operations", "module.yaml")).read()
+            with open(os.path.join(other, "module.yaml"), "w") as fh:
+                fh.write(src.replace("modules/home-operations",
+                                     "modules/home-operations-2"))
+            r = run(SELFCHECK, "--repo", td, "--field", "field")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("duplicate module id", r.stdout)
 
 
 class ModuleYamlTest(unittest.TestCase):
@@ -423,6 +674,92 @@ class ModuleYamlTest(unittest.TestCase):
             self.assertIn("bad2.yaml:2", r.stderr)
             self.assertIn("tab", r.stderr)
 
+    def test_out_of_subset_scalars_fail_loud(self):
+        # The EX-022/023 reviewers' probes: every spelling full
+        # YAML would silently reinterpret must be an error here,
+        # named by file and line — including the probe that would
+        # have manufactured a review record out of a comment.
+        cases = [
+            'version: 0.9 # bumped',
+            "title: 'Morning Brief'",
+            'version: !!str 0.9',
+            'kit_compat: [[kit-1]]',
+            'reviewed_by: ~',
+            'reviewed_by: null # pending review',
+            'reviewed_by: Null',
+            'reviewed_by: false',
+            'title: say "hi" there',
+            'title: "unterminated',
+        ]
+        with tempfile.TemporaryDirectory() as td:
+            for line in cases:
+                p = self._write(td, "bad.yaml",
+                                "id: core/example\n" + line + "\n")
+                r = run(MODULE_YAML, p)
+                self.assertEqual(r.returncode, 1,
+                                 f"accepted out-of-subset: {line}")
+                self.assertIn("bad.yaml:2", r.stderr)
+
+    def test_nested_block_sequence_fails_loud(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "bad.yaml",
+                            "id: core/example\n"
+                            "files:\n"
+                            "  - - path\n")
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("bad.yaml:3", r.stderr)
+            self.assertIn("nested", r.stderr)
+
+    def test_parity_binds_class_sets(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(td, "module.yaml",
+                        'id: core/example\n'
+                        'reads: "the files."\n'
+                        'writes: "a register."\n'
+                        'network: "none."\n'
+                        'jobs: "none."\n'
+                        'data_classes: [personal]\n'
+                        'action_classes: [none]\n')
+            self._write(td, "MODULE.md",
+                        "# Module — Example\n\n"
+                        "**Reads:** the files. **Writes:** a register.\n"
+                        "**Network:** none. **Jobs:** none.\n"
+                        "**Data classes:** personal, financial. "
+                        "**Action classes:** none.\n")
+            r = run(MODULE_YAML, "--parity", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("data classes disagree", r.stderr)
+            self._write(td, "MODULE.md",
+                        "# Module — Example\n\n"
+                        "**Reads:** the files. **Writes:** a register.\n"
+                        "**Network:** none. **Jobs:** none.\n"
+                        "**Data classes:** personal. "
+                        "**Action classes:** none.\n")
+            r = run(MODULE_YAML, "--parity", td)
+            self.assertEqual(r.returncode, 0, r.stderr)
+
+    def test_parity_rejects_a_repeated_header_label(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(td, "module.yaml",
+                        'id: core/example\n'
+                        'reads: "the files."\n'
+                        'writes: "a register."\n'
+                        'network: "none."\n'
+                        'jobs: "none."\n'
+                        'data_classes: [personal]\n'
+                        'action_classes: [none]\n')
+            self._write(td, "MODULE.md",
+                        "# Module — Example\n\n"
+                        "**Reads:** the files. **Reads:** the files.\n"
+                        "**Writes:** a register.\n"
+                        "**Network:** none. **Jobs:** none.\n"
+                        "**Data classes:** personal. "
+                        "**Action classes:** none.\n")
+            r = run(MODULE_YAML, "--parity", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("repeats the reads label", r.stderr)
+
     def test_parity_mismatch_is_named(self):
         with tempfile.TemporaryDirectory() as td:
             self._write(td, "module.yaml",
@@ -430,19 +767,25 @@ class ModuleYamlTest(unittest.TestCase):
                         'reads: "the files."\n'
                         'writes: "a register."\n'
                         'network: "none."\n'
-                        'jobs: "none."\n')
+                        'jobs: "none."\n'
+                        'data_classes: [personal]\n'
+                        'action_classes: [none]\n')
             self._write(td, "MODULE.md",
                         "# Module — Example\n\n"
                         "**Reads:** the files. **Writes:** something "
                         "else entirely.\n**Network:** none. "
-                        "**Jobs:** none.\n")
+                        "**Jobs:** none.\n"
+                        "**Data classes:** personal. "
+                        "**Action classes:** none.\n")
             r = run(MODULE_YAML, "--parity", td)
             self.assertEqual(r.returncode, 1)
             self.assertIn("writes disagrees", r.stderr)
             self._write(td, "MODULE.md",
                         "# Module — Example\n\n"
                         "**Reads:** the files. **Writes:** a register.\n"
-                        "**Network:** none. **Jobs:** none.\n")
+                        "**Network:** none. **Jobs:** none.\n"
+                        "**Data classes:** personal. "
+                        "**Action classes:** none.\n")
             r = run(MODULE_YAML, "--parity", td)
             self.assertEqual(r.returncode, 0, r.stderr)
 

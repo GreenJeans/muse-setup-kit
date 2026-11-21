@@ -42,10 +42,19 @@ Note: `UNINSTALL.md` — the document the uninstall phase of this
 rehearsal follows — is itself untracked (`??`) in this tree; it is
 part of the EVALUATION source state above, not of any release.
 
+**Libraries configured:** core only (this repository). Modules
+carry qualified ids (`core/<module>`) throughout this plan.
+**Pins:** per module, the checkout pin is the EVALUATION tree
+above (HEAD `bed2cfbeb0177c02c033426b595faa62c378a9fd` + the
+recorded dirty state); the catalog pin is *none* — the source
+tree carried no generated catalog, so the listing verbs do not
+speak for this install, and no baseline line here is repairable
+(an EVALUATION install is never repair's object).
+
 ## 1. Vetting entry (kit) — plan item 1, approved with the plan
 
-- **What:** Muse Setup Kit (wizard + modules 00, 02, 09 for this
-  install). Source: the kit repository, local checkout, branch `v0.5`
+- **What:** Muse Setup Kit (wizard + modules core/core-procedures,
+  core/morning-brief, core/cost-guardrails for this install). Source: the kit repository, local checkout, branch `v0.5`
   working tree at HEAD bed2cfb (see EVALUATION note above).
 - **Read in full by the installing agent:** wizard/SKILL.md,
   wizard/manifest.yaml, docs/DESIGN.md, docs/REHEARSALS.md,
@@ -53,7 +62,7 @@ part of the EVALUATION source state above, not of any release.
   MODULE.md and VERIFY.md, plus every template rendered from
   (module 00: OPERATING_PROCEDURES, decision-queue, SCOPE, JOBS;
   module 02: brief.template.md; module 09: bucket-register).
-- **Reads (selected modules, per manifest):** Robin's existing agent
+- **Reads (selected modules, per module.yaml):** Robin's existing agent
   instructions and workspace layout (00); calendar, mailbox, task
   lists, watch outputs — whatever is connected (02); model/provider
   usage and billing pages, with Robin present (09).
@@ -114,12 +123,12 @@ Profiles offered first: **Starter** (00 + 02 + 09, audit cost
 sensible default for a first install. Modules can be added later,
 one at a time (UPGRADING.md).
 
-Rehearsal status, stated at selection (manifest `rehearsed_at`,
-backed by docs/REHEARSALS.md):
+Rehearsal status, stated at selection (each module.yaml's
+`rehearsed_at`, backed by docs/REHEARSALS.md):
 
-- 00 core-procedures — rehearsed: "v0.1 wizard dry runs"
-- 02 morning-brief — rehearsed: "v0.1 wizard dry runs"
-- 09 cost-guardrails — rehearsed: "v0.4 Starter dry run"
+- core/core-procedures — rehearsed: "v0.1 wizard dry runs"
+- core/morning-brief — rehearsed: "v0.1 wizard dry runs"
+- core/cost-guardrails — rehearsed: "v0.4 Starter dry run"
 
 Not offerable for Robin: 03 household-hq (no second person, no
 shared docs/tasks), 04 ai-exchange (no shared storage, no other
@@ -149,7 +158,7 @@ Starter. Module 03's food layer and change detector — not applicable
 
 ## 7. Files and jobs, in dependency order
 
-### Module 00 — core-procedures
+### Module core/core-procedures
 - Create `OPERATING_PROCEDURES.md` from
   `templates/OPERATING_PROCEDURES.template.md`, Local configuration
   filled from §6; template comments deleted per the template's own
@@ -173,12 +182,12 @@ Starter. Module 03's food layer and change detector — not applicable
 - Create `JOBS.md` from `templates/JOBS.template.md` (canonical
   format, no jobs yet).
 - Jobs: none. Network: none.
-- Disclosure (manifest): reads Robin's existing agent instructions
+- Disclosure (module.yaml): reads Robin's existing agent instructions
   and workspace layout (to merge, not overwrite); writes an
   OPERATING_PROCEDURES.md, a decision queue file, SCOPE.md files per
   workstream; network none; jobs none.
 
-### Module 02 — morning-brief
+### Module core/morning-brief
 - Create `jobs/morning-brief.md`: the brief job's instructions,
   adapted from `brief.template.md` — daily 07:30
   America/Los_Angeles, delivered to the main chat. Adaptations:
@@ -196,12 +205,12 @@ Starter. Module 03's food layer and change detector — not applicable
   not installed.
 - Jobs: `morning-brief` (daily). Network: Robin's connected
   accounts only.
-- Disclosure (manifest): reads calendar, mailbox, task lists, watch
+- Disclosure (module.yaml): reads calendar, mailbox, task lists, watch
   outputs (whatever Robin connects); writes one brief message per
   day, draft replies only; network Robin's connected accounts only;
   jobs: one daily brief, optional triage (declined).
 
-### Module 09 — cost-guardrails
+### Module core/cost-guardrails
 - Append §12 "Cost & billing guardrails" to
   `OPERATING_PROCEDURES.md` at the template's marker: rule 2
   (declare-before-heavy-work) and the bucket register built from
@@ -221,7 +230,7 @@ Starter. Module 03's food layer and change detector — not applicable
   gives as its example.
 - Jobs: `spend-check` (monthly on the 1st, rides morning-brief).
   Network: billing pages only, with Robin present.
-- Disclosure (manifest): reads model/provider usage and billing
+- Disclosure (module.yaml): reads model/provider usage and billing
   pages (with Robin present) and the plan's bucket register; writes
   a bucket register in the procedures and queue entries when a cap
   is approached; network providers' billing pages only, with Robin
@@ -239,14 +248,14 @@ Installed 2026-11-20, in dependency order: 00, 02, 09. Source for
 every file: the EVALUATION tree named at the top of this plan (HEAD
 bed2cfbeb0177c02c033426b595faa62c378a9fd + the recorded dirty state).
 
-- **00 core-procedures** — files created as listed in §7; §2 as
+- **core/core-procedures** — files created as listed in §7; §2 as
   written (autonomy (b)); JOBS.md created empty of jobs. Baseline
   stamped for all five files.
-- **02 morning-brief** — job pair created (`jobs/morning-brief.md` +
+- **core/morning-brief** — job pair created (`jobs/morning-brief.md` +
   `JOBS.md` entry); triage not installed. Baseline stamped for the
   job file; JOBS.md is baselined `accumulating` — it grows by
   design and is never re-stamped.
-- **09 cost-guardrails** — §12 appended to OPERATING_PROCEDURES.md at
+- **core/cost-guardrails** — §12 appended to OPERATING_PROCEDURES.md at
   the template marker (rule 2 + register + declaration snippet);
   `spend-check` bullet added to JOBS.md. OPERATING_PROCEDURES.md
   re-stamped after its edit (wizard Step 5 item 5: the baseline
@@ -260,13 +269,13 @@ plan, and by the session-start line in INSTRUCTIONS.md).
 
 | Module | Deferred check | Due | Status |
 |---|---|---|---|
-| 00 | Fresh-session test ("What needs a ticket?") | Robin's next new conversation | DEFERRED |
-| 00 | Queue drill (test item numbered, clears by number) | First brief or first on-demand review | DONE 2026-11-20 — item 1 was planted, printed in full in briefs/brief-2026-11-20.md, and cleared by Robin's reply "1: yes"; it sits in the queue's Resolved section with its number kept |
-| 02 | First brief (arrives on time, failures first, queue numbered) | 2026-11-21 07:30 | DEFERRED — an on-demand instance was generated 2026-11-20 as a worked example; scheduled arrival itself is unverifiable in a file-based workspace with no live scheduler |
-| 02 | Interrupt test | First week | NOT APPLICABLE — triage not installed |
-| 02 | Detector-silence drill | First month | NOT APPLICABLE — no watches exist |
-| 09 | First spend check (usage vs register and caps; surprises to the queue) | 2026-12-20 (30 days after install) | DEFERRED |
-| 09 | Bucket-declaration sample (with the first spend check) | 2026-12-20 | DEFERRED |
+| core/core-procedures | Fresh-session test ("What needs a ticket?") | Robin's next new conversation | DEFERRED |
+| core/core-procedures | Queue drill (test item numbered, clears by number) | First brief or first on-demand review | DONE 2026-11-20 — item 1 was planted, printed in full in briefs/brief-2026-11-20.md, and cleared by Robin's reply "1: yes"; it sits in the queue's Resolved section with its number kept |
+| core/morning-brief | First brief (arrives on time, failures first, queue numbered) | 2026-11-21 07:30 | DEFERRED — an on-demand instance was generated 2026-11-20 as a worked example; scheduled arrival itself is unverifiable in a file-based workspace with no live scheduler |
+| core/morning-brief | Interrupt test | First week | NOT APPLICABLE — triage not installed |
+| core/morning-brief | Detector-silence drill | First month | NOT APPLICABLE — no watches exist |
+| core/cost-guardrails | First spend check (usage vs register and caps; surprises to the queue) | 2026-12-20 (30 days after install) | DEFERRED |
+| core/cost-guardrails | Bucket-declaration sample (with the first spend check) | 2026-12-20 | DEFERRED |
 
 ## Verification results (at-install, run 2026-11-20)
 
@@ -308,9 +317,9 @@ plan, and by the session-start line in INSTRUCTIONS.md).
 Stamped per wizard Step 5 item 5 — every file this install created
 or copied from the kit, at its last approved state:
 
-- installed: OPERATING_PROCEDURES.md sha256:ae60268d4ea687de73031bd9e73d6a4a7f873b10e1c96753326e2fbf42191325 static-rendered
-- installed: decision-queue.md accumulating
-- installed: freelance-projects/SCOPE.md sha256:924f04d778492a2e81f87660686a9e9cc11d68726b1c9f7c5a82ba9cc92d2146 static-rendered
-- installed: INSTRUCTIONS.md accumulating
-- installed: JOBS.md accumulating
-- installed: jobs/morning-brief.md sha256:fe04f4f756638b4570bac0e1242c26c81aa5a6688d54f0de95de5d4d7c21bb13 static-rendered
+- installed: OPERATING_PROCEDURES.md sha256:ae60268d4ea687de73031bd9e73d6a4a7f873b10e1c96753326e2fbf42191325 static-rendered core/core-procedures
+- installed: decision-queue.md accumulating core/core-procedures
+- installed: freelance-projects/SCOPE.md sha256:924f04d778492a2e81f87660686a9e9cc11d68726b1c9f7c5a82ba9cc92d2146 static-rendered core/core-procedures
+- installed: INSTRUCTIONS.md accumulating core/core-procedures
+- installed: JOBS.md accumulating core/core-procedures
+- installed: jobs/morning-brief.md sha256:fe04f4f756638b4570bac0e1242c26c81aa5a6688d54f0de95de5d4d7c21bb13 static-rendered core/morning-brief

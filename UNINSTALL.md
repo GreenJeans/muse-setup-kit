@@ -37,6 +37,24 @@ An install old enough to have no baseline falls back to the plan's
 module list plus each module's template names, and the agent says
 plainly that the manifest is reconstructed, not recorded.
 
+## Recording a removal outside uninstall
+
+A baselined file the user deletes on purpose — not through this
+procedure — is recorded in the plan's baseline section, so the
+absence reads as a decision, not as damage:
+
+```
+- removed: <path> <YYYY-MM-DD> <reason, in the user's words>
+```
+
+The doctor reports a recorded removal as a note, and the wizard's
+repair verb never resurrects a file that has one: the record is
+the user's answer, and it stands until the user reverses it
+through an approved plan. A missing baselined file with no
+removal line is damage until the user says otherwise — that is
+the state the doctor's "repair, or record the removal" offer is
+for.
+
 ## Steps
 
 1. **Inventory.** Build the removal list from the records above:
