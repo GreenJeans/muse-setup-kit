@@ -1,5 +1,5 @@
 {
-  "generated_from": "d325eade6be3bdc8be7ec8365e39550c74af9d40",
+  "generated_from": "cd97b024908c03a74e826c0a26cfc29bdd252e2f",
   "library": "core",
   "modules": [
     {
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 5445,
+      "audit_words": 5490,
       "data_classes": [
         "personal"
       ],
@@ -308,7 +308,7 @@
       "action_classes": [
         "send"
       ],
-      "audit_words": 10484,
+      "audit_words": 10753,
       "data_classes": [
         "personal",
         "financial",
@@ -368,7 +368,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 6097,
+      "audit_words": 7518,
       "data_classes": [
         "personal",
         "third-party"
@@ -405,7 +405,7 @@
       "network": "none.",
       "pitch": "Author the persona file deliberately instead of inheriting the stock template: an interview, a front-loaded template with examples, a mechanical linter, and staged-diff governance for every later change.",
       "reads": "the existing persona file if one exists, the adopter's interview answers, and, for examples the adopter cannot supply, their interaction history.",
-      "rehearsed_at": "library branch runs 16-17 (2026-11-21) on the branch at 41eb24e plus the module as built; friction fixes followed in the same pass, re-rehearsal at the committed pin pending",
+      "rehearsed_at": "library branch runs 16-18 (2026-11-21): runs 16-17 (full interview) on the branch at 41eb24e plus the module as built; run 18 (short subset, cold-start fallback) on the EX-032/033 fix-pass tree; that round's fixes are in this tree, re-rehearsal at the committed pin pending",
       "requires": [
         "persona-file"
       ],
@@ -417,7 +417,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 4383,
+      "audit_words": 4455,
       "data_classes": [
         "none"
       ],
