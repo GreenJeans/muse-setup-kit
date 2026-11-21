@@ -169,6 +169,15 @@ downstream renumbers.)*
   never in a multi-agent exchange, existence pointers only.
   Credentials are not a class under this section: the credential
   rule in §10 governs them.
+- **Identifiers are not recorded.** A document's number — passport,
+  policy, licence, account, or card number — is never written into
+  any record, in any class: not in a register, not in compiled
+  memory, not in a plan. Records point at the document (its type,
+  its expiry, where the original lives); the number stays in the
+  document. Where two records of a type must be told apart — two
+  passports, two vehicles — they are disambiguated by the holder's
+  name or a label the user chooses, never by a partial number: no
+  last-four, no plate fragment.
 - They may live only in local workspace files kept for that purpose —
   a named folder or file the user chose. Nowhere else: never on
   shared surfaces (module 03's sharing rules), never in a
@@ -191,9 +200,11 @@ downstream renumbers.)*
   no bank logins, no portal passwords, no card numbers in chat (§10).
   Data arrives as exports the user downloads, files the user places,
   or the user's own reads — or it does not arrive.
-- Applications of this rule: module 02's money watch (financial),
-  module 03's shared-surface exclusions (all classes), module 04's
-  exchange hygiene (financial and health records stay out of the
-  exchange entirely), module 06's vetting records (what a tool
-  would hold), and module 00's continuity handover (the
-  third-party contacts it names).
+- Applications of this rule: module 02's money watch (financial)
+  and promises ledger (third-party), module 03's shared-surface
+  exclusions (all classes), module 04's exchange hygiene
+  (financial and health records stay out of the exchange
+  entirely), module 06's vetting records (what a tool would
+  hold), module 00's continuity handover (the third-party
+  contacts it names), and module 10's deadlines register
+  (identifiers — document numbers are never recorded).

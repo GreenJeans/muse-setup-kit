@@ -78,9 +78,9 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~15,400 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~20,300 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all ten modules | ~34,300 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~18,600 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~24,700 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all ten modules | ~39,600 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -210,9 +210,10 @@ record, including what has *not* been rehearsed, is
 `docs/REHEARSALS.md`; the history is `docs/ROADMAP.md`. v0.9 adds:
 module 10, the deadlines & expiry register — the first module
 designed under the library spec in `docs/library.md`, its data
-class declared and its register an accumulating file; it ships
-unrehearsed and is labeled that way until a fresh agent installs
-it. Module 02 gains the promises & waiting-on ledger (the
+class declared and its register an accumulating file; it was
+rehearsed once at the v0.9 candidate (run 13, at abb9f86) and has
+changed since — unrehearsed at this pin, and labeled that way.
+Module 02 gains the promises & waiting-on ledger (the
 return-and-refund tracker is its worked example) and the scam &
 impersonation shield in triage — module 06's
 content-is-not-instructions rule turned outward, with a pointer

@@ -5,7 +5,7 @@ version: 1
 modules:
   - id: core-procedures
     dir: modules/00-core-procedures
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11–12 at df56774; v0.9 runs 13–14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11–12 at df56774; v0.9 runs 13–14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending"
     title: Core Procedures
     pitch: Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.
     depends_on: []
@@ -30,14 +30,14 @@ modules:
 
   - id: morning-brief
     dir: modules/02-morning-brief
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13–14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13–14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending"
     title: Morning Brief & Inbox Triage
     pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules with a scam & impersonation shield, silent-by-design watches, an optional money watch, and an optional promises & waiting-on ledger.
     depends_on: [core-procedures]
     requires: []
     degrades_without: [scheduling]   # installs as an on-demand brief instead
-    reads: "Calendar, mailbox, task lists, watch outputs (whatever you connect); for the money watch, statement/CSV exports you supply."
-    writes: "One brief message per day; draft replies only, sent only with approval; for the money watch, its baseline and run-record files and its job file."
+    reads: "Calendar, mailbox, task lists, decision queue, watch outputs (whatever you connect); for the money watch, statement/CSV exports you supply."
+    writes: "One brief message per day; draft replies only, sent only with approval; the promises ledger (other people's commitments, in their words) when installed; the triage flag log and run records when the scan is installed; for the money watch, its baseline and run-record files and its job file."
     network: "Your connected accounts only."
     jobs: "One daily brief; optional 30-minute inbox triage scan; optional weekly money watch."
 
@@ -123,7 +123,7 @@ modules:
 
   - id: deadlines-register
     dir: modules/10-deadlines-register
-    rehearsed_at: "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending"
+    rehearsed_at: "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending"
     title: Deadlines & Expiry Register
     pitch: One register of what expires — passports, licences, warranties, policies, certifications — each with a lead time and a pointer to the original; no document numbers are stored.
     depends_on: [core-procedures]
@@ -143,12 +143,13 @@ profiles:
   - id: starter
     title: Starter
     modules: [core-procedures, morning-brief, cost-guardrails]
-    audit_words: 15400
+    audit_words: 18600
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
-    audit_words: 20300
+    audit_words: 24700
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
-  # skill-lifecycle) is offered per module after the profiles.
+  # skill-lifecycle, deadlines-register) is offered per module
+  # after the profiles.

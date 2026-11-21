@@ -286,7 +286,10 @@ approval updates its status line):
 - Every `<PLACEHOLDER>` that needs a user-supplied value, listed as
   questions (names to use — including the agent's own name, the partner's
   name and their agent's name, and other agents' names for the Exchange —
-  brief time and timezone, VIP senders for triage, household members,
+  brief time and timezone, VIP senders for triage, the shield's
+  immediacy set (the user's bank, toll operator, package carrier,
+  and key services, each with every sending domain and number
+  they use), household members,
   storage locations, HQ options: food layer and change detector in/out).
 - For two-person installs, **partner checkpoints** are plan items in
   their own right: the partner approves the Principles doc, and reads
@@ -297,11 +300,13 @@ approval updates its status line):
   resolution.
 
 Expect a short second question round here: several placeholders (the
-agent's own name, brief time and timezone, VIP senders) are collected
+agent's own name, brief time and timezone, VIP senders, the shield's
+immediacy set) are collected
 at plan time rather than in the interview, because the answers depend
 on which modules were selected. The plan also states every optional
 component's decision explicitly — installed or not installed —
-including module 02's triage scan and money watch and module 03's
+including module 02's triage scan, money watch, and promises ledger
+and module 03's
 food layer and change detector; an unrecorded "not installed" is
 how features get silently dropped or silently assumed. Optional
 components carry their own rehearsal status, read from

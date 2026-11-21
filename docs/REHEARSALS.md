@@ -33,7 +33,7 @@ known and no more.
 
 ## What has never been rehearsed (as of v0.9)
 
-- A fresh **full** install (all nine modules) at any single pin.
+- A fresh **full** install (all ten modules) at any single pin.
 - The wizard on a **small-group (Q1c)** interview.
 - A module 05 **install** (its method — blind dual review — has
   been run against the kit itself in the rounds ROADMAP records
@@ -49,6 +49,11 @@ known and no more.
 - The tree at the v0.8 pin itself: modules 00, 01, 02, 03, 06,
   and 09 changed after runs 11–12 (the friction fixes, then the
   EX-018/019 review fixes), so their current text is unrehearsed
+  at this pin — the manifest's `rehearsed_at` strings say so per
+  module.
+- The tree at the v0.9 pin itself: modules 00, 02, and 10
+  changed after runs 13–14 (the friction fixes, then the
+  EX-020/021 review fixes), so their current text is unrehearsed
   at this pin — the manifest's `rehearsed_at` strings say so per
   module.
 - The **Standard profile** (00+01+02+06+09) installed as a unit.

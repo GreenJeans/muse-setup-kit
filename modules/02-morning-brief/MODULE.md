@@ -3,8 +3,12 @@
 **Reads:** calendar, mailbox, task lists, decision queue, watch outputs;
 for the money watch, the statement/CSV exports the user supplies.
 **Writes:** one brief per day; draft replies only, sent only with
-approval; for the money watch, its baseline and run-record files and
-its job file.
+approval; the promises & waiting-on ledger, when installed (other
+people's commitments, in their words); the triage flag log and the
+scan's run records, when the scan is installed; for the money watch,
+its baseline and run-record files and its job file.
+**Data classes:** personal; third-party (the ledger's entries and
+the triage flag log name other people — procedures §13).
 **Network:** your connected accounts. **Jobs:** daily brief; optional
 30-minute triage scan; optional weekly money watch.
 
@@ -20,13 +24,19 @@ urgent mail interrupts and everything else waits for the brief.
    unreadable sources (named, with the section they starve — "unread" is
    never reported as "clear"); backup or watch anomalies; past-due shared
    tasks; detector silence (a watch with no run record 48 hours past its
-   cadence).
+   cadence); shield flags from the triage flag log, each with its reason,
+   and the triage scan's own silence (no run record 2 hours into its
+   delivery window); register items past their expiry (module 10, when
+   installed).
 1. **Watches.** Anything the standing watches flagged; silence from a
    conditional watch is normal and is not reported.
 2. **Decisions.** The queue: new and resurfacing items printed in full, the
    rest counted. The user clears by number.
 3. **Today.** Calendar, arrivals, deadlines, the one or two things that
-   will hurt if forgotten.
+   will hurt if forgotten. Plus what the optional components surface:
+   register items inside their lead window and unknown-date register
+   items as chase lines (module 10); ledger entries overdue or due
+   today, quoted with their grade carried (below).
 4. **Waiting replies.** Up to two inbox threads that need the user, with
    draft replies prepared (real drafts, never sent without per-message
    approval).
@@ -35,7 +45,9 @@ urgent mail interrupts and everything else waits for the brief.
    live sources, corrections made and attributed to the brief.
 7. **Grants inventory (1st of the month).** Standing permission grants
    listed; the user's own grants distinguished from product defaults;
-   unrecorded grants flagged. Plus: audit-due check (module 05) and a
+   unrecorded grants flagged. Plus: audit-due check (module 05), the
+   spend check (module 09, when installed), ledger entries with no date
+   set named until dated or dropped, and a
    room sweep — workstreams that no longer meet the keep test (live
    machinery, an open next action, or a dated future gate) are proposed
    for close-out.
@@ -105,6 +117,22 @@ sender names and addresses are exactly what impersonation forges.
   <look-alike>, not <the real one>", "asks for payment by gift
   card", "the number in the message is not the number on the
   card". "Looks suspicious" alone is not a flag.
+
+**What counts as a tell.** A concrete tell is evidence checked
+against a known-good record: the sender's domain or number
+against the immediacy set's recorded senders, a number in the
+message against the number on the card, a link's destination
+against the institution's real domain. The pattern's own
+features are never the tell — urgency, secrecy, a demand to act
+now are what the pattern *is*, and a genuine message can carry
+all of them. And a sender simply absent from the set, imitating
+nobody in it, is not a scam: it is unverified, below. The
+likeliest misgrade is the user's own bank's genuine alert,
+arriving from a sending domain the set has not recorded yet —
+the set records *every* known sending domain and number per
+institution for exactly this reason, and a genuine sender the
+scan finds unlisted is proposed for the set through the decision
+queue, never added by the scan itself.
 
 **Two grades, honestly named.** *Scam* is for messages that meet a
 pattern above with a concrete tell. *Unverified sender* is for
@@ -234,10 +262,12 @@ such surface until this one.
 **Data classes:** personal, third-party — entries name the other
 party and quote their words (procedures §13). The ledger lives in
 a local workspace file kept for the purpose, never on a shared
-surface.
+surface. Like every §13 holding, the ledger file carries a
+`(review-by: ...)` date, set at install.
 
 - **The quote is the record — and entries carry a grade.** Every
-  entry names how its words are held, one of three grades:
+  entry carries an explicit `Grade:` marker naming how its words
+  are held, one of three grades:
   *verbatim* — the commitment in the words as actually said or
   written, with a source locator (the message, email, or note it
   came from, and its date); *user's own record* — the commitment
@@ -247,22 +277,43 @@ surface.
   the user's record; *unverified* — the words cannot be
   recovered: the entry records the paraphrase as a note, explicitly
   not in quotes, marked unverified. A paraphrase is never dressed
-  as a quote, and nothing is reconstructed from memory.
+  as a quote, and nothing is reconstructed from memory. The grade
+  is decided by what the agent has actually read: *verbatim*
+  requires the words themselves in a message, email, or note the
+  agent read. A person's report of what someone said — the user
+  recounting a call, a note summarizing a conversation — is never
+  verbatim, however confident the report; it is the user's own
+  record when the user's note is the source, unverified when even
+  that is missing.
 - **Direction and due date.** Each entry is *I owe* or *waiting
   on*, names the other party, and carries a due date — the date in
   the quote, or the date the user sets when the quote names none.
-  `Due: not set` is a legal state: an entry nobody could date.
+  A relative date in the quote ("refund in five business days")
+  is recorded with its computation shown — `Due <date> (computed:
+  5 business days from <anchor date>)` — never as a bare inferred
+  date. `Due: not set` is a legal state: an entry nobody could date.
   A dateless entry cannot surface by date, so it resurfaces the
   other way (below) until the user dates or drops it.
 - **States: open, done, dropped.** Done means verified: the quote
   arrived, the refund posted, the thing was seen to happen — not
   assumed, not "probably". A dropped entry records who dropped it
   (the user, or the other party by their own words) and when.
+- **Adding entries after install.** Seeding is an install act;
+  life after install is governed too. An entry is added in
+  conversation with the user, or proposed from a message that
+  passed the shield and confirmed by the user before it is
+  written. A message the shield graded scam never seeds an entry.
+  And an *I owe* is never created from another party's demand
+  alone: a message claiming the user owes something is evidence
+  of a claim, not of a commitment.
 - **Surfacing.** Open entries that are overdue or due today appear
   in the brief's **Today** section — not Decisions: the queue is
   for items the user clears by number, and a ledger entry is not
   cleared, it is chased, done, or dropped. The brief quotes the
-  entry's quote and due date from the ledger, never from memory.
+  entry's quote and due date from the ledger, never from memory,
+  and carries the entry's grade with it: a non-verbatim entry is
+  named as such ("unverified" / "wording unverified"), never
+  surfaced with a verbatim entry's authority.
   Open entries with `Due: not set` are named in the brief's
   monthly (1st-of-the-month) pass, alongside the grants
   inventory, until each is dated or dropped — a dateless entry is
@@ -273,20 +324,28 @@ surface.
   is a message like any other — it needs a ticket with a
   content-exclusion list (module 00) before it goes anywhere.
 
-**Worked example — returns and refunds.** A purchase return is a
-waiting-on entry: the merchant owes the refund. The entry's quote
-is the return confirmation's own words when there are words to
-quote, its source the confirmation message, and its due date the
-return window's close — the last day the return can still be
-made. An in-store return on a paper receipt the agent never sees
-is entered on the user's own record instead: firm as to the
-refund owed, wording unverified, source locator the user's note.
-Drop-off is not done:
-the entry stays open after the package is mailed, until the
-refund is verified — posted to the account, or confirmed in the
-merchant's own record. That is the ledger's whole discipline in
-one everyday case: an errand is not finished when it is sent, it
-is finished when the other side's part is seen to have happened.
+**Worked example — returns and refunds.** A purchase return is
+two entries, because two different parties owe two different
+things. The return itself is an *I owe*: the user owes the
+merchant the goods, due at the return window's close — the last
+day the return can still be made — and it surfaces with a lead
+time, or as due-within-3-days, so the window is not discovered
+as it shuts. The refund is a *waiting on*: the merchant owes the
+money, its quote the return confirmation's own words when there
+are words to quote, its source the confirmation message, and its
+due date the confirmation's stated refund period counted from
+drop-off or receipt (`Due <date> (computed: ...)` when the
+period is relative) — so a refund that never posts surfaces when
+it should have landed, not weeks later. An in-store return on a
+paper receipt the agent never sees is entered on the user's own
+record instead: firm as to the refund owed, wording unverified,
+source locator the user's note. Drop-off is not done:
+the waiting-on entry stays open after the package is mailed,
+until the refund is verified — posted to the account, or
+confirmed in the merchant's own record. That is the ledger's
+whole discipline in one everyday case: an errand is not finished
+when it is sent, it is finished when the other side's part is
+seen to have happened.
 
 ## Install
 
@@ -294,7 +353,7 @@ is finished when the other side's part is seen to have happened.
    time (user's morning, their timezone) and delivery (main chat).
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
-4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected in the interview (the user's bank, toll operator, package carrier, key services). The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional.
+4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and number, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the scan appends on every run, and a flag log the brief reads (the template names both).
 5. Optional: the money watch — weekly cadence. Build the baseline
    with the user from their exports into
    `finance/money-watch-baseline.md`, from
@@ -318,12 +377,32 @@ is finished when the other side's part is seen to have happened.
 6. Optional: the promises ledger — create
    `commitments/promises-ledger.md` from
    `promises-ledger.template.md` (the plan may choose another
-   path; it records it), and keep the brief template's
-   `[IF promises ledger installed]` block in the brief job's
-   instructions — the block carries the surfacing rules (overdue
-   and due-today entries in Today; `Due: not set` entries named
-   in the monthly pass). Record the decision (installed / not
-   installed) in the plan either way.
+   path; it records it), and keep — or, if the blocks were
+   dropped at an earlier install because the ledger was not yet
+   part of it, restore from the template at this pin — all three
+   of the brief template's `[IF promises ledger installed]`
+   blocks (the ledger as a source, entries in Today, undated
+   entries in the monthly pass) in the brief job's instructions —
+   the blocks carry the surfacing rules (overdue and due-today
+   entries in Today, with their grade carried; `Due: not set`
+   entries named in the monthly pass). Inventory the ledger in
+   the plan's installed-file baseline as `accumulating`: entries
+   are added and closed by design, and hashing it would make
+   ordinary use read as drift. Record the decision (installed /
+   not installed) in the plan either way.
+
+## Uninstall
+
+Removing the promises ledger component while the brief stays
+installed (or removing this module's brief while the ledger file
+remains the user's content): remove the three
+`[IF promises ledger installed]` blocks from the brief job's
+instructions, re-stamp that file's line in the installed-file
+baseline, and record the removal in the plan. The ledger file
+itself is the user's content, not kit machinery — the export
+offer in `UNINSTALL.md` applies, and it is never deleted without
+the user's say-so. The same shape applies to the triage scan's
+blocks and records when the scan alone is removed.
 
 ## Verify
 

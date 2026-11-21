@@ -216,10 +216,27 @@ section, follow-ups as drafts under ticket rules — with the
 return-window/refund tracker as its worked example. The
 scam/impersonation shield joins module 02's triage, running
 before the VIP interrupt rule, with a pointer from module 06:
-rule 3 turned outward. Module 10 ships unrehearsed and is
-labeled that way; its rehearsals (Starter and Standard installs,
-ledger and shield fixture runs) are specified from the reviewers'
-pass bars and run before the library phase builds on it.
+rule 3 turned outward. Module 10 was rehearsed once at the v0.9
+candidate (run 13, at abb9f86); changed since, it is unrehearsed
+at this pin and labeled that way. Further rehearsals (Standard
+installs, ledger and shield fixture runs) are specified from the
+reviewers' pass bars and run before the library phase builds on
+it.
+
+Review fixes (EX-020/021 — the blind dual review of this
+release, run against the v0.9 tree before tagging): 29 distinct
+findings, every one verified against the tree, the fixes in this
+phase's tree. Shield flags now have a route into the brief (the
+triage flag log, consumed in Failures, and the scan's own
+silence is a brief-visible failure); procedures §13 states the
+identifiers rule module 10 cites, with module 10 in its
+applications; the ledger's grade system is one system across
+MODULE, template, and VERIFY, with a `Grade:` marker on every
+entry; the immediacy set records every known sender per
+institution and is collected as a plan question; module 10's
+deferred checks all carry event-plus-fallback due dates. One
+finding is a maintainer decision, left open on purpose: the
+interrupt treatment of a message graded "unverified sender".
 
 ## Phase 12 — the library (planned)
 

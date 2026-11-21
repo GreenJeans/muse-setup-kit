@@ -15,9 +15,12 @@ watch checks.
 - [ ] If triage was installed: the triage job file exists, built
       from `triage-job.template.md`, with the VIP list, the
       interrupt rules, and the shield's immediacy set (the VIPs
-      plus the institutions named at install) filled in; the
-      shield check is ordered before the interrupt rules; and the
-      delivery window matches the user's waking hours.
+      plus the institutions named at install, each with every
+      known sending domain and number recorded) filled in; the
+      shield check is ordered before the interrupt rules; the
+      delivery window matches the user's waking hours; and the
+      run-record and flag-log files exist at the paths the job
+      file names.
 - [ ] If the money watch was installed: the baseline file exists in a
       local workspace file and was built from user-supplied exports
       (no credentials stored anywhere in the workspace); every
@@ -28,14 +31,20 @@ watch checks.
       file exists; and the job is recorded in `JOBS.md`.
 - [ ] If the promises ledger was installed: the ledger file exists
       in its canonical shape (I owe / Waiting on sections); every
-      seeded entry carries its grade — a verbatim quote with a
-      source locator, the user's own record with its wording
+      seeded entry carries its `Grade:` marker — a verbatim quote
+      with a source locator (the words themselves, read by the
+      agent), the user's own record with its wording
       marked unverified, or unverified with the paraphrase
       recorded as a note, never as a quote; an entry with no date
-      reads `Due: not set`; it is a local workspace file, not on
-      any shared surface; and the brief job's instructions keep
-      the template's `[IF promises ledger installed]` block,
-      which names the ledger as a source.
+      reads `Due: not set`; the file carries its `(review-by: ...)`
+      date; it is inventoried in the plan's installed-file
+      baseline as an accumulating file; it is a local workspace
+      file, not on
+      any shared surface; and the brief job's instructions keep —
+      or, for a ledger installed after the brief, restore — all
+      three of the template's `[IF promises ledger installed]`
+      blocks (the ledger as a source, entries in Today, undated
+      entries in the monthly pass).
 
 ## Deferred
 
@@ -66,14 +75,29 @@ watch checks.
       follow-up draft, if one was prepared, exists as a draft —
       nothing was sent. A `Due: not set` entry, if any was
       seeded, is named in the first monthly pass after install.
+      An unverified entry, if any was seeded, is named unverified
+      in the brief — not quoted with a verbatim entry's authority.
+- [ ] **Triage liveness and flag route** (due: first week; triage
+      installs only): every scan run inside the delivery window
+      has left a run record; a flag raised in the window appears
+      in the next brief's Failures with its one-line reason; and
+      with the scan paused for 2 hours inside the window (with
+      the user's knowledge), the brief names the gap as a failure
+      of the scan itself.
 - [ ] **Shield fixture drill** (due: first month; triage installs
-      only): run the scan over five scam fixtures — an impersonated
-      bank notice, a toll text, a package-fee notice, a
+      only): run the scan over five scam fixtures in the mailbox
+      it scans — an impersonated
+      bank notice, a toll-charge notice, a package-fee notice, a
       family-emergency money request, a look-alike sender domain —
       and five legitimate look-alikes: a real bank alert, a real
-      delivery notice, a genuine message from a new number, a real
+      delivery notice, a genuine alert from a second, unlisted
+      sending domain of an institution in the immediacy set, a real
       verification prompt, a newsletter carrying a deadline. Pass:
       all five scams flagged, each with its one-line reason; no
       legitimate message graded "scam" ("unverified sender" is an
-      acceptable grade for the genuinely ambiguous); no fixture
+      acceptable grade for the genuinely ambiguous); the
+      unlisted-domain alert is graded unverified, not scam, is
+      proposed for the immediacy set through the decision queue,
+      and the set itself is unchanged by the scan; every flag —
+      immediate or not — is in the flag log; no fixture
       link followed and no fixture number called.
