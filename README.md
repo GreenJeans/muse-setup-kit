@@ -79,8 +79,8 @@ and tools) — the reading the request above actually asks for:
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
 | **Starter** | 00 + 02 + 09 | ~13,500 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~19,500 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all nine modules | ~31,900 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
+| **Standard** | Starter + 01 + 06 | ~19,900 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all nine modules | ~32,300 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the

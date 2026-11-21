@@ -11,8 +11,13 @@ a version change means a new entry.
 - **Source:** <where it came from>
 - **Pinned:** <version or commit hash>
 - **Read in full at the pin:** yes / no / scoped — full for <scope>,
-  <rest> not read (if no, stop — do not install; an unscoped "yes"
-  for a partial read is a false record)
+  <rest> not read (an unscoped "yes" for a partial read is a false
+  record. If no: say plainly what was read instead — for a hosted
+  connector, "source not readable — hosted" — and what observable
+  surface the vetting ran on. Proceeding on that basis is the
+  user's decision, recorded in their words under **Why**. For a
+  connector or MCP server the presented manifest must still have
+  been read in full; if it was not, stop)
 - **Reads:** <files, accounts, data it accesses>
 - **Writes:** <what it creates or changes>
 - **Network:** <endpoints it contacts>
@@ -34,6 +39,13 @@ Connectors and MCP servers add these fields (module 06's vetting pack):
   the feature it maps to — vendor statements are not the record;
   for key/PAT servers, the token's breadth and whether a narrower
   or read-only token exists; "none" for a local-only item>
+- **Accepted excess scopes:** none / <official tier only: each
+  observed scope that maps to no wanted feature and that the user
+  accepted anyway — the connector named, each scope named, in the
+  user's own words, stating that a narrower configuration was
+  unavailable or declined. This record is the user's decision,
+  not an audit pass; community and unknown tiers have no such
+  record — excess there is a walk-away>
 - **Presented-manifest hash:** <sha256 of the presented manifest
   captured at first connection — server instructions, every tool's
   name, description, and input schema including parameter
