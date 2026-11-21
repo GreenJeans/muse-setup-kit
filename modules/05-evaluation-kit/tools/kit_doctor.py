@@ -6,11 +6,18 @@ Checks, in the workspace:
   1. SETUP-PLAN.md exists and records the kit commit(s) it installed
      from — per module where the plan names them. Mixed pins are
      normal (UPGRADING.md); hidden mixed pins are not, so every pin
-     found is listed, not just the first.
+     found is listed, not just the first. A line explicitly labeled
+     as the pin ("pin: <hash>", or a "commit <hash>" line) is
+     preferred: when any labeled pin exists, the looser scan for
+     bare hashes is skipped, so a hash a plan mentions only to
+     disclaim it ("this hash was NOT used") is never counted.
   2. JOBS.md exists (the scheduler-of-record).
   3. OPERATING_PROCEDURES.md exists.
-  4. Deferred checks ledgered in SETUP-PLAN.md: any line marked
-     DEFERRED carrying a YYYY-MM-DD date that has passed is overdue.
+  4. Deferred checks ledgered in SETUP-PLAN.md: a line marked
+     DEFERRED whose "due: YYYY-MM-DD" field names a date that has
+     passed is overdue. The wizard's ledger format carries the due
+     date in that field; a DEFERRED line without it falls back to
+     any date the line carries.
   5. Installed-file baseline: SETUP-PLAN.md lines of the form
      "- installed: <relpath> sha256:<hex>" record the hash of every
      file the wizard installed. A baselined file whose current hash
@@ -36,6 +43,8 @@ import sys
 
 DATE_RE = re.compile(r"\b(20\d{2}-\d{2}-\d{2})\b")
 COMMIT_RE = re.compile(r"\bcommit[:\s]+([0-9a-f]{7,40})\b", re.I)
+PIN_LABEL_RE = re.compile(r"\bpin\s*[:=]\s*([0-9a-f]{7,40})", re.I)
+DUE_RE = re.compile(r"\bdue:?\s*(20\d{2}-\d{2}-\d{2})", re.I)
 
 
 def main():
@@ -61,17 +70,24 @@ def main():
         for m in COMMIT_RE.finditer(plan_text):
             if m.group(1) not in pins:
                 pins.append(m.group(1))
+        for m in PIN_LABEL_RE.finditer(plan_text):
+            if m.group(1) not in pins:
+                pins.append(m.group(1))
         # Older plans also record pins as a bare 40-hex hash on a line
-        # naming the pin or HEAD ("installed from HEAD <hash>"). A
-        # baseline line is not a pin: skip any line carrying sha256:.
-        for line in plan_text.splitlines():
-            if "sha256:" in line:
-                continue
-            low = line.lower()
-            if "pin" in low or "head" in low:
-                for h in re.findall(r"\b[0-9a-f]{40}\b", line):
-                    if h not in pins:
-                        pins.append(h)
+        # naming the pin or HEAD ("installed from HEAD <hash>"). That
+        # loose scan runs only when no labeled pin exists: a plan may
+        # mention a hash precisely to disclaim it, and a disclaimed
+        # hash is not a pin. A baseline line is not a pin either:
+        # skip any line carrying sha256:.
+        if not pins:
+            for line in plan_text.splitlines():
+                if "sha256:" in line:
+                    continue
+                low = line.lower()
+                if "pin" in low or "head" in low:
+                    for h in re.findall(r"\b[0-9a-f]{40}\b", line):
+                        if h not in pins:
+                            pins.append(h)
         if not pins:
             problems.append("SETUP-PLAN.md records no kit commit hash")
         elif len(pins) == 1:
@@ -123,7 +139,14 @@ def main():
     overdue = []
     for line in plan_text.splitlines():
         if "DEFERRED" in line.upper():
-            for ds in DATE_RE.findall(line):
+            # The ledger format carries the due date in an explicit
+            # "due: YYYY-MM-DD" field; when it is present it governs,
+            # and other dates in the row (a note, a status) are not
+            # due dates. Without the field, fall back to any date
+            # the line carries.
+            dm = DUE_RE.search(line)
+            dates = [dm.group(1)] if dm else DATE_RE.findall(line)
+            for ds in dates:
                 try:
                     d = datetime.date.fromisoformat(ds)
                 except ValueError:

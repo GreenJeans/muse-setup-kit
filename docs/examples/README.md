@@ -17,10 +17,11 @@ what fixed it (run 8's log is summarized in the REHEARSALS row).
   approved before anything was installed: capabilities, the
   interview answers, module choices with their verification
   results, the deferred-check ledger, and the installed-file
-  baseline (every file hashed — including the queue and `JOBS.md`.
-  That is a wart, preserved as it ran: hashing files that grow by
-  design made ordinary use read as drift, and this run's friction
-  log is what produced the `accumulating` form the kit uses now).
+  baseline (the queue and `JOBS.md` marked `accumulating` —
+  inventoried, never hashed. The run's first draft hashed them,
+  and ordinary use read as drift; its friction log is what
+  produced the `accumulating` form, and the baseline is shown in
+  that form).
 - **`morning-brief.md`** — the first brief the install produced,
   failures-first, including the queue drill item the rehearsal
   planted and cleared.

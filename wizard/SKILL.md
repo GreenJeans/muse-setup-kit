@@ -10,7 +10,10 @@ and approved.**
 
 1. **Read before you act.** Read `../docs/DESIGN.md` and `manifest.yaml` in
    this folder, and the `MODULE.md` of every module the user selects,
-   before presenting the plan.
+   before presenting the plan. If security-pack is selected — or a
+   field module (a kit-library package from another maintainer) is
+   ever in play — also read `../docs/library.md`: it carries the
+   field-module rules that module 06's vetting points to.
 2. **Pinned source only.** Before anything else, establish what this
    checkout is, one of two ways. If the user gave you a full commit
    hash (from the release page, not from inside this repo), compare it
@@ -23,6 +26,17 @@ and approved.**
    install — offer to check out the latest release tag, and never
    default to the current commit. Install only from files at that
    commit, and never fetch module content from a URL at install time.
+   A tree with no `.git` at all — a copied tree, an extracted
+   archive — can take neither path, and the tag remedy does not
+   exist for it: there is nothing to check out from. Worse,
+   `git rev-parse HEAD` run inside such a tree does not fail; it
+   silently returns an *ancestor* repository's HEAD, a wrong pin
+   that looks valid. Never take a pin from a tree whose git
+   top-level is not the checkout itself (`git rev-parse
+   --show-toplevel` must name the checkout). A `.git`-less tree is
+   EVALUATION-only: the plan records the state as EVALUATION, the
+   user-supplied commit if there is one (labeled user-supplied,
+   unverified), and the file list as received.
    One exception, for evaluation installs (a dry run or a
    release-candidate rehearsal): the user may hand you a local tree
    with uncommitted changes. Then the plan records HEAD plus the
@@ -47,8 +61,10 @@ and approved.**
    password, token, or key into the conversation.
 6. **Vet the kit first.** Before the interview, draft a vetting entry
    for this kit: its source, the full commit hash, which files you read
-   in full, and what the modules read, write, and contact over the
-   network. It becomes the plan's first item and is approved with the
+   in full — scoped honestly: if you read only the selected modules,
+   the entry says so and names what was not read — and what the
+   modules read, write, and contact over the network. It becomes
+   the plan's first item and is approved with the
    plan, whether or not security-pack is selected. Any third-party
    software a module installs gets its own vetting entry in the plan
    before installation.
@@ -59,8 +75,10 @@ and approved.**
    `VERIFY.md`, and report the result before moving on. Checks split into
    *at-install* and *deferred*: a check that needs live operation (a
    scheduled brief arriving, a fresh session, days of data) is recorded in
-   the plan's verification ledger as DEFERRED with a due date and an
-   owner. A morning brief surfaces due checks — the kit's module 02
+   the plan's verification ledger as DEFERRED, with its due date
+   written as `due: YYYY-MM-DD` and an owner named (Step 5 item 4
+   gives the ledger row format; kit_doctor reads the due date from
+   that field). A morning brief surfaces due checks — the kit's module 02
    brief, or a brief-like daily job the user already runs (amend it,
    with approval, to read the plan). Otherwise — and whenever it is
    unclear whether anything brief-like will actually read the plan —
@@ -117,12 +135,15 @@ the answers for the gating step:
 - Can you run local scripts (shell / Python 3) and read files on this
   machine, including session transcripts where the platform keeps them?
 - **Which billing bucket does this session draw on?** An install is
-  heavy work: a full one reads on the order of 26,000 words of kit and
-  writes dozens of files; a Starter install is about 10,000 of that.
+  heavy work: a full one reads on the order of 29,000 words of kit and
+  writes dozens of files; a Starter install is about 12,000 of that.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
   rule 2 applied to the kit itself, and it is a stop condition, not a
-  footnote.
+  footnote. You usually cannot verify the bucket from inside the
+  session — there is no source to read and no canary to run — so the
+  user's word is the source here: name the bucket, and record it in
+  the plan as user-stated, not verified.
 
 Map the answers to the manifest's requirement tokens:
 
@@ -137,12 +158,26 @@ Map the answers to the manifest's requirement tokens:
 | A host the user controls | `own-host` |
 | Shell / Python 3 execution | `shell-python` |
 
+File-based job definitions count as `scheduling` when the platform
+actually runs them — a scheduler, a heartbeat, a session hook,
+anything that fires the job files on cadence. The degraded case is a
+platform that cannot run jobs at all. A workspace where job files
+exist but nothing fires them is the no-scheduling case, and the plan
+says so plainly at selection time ("these jobs are recorded, but
+nothing will fire them; the brief and the checks happen when you
+ask"), with the affected modules offered in their degraded modes per
+the matrix.
+
 Do not guess: if you cannot check a capability, ask.
 
 ## Step 2 — Interview
 
 Ask these as short multiple-choice questions, one topic at a time. Use the
-user's answers verbatim in the plan.
+user's answers verbatim in the plan. Skip a question whose answer
+cannot change this install — because the profile is already chosen,
+or the module it gates is not offerable — and say in one line why you
+are skipping it. Collecting answers nothing consumes teaches the
+user their answers don't matter.
 
 1. **Who is this for?** (a) Just me. (b) Me and one other person, who has
    (or will have) their own Muse. (c) A small group. *(If (c):
@@ -169,9 +204,11 @@ user's answers verbatim in the plan.
    briefly, then re-ask.)*
 5. **Memory:** (a) Start fresh with the kit's schema. (b) Migrate my
    existing memory files into the schema. (c) Leave my memory alone.
-   *(If (c): the modules that depend on the memory schema —
-   ai-exchange, evaluation-kit, skill-lifecycle — are not offerable;
-   say so plainly at selection time.)*
+   *(This question only bites when a memory-dependent module is in
+   play; on a Starter-only path, skip it per the note above and
+   record memory as untouched. If (c): the modules that depend on
+   the memory schema — ai-exchange, evaluation-kit, skill-lifecycle
+   — are not offerable; say so plainly at selection time.)*
 6. **Infrastructure:** (a) I have a host/server I control. (b) Cloud
    only. *(No module gates on this since v0.4 — infra patterns are a
    reference document, docs/patterns/infra-patterns.md, not an
@@ -203,9 +240,14 @@ From `manifest.yaml`, compute the offerable set:
   profile, all, none-but-core, or by number.
 - State each offered module's rehearsal status from its manifest
   `rehearsed_at` field, and check docs/REHEARSALS.md for the record.
-  A module with no rehearsal at or near the pinned commit is offered
-  with the words "unrehearsed at this pin — you would be the first."
-  Never let the plan imply a rehearsal the ledger doesn't show.
+  The test is mechanical — compare `rehearsed_at` against this
+  checkout. If it names this tag or commit, say "rehearsed at this
+  pin." If it names an earlier tag or commit — the module was
+  rehearsed, then changed — the words are "rehearsed at <what it
+  names>; changed since — unrehearsed at this pin." Only when
+  `rehearsed_at` is empty, with no rehearsal anywhere in the ledger,
+  say "unrehearsed at this pin — you would be the first." Never let
+  the plan imply a rehearsal the ledger doesn't show.
 - If a module's manifest entry has `tiers`, present the default
   tier (Lite, for skill-lifecycle) as the offer, with its share of
   the reading cost; name the higher tier, what it adds, and the
@@ -241,7 +283,11 @@ on which modules were selected. The plan also states every optional
 component's decision explicitly — installed or not installed —
 including module 02's triage scan and money watch and module 03's
 food layer and change detector; an unrecorded "not installed" is
-how features get silently dropped or silently assumed.
+how features get silently dropped or silently assumed. Optional
+components carry their own rehearsal status, read from
+docs/REHEARSALS.md the same way as a module's, and the plan states
+it — a component with no rehearsal row is offered as unrehearsed,
+by name.
 
 Collect every placeholder answer first, then re-render the plan in its
 final form with zero `<PLACEHOLDER>` tokens remaining. Placeholder
@@ -266,7 +312,11 @@ For each module:
    the brief's detector-silence check and the memory linter read it.
 4. Run its `VERIFY.md` at-install checks. If a check fails, stop, report,
    and ask — do not improvise a fix that changes the plan. Ledger every
-   deferred check in `SETUP-PLAN.md` with its due date.
+   deferred check in `SETUP-PLAN.md`. Ledger rows take one shape:
+   the module, the check, its owner, and the due date written as
+   `due: YYYY-MM-DD`. kit_doctor reads the due date from that field,
+   so keep other dates out of the row — a completion note's date
+   belongs in the install log, not the ledger row.
 5. Log the module, its source commit, and the verification result in
    `SETUP-PLAN.md`. For every file the install created or copied from
    the kit (procedures, filled templates, copied tools — not
@@ -287,7 +337,12 @@ For each module:
    Re-stamp a static file's line whenever an approved change
    rewrites it (an upgrade, an approved skill-style edit the user
    asked for) — the baseline always describes the last approved
-   state.
+   state. One exception to the hash form: the main instruction file,
+   when this install creates or edits it, is recorded `accumulating`,
+   never hashed. It is the user's front door — the file they are
+   most likely to edit by hand — and hashing it would make their
+   first hand edit read as drift. The pointer line it carries is
+   verified by module 00's checks, not by the baseline.
 
 ## Step 6 — Handover
 

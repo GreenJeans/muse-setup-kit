@@ -17,8 +17,15 @@ and it blocks heavy work on that surface until it is classified.
 ## Heavy-run declaration (the snippet rule 2 asks for)
 
 Before a long or expensive run, the plan or kickoff message carries
-three lines:
+three lines. The snippet is a fill-in form: replace the
+parenthesized prompts with real values when you write a
+declaration. The prompts avoid `<...>` tokens on purpose — module
+00's placeholder check scans the procedures for angle-bracket
+tokens, and a snippet copied verbatim, as snippets are, would fail
+that check forever. (The register table above does use `<...>`
+fill-ins; it is filled once, at install, and the check flagging an
+unfilled row there is the check working as intended.)
 
-Bucket: <which bucket this run draws on>
-Expected magnitude: <order of magnitude, in the bucket's own terms>
-Cap check: <the cap in the register, and what happens when it hits>
+Bucket: (which bucket this run draws on)
+Expected magnitude: (order of magnitude, in the bucket's own terms)
+Cap check: (the cap in the register, and what happens when it hits)

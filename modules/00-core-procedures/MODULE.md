@@ -98,6 +98,9 @@ HTML comments of the form `<!-- ext:<name> -->`. The rules:
 - A new anchor is added by editing this registry and the target file
   in the same change. An anchor with no registry entry is a defect;
   so is a registry entry with no anchor.
+- Anchor comments are never deleted as "template comments" — they
+  are the mechanism, not commentary. The procedures template's
+  header says so at its head.
 
 Registry, as shipped:
 
@@ -131,9 +134,13 @@ Registry, as shipped:
 7. Create the continuity handover from
    `templates/continuity-handover.template.md`, filled with the user:
    where things live, who to call, what to stop, how to pause the
-   agent. It carries a review-by date. The user names where the
-   handover itself lives and who it is for; an unfilled handover is
-   ledgered as a deferred check, never silently skipped.
+   agent. It carries a review-by date. Its default home is
+   `continuity-handover.md` at the workspace root — a file whose
+   purpose is to be found later, by a stressed human or a fresh
+   agent, gets a findable name. The user may name another home; the
+   plan records the path and who the handover is for either way. An
+   unfilled handover is ledgered as a deferred check, never silently
+   skipped.
 
 ## Verify
 

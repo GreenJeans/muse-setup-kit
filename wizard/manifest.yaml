@@ -5,7 +5,7 @@ version: 1
 modules:
   - id: core-procedures
     dir: modules/00-core-procedures
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; changed in v0.8, re-rehearsal pending"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11–12 at df56774; changed since (friction fixes), re-rehearsal pending"
     title: Core Procedures
     pitch: Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.
     depends_on: []
@@ -30,7 +30,7 @@ modules:
 
   - id: morning-brief
     dir: modules/02-morning-brief
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; changed in v0.8, re-rehearsal pending"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); changed since (friction fixes), re-rehearsal pending"
     title: Morning Brief & Inbox Triage
     pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules, and silent-by-design watches.
     depends_on: [core-procedures]
@@ -81,7 +81,7 @@ modules:
 
   - id: security-pack
     dir: modules/06-security-pack
-    rehearsed_at: "v0.1 wizard dry run (solo); changed in v0.8, re-rehearsal pending"
+    rehearsed_at: "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending"
     title: Security Pack
     pitch: Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share.
     depends_on: [core-procedures]
@@ -110,7 +110,7 @@ modules:
 
   - id: cost-guardrails
     dir: modules/09-cost-guardrails
-    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; changed in v0.8, re-rehearsal pending"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; changed since (friction fixes), re-rehearsal pending"
     title: Cost & Billing Guardrails
     pitch: Bucket discipline for agent spending — know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.
     depends_on: [core-procedures]
@@ -130,12 +130,12 @@ profiles:
   - id: starter
     title: Starter
     modules: [core-procedures, morning-brief, cost-guardrails]
-    audit_words: 10200
+    audit_words: 12100
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
-    audit_words: 14200
+    audit_words: 17000
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle) is offered per module after the profiles.

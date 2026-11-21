@@ -1,7 +1,10 @@
 # Operating Procedures
 
 <!-- Template from the Muse Setup Kit. Fill the <PLACEHOLDERS>, delete the
-comments, and make it yours. This file is the agent's constitution; the
+comments, and make it yours. One exception: the ext: anchor
+comments are structural, not instructional — they mark where
+another module's block lives, and they stay; deleting one orphans
+the block it frames. This file is the agent's constitution; the
 agent's main instruction file should point here. It is also the operative
 text of the kit's constitutional rules: module summaries and other
 modules' applications point back to these sections, and where any of
@@ -135,8 +138,15 @@ stays however the user keeps it, and this section is inert.)*
 
 <!-- ext:billing-buckets — extension anchor (registered in module
      00's extension-point registry). Module 09, when installed,
-     inserts its cost & billing guardrails as §12 at this anchor,
-     between this comment and the closing marker below. -->
+     replaces the stub below with its cost & billing guardrails
+     as §12, between this comment and the closing marker. -->
+## 12. Cost & billing guardrails
+
+*(Reserved for module 09 (cost-guardrails), which replaces this
+stub at the anchor above with the bucket register and the
+declare-before-heavy-work rule. Until it is installed, this
+section is deliberately empty — the number is held so nothing
+downstream renumbers.)*
 <!-- /ext:billing-buckets -->
 
 ## 13. Sensitive records

@@ -201,6 +201,43 @@ class KitDoctorTest(unittest.TestCase):
             self.assertIn("bbbbbbb2222", notes)
             self.assertTrue(any("overdue" in p for p in rep["problems"]))
 
+    def _doctor_workspace(self, td, plan):
+        with open(os.path.join(td, "SETUP-PLAN.md"), "w") as fh:
+            fh.write(plan)
+        with open(os.path.join(td, "JOBS.md"), "w") as fh:
+            fh.write("# Jobs\n")
+        with open(os.path.join(td, "OPERATING_PROCEDURES.md"), "w") as fh:
+            fh.write("# Procedures\n")
+        return json.loads(run(DOCTOR, "--workspace", td, "--json").stdout)
+
+    def test_due_field_governs_the_deferred_row(self):
+        with tempfile.TemporaryDirectory() as td:
+            # A status-cell date in the past must not make the row
+            # overdue when the explicit due: field is in the future.
+            rep = self._doctor_workspace(
+                td, "# Plan\n- install — commit aaaaaaa1111\n"
+                    "- [ ] Money-watch first run DEFERRED due: 2099-01-01"
+                    " — PART DONE 2020-01-01\n")
+            self.assertFalse(any("overdue" in p for p in rep["problems"]))
+            # And a past due: field governs even beside a future date.
+            rep = self._doctor_workspace(
+                td, "# Plan\n- install — commit aaaaaaa1111\n"
+                    "- [ ] Money-watch first run DEFERRED due: 2020-01-01"
+                    " — rescheduled from 2099-01-01\n")
+            self.assertTrue(any("overdue" in p for p in rep["problems"]))
+
+    def test_labeled_pin_beats_a_disclaimed_hash(self):
+        with tempfile.TemporaryDirectory() as td:
+            real, fake = "a" * 40, "b" * 40
+            rep = self._doctor_workspace(
+                td, f"# Plan\n- install pin: {real}\n"
+                    f"- note: the hash {fake} was NOT used as the pin;"
+                    " it is an ancestor repo's HEAD\n")
+            notes = " ".join(rep["notes"])
+            self.assertIn(real, notes)
+            self.assertNotIn(fake, notes)
+            self.assertNotIn("mixed pins", notes)
+
     def test_baseline_reports_edits_and_missing(self):
         import hashlib
         with tempfile.TemporaryDirectory() as td:

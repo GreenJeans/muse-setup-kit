@@ -19,9 +19,13 @@ tight: the user reads this in two minutes. Failures first, always.
 - [IF watches exist] Watches: <each watch's state file / last run record>
 - [IF memory-architecture installed] Memory: yesterday's daily log; the reconciliation rotation file
 
-Blocks marked [IF ...] are conditional: include them only when the
-condition holds for this install, and drop them silently when it doesn't.
-A section whose sources don't exist is omitted — never reported as clear.
+Blocks marked [IF ...] are conditional. Keep a block — marker and
+all — when its condition is install state that may change (a module
+installed or not, a source connected or not). Drop a block when its
+source does not exist for this install at all, and record the drops
+in the plan, so the installed instructions and the plan agree about
+what was left out. A section whose sources don't exist is omitted —
+never reported as clear.
 
 ## Steps
 

@@ -3,8 +3,11 @@
 <!-- Template from the Muse Setup Kit (module 00). One page, written
 with the user, for the person who would have to pick things up — a
 partner, a family member, an executor. Fill it, tell that person
-where it lives, and keep the review-by date honest: an unavailable
-user plus a stale handover is the failure this page exists for. -->
+where it lives, and keep the review-by date honest — default: six
+months from the day you write it, sooner after any big change (a
+move, a new account, a new agent, a change in who would pick
+things up). An unavailable user plus a stale handover is the
+failure this page exists for. -->
 
 **Review by:** <YYYY-MM-DD>
 

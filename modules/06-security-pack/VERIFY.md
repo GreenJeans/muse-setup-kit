@@ -4,7 +4,10 @@
 
 - [ ] `security/VETTING.md` exists, and its first entry is this kit
       itself: source, the pinned commit installed from, and an honest
-      "read in full" line.
+      "read in full" line — scoped to what was actually read. A
+      partial install's entry reads "full for the installed scope;
+      modules <list> not read"; that scoping is the honest form,
+      not a failure.
 - [ ] The standing rules (§10) are present in the installed procedures —
       including verify-before-install and one-time grants only.
 - [ ] The monthly grants inventory is scheduled (brief 1st-of-month step

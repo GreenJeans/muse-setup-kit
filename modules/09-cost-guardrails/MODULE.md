@@ -72,7 +72,8 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    to the operating procedures, as §12, inserted at the procedures
    template's `<!-- ext:billing-buckets -->` anchor (module 00's
    extension-point registry names this module as the anchor's
-   owner).
+   owner), replacing the reserved §12 stub the template ships at
+   that anchor.
 4. Record the monthly spend check in `JOBS.md` as its own bullet,
    marked "(rides morning-brief)" when the brief carries it (the
    brief template's monthly step has the gated spend-check line), or

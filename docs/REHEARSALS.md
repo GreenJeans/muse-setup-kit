@@ -2,10 +2,13 @@
 
 The kit's claim is "done means verified." This ledger is where
 that claim is cashed: every rehearsal a fresh agent has run
-against the kit, what it covered, and what it found. A module with
-no row here is **unrehearsed**, and the wizard says so at selection
-time ("unrehearsed at this pin — you would be the first"), from
-the manifest's `rehearsed_at` field, which this ledger backs.
+against the kit, what it covered, and what it found. The wizard
+states rehearsal status at selection time from the manifest's
+`rehearsed_at` field, which this ledger backs: "rehearsed at this
+pin" when a row names the checkout, "rehearsed at <tag>; changed
+since" when the module changed after its row, and "unrehearsed at
+this pin — you would be the first" only when there is no row at
+all.
 
 Kept honestly, including the gaps. Early runs predate this ledger
 and did not record per-module check counts; those rows say what is
@@ -23,6 +26,8 @@ known and no more.
 | 8 | 2026-11-20 | v0.5 candidate | **Install → uninstall**: fresh Starter install, artifacts preserved, then UNINSTALL.md end to end | 00, 02, 09 (install + uninstall) | Install: 00: 6/6; 02: 2/2 applicable; 09: 4/4. Uninstall verify: 4/4 | 11 friction items, all fixed in v0.5. The load-bearing one: the baseline originally hashed content-accumulating files (the queue, JOBS.md), so ordinary use read as drift — the baseline now marks those `accumulating` (inventoried, never diffed; fixture-tested). Also: the JOBS template's examples used real job names (renamed sample-*), module 09's cap check no longer passes an empty register silently, UNINSTALL's scheduler check now speaks to file-based workspaces, and JOBS.md's removal step is unambiguous. This run's preserved artifacts are the worked example in docs/examples/ |
 | 9 | 2026-11-20 | v0.6 candidate | Capability matrix scored blind against the manifest (3 personas × 9 modules) + canonical-reference check | none (desk check — no install) | n/a | Matrix table 27/27 cells; verdicts 26/27 — the miss (module 08 × shell) and four prose mismatches found and fixed, incl. an invented Lite degradation and a kit_doctor self-contradiction; canonical table: 9 pass, 1 partial (exclusions pointer), §5/§6/§11 rows added; module 06 and README summaries labeled with governing pointers |
 | 10 | 2026-11-20 | v0.7 candidate | Cold entry via the simplified quickstart prompt (no hash, tag entry), persona on mobile | none (plan only — a complete Starter plan, no install executed) | n/a | Under the v0.7 rule the prompt reached a complete Starter plan with no substitution and no extra asks; the plan recorded tag v0.6 + full hash. Under the released v0.6 wizard the same prompt dead-stops at ground rule 2 demanding a hash — the gap v0.7 closes, documented verbatim. Also caught: stale manifest rehearsed_at for modules 00/02 (fixed), a Step 4 save-ordering wording snag (fixed) |
+| 11 | 2026-11-20 | v0.8 candidate (df56774) | Solo user (scripted persona, non-programmer), EVALUATION install from a `.git`-less copy, then five connector/MCP vetting passes against fixtures | 00, 06 | All at-install checks passed; 5/5 fixture vetting decisions correct; 3 agent-directed instructions embedded in fixtures reported, none followed | 17 friction items, fixed in v0.8 after the run: ground rule 2 gains the `.git`-less tree case; the procedures template distinguishes anchor comments from deletable ones and ships a reserved §12 stub; the tool-manifest hash gains a canonical form (a named artifact, or "vendor-stated, unverifiable"); the scope audit and the walk-away list now state one decision rule; module 06 and the wizard point to docs/library.md; the file-based scheduling rule is stated; module 06 ships the grants-inventory job template it requires |
+| 12 | 2026-11-20 | v0.8 candidate (df56774) | Solo user (scripted persona), EVALUATION install from a `.git`-less copy; Starter profile plus the money watch, fed two monthly statement exports with planted cases | 00, 02, 09 | All at-install checks passed; kit_doctor 0 problems; the watch flagged exactly the 3 planted cases (a price change, a duplicate, a new charge) and stayed silent on the excluded category | 18 friction items, fixed in v0.8 after the run: the money watch gains its baseline-maintenance rule (a run never edits the baseline), a definition of "recurring", sign normalization, the no-new-data run, and shipped templates (baseline, run records, job file); VERIFY gains an at-install baseline accuracy check; the worked example's baseline now marks accumulating files `accumulating`; kit_doctor reads the `due:` field and prefers labeled pins; Step 3's rehearsal warning gains its mechanical trigger |
 
 ## What has never been rehearsed (as of v0.8)
 

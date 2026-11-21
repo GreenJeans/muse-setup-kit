@@ -75,12 +75,28 @@ the triage scan — installed or not installed, recorded either way.
   Never credentials, never a bank login, never a scraped banking
   session. If a source cannot be exported, the watch does not run
   on it (procedures §13).
-- **Exclusion categories** are named with the user at install —
-  charges whose variation is normal (variable utilities, groceries,
-  fuel) — and recorded in the watch's instructions. Excluded
-  categories are never flagged.
-- **It flags three things only**: a new recurring charge, a changed
-  amount on a known charge, a duplicate. Everything else is
+- **Exclusion categories** are named with the user at install, and
+  the installer *offers* the examples here — an exclusion the user
+  never hears about is one they will never choose. Two different
+  kinds share the one mechanism, and the baseline names which kind
+  each exclusion is: *variability* exclusions (charges whose
+  amounts move normally — variable utilities, groceries, fuel) and
+  *sensitivity* exclusions (categories the user does not want
+  watched or quoted at all — veterinary and medical care, in the
+  maintainer's own install). Excluded categories are never flagged.
+- **"Recurring" is a baseline property, not a guess.** A charge is
+  in scope when it is in the baseline. A charge sighted for the
+  first time is flagged NEW — a candidate, nothing more. It enters
+  the baseline only when the user confirms it, directly or by
+  clearing the flag's decision-queue item. No number of sightings
+  enrolls a charge on its own.
+- **Amounts are positive dollars in the baseline**, whatever sign
+  convention an export uses, and every comparison normalizes the
+  same way first. A baseline that copies an export's negative
+  signs flags a phantom change on every line the day the source
+  changes convention.
+- **It flags three things only**: a first sighting (NEW), a changed
+  amount on a baseline charge, a duplicate. Everything else is
   silence, and every run writes a run record — the detector-silence
   rule applies to this watch like any other (no run record 48 hours
   past cadence means the watch is the failure).
@@ -88,6 +104,18 @@ the triage scan — installed or not installed, recorded either way.
   anyone. A flag that warrants action becomes a decision-queue
   item; cancelling or disputing then needs a ticket, like any
   irreversible action.
+- **A run never edits the baseline.** When a flag is raised — a
+  price change, a confirmed new charge, a refunded duplicate — the
+  baseline keeps reading the old state until the user resolves the
+  flag's decision-queue item. On resolution, the agent updates the
+  affected line and records the decision and its date on the line
+  itself. Until then, the same change flags again on the next run
+  that brings new data — that repetition is the mechanism working,
+  not spam: the flag is unresolved.
+- **Cadence is weekly; data may not be.** A run with no new export
+  since the last run records "no new data" in the run record and
+  stays silent — it does not re-compare the old export. Flags are
+  computed only on new data. The run record is written either way.
 - **The baseline is a financial record** (procedures §13): it lives
   in a local workspace file kept for the purpose, never on a shared
   surface, and figures from it are quoted from the file, not from
@@ -100,11 +128,19 @@ the triage scan — installed or not installed, recorded either way.
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
 4. Optional: the triage scan job, 30-minute cadence, same interrupt rules.
-5. Optional: the money watch — weekly cadence; build the baseline
-   with the user from their exports, record the exclusion
-   categories in the watch's instructions, and record the job in
-   `JOBS.md`. The decision (installed / not installed) goes in the
-   plan either way.
+5. Optional: the money watch — weekly cadence. Build the baseline
+   with the user from their exports into
+   `finance/money-watch-baseline.md`, from
+   `money-watch-baseline.template.md`: every line carries its
+   source pointer (export file, and date or line in it), and the
+   exclusion categories — each marked variability or sensitivity —
+   are named in the baseline file itself. Create the run-record
+   file `finance/money-watch-runs.md` from
+   `money-watch-runs.template.md` and the job file
+   `jobs/money-watch.md` from `money-watch-job.template.md`, and
+   record the job in `JOBS.md`. (The plan may choose other paths;
+   it records them, and the job file names them.) The decision
+   (installed / not installed) goes in the plan either way.
 
 ## Verify
 

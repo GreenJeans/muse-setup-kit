@@ -24,7 +24,11 @@ Legend: **required** = the module will not install without it.
 
 ## What each degradation means
 
-- **No scheduling.** Module 01's weekly lint becomes a manual run.
+- **No scheduling** — the platform cannot run jobs at all.
+  File-based job definitions count as scheduling only when
+  something actually fires them on cadence (a scheduler, a
+  heartbeat, a session hook); job files that nothing runs are this
+  row, not a degraded form of scheduling. Module 01's weekly lint becomes a manual run.
   Module 02's brief is generated when asked instead of arriving.
   Module 05's scheduled audit reminders become manual; the audits
   themselves run on demand. Module 06's periodic re-checks (grants

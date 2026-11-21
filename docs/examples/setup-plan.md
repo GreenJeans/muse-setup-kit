@@ -244,12 +244,14 @@ bed2cfbeb0177c02c033426b595faa62c378a9fd + the recorded dirty state).
   stamped for all five files.
 - **02 morning-brief** — job pair created (`jobs/morning-brief.md` +
   `JOBS.md` entry); triage not installed. Baseline stamped for the
-  job file; JOBS.md re-stamped after its edit.
+  job file; JOBS.md is baselined `accumulating` — it grows by
+  design and is never re-stamped.
 - **09 cost-guardrails** — §12 appended to OPERATING_PROCEDURES.md at
   the template marker (rule 2 + register + declaration snippet);
-  `spend-check` bullet added to JOBS.md. OPERATING_PROCEDURES.md and
-  JOBS.md re-stamped after their edits (wizard Step 5 item 5: the
-  baseline always describes the last approved state).
+  `spend-check` bullet added to JOBS.md. OPERATING_PROCEDURES.md
+  re-stamped after its edit (wizard Step 5 item 5: the baseline
+  always describes the last approved state); JOBS.md stays
+  `accumulating`.
 
 ## Verification ledger — deferred checks
 
@@ -307,8 +309,8 @@ Stamped per wizard Step 5 item 5 — every file this install created
 or copied from the kit, at its last approved state:
 
 - installed: OPERATING_PROCEDURES.md sha256:ae60268d4ea687de73031bd9e73d6a4a7f873b10e1c96753326e2fbf42191325
-- installed: decision-queue.md sha256:21de25fa3561193fd096ab47d07b703087e0c9aedbc84bcc4a8d49b0912aba41
+- installed: decision-queue.md accumulating
 - installed: freelance-projects/SCOPE.md sha256:924f04d778492a2e81f87660686a9e9cc11d68726b1c9f7c5a82ba9cc92d2146
-- installed: INSTRUCTIONS.md sha256:020d3a3c699478c3152bea01bebe6700a5301344e3ab2ddce95326c8d62a033d
-- installed: JOBS.md sha256:31fec4ce344229fb1ac9b1e5a15bb2ca1f324ef0302d228f15be13bf3226e702
+- installed: INSTRUCTIONS.md accumulating
+- installed: JOBS.md accumulating
 - installed: jobs/morning-brief.md sha256:fe04f4f756638b4570bac0e1242c26c81aa5a6688d54f0de95de5d4d7c21bb13
