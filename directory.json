@@ -1,5 +1,5 @@
 {
-  "generated_from": "f456751ec0788b3b4b932e6ab75dfb6609a4a3ad",
+  "generated_from": "d19d225d3d4b306daf48417d7b23e9c2e9ac8f2d",
   "library": "core",
   "modules": [
     {
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 5242,
+      "audit_words": 5445,
       "data_classes": [
         "personal"
       ],
@@ -132,7 +132,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2714,
+      "audit_words": 2741,
       "data_classes": [
         "personal",
         "third-party"
@@ -170,14 +170,15 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2818,
+      "audit_words": 2897,
       "data_classes": [
         "personal",
         "third-party"
       ],
       "degrades_without": [
         "other-agents",
-        "scheduling"
+        "scheduling",
+        "shell-python"
       ],
       "depends_on": [
         "core/core-procedures",
@@ -307,13 +308,15 @@
       "action_classes": [
         "send"
       ],
-      "audit_words": 9782,
+      "audit_words": 10484,
       "data_classes": [
         "personal",
+        "financial",
         "third-party"
       ],
       "degrades_without": [
-        "scheduling"
+        "scheduling",
+        "shell-python"
       ],
       "depends_on": [
         "core/core-procedures"
@@ -359,13 +362,13 @@
       "requires": [],
       "title": "Morning Brief & Inbox Triage",
       "version": "0.9",
-      "writes": "one brief per day; draft replies only, sent only with approval; the promises & waiting-on ledger, when installed (other people's commitments, in their words); the triage flag log, the scan's run records, and the scan detector's state file (seen-IDs, noise list), when the scan is installed; for the money watch, its baseline and run-record files and its job file."
+      "writes": "one brief per day; draft replies only, sent only with approval; the promises & waiting-on ledger, when installed (other people's commitments, in their words); the triage flag log, the scan's run records, and the scan detector's state file (seen-IDs, noise list), when the scan is installed; for the money watch, its baseline and run-record files and its job file; the deadlines register's state transitions, when module 10 is installed."
     },
     {
       "action_classes": [
         "none"
       ],
-      "audit_words": 4237,
+      "audit_words": 4383,
       "data_classes": [
         "none"
       ],
