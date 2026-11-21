@@ -149,7 +149,7 @@ as the human-readable form.
 
 ## Gates (what replaces the cap)
 
-1. **Reading cost.** Budgets bind per profile and per module,
+1. **Reading cost.** Budgets bind per profile,
    never the library total — nobody installs the whole shelf.
    Counts are computed on the all-files basis (MODULE.md +
    VERIFY.md + templates + tools), the basis `kit_selfcheck`
