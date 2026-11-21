@@ -79,9 +79,9 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~23,900 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~31,000 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all ten modules | ~47,400 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~24,200 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~31,300 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all eleven modules | ~53,700 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -115,6 +115,7 @@ pin — you would be the first" where that is true.
 | 08 | **Skill lifecycle** | A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, a curator that archives unused skills but never deletes — gates on, unlike the system it adapts | 00, 01 |
 | 09 | **Cost & billing guardrails** | Bucket discipline for agent spending: know whether a run draws on a subscription, an API key, or a router before it starts; hard caps set in advance; a monthly spend check | 00 |
 | 10 | **Deadlines & expiry register** | One local register of what expires — passports, licences, warranties, policies, certifications — each with a lead time and a pointer to the original; no document numbers stored | 00; 02 surfaces it in the brief (manual check without) |
+| 11 | **Persona & soul** | Author the persona file instead of inheriting the stock template: an authoring interview, a front-loaded SOUL template filled with real examples, a mechanical linter, and staged-diff governance for every later change | 00; a persistent persona file |
 
 Not a module: **infra patterns** (layered backups, health watches,
 alert discipline for people with a host) live in
@@ -202,6 +203,7 @@ modules/
   08-skill-lifecycle/      module.yaml · MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator, stage check)
   09-cost-guardrails/      module.yaml · MODULE.md · VERIFY.md · templates/ (bucket register)
   10-deadlines-register/   module.yaml · MODULE.md · VERIFY.md · register template
+  11-persona-soul/         module.yaml · MODULE.md · VERIFY.md · templates/ (SOUL template, authoring interview) · tools/ (soul linter)
 tools/               ← kit_selfcheck.py (the kit lints itself) · module_yaml.py (the strict package parser) · build_directory.py (generates directory.json + advisories.json) · tests/ (tool fixtures)```
 
 ## Status
@@ -233,6 +235,11 @@ narrowed repair, inspect, rollback, reconfigure, add/remove
 library. A one-module field library (home operations) pilots the
 package format from a separate local repository. The branch is
 not a release: the verbs have not yet had a fresh-agent
-rehearsal, and the merge is the maintainer's call.
+rehearsal, and the merge is the maintainer's call. The branch
+also adds module 11, persona & soul: the authoring interview,
+template, and linter for the persona file every install already
+has, rehearsed in runs 16–17 (see `docs/REHEARSALS.md`). It is
+offered per module, not in a profile; which profile it joins,
+if any, is a maintainer call for the merge.
 
 License: MIT (see `LICENSE`).

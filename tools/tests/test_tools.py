@@ -22,7 +22,13 @@ found, so the fix cannot silently regress:
     paths, catalog staleness the regenerate-and-diff check
     cannot see, and the parser's last uncaught spellings
     (YAML 1.1 booleans, a block-list item that is a list,
-    negated class prose).
+    negated class prose);
+  - module 11's soul linter and registration: a filled soul
+    file lints quiet, the shipped template (all slots) never
+    lints clean, inherited boilerplate is a warning and never
+    a finding, and the module is registered in the catalog,
+    the matrix, and the README while staying out of the
+    profiles until the maintainer's merge call.
 
 Run: python3 -m unittest discover -s tools/tests
 """
@@ -1083,6 +1089,136 @@ class ModuleYamlTest(unittest.TestCase):
                         "**Action classes:** none.\n")
             r = run(MODULE_YAML, "--parity", td)
             self.assertEqual(r.returncode, 0, r.stderr)
+
+
+SOUL_LINT = os.path.join(
+    REPO, "modules/11-persona-soul/tools/soul_lint.py")
+SOUL_TEMPLATE = os.path.join(
+    REPO, "modules/11-persona-soul/templates/SOUL.template.md")
+
+VALID_SOUL = """# Test Agent
+
+## What wins when things collide
+
+1. Truth
+2. The household
+3. The user's instruction
+
+## Examples
+
+### Ops acknowledgment
+
+> User: do the thing
+> Agent: Done.
+
+### Disagreement
+
+> User: ship it anyway
+> Agent: It breaks the export; I would fix that first. Your call.
+
+### Warm mode
+
+> User: bad news today
+> Agent: That is a rough one. Here is what I can take off your plate.
+
+### Repair
+
+> User: that was wrong
+> Agent: It was; the record is fixed.
+
+### Anti-example
+
+> User: do the thing
+> Agent: Great question! I'd be happy to help with that!!
+
+## How this file changes (governance)
+
+- The core is the user's. Changes are staged diffs, approved
+  before they land.
+"""
+
+
+class SoulLintTest(unittest.TestCase):
+    def _lint(self, td, text, *extra):
+        p = os.path.join(td, "SOUL.md")
+        with open(p, "w") as fh:
+            fh.write(text)
+        return run(SOUL_LINT, p, *extra)
+
+    def test_clean_file_is_quiet(self):
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, VALID_SOUL)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertEqual(r.stdout, "")
+
+    def test_word_cap_is_a_finding(self):
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, VALID_SOUL, "--cap", "10")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("over the cap of 10", r.stdout)
+
+    def test_missing_sections_are_findings(self):
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, "# Agent\n\nBe helpful and kind.\n")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("no examples block", r.stdout)
+            self.assertIn("no priority order", r.stdout)
+            self.assertIn("no governance footer", r.stdout)
+
+    def test_unfilled_template_never_lints_clean(self):
+        # The shipped template is all slots: its placeholders
+        # must not count as filled examples or as a ranking.
+        r = run(SOUL_LINT, SOUL_TEMPLATE)
+        self.assertEqual(r.returncode, 1)
+        self.assertIn("0 filled exchange lines", r.stdout)
+        self.assertIn("priority order holds 0 filled items",
+                      r.stdout)
+
+    def test_boilerplate_is_a_warning_not_a_finding(self):
+        with tempfile.TemporaryDirectory() as td:
+            text = VALID_SOUL + \
+                "\nYou're not a chatbot. You're becoming someone.\n"
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertIn("[warning]", r.stdout)
+            self.assertIn("inherited boilerplate", r.stdout)
+
+
+class PersonaSoulRegistrationTest(unittest.TestCase):
+    def test_directory_carries_the_module(self):
+        doc = json.load(open(os.path.join(REPO, "directory.json")))
+        entries = {m["id"]: m for m in doc["modules"]}
+        self.assertIn("core/persona-soul", entries)
+        entry = entries["core/persona-soul"]
+        files = {f["path"]: f["class"] for f in entry["files"]}
+        self.assertEqual(files["templates/SOUL.template.md"],
+                         "static-rendered")
+        self.assertEqual(files["templates/interview.md"],
+                         "static-verbatim")
+        self.assertEqual(files["tools/soul_lint.py"],
+                         "static-verbatim")
+        self.assertIn("personal", entry["data_classes"])
+        self.assertEqual(entry["depends_on"],
+                         ["core/core-procedures"])
+        self.assertEqual(entry["requires"], ["persona-file"])
+
+    def test_profiles_do_not_include_persona_soul(self):
+        # Profile membership is the maintainer's merge call;
+        # until then the module is offered per module only.
+        sys.path.insert(0, os.path.join(REPO, "tools"))
+        import module_yaml
+        doc = module_yaml.parse_file(
+            os.path.join(REPO, "wizard", "manifest.yaml"))
+        for prof in doc["profiles"]:
+            self.assertNotIn("core/persona-soul", prof["modules"])
+
+    def test_matrix_and_readme_carry_the_module(self):
+        matrix = open(os.path.join(
+            REPO, "docs", "capability-profiles.md")).read()
+        self.assertIn("11 Persona", matrix)
+        self.assertIn("persona file", matrix)
+        readme = open(os.path.join(REPO, "README.md")).read()
+        self.assertRegex(readme, r"(?m)^\| 11 \|")
 
 
 if __name__ == "__main__":

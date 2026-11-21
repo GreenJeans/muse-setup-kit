@@ -41,3 +41,13 @@ what fixed it (run 8's log is summarized in the REHEARSALS row).
 - **`staged-proposal.md`** — the proposal behind that item:
   verbatim evidence, the preference-order justification, and the
   routing note, exactly as the reviewer staged it.
+- **`soul.md`** — the SOUL.md from run 16: a fresh agent ran
+  module 11's authoring interview with a fictional solo user
+  ("Casey," a freelance bookkeeper), drafted the file from the
+  answers into the module's template, ran the module's
+  checklist and linter against it, and wrote it on the
+  persona's approval. Shown with two disclosed conversions:
+  the sharing posture appears as its own bullet, the shape
+  run 17's friction log gave the template (in the run's own
+  file it sits inside the partner row), and one em dash in
+  the first paragraph is a colon. Nothing else is edited.

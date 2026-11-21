@@ -148,6 +148,8 @@ the answers for the gating step:
   agents) they might exchange work with?
 - Can you run local scripts (shell / Python 3) and read files on this
   machine, including session transcripts where the platform keeps them?
+- Does the platform keep a persistent persona file (a SOUL.md or
+  equivalent) that the agent reads at the start of every session?
 - **Which billing bucket does this session draw on?** An install is
   heavy work: a full one reads on the order of 37,000 words of kit and
   writes dozens of files; a Starter install is about 16,900 of that.
@@ -179,6 +181,7 @@ Map the answers to the module.yaml requirement tokens:
 | Other agents in use | `other-agents` |
 | A host the user controls | `own-host` |
 | Shell / Python 3 execution | `shell-python` |
+| A persistent persona file | `persona-file` |
 
 File-based job definitions count as `scheduling` when the platform
 actually runs them — a scheduler, a heartbeat, a session hook,
@@ -241,6 +244,16 @@ user their answers don't matter.
    the file the agent reads as its main instructions, if one exists. If
    none exists, the install creates one (`INSTRUCTIONS.md`) and module 00
    adds the procedures pointer to it.
+8. **Persona file:** *(Only where the platform keeps one: the
+   `persona-file` capability from Step 1; without one, persona-soul is
+   not offerable and this question is skipped.)* Your agent reads a
+   persona file (SOUL.md or its equivalent) every session. (a) Author
+   it deliberately during this install: an interview, a draft in your
+   own terms, written only when you approve the draft. (b) Keep the
+   stock file for now. *(If (b): persona-soul is not selected, and the
+   plan states the cost plainly: the agent keeps generic behavior, no
+   examples in its own voice, no priority order of yours, no governance
+   on the file. The module can be added later like any other.)*
 
 ## Step 3 — Module selection
 
@@ -421,6 +434,23 @@ For each module:
    most likely to edit by hand — and hashing it would make their
    first hand edit read as drift. The pointer line it carries is
    verified by module 00's checks, not by the baseline.
+
+**The persona step (module 11).** Persona-soul's install is a
+conversation, not a copy. When module 11 is in the plan, its install
+runs the authoring interview in
+`modules/11-persona-soul/templates/interview.md` (the short subset
+where the user chose it), drafts SOUL.md from the answers into the
+module's template, runs the module's failure-mode checklist against
+the draft, and shows the draft in full. Nothing is written until the
+user approves the draft itself: approval of the plan was approval to
+run the interview, not to write the file. Examples the user could
+not supply are drafted from the user's real interaction history and
+marked as drafted, for the user to veto or pick, never invented
+from nothing. The written file is baselined static-rendered and the
+module's linter static-verbatim. If the user skips the interview at
+this point after all, record the skip in the plan with its cost
+stated (generic behavior, no examples, no governance) and write no
+persona file.
 
 ## Step 6 — Handover
 
