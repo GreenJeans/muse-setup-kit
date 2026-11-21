@@ -1,5 +1,5 @@
 {
-  "generated_from": "d19d225d3d4b306daf48417d7b23e9c2e9ac8f2d",
+  "generated_from": "d325eade6be3bdc8be7ec8365e39550c74af9d40",
   "library": "core",
   "modules": [
     {
@@ -363,6 +363,55 @@
       "title": "Morning Brief & Inbox Triage",
       "version": "0.9",
       "writes": "one brief per day; draft replies only, sent only with approval; the promises & waiting-on ledger, when installed (other people's commitments, in their words); the triage flag log, the scan's run records, and the scan detector's state file (seen-IDs, noise list), when the scan is installed; for the money watch, its baseline and run-record files and its job file; the deadlines register's state transitions, when module 10 is installed."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 6097,
+      "data_classes": [
+        "personal",
+        "third-party"
+      ],
+      "degrades_without": [
+        "scheduling",
+        "shell-python"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/11-persona-soul",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "templates/SOUL.template.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "templates/interview.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/soul_lint.py"
+        }
+      ],
+      "id": "core/persona-soul",
+      "jobs": "none of its own; the periodic reread rides the brief's monthly pass or the memory linter's weekly run when either is installed.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "none.",
+      "pitch": "Author the persona file deliberately instead of inheriting the stock template: an interview, a front-loaded template with examples, a mechanical linter, and staged-diff governance for every later change.",
+      "reads": "the existing persona file if one exists, the adopter's interview answers, and, for examples the adopter cannot supply, their interaction history.",
+      "rehearsed_at": "library branch runs 16-17 (2026-11-21) on the branch at 41eb24e plus the module as built; friction fixes followed in the same pass, re-rehearsal at the committed pin pending",
+      "requires": [
+        "persona-file"
+      ],
+      "title": "Persona & Soul",
+      "version": "0.1",
+      "writes": "the persona file (SOUL.md), drafted from the interview and written only on the adopter's approval; the soul linter, copied as a tool."
     },
     {
       "action_classes": [
