@@ -32,7 +32,10 @@
       stamps the hash, `check` fails the example feature while its
       file is missing and passes it once the file exists, and
       editing the verifier text by hand makes `check` refuse with a
-      tamper flag instead of running it.
+      tamper flag instead of running it. Re-running `init` on the
+      stamped list is refused, and hand-setting the feature's
+      status to done with its file still missing does not survive
+      `check`: the verifier re-runs and the status flips to failed.
 
 ## Deferred
 

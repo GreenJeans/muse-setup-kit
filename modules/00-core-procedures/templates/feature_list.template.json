@@ -8,6 +8,6 @@
       "verifier": "test -f REPLACE-ME.txt"
     }
   ],
-  "note": "Agent reads this file and works features. Agent must NOT edit status or verifier fields. Only tools/verify_done.py flips status, after the verifier command exits 0. Run verify_done.py init once at creation to stamp verifier_hash values.",
+  "note": "Agent reads this file and works features; status and verifier fields belong to the gate (module 00, Verifier-gated done). Run tools/verify_done.py init once at creation to stamp verifier_hash values; check re-runs every verifier.",
   "project": "REPLACE-ME"
 }

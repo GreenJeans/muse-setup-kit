@@ -1,7 +1,8 @@
 # Pause / Resume card — one per long task (12-Factor Agents, Factor 6)
 
-Copy into the task's workspace as STATE.md. A task is pausable only if
-this card is current; it is resumable only from this card, not from chat.
+Copy into the task's workspace as STATE.md. The pause and resume rule
+lives in module 00 (Mechanical forms — Pause and resume); this card is
+its form.
 
 - **Task:** 
 - **Goal workspace / SCOPE:** 

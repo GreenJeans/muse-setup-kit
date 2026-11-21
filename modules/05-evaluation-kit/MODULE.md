@@ -92,12 +92,17 @@ Harness Engineering course (walkinglabs), named in module 00's
 further reading.
 
 The kit's first recorded comparison is a negative, kept on
-purpose: module 00's verifier gate, run against prose records
-over 30 trials with the model fixed, passed 15/15 in both arms
-and met its adoption bar in neither. The mechanism was
-reclassified as a record/audit mechanism on the strength of what
-the run did measure (module 00 tells the story). A negative
-result recorded this way is the track working as designed.
+purpose: the maintainer ran module 00's verifier gate against
+prose records (module 00 tells the story and gives the numbers;
+the job records are not shipped with the kit), and the mechanism
+was reclassified on the strength of what the run did measure.
+The comparison also missed this track's own reporting standard:
+the model was named only to runtime level, wall time was not
+instrumented, and interventions were unavailable by design, so
+the adoption bar's intervention clause could never bite.
+Recorded anyway, shortfalls named — a comparison that misses
+the standard and says so is worth more than one that quietly
+rounds up.
 
 ## Standing evaluations (cheap, continuous)
 

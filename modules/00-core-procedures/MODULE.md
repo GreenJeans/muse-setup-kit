@@ -90,35 +90,53 @@ governs and the application has a bug.
 
 ## Mechanical forms (machinery shipped with this module)
 
-Three rules above have mechanical forms, shipped as tools and templates
-in this module. They are machinery, not new rules: each implements a
-rule whose operative text stays in the procedures, and each points
-back to its home section rather than restating it.
+Three of this module's rules have mechanical forms, shipped as tools
+and templates here. The gate implements §5. The other two forms carry
+their rule with them: the retry rule (Error compaction) extends §7,
+and the pause rule (Pause and resume) extends §9, and this section
+is those two rules' home — the templates and tools point back here
+rather than restating them.
 
 **Verifier-gated done** (implements §5: "done" requires a verified
 deliverable). A workstream may keep a `feature_list.json` (from
 `templates/feature_list.template.json`): features, each with a
 verifier command. The agent works the features but never edits the
-file's status or verifier fields. Only `tools/verify_done.py` flips
-a status, and only when the verifier exits 0. At creation the tool
-stamps a hash of each verifier; a changed verifier is flagged as
-tampering and refused, never silently run. "Done" stops being a
-claim the agent makes and becomes a state a script checked.
+file's status or verifier fields. Only `tools/verify_done.py` sets
+a status: done when the verifier exits 0, failed otherwise. At
+creation (`init`) the tool stamps a hash of each verifier, and
+refuses to re-stamp a list that already carries hashes —
+re-stamping would bless a changed verifier, so it needs `--force`
+and is the user's call, never a routine step. `check` validates
+every hash before running anything (a missing hash is reported as
+not initialized, a mismatch as tampering; either stops the run,
+exit 2), then re-runs every verifier, including for features
+already marked done — a done whose verifier now fails flips back
+to failed. "Done" stops being a claim the agent makes and becomes
+a state a script checked. One limit, stated plainly: the agent
+holds write access to the file, so no stamp inside it makes the
+record proof against an agent willing to forge its own record.
+What the gate guarantees is that a status it set was set by a
+verifier run, and that check re-verifies rather than trusting the
+file. Verifier commands run through the system shell; the
+examples assume a POSIX shell.
 
-**What the gate is, measured.** The kit's own Track B comparison
-(module 05) ran the gate against prose records: 30 trials, model
-fixed, short fully-specified tasks. Both arms passed 15/15; the
+**What the gate is, measured.** The maintainer's Track B
+comparison (module 05; the job records are not shipped with the
+kit) ran the gate against prose records: 30 trials, model fixed,
+short fully-specified tasks. Both arms passed 15/15; the
 pre-registered adoption bar was not met. On tasks like these the
 model does not produce the premature "done" the gate guards
 against, so its correctness benefit is **unproven** — and the
 conditions it was designed for (long, multi-session,
 underspecified work) are the ones a task-run eval cannot
 reproduce. Its measured benefit is the record: in all 12 gated
-trials the scope record ended accurate and hash-stamped, where
-the prose arm's feature list still read "pending" in 3 of 3
-trials after the work was done. Ship the gate as a record and
-audit mechanism. Do not claim it makes the work more correct
-until a long-horizon eval shows that.
+trials — the feature-list trials; 3 of the 15 gate-arm trials
+ran a task with no feature list — the scope record ended
+accurate and hash-stamped, where the prose arm's list on the
+seed task still read "pending" in 3 of 3 trials after the work
+was done. Ship the gate as a record and audit mechanism. Do not
+claim it makes the work more correct until a long-horizon eval
+shows that.
 
 **Error compaction** (implements §7, ground truth; 12-Factor Agents
 factor 9). When a failed command is retried, the raw log does not
@@ -144,10 +162,13 @@ procedures live beside — is one thing. A repo-local `AGENTS.md` in
 the open agents.md format is another: build, test, and PR
 instructions for coding agents working in that repository —
 guidance for tools, not a constitution and not a security
-boundary. Neither file's rules bind the other's reader. When the
-user works in code repositories, `templates/AGENTS.repo.template.md`
-is the repo kind; keep the two separate, and name each for its
-audience.
+boundary. Neither file's rules bind the other's reader. Tools
+load by filename, not by audience, though: a coding agent opened
+at the personal workspace root will read the personal file as
+project instructions. Keep coding-agent sessions inside the repo
+they are working on. When the user works in code repositories,
+`templates/AGENTS.repo.template.md` is the repo kind; keep the
+two separate, and name each for its audience.
 
 ## Further reading
 
