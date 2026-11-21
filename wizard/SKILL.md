@@ -117,8 +117,8 @@ the answers for the gating step:
 - Can you run local scripts (shell / Python 3) and read files on this
   machine, including session transcripts where the platform keeps them?
 - **Which billing bucket does this session draw on?** An install is
-  heavy work: a full one reads on the order of 20,000 words of kit and
-  writes dozens of files; a Starter install is about a fifth of that.
+  heavy work: a full one reads on the order of 26,000 words of kit and
+  writes dozens of files; a Starter install is about 10,000 of that.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
   rule 2 applied to the kit itself, and it is a stop condition, not a
@@ -239,9 +239,9 @@ agent's own name, brief time and timezone, VIP senders) are collected
 at plan time rather than in the interview, because the answers depend
 on which modules were selected. The plan also states every optional
 component's decision explicitly — installed or not installed —
-including module 02's triage scan and module 03's food layer and
-change detector; an unrecorded "not installed" is how features get
-silently dropped or silently assumed.
+including module 02's triage scan and money watch and module 03's
+food layer and change detector; an unrecorded "not installed" is
+how features get silently dropped or silently assumed.
 
 Collect every placeholder answer first, then re-render the plan in its
 final form with zero `<PLACEHOLDER>` tokens remaining. Placeholder

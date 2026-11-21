@@ -61,7 +61,7 @@ plainly that the manifest is reconstructed, not recorded.
    Module leftovers: module 08's `staged/` (undecided proposals
    expire with the module — list them in the close-out), its
    `.archive/` of retired skills (content — export offer applies),
-   and module 05's vetting log (content — export offer applies).
+   and module 06's vetting log (content — export offer applies).
 6. **Close out.** Remove `SETUP-PLAN.md` last, after printing a
    summary: jobs removed, files removed, files kept and why,
    shares revoked and verified. The summary is the record; keep it

@@ -46,7 +46,7 @@ whose findings the user adopts or rejects one by one.
 
 - **Memory fidelity sample** (module 01): weekly random claims checked
   against sources, plus one planted discrepancy as a test case.
-- **Backup verify pass** (module 07): archives are test-read, not assumed.
+- **Backup verify pass** (infra patterns, `docs/patterns/infra-patterns.md`): archives are test-read, not assumed.
 - **Wizard dry run** (for this kit): run the setup wizard in a fresh,
   memory-free session and confirm it produces a coherent setup.
 - **Kit doctor** (this module's `tools/kit_doctor.py`): a read-only

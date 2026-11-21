@@ -66,7 +66,7 @@
 - Tagged **v0.2** at the merge commit
   (7e15e075b3873e019357f9fddde0df8c7a80478e).
 
-## Phase 5 — v0.3: adversarial-review fixes + module 09 (this release)
+## Phase 5 — v0.3: adversarial-review fixes + module 09 — DONE 2026-11-20
 
 Blind dual review of the v0.2 kit (two outside models, identical
 packet, one planted canary — both caught it) produced 36 findings.
@@ -120,7 +120,7 @@ audit-first wizard mode, the full worked example.
   adopters can see the target state without any real data.
 - Localization of the templates.
 
-## Phase 7 — v0.5: the first stranger (this release)
+## Phase 7 — v0.5: the first stranger — DONE 2026-11-20
 
 From the v0.4 synthesis's held list, in the order the lineup
 adopted: module 08 restructured into tiers (Lite default, Full at
@@ -135,3 +135,77 @@ upgrade whose planted edit the doctor caught exactly, and an
 install → uninstall that left the workspace empty. Removal this
 release: the README's Status narrative, which duplicated this
 file's history, is now a pointer here.
+
+## Phase 8 — v0.6: capability profiles + constitutional dedup — DONE 2026-11-20
+
+The two remaining candidates from the roadmap brainstorm:
+`docs/capability-profiles.md`, the matrix of what each platform
+capability buys each module (required / degrades / unaffected),
+generated from the manifest's `requires` and `degrades_without`
+fields; and the constitutional-rule dedup — module 00 gained the
+canonical-location table naming the one operative section per
+rule, governing-text pointers were added where summaries live,
+and the wizard's gating prose points at the matrix instead of
+duplicating it. Rehearsal run 9 scored the matrix blind against
+the manifest (27/27 cells, 26/27 verdicts; the misses fixed in
+the release). Merged via PR #5.
+
+## Phase 9 — v0.7: just paste it — DONE 2026-11-20
+
+The quickstart became one sentence with nothing to substitute:
+the wizard's pinned-source rule gained a tag-entry path — a
+checkout sitting exactly on a release tag is a valid entry, and
+the wizard resolves the full commit hash itself and states it in
+the plan. (A user-supplied hash is still verified exactly, and a
+checkout on no tag with no hash still stops.) Release-notes
+automation prints the short prompt with the tag filled in;
+UPGRADING.md names releases by tag. Rehearsal run 10 ran the new
+prompt cold and reached a complete Starter plan; the same run
+documents the released v0.6 wizard dead-stopping the new prompt
+at the old rule. Merged via PR #6.
+
+## Phase 10 — v0.8: vet the door (this release)
+
+Driven by the second blind dual review of the kit's direction
+(the library brainstorm): both reviewers put the same item first
+and demoted the maintainer's favorite, and the release follows
+them. Module 06 gains the connector/MCP vetting pack (provenance
+tiers, typosquat check, OAuth scope audit, tool-manifest hash
+pinning with re-vet on change, walk-away criteria). Module 02
+gains the money watch as an optional component (baseline from
+user-supplied exports, never credentials). Module 00 gains the
+sensitive-records rule (procedures §13), the continuity handover
+template, and the extension-point anchor registry.
+`docs/library.md` specifies the library design the next phases
+implement. Repairs from the same round: the audit-word count now
+covers every installed file (MODULE.md, VERIFY.md, templates,
+tools) and the selfcheck asserts the README's figures equal the
+manifest's; the memory linter gains the review-by check (check D)
+its schema template always claimed; stale citations and the
+REHEARSALS ledger are repaired. Rehearsals for the 06 pack and
+the money watch are specified from the reviewers' pass bars and
+run before tagging.
+
+## Phase 11 — v0.9: everyday (planned)
+
+Module 10, the deadlines & expiry register (an accumulating
+register with per-item lead times and source pointers, no raw ID
+numbers). Module 02 gains the promises & waiting-on ledger (the
+return-window/refund tracker is its worked example). The
+scam/impersonation shield joins module 02's triage with a module
+06 pointer. Data classes are declared for the new pieces under
+the §13 rule.
+
+## Phase 12 — the library (planned)
+
+Implements `docs/library.md` on top of v0.9: `module.yaml` per
+module replaces the manifest fragments (strict flat subset,
+fail-loud parser, MODULE.md header parity check); qualified ids
+(`<library>/<module>`) throughout; `tools/build_directory.py`
+generates `directory.json` + `advisories.json` in the core repo;
+the wizard gains the named verbs (list installed / available /
+upgradable, add/remove library, suspend, narrowed repair,
+inspect, rollback, reconfigure); the selfcheck flags rehearsal
+staleness against the `rehearsed_at` pin. First field library: a
+home-operations pilot in a separate repository, installed into a
+sandbox through the new verbs — a format pilot, not a launch.

@@ -6,6 +6,9 @@ found, so the fix cannot silently regress:
 
   - the memory linter flagging a textbook install (INDEX.md files,
     its own report) and bolded JOBS.md entries;
+  - the linter's review-by check (check D) flagging a claim whose
+    review-by date has passed — the check the schema template always
+    claimed and the code did not have until v0.8;
   - the curator's substring exemptions, dateless-record immortality,
     dead grace floor, and job-name matching (tax-docs vs
     tax-docs-prep);
@@ -61,6 +64,34 @@ class LinterTest(unittest.TestCase):
                     "--jobs", jobs, "--report", os.path.join(td, "r.md"))
             self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
             self.assertIn("No findings", r.stdout)
+
+    def test_review_by_check_flags_only_passed_dates(self):
+        with tempfile.TemporaryDirectory() as td:
+            mem = os.path.join(td, "memory")
+            os.makedirs(mem)
+            past = days_ago(30)
+            future = str(TODAY + datetime.timedelta(days=30))
+            with open(os.path.join(mem, "one.md"), "w") as fh:
+                fh.write("<!-- schema_version: 1.1 | last_verified: 2026-11-20 -->\n"
+                         "# One\n\n## Facts\n"
+                         f"- A settled claim (review-by: {past}).\n"
+                         f"- A live claim (review-by: {future}).\n"
+                         "- A claim with a broken date (review-by: soon).\n")
+            jobs = os.path.join(td, "JOBS.md")
+            with open(jobs, "w") as fh:
+                fh.write("- morning-brief — daily\n")
+            proc = os.path.join(td, "OPERATING_PROCEDURES.md")
+            with open(proc, "w") as fh:
+                fh.write("# Procedures\n")
+            r = run(LINT, "--memory-dir", mem, "--procedures", proc,
+                    "--jobs", jobs, "--report", os.path.join(td, "r.md"))
+            # D findings are medium severity: reported, exit stays 0.
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertIn("checks=A,B,C,D", r.stdout)
+            self.assertIn(f"D: ", r.stdout)
+            self.assertIn(f"review-by {past} has passed", r.stdout)
+            self.assertIn("unparseable review-by date 'soon'", r.stdout)
+            self.assertNotIn(f"review-by {future} has passed", r.stdout)
 
 
 class CuratorTest(unittest.TestCase):

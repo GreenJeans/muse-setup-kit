@@ -65,10 +65,12 @@ schema in daily use in a working installation.
    sources) instead; pages without a stamp are legacy, and the
    most-loaded ones migrate first.
 3. Install the reference linter (`tools/memory_lint.py` in this module —
-   adapt its paths): it runs three checks — (a) every compiled page
+   adapt its paths): it runs four checks — (a) every compiled page
    carries a provenance header, (b) live bullets containing figures carry
    a source or `(verify: ...)` pointer, (c) job names in the procedures
-   exist in `JOBS.md`, the scheduler-of-record the wizard maintains. It
+   exist in `JOBS.md`, the scheduler-of-record the wizard maintains,
+   (d) time-bound claims whose `(review-by: ...)` date has passed are
+   flagged for re-verification or retirement. It
    is read-only and writes only its report; every report opens with a
    run receipt (timestamp, files scanned, checks run, findings count).
    Schedule it weekly and record the job in `JOBS.md`.

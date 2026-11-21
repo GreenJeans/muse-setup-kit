@@ -13,7 +13,13 @@ defect the kit's review rounds kept finding by hand:
   3. Every module folder on disk is in the manifest (no orphans),
      and the README module table matches the manifest.
   4. Profile audit word counts in the manifest are within 10% of
-     the counts recomputed from the tree.
+     the counts recomputed from the tree. Audit cost counts every
+     installed file: the wizard, the manifest, and each module's
+     MODULE.md, VERIFY.md, templates, and tools.
+  5. The README's printed audit figures match the manifest's
+     (Starter, Standard) and the recomputed all-modules figure
+     (Everything) exactly — the numbers a stranger reads are the
+     numbers the manifest carries.
 
 It also prints per-module word counts (the kit's word-budget
 discipline: every release should know what it weighs).
@@ -36,6 +42,40 @@ def words(path):
         return len(open(path, encoding="utf-8", errors="replace").read().split())
     except OSError:
         return 0
+
+
+def tree_words(root):
+    """Words in every text file under root (skips caches/binaries)."""
+    total = 0
+    for dirpath, dirnames, filenames in os.walk(root):
+        dirnames[:] = [d for d in dirnames if d != "__pycache__"]
+        for f in filenames:
+            if f.endswith((".pyc", ".png", ".jpg", ".gif")):
+                continue
+            total += words(os.path.join(dirpath, f))
+    return total
+
+
+def count_module_words(mdir):
+    """Audit words for one module: every file an install reads —
+    MODULE.md, VERIFY.md, templates (templates/ and *.template.md),
+    and tools/."""
+    w = words(os.path.join(mdir, "MODULE.md"))
+    w += words(os.path.join(mdir, "VERIFY.md"))
+    tdir = os.path.join(mdir, "templates")
+    if os.path.isdir(tdir):
+        w += tree_words(tdir)
+    for f in os.listdir(mdir):
+        if f.endswith(".template.md"):
+            w += words(os.path.join(mdir, f))
+    tools_dir = os.path.join(mdir, "tools")
+    if os.path.isdir(tools_dir):
+        w += tree_words(tools_dir)
+    return w
+
+
+def round100(n):
+    return int(round(n / 100.0)) * 100
 
 
 def parse_manifest(path):
@@ -127,12 +167,7 @@ def main():
                 findings.append(f"{mid}: VERIFY.md has no At install section")
             if "## Deferred" not in vtext:
                 findings.append(f"{mid}: VERIFY.md has no Deferred section")
-        w = words(module_md)
-        tools_dir = os.path.join(mdir, "tools")
-        if os.path.isdir(tools_dir):
-            w += sum(words(os.path.join(tools_dir, f))
-                     for f in os.listdir(tools_dir))
-        module_words[mid] = w
+        module_words[mid] = count_module_words(mdir)
 
     on_disk = sorted(d for d in os.listdir(os.path.join(repo, "modules"))
                      if os.path.isdir(os.path.join(repo, "modules", d)))
@@ -156,6 +191,30 @@ def main():
                             f"vs recomputed {actual} (>10% drift)")
         notes.append(f"profile {prof['id']}: audit cost {actual} words "
                      f"(manifest says {stated})")
+
+    # Check 5: README figures == manifest / recomputed figures.
+    readme_figs = {}
+    for label, pat in (("starter", r"\*\*Starter\*\*"),
+                       ("standard", r"\*\*Standard\*\*"),
+                       ("everything", r"Everything")):
+        m = re.search(pat + r"[^|\n]*\|[^|\n]*\|[^|\n]*~\s*([\d,]+)\s*words",
+                      readme)
+        if m:
+            readme_figs[label] = int(m.group(1).replace(",", ""))
+    stated_by_id = {p["id"]: int(p.get("audit_words", 0)) for p in profiles}
+    for label in ("starter", "standard"):
+        if label not in readme_figs:
+            findings.append(f"README: no audit figure found for {label}")
+        elif readme_figs[label] != stated_by_id.get(label):
+            findings.append(f"README {label} figure {readme_figs[label]} "
+                            f"!= manifest audit_words {stated_by_id.get(label)}")
+    everything = round100(base_words + sum(module_words.values()))
+    if "everything" not in readme_figs:
+        findings.append("README: no audit figure found for everything")
+    elif readme_figs["everything"] != everything:
+        findings.append(f"README everything figure {readme_figs['everything']} "
+                        f"!= recomputed {everything}")
+    notes.append(f"everything: audit cost {everything} words (rounded)")
     for mid in sorted(module_words, key=module_words.get, reverse=True):
         notes.append(f"module words: {mid} {module_words[mid]}")
 

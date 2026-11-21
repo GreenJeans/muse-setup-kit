@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 20,000
+install is heavy work — a full one reads on the order of 26,000
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -62,9 +62,9 @@ reads/writes/network disclosed — and installs only what you approved,
 verifying each module as it goes.
 
 One honest request, from the kit's own security rules: **read
-`wizard/SKILL.md`, `wizard/manifest.yaml`, and the `MODULE.md` (plus any
-`tools/` scripts) of the modules you plan to install, at your pinned
-commit, before you approve the plan.** A setup wizard is an instruction
+`wizard/SKILL.md`, `wizard/manifest.yaml`, and the `MODULE.md`,
+`VERIFY.md`, templates, and any `tools/` scripts of the modules you
+plan to install, at your pinned commit, before you approve the plan.** A setup wizard is an instruction
 surface, and reading only the entry point leaves the actual payload —
 the module instructions your agent will carry out — unaudited. Check
 that the pinned-commit, plan-before-changes, and nothing-fetched-at-
@@ -72,14 +72,15 @@ install-time rules are intact; if any is missing, you're looking at a
 fork that dropped the safety properties.
 
 **First time? Install a profile, not the whole shelf.** The audit
-cost below is the wizard, the manifest, and that profile's module
-files and tools — the reading the request above actually asks for:
+cost below is the wizard, the manifest, and every file an install
+reads in that profile's modules (MODULE.md, VERIFY.md, templates,
+and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~5,600 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~7,700 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all nine modules | ~15,600 words | Module 08 at Full is ~5,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~10,200 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~14,200 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all nine modules | ~26,200 words | Module 08 at Full is ~6,700 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -103,13 +104,13 @@ pin — you would be the first" where that is true.
 
 | # | Module | What it gives you | Needs |
 |---|--------|-------------------|-------|
-| 00 | **Core procedures** | Ticket rule for irreversible actions, a numbered decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules | Nothing — the foundation |
+| 00 | **Core procedures** | Ticket rule for irreversible actions, a numbered decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover | Nothing — the foundation |
 | 01 | **Memory architecture** | A compiled-memory schema (current state + superseded history, provenance, verify pointers), a deterministic linter, weekly fidelity sampling | 00 |
-| 02 | **Morning brief** | A failures-first daily brief, inbox triage with interrupt rules, silent-by-design watches whose silence is itself checked | 00; a mailbox/calendar helps |
+| 02 | **Morning brief** | A failures-first daily brief, inbox triage with interrupt rules, silent-by-design watches whose silence is itself checked, an optional money watch | 00; a mailbox/calendar helps |
 | 03 | **Household HQ** | Two people, two agents, one shared coordination system: task layer, memory layer, a notebook protocol, a principles doc | 00; a second person with their own Muse; shared docs/tasks |
 | 04 | **AI Exchange** | Several AI agents exchanging work through shared storage — protocol, queue, blind reviews, ingest discipline | 00, 01; shared cloud storage; at least one other agent |
 | 05 | **Evaluation kit** | Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks | 00, 01 |
-| 06 | **Security pack** | Verify-before-install, one-time permission grants, content-exclusion lists, session canary, retitle-before-share | 00 |
+| 06 | **Security pack** | Verify-before-install (with the connector/MCP vetting pack: provenance tiers, scope audits, tool-manifest pinning), one-time permission grants, content-exclusion lists, session canary, retitle-before-share | 00 |
 | 08 | **Skill lifecycle** | A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, a curator that archives unused skills but never deletes — gates on, unlike the system it adapts | 00, 01 |
 | 09 | **Cost & billing guardrails** | Bucket discipline for agent spending: know whether a run draws on a subscription, an API key, or a router before it starts; hard caps set in advance; a monthly spend check | 00 |
 
@@ -185,7 +186,7 @@ procedures, templates, and the wizard itself are original to this kit.
 README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
-docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
+docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (modules)
 modules/
   00-core-procedures/      MODULE.md · VERIFY.md · templates/
@@ -204,13 +205,12 @@ tools/               ← kit_selfcheck.py (the kit lints itself) · tests/ (tool
 Rehearsed, and then audited — repeatedly, by fresh agents in
 sandboxes and by two outside models in blind review rounds. The
 record, including what has *not* been rehearsed, is
-`docs/REHEARSALS.md`; the history is `docs/ROADMAP.md`. v0.5 adds:
-module 08's Lite tier (the default — no tools, jobs, or ledger
-until a setup outgrows it), an installed-file baseline that makes
-upgrades and uninstalls mechanical (`UPGRADING.md`,
-`UNINSTALL.md`), an audit-first wizard mode for existing setups, a
-worked example built from a real rehearsal's artifacts
-(`docs/examples/`), and an install-report form — the project now
-asks its first strangers how the install went.
+`docs/REHEARSALS.md`; the history is `docs/ROADMAP.md`. v0.8 adds:
+the connector/MCP vetting pack in module 06 (provenance tiers,
+scope audits, tool-manifest hash pinning), module 02's money
+watch, the sensitive-records rule and continuity handover in
+module 00, named extension anchors for modules that amend core
+files, and `docs/library.md` — the design for the module library
+the next phases implement.
 
 License: MIT (see `LICENSE`).
