@@ -1,5 +1,5 @@
 {
-  "generated_from": "4dfca735cf4d772b183f77997c26cb4f66ff3a71",
+  "generated_from": "f456751ec0788b3b4b932e6ab75dfb6609a4a3ad",
   "library": "core",
   "modules": [
     {
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 5064,
+      "audit_words": 5242,
       "data_classes": [
         "personal"
       ],
@@ -85,7 +85,7 @@
       "network": "none.",
       "pitch": "Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.",
       "reads": "your existing agent instructions and workspace layout.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending",
       "requires": [],
       "title": "Core Procedures",
       "version": "0.9",
@@ -95,7 +95,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 1518,
+      "audit_words": 1544,
       "data_classes": [
         "financial"
       ],
@@ -122,7 +122,7 @@
       "network": "your providers' billing pages only, with you present.",
       "pitch": "Bucket discipline for agent spending \u2014 know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.",
       "reads": "your model/provider usage and billing pages (with you present), the bucket register.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending",
       "requires": [],
       "title": "Cost & Billing Guardrails",
       "version": "0.8",
@@ -170,7 +170,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2619,
+      "audit_words": 2818,
       "data_classes": [
         "personal",
         "third-party"
@@ -307,7 +307,7 @@
       "action_classes": [
         "send"
       ],
-      "audit_words": 8601,
+      "audit_words": 9782,
       "data_classes": [
         "personal",
         "third-party"
@@ -346,20 +346,20 @@
         }
       ],
       "id": "core/morning-brief",
-      "jobs": "daily brief; optional 30-minute triage scan; optional weekly money watch.",
+      "jobs": "daily brief; optional triage scan (script poll, agent on wake); optional weekly money watch.",
       "kit_compat": [
         "kit-1"
       ],
       "license": "MIT",
       "maintainer": "Muse Setup Kit maintainer",
       "network": "your connected accounts.",
-      "pitch": "A failures-first daily brief, a numbered decision queue review, inbox interrupt rules with a scam & impersonation shield, silent-by-design watches, an optional money watch, and an optional promises & waiting-on ledger.",
+      "pitch": "A failures-first daily brief, a numbered decision queue review, inbox interrupt rules with a scam & impersonation shield, script-first silent watches, an optional money watch, and an optional promises & waiting-on ledger.",
       "reads": "calendar, mailbox, task lists, decision queue, watch outputs; for the money watch, the statement/CSV exports the user supplies.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending",
       "requires": [],
       "title": "Morning Brief & Inbox Triage",
       "version": "0.9",
-      "writes": "one brief per day; draft replies only, sent only with approval; the promises & waiting-on ledger, when installed (other people's commitments, in their words); the triage flag log and the scan's run records, when the scan is installed; for the money watch, its baseline and run-record files and its job file."
+      "writes": "one brief per day; draft replies only, sent only with approval; the promises & waiting-on ledger, when installed (other people's commitments, in their words); the triage flag log, the scan's run records, and the scan detector's state file (seen-IDs, noise list), when the scan is installed; for the money watch, its baseline and run-record files and its job file."
     },
     {
       "action_classes": [
