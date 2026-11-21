@@ -6,12 +6,16 @@ tight: the user reads this in two minutes. Failures first, always.
 ## Sources to read (name any you cannot read in Failures)
 
 - Decision queue: <path>
-- Calendar: today and tomorrow
-- Mailbox: since the last brief
+- [IF calendar connected] Calendar: today and tomorrow
+- [IF mailbox connected] Mailbox: since the last brief
 - [IF a task app is connected] Task lists: <shared and personal lists>
 - [IF household-hq installed] Agents' Notebook: entries in the *other*
   agent's "From ..." section since the last brief — surface them in a
   short Notebook block, attributed and dated
+- [IF ai-exchange installed] AI Exchange: for each open queue row,
+  check the owner's outbox for a matching output; flag a row with no
+  output 72 hours after assignment (once, and again when the output
+  lands)
 - [IF watches exist] Watches: <each watch's state file / last run record>
 - Memory: yesterday's daily log; the reconciliation rotation file
 

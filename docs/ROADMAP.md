@@ -1,6 +1,6 @@
 # Roadmap
 
-## Phase 1 — scaffold (this commit)
+## Phase 1 — scaffold (the scaffold commit)
 
 - Repo skeleton, README, design notes.
 - Wizard skill + module manifest.
@@ -49,6 +49,29 @@
 - Optional: submit the wizard to community skill directories, following the
   kit's own verify-before-install discipline in reverse — publish the pinned
   commit hash alongside any listing.
+
+## Phase 5 — v0.3: adversarial-review fixes + module 09 (this release)
+
+Blind dual review of the v0.2 kit (two outside models, identical
+packet, one planted canary — both caught it) produced 36 findings.
+The convergent set is fixed here: the quickstart pin is real (the
+wizard refuses a hashless install); module 08 escalates by effect,
+binds approval to the diff's hash, and gives its shadow week a pass
+bar and its staging expiry a runner; the curator matches job
+references by job name (longest match wins) instead of substrings
+and anchors dateless records instead of immortalizing them; the
+memory linter no longer flags a textbook install; module 00 creates
+the JOBS.md its VERIFY checks for; module 05 gained the Install
+section it never had, a fictional-seed library, and a drift checker;
+module 04's outputs are actually polled; module 03 shares nothing
+before the partner checkpoint; the manifest declares scheduling and
+shell/python degradation honestly. Module 09 (cost & billing
+guardrails) is new, and UPGRADING.md covers pinned updates. Module
+08 was rehearsed before tagging: a fresh agent installed it via the
+upgrade path in a sandbox (6 of 7 at-install checks passed; the one
+failure was the kit's own job-matching rule, fixed above). Not yet
+rehearsed: a fresh full install including module 09, and the wizard
+on a small-group (Q1c) interview.
 
 ## Phase 4 — Module 08: Skill Lifecycle — DONE 2026-11-20
 

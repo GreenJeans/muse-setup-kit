@@ -33,8 +33,12 @@ schema in daily use in a working installation.
    candidates. A mind decides each one.
 5. **Fidelity is sampled, not assumed.** Weekly, pick a few compiled claims
    at random and check them against their sources. Keep one known
-   discrepancy as a standing test case — planted in a dedicated test page
-   that is *excluded from the memory the agent loads*, and recorded only in
+   discrepancy as a standing test case — planted by the *user* (not the
+   agent; a self-planted test is not blind) in a dedicated test page whose
+   filename contains `fidelity-test`, which excludes it from the memory
+   the agent loads and from the linter. The weekly sample reserves one
+   slot for that page: the sampler's pool includes it even though the
+   agent's loaded memory does not. The true value is recorded only in
    `memory/fidelity-test-log.md`. Never plant a false claim in a live
    page: the test exists to check the sampler, and a sampler that reads
    live pages would be trained on a lie. If the process can't catch the
@@ -54,7 +58,9 @@ schema in daily use in a working installation.
 2. **Fresh install (interview Q5a):** create the store —
    `memory/MEMORY.md` from `MEMORY.template.md`, a `memory/logs/` folder
    for dated daily logs, and `memory/people/` + `memory/groups/` folders
-   with an `INDEX.md` in each. **Migrating (Q5b):** stamp existing
+   with an `INDEX.md` in each (the linter
+   excludes INDEX.md files by name — they are generated listings, not
+   compiled pages). **Migrating (Q5b):** stamp existing
    compiled pages with the header (schema version, last_verified,
    sources) instead; pages without a stamp are legacy, and the
    most-loaded ones migrate first.
@@ -66,11 +72,13 @@ schema in daily use in a working installation.
    is read-only and writes only its report; every report opens with a
    run receipt (timestamp, files scanned, checks run, findings count).
    Schedule it weekly and record the job in `JOBS.md`.
-4. Create `memory/fidelity-test-log.md`; plant one fidelity test case in
-   a dedicated test page excluded from loaded memory (a harmless
-   discrepancy between the test page and its cited source), record the
-   true value in the test log, and confirm the weekly sample process
-   finds it.
+4. Create `memory/fidelity-test-log.md`; ask the user to plant one
+   fidelity test case in a dedicated test page whose filename contains
+   `fidelity-test` (excluded from loaded memory and from the linter): a
+   harmless discrepancy between the test page and its cited source.
+   Record the true value in the test log, wire the weekly sample to
+   reserve one slot for the test page, and confirm the process finds
+   the plant.
 
 ## Verify
 

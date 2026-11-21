@@ -1,6 +1,10 @@
 # Staged Proposal Template
 
-One folder per proposal: `staged/<queue-number>-<skill-name>/`,
+Staged: <YYYY-MM-DD — the staging date, in this exact form; the
+expiry runner reads this line>
+
+Staged by the reviewer as `staged/draft-<skill-name>-<date>/`;
+renamed to `staged/<queue-number>-<skill-name>/` when filed:
 containing the three files below. Copy this template for
 `proposal.md`; `diff.patch` and `base.json` follow the shapes given.
 
@@ -55,6 +59,7 @@ of every file the create would add.
 {
   "targets": ["<path to each live file the diff touches>"],
   "sha256": {"<path>": "<sha256 of the live file at review time>"},
+  "diff_sha256": "<sha256 of diff.patch itself>",
   "reviewer": "<in-session | nightly-sweep | platform-loop>",
   "session": "<chat or session reference + date>"
 }

@@ -20,12 +20,16 @@ never reused.
 ## Item shape — skill-write
 
 ```text
-N. **Skill write (staged) — <patch | support file | create> `<skill-name>`** [type: skill-write]
+N. **Skill write (staged) — <patch | support file> `<skill-name>`** [type: skill-write]  *(creates are not queue items — they escalate to the module 06 vetting record plus a ticket)*
    Signal: <user correction | verified fix | stale skill>, <YYYY-MM-DD>,
    <chat/session> — "<short verbatim quote>" (full evidence in
    staged/N-<skill-name>/proposal.md).
    Change: +<n>/−<m> lines in <file> — <what the diff does, one line>.
-   Full diff: staged/N-<skill-name>/diff.patch.
+   Diff sha256: <first 6 of the diff hash>… (full hash in base.json).
+   Diff: <the full diff inline when 20 lines or fewer; otherwise the
+   first 20 lines + total, with the full diff at
+   staged/N-<skill-name>/diff.patch — approval of a longer diff quotes
+   the hash prefix: "N: approve <6 chars>">.
    Base hash: matches the live file as of staging (sha256 <short hash>).
    Void if the target changes before approval.
    Risk if wrong: <one line>. Reversible by <how>.

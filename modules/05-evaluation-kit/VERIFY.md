@@ -6,8 +6,10 @@
       reminder job is used, recorded in `JOBS.md`.
 - [ ] A dry packet assembles cleanly from the current procedures,
       instructions, and brief instructions — verbatim, timestamped.
-- [ ] The incident-seed format is understood and at least one real seed
-      is drafted with the user (facts only, no blame).
+- [ ] The incident-seed format is understood and at least one seed is
+      drafted with the user — a real one if any exist (facts only, no
+      blame), otherwise a fictional seed from the module's library,
+      labeled fictional.
 
 ## Deferred
 

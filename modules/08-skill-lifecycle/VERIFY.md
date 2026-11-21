@@ -11,8 +11,8 @@
       find it.
 - [ ] The usage ledger exists with one record per existing custom
       skill; created dates come from verifiable records only, and
-      unverifiable counts are null or zero — nothing backfilled by
-      guessing.
+      unverifiable counts are zero (never null) — nothing backfilled
+      by guessing.
 - [ ] The curator script runs once by hand and its report is shown to
       the user: it moved nothing, deleted nothing, and wrote nothing
       outside the ledger.
@@ -37,13 +37,18 @@
 - [ ] **First staged proposal** (due: first real signal after install):
       it carries verbatim evidence, a preference-order justification,
       and a `base.json` whose sha256 matches the live target at
-      staging time. Approving it runs the apply procedure end to end —
+      staging time. During shadow week it stages to `staged/shadow-*`
+      and files no item — that satisfies this check's staging half.
+- [ ] **First apply** (due: first approval after shadow lifts):
+      approving a staged proposal runs the apply procedure end to end —
       hash check, apply, verify, ledger update, queue item resolved.
 - [ ] **Hash-drift drill** (due: first month): stage a proposal, then
       edit the target skill, then approve. The apply aborts on the
       mismatch, reports it, and restages fresh — nothing is applied
       over the drift.
-- [ ] **First curator item** (due: first weekly run after scheduling):
+- [ ] **First curator item** (due: first weekly run after shadow
+      lifts — Rollout phase 3; weekly runs during shadow file
+      nothing):
       at most one batched item; each candidate is individually
       approvable; approving an archive moves the folder to
       `.archive/` and nothing is deleted. Restoring it is a move back
@@ -51,7 +56,7 @@
 - [ ] **Expiry works** (due: 14 days after the first undecided item):
       an item left undecided past its expiry is auto-rejected and
       logged — never applied.
-- [ ] **30-day review** (due: 30 days after the sweep goes live):
+- [ ] **30-day review** (due: 30 days after shadow lifts):
       acceptance rate (bar: at least half of staged items approved or
       edited), false-stale count (an archive restored within 7 days
       counts as one), restage rate, and queue load are reported to the

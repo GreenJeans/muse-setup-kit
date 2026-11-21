@@ -49,6 +49,32 @@ whose findings the user adopts or rejects one by one.
 - **Backup verify pass** (module 07): archives are test-read, not assumed.
 - **Wizard dry run** (for this kit): run the setup wizard in a fresh,
   memory-free session and confirm it produces a coherent setup.
+- **Kit doctor** (this module's `tools/kit_doctor.py`): a read-only
+  drift check — plan, jobs, and procedures files present, install
+  commit recorded, deferred checks not overdue.
+
+## Install
+
+1. Write the audit cadence into the procedures (the audit-cadence
+   section; module 00's template carries one) and record the audit
+   reminder in `JOBS.md` — a scheduled job if scheduling exists,
+   otherwise an on-demand chore with a named owner.
+2. Assemble a dry packet from the current procedures, instructions,
+   and brief instructions — verbatim, timestamped — to prove the
+   freeze works before the first real audit depends on it.
+3. Draft incident seeds with the user: real ones if any exist (facts
+   only, no blame). A fresh install has none, and that is expected —
+   start from `templates/fictional-seeds.md`, label them fictional in
+   every packet that uses them, and replace them with real seeds as
+   incidents happen.
+4. If shell/python is available, copy `tools/kit_doctor.py` into the
+   workspace tools folder. It is the mechanical half of an audit —
+   missing plan/jobs/procedures files, an install commit of record,
+   overdue deferred checks — run before a packet is frozen so the
+   reviewers spend their attention on judgment, not bookkeeping.
+5. Agree the reviewer channel: the Exchange (module 04) if installed,
+   or single-reviewer degraded mode — recorded as such in the plan,
+   so the first audit's strength is known in advance.
 
 ## Cadence
 
