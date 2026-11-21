@@ -50,7 +50,10 @@ omitted — never reported as clear.
    consecutive flag, fold to a count). (e) [IF shared lists exist] Tasks
    tagged `urgent` — these also interrupt between briefs, like a triage
    item. (f) Deferred checks: SETUP-PLAN.md's verification ledger — any
-   check due today or overdue is named here, with its owner.
+   check due today or overdue is named here, with its owner. The
+   ledger is also where review-by dates for local §13 holdings are
+   recorded (procedures §13), so a holding past its review-by is
+   named here like any other due check.
    (g) [IF deadlines register installed] Register items past their
    expiry — an expired document is a failure, not a deadline, and
    stays here until it is renewed or dropped.

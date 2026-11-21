@@ -1,9 +1,12 @@
 # Module 02 — Morning Brief & Inbox Triage
 
-**Reads:** calendar, mailbox, task lists, decision queue, watch outputs.
-**Writes:** one brief per day; draft replies only, sent only with approval.
+**Reads:** calendar, mailbox, task lists, decision queue, watch outputs;
+for the money watch, the statement/CSV exports the user supplies.
+**Writes:** one brief per day; draft replies only, sent only with
+approval; for the money watch, its baseline and run-record files and
+its job file.
 **Network:** your connected accounts. **Jobs:** daily brief; optional
-30-minute triage scan.
+30-minute triage scan; optional weekly money watch.
 
 ## Purpose
 
@@ -140,7 +143,18 @@ the triage scan — installed or not installed, recorded either way.
   amounts move normally — variable utilities, groceries, fuel) and
   *sensitivity* exclusions (categories the user does not want
   watched or quoted at all — veterinary and medical care, in the
-  maintainer's own install). Excluded categories are never flagged.
+  maintainer's own install). An exclusion narrows what is flagged;
+  it never makes a charge invisible. A first sighting in a
+  variability-excluded category still flags NEW — the exclusion
+  silences its later amount changes, not its existence. A first
+  sighting in a sensitivity-excluded category flags as NEW with no
+  merchant or amount printed: the user learns a charge exists in
+  that category, and nothing more. Which category a charge belongs
+  to comes only from the baseline's exclusion listing or the
+  export's own category field — never from the agent's inference
+  about a merchant. Exclusions change only on the user's explicit
+  instruction, and the change is recorded in the baseline with its
+  date.
 - **"Recurring" is a baseline property, not a guess.** A charge is
   in scope when it is in the baseline. A charge sighted for the
   first time is flagged NEW — a candidate, nothing more. It enters
@@ -161,22 +175,50 @@ the triage scan — installed or not installed, recorded either way.
   anyone. A flag that warrants action becomes a decision-queue
   item; cancelling or disputing then needs a ticket, like any
   irreversible action.
+- **Silence never settles a money-watch flag.** A decision-queue
+  item from this watch never carries an accepting default: its
+  only printed default is no action — the charge stays flagged and
+  the baseline stays unchanged. Procedures §3 lets silence consent
+  to a printed low-stakes default, and enrolling or repricing a
+  charge in the baseline is exactly the quiet change that consent
+  must not reach here. A money-watch item is resolved by the
+  user's word, or it is not resolved.
 - **A run never edits the baseline.** When a flag is raised — a
   price change, a confirmed new charge, a refunded duplicate — the
   baseline keeps reading the old state until the user resolves the
-  flag's decision-queue item. On resolution, the agent updates the
-  affected line and records the decision and its date on the line
-  itself. Until then, the same change flags again on the next run
-  that brings new data — that repetition is the mechanism working,
-  not spam: the flag is unresolved.
+  flag's decision-queue item (by their word — never by silence;
+  see above). On resolution, the agent updates the affected line
+  and records the decision and its date on the line itself. Until
+  then, the same change flags again on the next run that brings
+  new data — that repetition is the mechanism working, not spam:
+  the flag is unresolved.
 - **Cadence is weekly; data may not be.** A run with no new export
   since the last run records "no new data" in the run record and
   stays silent — it does not re-compare the old export. Flags are
   computed only on new data. The run record is written either way.
-- **The baseline is a financial record** (procedures §13): it lives
+- **"New data" is judged by transaction date, not by file.** An
+  export whose period overlaps the last run's re-delivers old
+  rows. A row dated inside the period the last run already covered
+  that matches a covered row on date + merchant + amount is
+  neither new nor a duplicate — it is the overlap, and it is
+  ignored. Only transactions dated after the last run's covered
+  period are new data, whatever file they arrived in.
+- **A cancelled charge retires; it is not deleted.** When the user
+  confirms a baseline charge is cancelled, its line moves to a
+  Retired section of the baseline file, carrying the cancellation
+  date and the number of the queue item that resolved it. A
+  retired line no longer flags; if that merchant charges again,
+  the charge is a first sighting (NEW), like any other.
+- **The baseline is a financial record** (procedures §13 — the
+  rule lives there; this is its money-watch application): it lives
   in a local workspace file kept for the purpose, never on a shared
   surface, and figures from it are quoted from the file, not from
-  memory.
+  memory. Like every §13 holding it carries a `(review-by: ...)`
+  date — the baseline template has the field, and §13 names where
+  the date is ledgered so the brief surfaces it. The exports it
+  was built from are holdings too: they live in the exports folder
+  (Install step 5), and the plan records that folder with its own
+  review-by date.
 
 ## The promises & waiting-on ledger (optional component)
 
@@ -263,7 +305,14 @@ is finished when the other side's part is seen to have happened.
    file `finance/money-watch-runs.md` from
    `money-watch-runs.template.md` and the job file
    `jobs/money-watch.md` from `money-watch-job.template.md`, and
-   record the job in `JOBS.md`. (The plan may choose other paths;
+   record the job in `JOBS.md`. Statement exports live in
+   `finance/exports/` — the folder the job file reads as "the
+   newest user-supplied export"; the plan records the folder as a
+   §13 holding with a review-by date. Record the baseline and
+   run-record files in the plan's installed-file baseline as
+   `accumulating`: resolutions rewrite baseline lines and runs
+   append records by design, and hashing either would make
+   ordinary use read as drift. (The plan may choose other paths;
    it records them, and the job file names them.) The decision
    (installed / not installed) goes in the plan either way.
 6. Optional: the promises ledger — create

@@ -21,7 +21,10 @@ schema in daily use in a working installation.
 2. **Exact figures come from source, never from a compiled page.** Amounts,
    dates, IDs, and counts are answered and acted on from the daily log or
    the live system. A compiled figure without a verify pointer is treated
-   as absent.
+   as absent. Sensitive figures (procedures §13) are never copied into
+   pages or logs at all: memory records the holding's existence, its
+   `(verify: ...)` pointer, and its review-by date, and the figure is
+   read from the holding itself.
 3. **Provenance is additive and cheap.** Pages carry a header (schema
    version, last verified, sources). Precise claims gain `(verify: ...)`
    pointers opportunistically. Guesses are tagged `[inference]` or
@@ -47,7 +50,8 @@ schema in daily use in a working installation.
 ## Layout (adapt to your platform's conventions)
 
 - A curated long-term memory file (current state + a Superseded section).
-- Dated daily logs (raw material; the authority for exact figures).
+- Dated daily logs (raw material; the authority for exact figures —
+  except §13-class figures, which live only in their holdings).
 - One page per person and per group, with Facts and History sections.
 - A `SCHEMA.md` stating the rules (template included).
 - The linter under a tools folder, with its run receipts kept.

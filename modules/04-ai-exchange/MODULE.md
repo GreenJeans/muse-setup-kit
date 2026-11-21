@@ -1,7 +1,9 @@
 # Module 04 — AI Exchange
 
 **Reads:** the exchange folders and queue. **Writes:** a protocol doc, a
-queue sheet, per-agent inboxes/outboxes, published pages.
+queue sheet, per-agent inboxes/outboxes, published pages, a `Work/`
+folder for the maintainer's own outputs, and `Snapshots/` with ingest
+memos.
 **Network:** your cloud storage. **Jobs:** optional outbox polling in the brief.
 
 ## Purpose

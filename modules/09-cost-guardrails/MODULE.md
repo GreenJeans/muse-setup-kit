@@ -57,6 +57,12 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    installed; without scheduling it is a manual chore with a named
    owner.
 
+**Billing data is a financial record (procedures §13).** Usage
+figures live in the register and on the providers' pages; a spend
+check quotes figures from the source read in that run, and no
+billing detail is copied onto shared surfaces or into compiled
+memory beyond an existence pointer.
+
 ## Install
 
 1. Build the bucket register with the user, from

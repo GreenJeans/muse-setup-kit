@@ -187,16 +187,16 @@ procedures, templates, and the wizard itself are original to this kit.
 README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
-docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
+docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (modules)
 modules/
   00-core-procedures/      MODULE.md · VERIFY.md · templates/
   01-memory-architecture/  MODULE.md · VERIFY.md · SCHEMA + MEMORY templates · tools/ (reference linter)
-  02-morning-brief/        MODULE.md · VERIFY.md · brief, money-watch, and ledger templates
+  02-morning-brief/        MODULE.md · VERIFY.md · brief, money-watch (baseline, run records, job), and ledger templates
   03-household-hq/         MODULE.md · VERIFY.md · principles + partner-prompt templates
   04-ai-exchange/          MODULE.md · VERIFY.md · protocol template
   05-evaluation-kit/       MODULE.md · VERIFY.md · templates/ (fictional seeds) · tools/ (kit doctor)
-  06-security-pack/        MODULE.md · VERIFY.md · vetting-log template
+  06-security-pack/        MODULE.md · VERIFY.md · vetting-log template · grants-inventory job template
   08-skill-lifecycle/      MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator, stage check)
   09-cost-guardrails/      MODULE.md · VERIFY.md · templates/ (bucket register)
   10-deadlines-register/   MODULE.md · VERIFY.md · register template

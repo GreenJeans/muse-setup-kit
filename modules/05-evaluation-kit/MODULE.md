@@ -15,7 +15,12 @@ whose findings the user adopts or rejects one by one.
 
 1. **Freeze a packet.** Copy the governing documents (procedures, agent
    instructions, the brief's instructions) verbatim, timestamped, into one
-   packet document. Add **incident seeds**: short, factual accounts of
+   packet document. Before freezing, scrub the packet against
+   procedures §13: a packet is a copy that travels, so sensitive
+   figures and details that live in the governing documents are
+   redacted to existence pointers — reviewers audit the rules, and
+   §13 records do not travel with them. Add **incident seeds**:
+   short, factual accounts of
    real failures (a false "done", a decision taken from a summary instead
    of the source, a job that silently stopped). Seeds are what turn a
    style review into a systems review.

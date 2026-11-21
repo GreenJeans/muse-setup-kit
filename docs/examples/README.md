@@ -9,7 +9,12 @@ files. In run 6, another fresh agent installed module 08 at the
 Lite tier for a different fictional user and staged a skill
 change; that produced the last two artifacts.
 
-Nothing here is edited except this page. If an artifact shows a
+Nothing here is edited except this page — and one disclosed
+conversion: setup-plan.md's baseline lines are shown in the
+`accumulating` form that run 8's own friction log produced; the
+conversion was applied to the artifact in v0.8 so the example
+teaches the current form (the setup-plan bullet below tells the
+story). If an artifact shows a
 wart, the wart shipped in the rehearsal and the friction log is
 what fixed it (run 8's log is summarized in the REHEARSALS row).
 
