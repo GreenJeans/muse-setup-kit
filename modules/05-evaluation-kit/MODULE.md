@@ -3,6 +3,7 @@
 **Reads:** your procedures and memory, frozen into an audit packet.
 **Writes:** packets, findings, adoption records. **Network:** a second
 model if used for blind review. **Jobs:** an audit reminder on cadence.
+**Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose
 
@@ -15,7 +16,12 @@ whose findings the user adopts or rejects one by one.
 
 1. **Freeze a packet.** Copy the governing documents (procedures, agent
    instructions, the brief's instructions) verbatim, timestamped, into one
-   packet document. Add **incident seeds**: short, factual accounts of
+   packet document. Before freezing, scrub the packet against
+   procedures §13: a packet is a copy that travels, so sensitive
+   figures and details that live in the governing documents are
+   redacted to existence pointers — reviewers audit the rules, and
+   §13 records do not travel with them. Add **incident seeds**:
+   short, factual accounts of
    real failures (a false "done", a decision taken from a summary instead
    of the source, a job that silently stopped). Seeds are what turn a
    style review into a systems review.
@@ -46,12 +52,33 @@ whose findings the user adopts or rejects one by one.
 
 - **Memory fidelity sample** (module 01): weekly random claims checked
   against sources, plus one planted discrepancy as a test case.
-- **Backup verify pass** (module 07): archives are test-read, not assumed.
+- **Backup verify pass** (infra patterns, `docs/patterns/infra-patterns.md`): archives are test-read, not assumed.
 - **Wizard dry run** (for this kit): run the setup wizard in a fresh,
   memory-free session and confirm it produces a coherent setup.
 - **Kit doctor** (this module's `tools/kit_doctor.py`): a read-only
   drift check — plan, jobs, and procedures files present, install
   commit recorded, deferred checks not overdue.
+
+## The usage audit (part of the audit)
+
+Once a month, folded into the audit cycle above, inventory every
+scheduled job and hook — `JOBS.md` is the register — and rank
+them by **estimated load**: runs per week × context weight. A
+full agent run is the heavy unit; a refresh or partial run
+weighs less; a script poll (module 02's detectors) weighs
+almost nothing. The ranking is the deliverable. It flags the
+jobs whose cadence exceeds their source's rate of change — a
+daily agent run watching a source that moves monthly — and
+names the fix for each: band the cadence, convert the watch to
+script-first, or retire it.
+
+Rankings only, never figures. Per-run token numbers circulate
+in field reports and blog posts, and they are unreliable —
+self-reported, method-free, and usually inflated; an audit that
+quotes them has invented its evidence. Relative load is enough
+to act on: the heaviest job is the heaviest job whether or not
+anyone can price its runs to the token. Money is the spend
+check's question (module 09); load is this one's.
 
 ## Install
 
@@ -81,7 +108,9 @@ whose findings the user adopts or rejects one by one.
 Monthly on the 1st while the procedures are changing; quarterly once
 stable; out-of-cycle when a new incident class appears or a gate rule is
 edited. The brief's monthly pass reports whether an audit is due — it
-never runs one inside the brief.
+never runs one inside the brief. The usage audit stays monthly even
+once the procedures audit goes quarterly: jobs accumulate faster
+than rules change.
 
 ## Verify
 

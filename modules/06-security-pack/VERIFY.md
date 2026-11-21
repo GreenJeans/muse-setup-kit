@@ -4,7 +4,10 @@
 
 - [ ] `security/VETTING.md` exists, and its first entry is this kit
       itself: source, the pinned commit installed from, and an honest
-      "read in full" line.
+      "read in full" line — scoped to what was actually read. A
+      partial install's entry reads "full for the installed scope;
+      modules <list> not read"; that scoping is the honest form,
+      not a failure.
 - [ ] The standing rules (§10) are present in the installed procedures —
       including verify-before-install and one-time grants only.
 - [ ] The monthly grants inventory is scheduled (brief 1st-of-month step
@@ -19,3 +22,17 @@
 - [ ] **First inventory** (due: the 1st of next month): standing grants
       are listed, the user's own grants distinguished from product
       defaults, and anything unrecorded is flagged.
+- [ ] **Manifest re-check** (due: the 1st of next month, with the first
+      inventory): the inventory run re-captures and re-hashes every
+      installed MCP server's presented manifest against its vetting
+      record — or, where the platform exposes the manifest at session
+      start, a session-start re-capture is in place and has fired. A
+      server whose hash differs from its record has been re-vetted
+      before being trusted again, or is stopped and the user told.
+- [ ] **First vetting** (due: with the first third-party vetting after
+      install): the entry carries the provenance tier, the typosquat
+      result (or "no official comparator"), the scopes or token
+      breadth *as observed* at connection time, and — for an MCP
+      server — the presented-manifest hash with its capture method
+      named: the presented manifest captured in full, not a
+      vendor-published file or a vendor-stated number.

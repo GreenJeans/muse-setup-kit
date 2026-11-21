@@ -1,8 +1,11 @@
 # Module 00 — Core Procedures
 
 **Reads:** your existing agent instructions and workspace layout.
-**Writes:** an operating-procedures file, a decision queue, SCOPE notes.
+**Writes:** an operating-procedures file, a decision queue, SCOPE notes,
+a JOBS.md, a continuity handover, and a pointer line in the agent's
+main instruction file.
 **Network:** none. **Jobs:** none.
+**Data classes:** personal. **Action classes:** none.
 
 ## Purpose
 
@@ -40,6 +43,10 @@ summary has a bug.
   agent will act on is re-read at the original in the same session, or it
   stays marked unverified. In document work: quote ambiguous passages
   verbatim, and mark unread sections "not verified", never summarized.
+  On the web: fetch a page's text first; a live browser is the last
+  resort, not the first (procedures §7).
+- **Done means verified.** Completion is checked against live state or the
+  original record, never accepted from a worker's report alone.
 - **Abort on mismatch.** Unexpected state from a live system — a wrong
   account, an unfamiliar screen, a balance that doesn't match — means stop
   and report, not improvisation. Before acting inside a signed-in system,
@@ -48,6 +55,11 @@ summary has a bug.
   complete it or re-home it, repoint or retire its machinery, sync drifted
   copies, report once, then archive. Nothing open may live only in a
   transcript.
+- **Continuity.** The agent accumulates access and context quietly. A
+  one-page handover — where things are, who to call, what to stop, how
+  to pause the agent itself — is written with the user for the person
+  who would pick things up if the user were unavailable, and carries a
+  review-by date like any other time-bound claim.
 
 ## Where each rule lives (canonical text)
 
@@ -74,8 +86,74 @@ governs and the application has a bug.
 | Audit cadence | procedures §11 |
 | Verify-before-install (application: module 06) | procedures §10 |
 | Billing buckets; declare before heavy work (application: module 09) | procedures §12 |
-- **Done means verified.** Completion is checked against live state or the
-  original record, never accepted from a worker's report alone.
+| Sensitive records — where financial, health, and third-party data may live; document numbers never recorded (applications: modules 01, 02, 03, 04, 05, 06, 08, 09, 10, and this module's continuity handover) | procedures §13 |
+
+## Extension points (anchors)
+
+Core prose files that other modules amend carry **named anchors**:
+HTML comments of the form `<!-- ext:<name> -->`. The rules:
+
+- A module may amend a core file **only at a declared anchor** — it
+  never appends wherever it likes, and it never renumbers sections.
+- Completing a section's own canonical text in its home section is
+  not an amendment and needs no anchor — module 06 confirming that
+  §10 is present in full, for instance. The canonical-location rule
+  above governs those edits. Anchors govern *inserted blocks*:
+  content a module adds to a file another module owns.
+- Each anchor has exactly **one owner** at a time. The owner's block
+  runs from the anchor comment to the matching
+  `<!-- /ext:<name> -->` marker. The install plan (SETUP-PLAN.md)
+  records which module owns each anchor it uses.
+- One anchor is a *registration* anchor: `ext:brief-sources` in
+  the brief job file. Module 02 owns the anchor itself; each
+  module that registers a block inside it owns that block,
+  recorded in the plan like any other ownership. Registration
+  there is the only way contributed surfacing enters the brief —
+  a module never free-edits the brief job file.
+- Uninstalling the owner removes its block, and nothing else.
+- A new anchor is added by editing this registry and the target file
+  in the same change. An anchor with no registry entry is a defect;
+  so is a registry entry with no anchor.
+- Anchor comments are never deleted as "template comments" — they
+  are the mechanism, not commentary. The procedures template's
+  header says so at its head.
+
+Registry, as shipped:
+
+| Anchor | File | Purpose | Owner |
+|---|---|---|---|
+| `ext:billing-buckets` | OPERATING_PROCEDURES.md (from this module's procedures template) | Module 09 inserts its bucket register and declare-before-heavy-work rule as §12 | module 09 (cost-guardrails), when installed |
+| `ext:brief-sources` | The brief job file (from module 02's brief template) | Modules whose surfacing rides the brief register their source lines here, each in its own delimited block keyed by its qualified module id (see Registered blocks, below) | module 02 (host); each registered block is owned by the module that registered it |
+| `ext:brief-steps` | The brief job file (from module 02's brief template) | A module whose surfacing is an instruction to the brief (not a source to read) registers a step block here, in the same delimited form | module 02 (host); each registered block is owned by the module that registered it |
+| `ext:queue-header` | The decision queue (from this module's queue template) | Module 08 adds its queue item-type definitions (`[type: skill-write]`, `[type: skill-curator]`) between the markers | module 08 (skill-lifecycle), when installed |
+| `ext:instruction-pointer` | The agent's main instruction file (the anchor pair is planted by this module's Install step 5 when the file is first created or amended) | Pointer lines other modules add: module 08's skill-lifecycle pointer, the wizard's session-start line. Each line inside is owned by the module that added it; uninstalling that module removes its line | module 00 (the anchor); lines as noted in Purpose |
+
+### Registered blocks
+
+Inside a *registration* anchor (`ext:brief-sources`,
+`ext:brief-steps`), each module's contribution is a **delimited
+block**, keyed by the module's qualified id — never by its bare
+name, which another library's module could share:
+
+```
+<!-- ext:brief-sources:block <library>/<module> -->
+- [IF <library>/<module> installed] <the module's source lines>
+<!-- /ext:brief-sources:block <library>/<module> -->
+```
+
+The block's first content line is its own
+`[IF <qualified-id> installed]` line. The delimiters are what
+make the block mechanical to find: uninstall removes exactly the
+delimited block — from its opening marker to its closing marker —
+and nothing else in the file, and re-stamps the host file's
+baseline line in the same approved plan (a removal that leaves
+the old hash standing reads as drift on the next doctor run).
+Any re-render of the host file — an upgrade, a rollback, a
+reconfigure of the host module — extracts every registered block
+first and re-inserts each one verbatim at the anchor, shown in
+the diff the user approves, before the host's baseline line is
+re-stamped. A re-render that drops a block silently has deleted
+another module's surfacing; the extraction step is not optional.
 
 ## Install
 
@@ -95,11 +173,32 @@ governs and the application has a bug.
    the user and approved as part of the plan, not invented after it.
 5. Add a pointer line to the agent's main instruction file (wizard Q7;
    create `INSTRUCTIONS.md` if none exists): "Operating procedures live
-   in OPERATING_PROCEDURES.md and govern daily work."
-6. Create `JOBS.md` at the workspace root from `templates/JOBS.template.md` — header and entry format, no jobs yet. The format is canonical: module 01's linter and module 08's curator both parse this file, and the brief's detector-silence check reads cadences from it. Do not improvise a different shape.
+   in OPERATING_PROCEDURES.md and govern daily work." Plant the
+   `ext:instruction-pointer` anchor pair (see the registry above)
+   around the line: later modules add their own pointer lines inside
+   the same markers, each line owned by the module that added it.
+6. Create `JOBS.md` at the workspace root from `templates/JOBS.template.md` — header and entry format, no jobs yet. The format is canonical: module 01's linter and module 08's curator both parse this file, and the brief's detector-silence check reads cadences from it. Do not improvise a different shape. The template also carries the slim-definitions rule — job bodies are short pointers, baselines and long instructions live in state files and design docs — which every later module's job files follow.
    Every later module records its scheduled jobs there; the morning
    brief and the memory linter read it. (This module's VERIFY checks
    for it — a step that creates what the check requires.)
+7. Create the continuity handover from
+   `templates/continuity-handover.template.md`, filled with the user:
+   where things live, who to call, what to stop, how to pause the
+   agent. It carries a review-by date. Its default home is
+   `continuity-handover.md` at the workspace root — a file whose
+   purpose is to be found later, by a stressed human or a fresh
+   agent, gets a findable name. The user may name another home; the
+   plan records the path and who the handover is for either way. A
+   handover filled in part is a normal state, not a failure: the
+   load-bearing fields — who picks things up if the user is
+   unavailable, and how to pause the agent — are filled at install;
+   the rest (account details, further contacts, the open-threads
+   list) may be marked not-yet-supplied in the file, with the
+   completion ledgered as a deferred check. An unfilled handover is
+   ledgered as a deferred check, never silently skipped. Record
+   the handover in the plan's installed-file baseline as
+   `accumulating` — it is filled in and revised by design, and
+   hashing it would make ordinary updates read as drift.
 
 ## Verify
 

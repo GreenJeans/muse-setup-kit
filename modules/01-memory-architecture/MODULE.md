@@ -2,6 +2,7 @@
 
 **Reads:** your memory files. **Writes:** a schema file, header stamps,
 a linter and its reports. **Network:** none. **Jobs:** one weekly linter run.
+**Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose
 
@@ -21,7 +22,10 @@ schema in daily use in a working installation.
 2. **Exact figures come from source, never from a compiled page.** Amounts,
    dates, IDs, and counts are answered and acted on from the daily log or
    the live system. A compiled figure without a verify pointer is treated
-   as absent.
+   as absent. Sensitive figures (procedures §13) are never copied into
+   pages or logs at all: memory records the holding's existence, its
+   `(verify: ...)` pointer, and its review-by date, and the figure is
+   read from the holding itself.
 3. **Provenance is additive and cheap.** Pages carry a header (schema
    version, last verified, sources). Precise claims gain `(verify: ...)`
    pointers opportunistically. Guesses are tagged `[inference]` or
@@ -47,7 +51,8 @@ schema in daily use in a working installation.
 ## Layout (adapt to your platform's conventions)
 
 - A curated long-term memory file (current state + a Superseded section).
-- Dated daily logs (raw material; the authority for exact figures).
+- Dated daily logs (raw material; the authority for exact figures —
+  except §13-class figures, which live only in their holdings).
 - One page per person and per group, with Facts and History sections.
 - A `SCHEMA.md` stating the rules (template included).
 - The linter under a tools folder, with its run receipts kept.
@@ -65,10 +70,12 @@ schema in daily use in a working installation.
    sources) instead; pages without a stamp are legacy, and the
    most-loaded ones migrate first.
 3. Install the reference linter (`tools/memory_lint.py` in this module —
-   adapt its paths): it runs three checks — (a) every compiled page
+   adapt its paths): it runs four checks — (a) every compiled page
    carries a provenance header, (b) live bullets containing figures carry
    a source or `(verify: ...)` pointer, (c) job names in the procedures
-   exist in `JOBS.md`, the scheduler-of-record the wizard maintains. It
+   exist in `JOBS.md`, the scheduler-of-record the wizard maintains,
+   (d) time-bound claims whose `(review-by: ...)` date has passed are
+   flagged for re-verification or retirement. It
    is read-only and writes only its report; every report opens with a
    run receipt (timestamp, files scanned, checks run, findings count).
    Schedule it weekly and record the job in `JOBS.md`.

@@ -39,7 +39,8 @@ is reported about today, and nothing is reported as clear.
 
 ## 5. Systems
 
-- Workspace integrity: five of the six baselined install files match
-  their SETUP-PLAN.md baseline hashes exactly. The sixth,
-  decision-queue.md, differs because item 1 above was added by this
-  run — the difference is the drill, attributed to this brief.
+- Workspace integrity: every hashed baselined install file matches
+  its SETUP-PLAN.md baseline hash exactly. decision-queue.md and
+  JOBS.md are baselined `accumulating` — they grow by design and
+  are never diffed; item 1 above was added to the queue by this
+  run, which is ordinary use, not drift.

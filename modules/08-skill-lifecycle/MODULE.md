@@ -3,9 +3,11 @@
 **Reads:** session transcripts, your custom skills, the decision queue,
 scheduled-job records. **Writes:** staged proposals (never live skills
 directly), a skill-usage ledger, decision-queue items, an archive folder
-for retired skills. **Network:** none. **Jobs:** none at the
+for retired skills, and a pointer line in the agent's main instruction
+file (added at the Lite install). **Network:** none. **Jobs:** none at the
 Lite tier; at Full, one nightly session-review sweep and one weekly
 curator run.
+**Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose
 
@@ -139,6 +141,12 @@ Hard rules:
   rubric, the operating procedures, the agent's main instructions,
   SCOPE files, or the curator. Procedure changes stay user-approved
   document edits in their own workstreams.
+- **Sensitive records are never quoted as evidence.** A proposal
+  never quotes a §13-class record (financial, health, third-party
+  personal — procedures §13) into `proposal.md` or a queue item.
+  A correction *about* a sensitive matter is recorded by topic,
+  with a pointer to the session — the verbatim-quoting rule is for
+  corrections, not for records.
 - **Memory routing unchanged.** Facts about the user and current
   state still go to memory under its schema (module 01). This pass is
   skills-only; it does not become a second memory writer.
@@ -393,12 +401,14 @@ the sweep on live. Roll out in phases:
    and `staged/expired/` holding folders. Defaults, unless the plan
    renames them: home folder `skill-lifecycle/`.
 2. Add the `[type: skill-write]` item type to the decision queue's
-   header, using the definition in
+   header, at its `ext:queue-header` anchor (module 00's
+   extension-point registry), using the definition in
    `templates/skill-queue-items.template.md`, and confirm the
    never-consent rule is stated in that header definition.
 3. Copy `templates/staged-proposal.template.md` where reviewers
    will find it (the module home).
-4. Add a pointer line to the agent's main instruction file: skill
+4. Add a pointer line to the agent's main instruction file, inside
+   its `ext:instruction-pointer` anchor: skill
    self-modification stages through this module; nothing writes a
    live skill without the user's approval of the staged diff.
 

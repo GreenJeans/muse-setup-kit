@@ -5,7 +5,10 @@
 ## Layers
 
 - **Raw sources** — conversations, daily logs, documents, system outputs.
-  Immutable once written; the authority for exact figures.
+  Immutable once written; the authority for exact figures — with one
+  carve-out: for sensitive records (procedures §13), the holding file
+  is the authority, and a log is not a second home for the figures
+  (rule 12).
 - **Compiled pages** — the memory the agent loads: a curated long-term
   file, one page per person and per group. Compiled pages are derived and
   may be wrong; sources outrank them.
@@ -21,7 +24,8 @@
 3. **Exact numbers, dates, amounts, and IDs** are answered and acted on
    from the daily log or the live source, never from a compiled page
    alone. A compiled figure without a `(verify: ...)` pointer is treated
-   as absent.
+   as absent. Sensitive figures are stricter still — rule 12: a compiled
+   page records a holding's existence and pointer, never the figure.
 4. **Provenance header** on every compiled page:
    `schema_version`, `last_verified` (date), `sources`. A page without a
    header is legacy and untrusted until stamped.
@@ -43,6 +47,14 @@
     findings; supersession and contradiction decisions are made by a mind
     and recorded with provenance.
 11. **Dates on compiled pages** use the user's home timezone.
+12. **Sensitive records stay in their holdings** (procedures §13).
+    Figures and details from financial, health, or third-party
+    personal records are never copied into compiled pages *or* daily
+    logs. What memory records is that a holding exists, where it
+    lives, a `(verify: ...)` pointer to it, and its
+    `(review-by: ...)` date — the linter's review-by check reads
+    compiled pages, which is what makes a local holding's review-by
+    surface. Exact figures are read from the holding at need.
 
 ## The linter (deterministic, read-only)
 

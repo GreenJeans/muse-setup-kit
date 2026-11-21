@@ -1,0 +1,24 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/deadlines-register
+dir: modules/10-deadlines-register
+title: Deadlines & Expiry Register
+pitch: "One register of what expires — passports, licences, warranties, policies, certifications — each with a lead time and a pointer to the original; no document numbers are stored."
+version: "0.9"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures]
+requires: []
+degrades_without: [core/morning-brief]
+reads: "the register file; a source document when its date needs re-reading at the original."
+writes: "the register — one local file, updated in place."
+network: "none."
+jobs: "none of its own; surfacing rides module 02's brief when installed."
+rehearsed_at: "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending"
+data_classes: [personal, third-party]
+action_classes: [none]
+files:
+  - path: register.template.md
+    class: accumulating

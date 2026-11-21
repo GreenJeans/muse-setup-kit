@@ -1,0 +1,28 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/persona-soul
+dir: modules/11-persona-soul
+title: Persona & Soul
+pitch: "Author the persona file deliberately instead of inheriting the stock template: an interview, a front-loaded template with examples, a mechanical linter, and staged-diff governance for every later change."
+version: "0.1"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures]
+requires: [persona-file]
+degrades_without: [scheduling, shell-python]
+reads: "the existing persona file if one exists, the adopter's interview answers, and, for examples the adopter cannot supply, their interaction history."
+writes: "the persona file (SOUL.md), drafted from the interview and written only on the adopter's approval; the soul linter, copied as a tool."
+network: "none."
+jobs: "none of its own; the periodic reread rides the brief's monthly pass or the memory linter's weekly run when either is installed."
+rehearsed_at: "library branch runs 16-18 (2026-11-21): runs 16-17 (full interview) on the branch at 41eb24e plus the module as built; run 18 (short subset, cold-start fallback) on the EX-032/033 fix-pass tree; that round's fixes are in this tree, re-rehearsal at the committed pin pending"
+data_classes: [personal, third-party]
+action_classes: [none]
+files:
+  - path: templates/SOUL.template.md
+    class: static-rendered
+  - path: templates/interview.md
+    class: static-verbatim
+  - path: tools/soul_lint.py
+    class: static-verbatim

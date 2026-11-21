@@ -5,6 +5,7 @@ present), the bucket register. **Writes:** a bucket register in the
 procedures; decision-queue items when a cap is approached. **Network:**
 your providers' billing pages only, with you present. **Jobs:** one
 monthly spend check (rides the brief if installed).
+**Data classes:** financial. **Action classes:** none.
 
 ## Purpose
 
@@ -55,7 +56,14 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    approached, spend with no matching work — in the decision queue.
    The check rides the morning brief's monthly pass if one is
    installed; without scheduling it is a manual chore with a named
-   owner.
+   owner. Its sibling is the usage audit (module 05) — jobs ranked
+   by load, no figures invented; money here, load there.
+
+**Billing data is a financial record (procedures §13).** Usage
+figures live in the register and on the providers' pages; a spend
+check quotes figures from the source read in that run, and no
+billing detail is copied onto shared surfaces or into compiled
+memory beyond an existence pointer.
 
 ## Install
 
@@ -69,8 +77,11 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    sets the amount) or record the user's explicit decision to run
    uncapped, in their words, in the register.
 3. Add the declare-before-heavy-work rule (rule 2) and the register
-   to the operating procedures, as the procedures' final section
-   (§12 — the module 00 template carries a marker for it).
+   to the operating procedures, as §12, inserted at the procedures
+   template's `<!-- ext:billing-buckets -->` anchor (module 00's
+   extension-point registry names this module as the anchor's
+   owner), replacing the reserved §12 stub the template ships at
+   that anchor.
 4. Record the monthly spend check in `JOBS.md` as its own bullet,
    marked "(rides morning-brief)" when the brief carries it (the
    brief template's monthly step has the gated spend-check line), or

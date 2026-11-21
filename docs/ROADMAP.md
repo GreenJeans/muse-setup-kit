@@ -66,7 +66,7 @@
 - Tagged **v0.2** at the merge commit
   (7e15e075b3873e019357f9fddde0df8c7a80478e).
 
-## Phase 5 — v0.3: adversarial-review fixes + module 09 (this release)
+## Phase 5 — v0.3: adversarial-review fixes + module 09 — DONE 2026-11-20
 
 Blind dual review of the v0.2 kit (two outside models, identical
 packet, one planted canary — both caught it) produced 36 findings.
@@ -120,7 +120,7 @@ audit-first wizard mode, the full worked example.
   adopters can see the target state without any real data.
 - Localization of the templates.
 
-## Phase 7 — v0.5: the first stranger (this release)
+## Phase 7 — v0.5: the first stranger — DONE 2026-11-20
 
 From the v0.4 synthesis's held list, in the order the lineup
 adopted: module 08 restructured into tiers (Lite default, Full at
@@ -135,3 +135,146 @@ upgrade whose planted edit the doctor caught exactly, and an
 install → uninstall that left the workspace empty. Removal this
 release: the README's Status narrative, which duplicated this
 file's history, is now a pointer here.
+
+## Phase 8 — v0.6: capability profiles + constitutional dedup — DONE 2026-11-20
+
+The two remaining candidates from the roadmap brainstorm:
+`docs/capability-profiles.md`, the matrix of what each platform
+capability buys each module (required / degrades / unaffected),
+generated from the manifest's `requires` and `degrades_without`
+fields; and the constitutional-rule dedup — module 00 gained the
+canonical-location table naming the one operative section per
+rule, governing-text pointers were added where summaries live,
+and the wizard's gating prose points at the matrix instead of
+duplicating it. Rehearsal run 9 scored the matrix blind against
+the manifest (27/27 cells, 26/27 verdicts; the misses fixed in
+the release). Merged via PR #5.
+
+## Phase 9 — v0.7: just paste it — DONE 2026-11-20
+
+The quickstart became one sentence with nothing to substitute:
+the wizard's pinned-source rule gained a tag-entry path — a
+checkout sitting exactly on a release tag is a valid entry, and
+the wizard resolves the full commit hash itself and states it in
+the plan. (A user-supplied hash is still verified exactly, and a
+checkout on no tag with no hash still stops.) Release-notes
+automation prints the short prompt with the tag filled in;
+UPGRADING.md names releases by tag. Rehearsal run 10 ran the new
+prompt cold and reached a complete Starter plan; the same run
+documents the released v0.6 wizard dead-stopping the new prompt
+at the old rule. Merged via PR #6.
+
+## Phase 10 — v0.8: vet the door — DONE 2026-11-20
+
+Driven by the second blind dual review of the kit's direction
+(the library brainstorm): both reviewers put the same item first
+and demoted the maintainer's favorite, and the release follows
+them. Module 06 gains the connector/MCP vetting pack (provenance
+tiers, typosquat check, OAuth scope audit, tool-manifest hash
+pinning with re-vet on change, walk-away criteria). Module 02
+gains the money watch as an optional component (baseline from
+user-supplied exports, never credentials). Module 00 gains the
+sensitive-records rule (procedures §13), the continuity handover
+template, and the extension-point anchor registry.
+`docs/library.md` specifies the library design the next phases
+implement. Repairs from the same round: the audit-word count now
+covers every installed file (MODULE.md, VERIFY.md, templates,
+tools) and the selfcheck asserts the README's figures equal the
+manifest's; the memory linter gains the review-by check (check D)
+its schema template always claimed; stale citations and the
+REHEARSALS ledger are repaired. Rehearsals for the 06 pack and
+the money watch are specified from the reviewers' pass bars and
+run before tagging.
+
+Review fixes (EX-018/019 — the blind dual review of this
+release, run against the v0.8 tree before tagging): 39 distinct
+findings, every one verified against the tree, the fixes in this
+phase's tree. The scope audit now decides on the scopes as
+observed at connection time (and audits token privilege where
+there are no scopes); manifest pinning captures the presented
+manifest in full — schemas, annotations, server instructions —
+with a named capture method and a re-check cadence; money-watch
+queue items can never resolve by silence; §13's review-by has a
+surfacing path for local holdings, and the §13 pointers are
+completed across modules 01, 04, 05, 08, and 09. Two findings
+were maintainer decisions, since taken: a user may accept
+excess scopes as a recorded decision — official tier only, in
+their own words, naming each scope accepted — and a hosted
+connector whose source cannot be read is vetted on its
+observable surface with the user's decision recorded, floored
+by a full read of the presented manifest.
+
+## Phase 11 — v0.9: everyday (this release)
+
+The everyday release: modules for the user's own life rather than
+the agent's machinery. Module 10, the deadlines & expiry register
+— an accumulating register with per-item lead times and source
+pointers, no raw ID numbers, surfacing through module 02's brief
+(or a manual deferred check without one). It is the first module
+designed under the library spec: its data class is declared in
+its MODULE.md and its register's file class is named. Module 02
+gains the promises & waiting-on ledger — verbatim quote plus
+source as the record, overdue entries in the brief's Today
+section, follow-ups as drafts under ticket rules — with the
+return-window/refund tracker as its worked example. The
+scam/impersonation shield joins module 02's triage, running
+before the VIP interrupt rule, with a pointer from module 06:
+rule 3 turned outward. Module 10 was rehearsed once at the v0.9
+candidate (run 13, at abb9f86); changed since, it is unrehearsed
+at this pin and labeled that way. Further rehearsals (Standard
+installs, ledger and shield fixture runs) are specified from the
+reviewers' pass bars and run before the library phase builds on
+it.
+
+Review fixes (EX-020/021 — the blind dual review of this
+release, run against the v0.9 tree before tagging): 29 distinct
+findings, every one verified against the tree, the fixes in this
+phase's tree. Shield flags now have a route into the brief (the
+triage flag log, consumed in Failures, and the scan's own
+silence is a brief-visible failure); procedures §13 states the
+identifiers rule module 10 cites, with module 10 in its
+applications; the ledger's grade system is one system across
+MODULE, template, and VERIFY, with a `Grade:` marker on every
+entry; the immediacy set records every known sender per
+institution and is collected as a plan question; module 10's
+deferred checks all carry event-plus-fallback due dates. One
+finding was a maintainer decision, since taken: a message
+graded "unverified sender" earns no interrupt of any class on
+its sender claim alone — it is written to the flag log and
+surfaces in the brief's Failures.
+
+## Phase 12 — the library (implemented on the library branch, 2026-11-20 — unreleased)
+
+Implemented on a branch off v0.9 — a branch, not a release, and
+the latest release remains v0.9. What landed: `module.yaml` per
+module replaces the manifest fragments (strict flat subset,
+fail-loud parser in `tools/module_yaml.py`, MODULE.md header
+parity asserted by the selfcheck, which also fails on any
+per-module field left in the manifest); the manifest keeps the
+library id, the interface version, and the profiles. Qualified
+ids (`core/<module>`) throughout. `tools/build_directory.py`
+generates `directory.json` + `advisories.json` in the core repo
+from the module.yaml files and `advisories.yaml`. The wizard
+gains a lifecycle section defining the named verbs (list
+installed / available / upgradable, add/remove library,
+suspend, narrowed repair, inspect, rollback, reconfigure,
+audit), each with its reads, writes, and ticket rule; installed-
+file baseline lines now name each static file's class, and
+kit_doctor accepts classed and pre-class lines alike. The
+selfcheck prints rehearsal staleness against each module's
+`rehearsed_at` pin as an informational report, not a finding.
+A home-operations field library pilots the package format from
+a separate local repository — unpublished; it was installed
+through the lifecycle verbs in rehearsal run 15. The EX-022/023
+blind review of the branch and the maintainer's four decisions
+landed as a fix pass (2026-11-21): packages no longer carry
+review fields, the parser's scalar edge cases fail loud, parity
+binds the class fields, catalog generation enforces its pin
+discipline, advisories validate and are never fabricated,
+baselines attribute their files to a module, brief blocks are
+delimited by qualified id, and the selfcheck gained a
+field-library mode. Held for the next phase: rehearsal of the
+verbs run 15 did not exercise (upgrade, uninstall, rollback,
+reconfigure, remove library) and of the post-run-15 fixes,
+field libraries entering the index by reviewed PR, and the
+merge/release decision, which is the maintainer's.

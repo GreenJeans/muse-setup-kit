@@ -1,0 +1,26 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/household-hq
+dir: modules/03-household-hq
+title: Household HQ
+pitch: "Two people, two agents, one shared coordination system — shared task layer, shared memory layer, a notebook protocol, and a principles doc."
+version: "0.8"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures]
+requires: [second-person, shared-docs, shared-tasks]
+degrades_without: [core/morning-brief]
+reads: "the shared surfaces both people agreed to share."
+writes: "shared lists, a shared notebook, a shared ops sheet."
+network: "your shared accounts."
+jobs: "an optional change detector."
+rehearsed_at: "v0.1 household dry run; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending"
+data_classes: [personal, third-party]
+action_classes: [contact]
+files:
+  - path: principles.template.md
+    class: static-rendered
+  - path: partner-setup-prompt.template.md
+    class: static-rendered

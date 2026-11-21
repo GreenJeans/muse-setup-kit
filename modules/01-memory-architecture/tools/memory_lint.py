@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Reference memory linter for the Muse Setup Kit (module 01).
 
-Deterministic and read-only: it writes only its report. Three checks:
+Deterministic and read-only: it writes only its report. Four checks:
 
   A. Every compiled page carries a provenance header
      (schema_version + last_verified within the first 40 lines).
@@ -13,6 +13,10 @@ Deterministic and read-only: it writes only its report. Three checks:
      mentions "job" is treated as a job name and must have a JOBS.md
      entry. (One direction only — operational jobs in JOBS.md need not
      be named in the procedures.)
+  D. Time-bound claims carry a "(review-by: YYYY-MM-DD)" date (schema
+     rule 7); a claim whose review-by date has passed is flagged for
+     re-verification or retirement. An unparseable review-by date is
+     flagged too — a date the linter cannot read protects nothing.
 
 Exclusions: files under logs/, reports/, or tools/ directories, files
 with "fidelity-test" in the name (schema-mandated fixtures, not compiled
@@ -38,6 +42,7 @@ import sys
 FIGURE = re.compile(r"(\$\s?\d|\b\d{4}-\d{2}-\d{2}\b|\b\d+\s?(mg|kg|km|mi|%|percent)\b)")
 HISTORY_HEAD = re.compile(r"^##\s+(History|Superseded)\b", re.M)
 BACKTICK = re.compile(r"`([a-z0-9][a-z0-9\-_]{2,})`")
+REVIEW_BY = re.compile(r"\(review-by:\s*([^)]+)\)")
 
 
 def read(path):
@@ -87,6 +92,25 @@ def check_jobs(procedures_path, jobs_path):
                 if name not in job_names:
                     findings.append(
                         ("med", f"C: job '{name}' named in procedures has no JOBS.md entry"))
+    return findings
+
+
+def check_review_by(pages, today=None):
+    findings = []
+    today = today or datetime.date.today()
+    for path, text in pages:
+        for i, line in enumerate(text.splitlines(), 1):
+            for m in REVIEW_BY.finditer(line):
+                raw = m.group(1).strip()
+                try:
+                    due = datetime.date.fromisoformat(raw)
+                except ValueError:
+                    findings.append(
+                        ("med", f"D: {path}:{i}: unparseable review-by date '{raw}'"))
+                    continue
+                if due < today:
+                    findings.append(
+                        ("med", f"D: {path}:{i}: review-by {raw} has passed"))
     return findings
 
 
@@ -142,11 +166,12 @@ def main():
     findings += check_headers(pages)
     findings += check_figures(pages)
     findings += check_jobs(args.procedures, args.jobs)
+    findings += check_review_by(pages)
 
     high = sum(1 for sev, _ in findings if sev == "high")
     now = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
     lines = [
-        f"run_receipt: {now} files_scanned={len(pages)} checks=A,B,C findings={len(findings)} high={high}",
+        f"run_receipt: {now} files_scanned={len(pages)} checks=A,B,C,D findings={len(findings)} high={high}",
         "",
         "# Memory lint report",
         "",

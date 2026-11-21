@@ -1,0 +1,520 @@
+{
+  "generated_from": "cd97b024908c03a74e826c0a26cfc29bdd252e2f",
+  "library": "core",
+  "modules": [
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 1770,
+      "data_classes": [
+        "personal",
+        "third-party"
+      ],
+      "degrades_without": [],
+      "depends_on": [
+        "core/core-procedures",
+        "core/memory-architecture"
+      ],
+      "dir": "modules/04-ai-exchange",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "protocol.template.md"
+        }
+      ],
+      "id": "core/ai-exchange",
+      "jobs": "optional outbox polling in the brief.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "your cloud storage.",
+      "pitch": "Multiple AI agents exchanging work through shared storage \u2014 protocol, queue, blind reviews, published pages, ingest discipline.",
+      "reads": "the exchange folders and queue.",
+      "rehearsed_at": "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "requires": [
+        "shared-storage",
+        "other-agents"
+      ],
+      "title": "AI Exchange",
+      "version": "0.3",
+      "writes": "a protocol doc, a queue sheet, per-agent inboxes/outboxes, published pages, a `Work/` folder for the maintainer's own outputs, and `Snapshots/` with ingest memos."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 5490,
+      "data_classes": [
+        "personal"
+      ],
+      "degrades_without": [],
+      "depends_on": [],
+      "dir": "modules/00-core-procedures",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "templates/OPERATING_PROCEDURES.template.md"
+        },
+        {
+          "class": "accumulating",
+          "path": "templates/decision-queue.template.md"
+        },
+        {
+          "class": "accumulating",
+          "path": "templates/JOBS.template.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "templates/SCOPE.template.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "templates/continuity-handover.template.md"
+        }
+      ],
+      "id": "core/core-procedures",
+      "jobs": "none.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "none.",
+      "pitch": "Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.",
+      "reads": "your existing agent instructions and workspace layout.",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending",
+      "requires": [],
+      "title": "Core Procedures",
+      "version": "0.9",
+      "writes": "an operating-procedures file, a decision queue, SCOPE notes, a JOBS.md, a continuity handover, and a pointer line in the agent's main instruction file."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 1544,
+      "data_classes": [
+        "financial"
+      ],
+      "degrades_without": [
+        "scheduling"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/09-cost-guardrails",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "templates/bucket-register.template.md"
+        }
+      ],
+      "id": "core/cost-guardrails",
+      "jobs": "one monthly spend check (rides the brief if installed).",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "your providers' billing pages only, with you present.",
+      "pitch": "Bucket discipline for agent spending \u2014 know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.",
+      "reads": "your model/provider usage and billing pages (with you present), the bucket register.",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending",
+      "requires": [],
+      "title": "Cost & Billing Guardrails",
+      "version": "0.8",
+      "writes": "a bucket register in the procedures; decision-queue items when a cap is approached."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 2741,
+      "data_classes": [
+        "personal",
+        "third-party"
+      ],
+      "degrades_without": [
+        "core/morning-brief"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/10-deadlines-register",
+      "files": [
+        {
+          "class": "accumulating",
+          "path": "register.template.md"
+        }
+      ],
+      "id": "core/deadlines-register",
+      "jobs": "none of its own; surfacing rides module 02's brief when installed.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "none.",
+      "pitch": "One register of what expires \u2014 passports, licences, warranties, policies, certifications \u2014 each with a lead time and a pointer to the original; no document numbers are stored.",
+      "reads": "the register file; a source document when its date needs re-reading at the original.",
+      "rehearsed_at": "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "requires": [],
+      "title": "Deadlines & Expiry Register",
+      "version": "0.9",
+      "writes": "the register \u2014 one local file, updated in place."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 2897,
+      "data_classes": [
+        "personal",
+        "third-party"
+      ],
+      "degrades_without": [
+        "other-agents",
+        "scheduling",
+        "shell-python"
+      ],
+      "depends_on": [
+        "core/core-procedures",
+        "core/memory-architecture"
+      ],
+      "dir": "modules/05-evaluation-kit",
+      "files": [
+        {
+          "class": "static-verbatim",
+          "path": "templates/fictional-seeds.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/kit_doctor.py"
+        }
+      ],
+      "id": "core/evaluation-kit",
+      "jobs": "an audit reminder on cadence.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "a second model if used for blind review.",
+      "pitch": "Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.",
+      "reads": "your procedures and memory, frozen into an audit packet.",
+      "rehearsed_at": null,
+      "requires": [],
+      "title": "Evaluation Kit",
+      "version": "0.8",
+      "writes": "packets, findings, adoption records."
+    },
+    {
+      "action_classes": [
+        "contact"
+      ],
+      "audit_words": 2010,
+      "data_classes": [
+        "personal",
+        "third-party"
+      ],
+      "degrades_without": [
+        "core/morning-brief"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/03-household-hq",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "principles.template.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "partner-setup-prompt.template.md"
+        }
+      ],
+      "id": "core/household-hq",
+      "jobs": "an optional change detector.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "your shared accounts.",
+      "pitch": "Two people, two agents, one shared coordination system \u2014 shared task layer, shared memory layer, a notebook protocol, and a principles doc.",
+      "reads": "the shared surfaces both people agreed to share.",
+      "rehearsed_at": "v0.1 household dry run; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "requires": [
+        "second-person",
+        "shared-docs",
+        "shared-tasks"
+      ],
+      "title": "Household HQ",
+      "version": "0.8",
+      "writes": "shared lists, a shared notebook, a shared ops sheet."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 2724,
+      "data_classes": [
+        "personal",
+        "third-party"
+      ],
+      "degrades_without": [
+        "scheduling",
+        "shell-python"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/01-memory-architecture",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "SCHEMA.template.md"
+        },
+        {
+          "class": "accumulating",
+          "path": "MEMORY.template.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/memory_lint.py"
+        }
+      ],
+      "id": "core/memory-architecture",
+      "jobs": "one weekly linter run.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "none.",
+      "pitch": "Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.",
+      "reads": "your memory files.",
+      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "requires": [],
+      "title": "Memory Architecture",
+      "version": "0.8",
+      "writes": "a schema file, header stamps, a linter and its reports."
+    },
+    {
+      "action_classes": [
+        "send"
+      ],
+      "audit_words": 10753,
+      "data_classes": [
+        "personal",
+        "financial",
+        "third-party"
+      ],
+      "degrades_without": [
+        "scheduling",
+        "shell-python"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/02-morning-brief",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "brief.template.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "triage-job.template.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "money-watch-job.template.md"
+        },
+        {
+          "class": "accumulating",
+          "path": "money-watch-baseline.template.md"
+        },
+        {
+          "class": "accumulating",
+          "path": "money-watch-runs.template.md"
+        },
+        {
+          "class": "accumulating",
+          "path": "promises-ledger.template.md"
+        }
+      ],
+      "id": "core/morning-brief",
+      "jobs": "daily brief; optional triage scan (script poll, agent on wake); optional weekly money watch.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "your connected accounts.",
+      "pitch": "A failures-first daily brief, a numbered decision queue review, inbox interrupt rules with a scam & impersonation shield, script-first silent watches, an optional money watch, and an optional promises & waiting-on ledger.",
+      "reads": "calendar, mailbox, task lists, decision queue, watch outputs; for the money watch, the statement/CSV exports the user supplies.",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending",
+      "requires": [],
+      "title": "Morning Brief & Inbox Triage",
+      "version": "0.9",
+      "writes": "one brief per day; draft replies only, sent only with approval; the promises & waiting-on ledger, when installed (other people's commitments, in their words); the triage flag log, the scan's run records, and the scan detector's state file (seen-IDs, noise list), when the scan is installed; for the money watch, its baseline and run-record files and its job file; the deadlines register's state transitions, when module 10 is installed."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 7518,
+      "data_classes": [
+        "personal",
+        "third-party"
+      ],
+      "degrades_without": [
+        "scheduling",
+        "shell-python"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/11-persona-soul",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "templates/SOUL.template.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "templates/interview.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/soul_lint.py"
+        }
+      ],
+      "id": "core/persona-soul",
+      "jobs": "none of its own; the periodic reread rides the brief's monthly pass or the memory linter's weekly run when either is installed.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "none.",
+      "pitch": "Author the persona file deliberately instead of inheriting the stock template: an interview, a front-loaded template with examples, a mechanical linter, and staged-diff governance for every later change.",
+      "reads": "the existing persona file if one exists, the adopter's interview answers, and, for examples the adopter cannot supply, their interaction history.",
+      "rehearsed_at": "library branch runs 16-18 (2026-11-21): runs 16-17 (full interview) on the branch at 41eb24e plus the module as built; run 18 (short subset, cold-start fallback) on the EX-032/033 fix-pass tree; that round's fixes are in this tree, re-rehearsal at the committed pin pending",
+      "requires": [
+        "persona-file"
+      ],
+      "title": "Persona & Soul",
+      "version": "0.1",
+      "writes": "the persona file (SOUL.md), drafted from the interview and written only on the adopter's approval; the soul linter, copied as a tool."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 4455,
+      "data_classes": [
+        "none"
+      ],
+      "degrades_without": [
+        "scheduling"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/06-security-pack",
+      "files": [
+        {
+          "class": "accumulating",
+          "path": "VETTING.template.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "standing-grants-inventory-job.template.md"
+        }
+      ],
+      "id": "core/security-pack",
+      "jobs": "monthly grants inventory (in the brief).",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "only the source of what you are vetting.",
+      "pitch": "Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share.",
+      "reads": "anything you are about to install, in full, at a pinned version.",
+      "rehearsed_at": "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "requires": [],
+      "title": "Security Pack",
+      "version": "0.9",
+      "writes": "vetting records; standing-rule additions."
+    },
+    {
+      "action_classes": [
+        "none"
+      ],
+      "audit_words": 7002,
+      "data_classes": [
+        "personal",
+        "third-party"
+      ],
+      "degrades_without": [
+        "scheduling",
+        "shell-python"
+      ],
+      "depends_on": [
+        "core/core-procedures",
+        "core/memory-architecture"
+      ],
+      "dir": "modules/08-skill-lifecycle",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "templates/staged-proposal.template.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "templates/skill-queue-items.template.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/curator.py"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/stage_check.py"
+        }
+      ],
+      "id": "core/skill-lifecycle",
+      "jobs": "none at the Lite tier; at Full, one nightly session-review sweep and one weekly curator run.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "none.",
+      "pitch": "A session-review rubric that stages skill lessons instead of writing them live, plus staged-diff approval through the decision queue. Installs at the Lite tier by default; the Full tier adds a nightly sweep and a deterministic curator that archives unused skills but never deletes.",
+      "reads": "session transcripts, your custom skills, the decision queue, scheduled-job records.",
+      "rehearsed_at": "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "requires": [],
+      "tiers": [
+        {
+          "description": "In-session + explicit staging and staged-diff approval. No tools, no jobs, no ledger.",
+          "id": "lite"
+        },
+        {
+          "description": "Adds the nightly sweep, the curator with its usage ledger and reference tools, the shadow-week rollout, and the 30-day review. Offer at 5+ custom skills.",
+          "id": "full"
+        }
+      ],
+      "title": "Skill Lifecycle",
+      "version": "0.5",
+      "writes": "staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills, and a pointer line in the agent's main instruction file (added at the Lite install)."
+    }
+  ]
+}

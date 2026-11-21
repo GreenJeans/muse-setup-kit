@@ -25,6 +25,22 @@ on, and a fresh agent's future jobs must keep:
   records against the cadences stated here: a job whose run record
   is 48 hours past its cadence is flagged as silent, and detector
   silence is a failure, not an all-clear.
+- Job definitions stay slim. This bullet is a pointer, and the
+  job's own instructions are a short pointer too: baselines,
+  tables, and long instructions live in the state files and
+  design docs the job reads, not copied into the job body —
+  a job body that carries its own copy of a baseline is a second
+  source of truth, and it drifts. Jobs carry watermarks or
+  seen-ID lists in their state files, so each run reads only
+  what is new since the last run instead of re-reading the
+  whole source to find the delta. Two kinds of job are the
+  named exceptions, and carry their instructions in full by
+  design: a job that is itself an instruction surface (the
+  brief's job file hosts the brief's instructions and its
+  registered anchors), and a job whose work is reading
+  everything (the memory linter's review-by sweep, the monthly
+  manifest re-hash). Slimming either would delete the work,
+  not the overhead.
 
 ## Jobs
 
