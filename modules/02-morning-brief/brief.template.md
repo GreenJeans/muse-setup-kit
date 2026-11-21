@@ -138,7 +138,10 @@ order. The anchor stays in every rendering. -->
    overflow (records due but not checked) in the rotation file and report
    the count in Failures.
 7. **Monthly (1st only).** Standing-grants inventory; procedures-audit due
-   check; room sweep — list workstreams failing the keep test (no live
+   check; [IF evaluation-kit installed] the usage audit (module 05):
+   rank the jobs by estimated load and name the first candidates for
+   a script, a cadence band, or a slower clock — it stays monthly
+   even when the procedures audit goes quarterly; room sweep — list workstreams failing the keep test (no live
    machinery, no open next action, no dated gate) as close-out candidates.
    [IF promises ledger installed] Ledger entries with no date set:
    name each one until it is dated or dropped.

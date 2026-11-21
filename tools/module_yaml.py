@@ -14,8 +14,9 @@ dependency. The subset is deliberately small:
           - a scalar item
           - name: a map item
             extra: its second key (indented four spaces)
-    A list item is a scalar or a one-level map of scalars. Nothing
-    nests deeper.
+    A list item is a scalar or a one-level map whose values are
+    scalars or inline lists of scalars. A list item may not
+    itself be a list. Nothing nests deeper.
 
 Everything outside the subset is an ERROR, never a silent misparse:
 nested maps, anchors and aliases, block (multi-line) scalars, flow
@@ -23,12 +24,13 @@ maps, tabs, duplicate keys, inconsistent indentation, document
 markers — and the scalar spellings full YAML would reinterpret:
 inline comments (`value # note`), single-quoted scalars, tags
 (`!!str x`), nested lists in either form, YAML's other null and
-boolean spellings (`~`, `Null`, `true`, `false`, …), and unescaped
-double quotes inside a bare scalar. A scalar that needs one of
-those spellings gets double quotes and stays a string. Every error
-names the file and the line. Generated files (directory.json,
-advisories.json) are JSON instead; this parser is only for files a
-human authors.
+boolean spellings (`~`, `Null`, `true`, `false`, and the YAML 1.1
+family `y`, `yes`, `n`, `no`, `on`, `off`, in any case), and
+unescaped double quotes inside a bare scalar. A scalar that needs
+one of those spellings gets double quotes and stays a string.
+Every error names the file and the line. Generated files
+(directory.json, advisories.json) are JSON instead; this parser is
+only for files a human authors.
 
 Usage:
     python3 tools/module_yaml.py FILE          print the parsed
@@ -52,9 +54,14 @@ INT = re.compile(r"^-?\d+$")
 # literal `null` is a null here; the rest are strings a full YAML
 # parser would silently turn into booleans or nulls, so the subset
 # rejects them outright — quote the value if the string is meant.
+# The y/n/yes/no/on/off family is YAML 1.1's boolean spellings:
+# the same silent reinterpretation, the same rejection.
 YAML_SPELLINGS = ("~", "Null", "NULL", "True", "TRUE", "False",
                   "FALSE", "true", "false", ".nan", ".inf", "-.inf",
-                  "+.inf")
+                  "+.inf",
+                  "y", "Y", "yes", "Yes", "YES",
+                  "n", "N", "no", "No", "NO",
+                  "on", "On", "ON", "off", "Off", "OFF")
 
 # The class vocabularies module.yaml declares and MODULE.md
 # headers repeat (docs/library.md). kit_selfcheck imports these
@@ -266,7 +273,13 @@ def parse_text(text, path="<text>"):
                                              "outside the subset")
                     items.append({k2: _parse_scalar(v2, path, lineno2)})
                 else:
-                    items.append(_parse_scalar(item_text, path, lineno2))
+                    val = _parse_scalar(item_text, path, lineno2)
+                    if isinstance(val, list):
+                        _fail(path, lineno2, "a block-list item may "
+                                             "not itself be a list — "
+                                             "nested lists are outside "
+                                             "the subset")
+                    items.append(val)
                 continue
             if indent == 4 and isinstance(items[-1] if items else None,
                                           dict):
@@ -335,15 +348,29 @@ def header_fields(module_md_text):
     return fields
 
 
+NEGATIONS = ("no", "not", "never", "without")
+
+
 def _class_tokens(value, vocabulary):
     """The vocabulary tokens a header class line names, as a set.
     The line may carry prose around the tokens (module 02's line
-    explains itself); parity binds the token set, not the prose."""
+    explains itself); parity binds the token set, not the prose.
+    A token named only under an immediate negation — "no financial
+    data is held" — does not count: the header there is denying
+    the class, not declaring it, and a negation is not a
+    declaration. (A class the header both declares and negates
+    in different clauses counts as declared.)"""
     found = set()
     for token in vocabulary:
-        if re.search(r"(?<![a-z-])" + re.escape(token) +
-                     r"(?![a-z-])", value):
+        for m in re.finditer(r"(?<![a-z-])" + re.escape(token) +
+                             r"(?![a-z-])", value):
+            before = value[:m.start()].rstrip()
+            prev = before.rsplit(" ", 1)[-1].strip("—–-();,").lower() \
+                if before else ""
+            if prev in NEGATIONS:
+                continue
             found.add(token)
+            break
     return found
 
 

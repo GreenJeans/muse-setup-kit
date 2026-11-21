@@ -30,7 +30,10 @@ defect the kit's review rounds kept finding by hand:
      and Deferred sections); files a MODULE.md references
      (templates/, tools/, *.template.md, *.py in backticks) exist;
      every file module.yaml declares exists, with a valid class,
-     at a path confined to the module directory; and the check
+     at a path confined to the module directory — lexically and
+     by resolution: a declared path that is a symlink pointing
+     outside the module directory is an escape, not a file; and
+     the check
      runs both ways — a file shipped under templates/ or tools/
      (or as a top-level *.template.md) that module.yaml never
      declares is a finding, because the audit counter counts it
@@ -50,7 +53,13 @@ defect the kit's review rounds kept finding by hand:
      records were read at, and the catalog commit follows it), and
      advisories.json exists exactly when advisories.yaml does,
      with entries that validate. A stale catalog is a finding:
-     the listing verbs speak from it.
+     the listing verbs speak from it. Two depth checks ride with
+     it: in core mode a missing directory.json is itself a
+     finding (the catalog is generated, not optional), and when
+     the checkout is a git work tree, module records changed
+     after the catalog's generated_from pin are a finding even
+     when the edit is invisible to the catalog's payload — the
+     pin must name the records the catalog was built from.
 
 A field library (no manifest, no README table, no profiles) is
 checked with `--field <library-id>`: the same package checks —
@@ -323,6 +332,13 @@ def main():
                 findings.append(f"{mid}: declared file path escapes "
                                 f"the module directory: {rel}")
                 continue
+            root = os.path.realpath(mdir)
+            target = os.path.realpath(os.path.join(mdir, rel))
+            if target != root and not target.startswith(root + os.sep):
+                findings.append(f"{mid}: declared file path escapes "
+                                f"the module directory: {rel} "
+                                f"(resolves outside it)")
+                continue
             if not os.path.isfile(os.path.join(mdir, rel)):
                 findings.append(f"{mid}: declared file missing: {rel}")
         # The inverse direction: a file the package ships under
@@ -462,6 +478,11 @@ def main():
                 findings.append(f"advisories.yaml: {problem}")
         except module_yaml.ModuleYamlError as exc:
             findings.append(f"advisories.yaml: {exc}")
+    if not args.field and not os.path.isfile(directory_path):
+        findings.append("directory.json is missing — the catalog is "
+                        "generated from the module records, not "
+                        "optional; regenerate it with "
+                        "tools/build_directory.py and commit it")
     if os.path.isfile(directory_path):
         try:
             on_disk_dir = _json.load(open(directory_path,
@@ -475,6 +496,38 @@ def main():
                                 "from what tools/build_directory.py "
                                 "regenerates from the current records; "
                                 "regenerate and commit it")
+            gen = on_disk_dir.get("generated_from")
+            if isinstance(gen, str) \
+                    and re.fullmatch(r"[0-9a-f]{40}", gen) \
+                    and os.path.isdir(os.path.join(repo, ".git")):
+                def _git(*argv):
+                    try:
+                        r = subprocess.run(["git", "-C", repo, *argv],
+                                           capture_output=True,
+                                           text=True, timeout=30)
+                    except (OSError, subprocess.SubprocessError):
+                        return None
+                    return r.stdout if r.returncode == 0 else None
+
+                if _git("rev-parse", "--verify", "--quiet",
+                        gen + "^{commit}") is not None:
+                    changed = _git("diff", "--name-only", gen, "HEAD",
+                                   "--", "modules",
+                                   "advisories.yaml") or ""
+                    dirty = _git("status", "--porcelain", "--",
+                                 "modules", "advisories.yaml") or ""
+                    n = len([l for l in changed.splitlines()
+                             if l.strip()]) \
+                        + len([l for l in dirty.splitlines()
+                               if l.strip()])
+                    if n:
+                        findings.append(
+                            "module records changed after "
+                            "directory.json's generated_from pin "
+                            f"({gen[:7]}): {n} record file(s) "
+                            "differ from the pinned commit — "
+                            "regenerate the catalog so its pin "
+                            "names the records it was built from")
             if os.path.isfile(advisories_src):
                 if not os.path.isfile(advisories_path):
                     findings.append("advisories.yaml exists but "

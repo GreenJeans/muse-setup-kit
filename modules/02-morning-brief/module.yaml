@@ -11,13 +11,13 @@ license: MIT
 kit_compat: [kit-1]
 depends_on: [core/core-procedures]
 requires: []
-degrades_without: [scheduling]
+degrades_without: [scheduling, shell-python]
 reads: "calendar, mailbox, task lists, decision queue, watch outputs; for the money watch, the statement/CSV exports the user supplies."
 writes: "one brief per day; draft replies only, sent only with approval; the promises & waiting-on ledger, when installed (other people's commitments, in their words); the triage flag log, the scan's run records, and the scan detector's state file (seen-IDs, noise list), when the scan is installed; for the money watch, its baseline and run-record files and its job file; the deadlines register's state transitions, when module 10 is installed."
 network: "your connected accounts."
 jobs: "daily brief; optional triage scan (script poll, agent on wake); optional weekly money watch."
 rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending"
-data_classes: [personal, third-party]
+data_classes: [personal, financial, third-party]
 action_classes: [send]
 files:
   - path: brief.template.md

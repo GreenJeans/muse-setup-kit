@@ -39,8 +39,9 @@ known and no more.
 - A module 05 **install** (its method — blind dual review — has
   been run against the kit itself in the rounds ROADMAP records
   by phase: Phase 2 (pre-v0.1), Phase 5 (adversarial, v0.3), two
-  direction rounds, Phase 6 (v0.4) and Phase 10 (v0.8), and
-  Phase 11 (v0.9) — five rounds; the install path has not).
+  direction rounds, Phase 6 (v0.4) and Phase 10 (v0.8),
+  Phase 11 (v0.9), and Phase 12 (the library) — six rounds;
+  the install path has not).
 - An uninstall of anything larger than the Starter profile, and
   any uninstall involving shares to revoke (run 8's install had
   none; the revocation steps are unrehearsed).

@@ -79,6 +79,13 @@ Fields beyond today's manifest entry:
   `kit_selfcheck` fails on it, and the directory generator
   refuses it. `list available` reads review status from those
   records, never from the catalog entry itself.
+  One honesty note: the core index is not yet a defined
+  artifact — no file or format in this repo holds a core
+  module's review record. Until the maintainer defines one, a
+  core module's review record lives in the maintainer's
+  vetting log, and every module's standing state in the
+  catalog is "no review recorded" — which is also, today,
+  simply the fact.
 - **audit_words** — computed by the tooling on the all-files basis,
   not hand-written.
 - **kit_compat** — the core interface versions the module depends

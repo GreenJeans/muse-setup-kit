@@ -33,7 +33,14 @@ on, and a fresh agent's future jobs must keep:
   source of truth, and it drifts. Jobs carry watermarks or
   seen-ID lists in their state files, so each run reads only
   what is new since the last run instead of re-reading the
-  whole source to find the delta.
+  whole source to find the delta. Two kinds of job are the
+  named exceptions, and carry their instructions in full by
+  design: a job that is itself an instruction surface (the
+  brief's job file hosts the brief's instructions and its
+  registered anchors), and a job whose work is reading
+  everything (the memory linter's review-by sweep, the monthly
+  manifest re-hash). Slimming either would delete the work,
+  not the overhead.
 
 ## Jobs
 

@@ -15,7 +15,7 @@ Legend: **required** = the module will not install without it.
 | Capability | 00 Procedures | 01 Memory | 02 Brief | 03 HQ | 04 Exchange | 05 Evaluation | 06 Security | 08 Skill lifecycle | 09 Cost | 10 Deadlines |
 |---|---|---|---|---|---|---|---|---|---|---|
 | scheduling | — | degrades | degrades | — | — | degrades | degrades | degrades (Full only) | degrades | — |
-| shell + python | — | degrades | — | — | — | degrades | — | degrades (Full only) | — | — |
+| shell + python | — | degrades | degrades | — | — | degrades | — | degrades (Full only) | — | — |
 | second person | — | — | — | required | — | — | — | — | — | — |
 | shared docs | — | — | — | required | — | — | — | — | — | — |
 | shared tasks | — | — | — | required | — | — | — | — | — | — |
@@ -42,7 +42,10 @@ Legend: **required** = the module will not install without it.
 - **No shell + python.** The kit's four tools (memory linter,
   curator, kit_doctor, stage_check) cannot run. Module 05 loses
   kit_doctor — the mechanical half of an audit — and freezes
-  packets without the drift check. Modules 01 and 08
+  packets without the drift check. Module 02's triage detector
+  cannot run either: the scan degrades to an agent-run scan at
+  a reduced cadence, the degraded mode module 02 names.
+  Modules 01 and 08
   Full keep their paper discipline — the schema, the staging format,
   the approval gate — and lose the mechanical checks: module 01's
   lint becomes a manual header and figure review against the schema

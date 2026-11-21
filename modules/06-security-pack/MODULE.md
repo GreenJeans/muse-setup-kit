@@ -143,10 +143,10 @@ vetted under this same record, plus the field-module rules in
 action classes judged by effect (not file type), and the risk
 gate. Read library.md before vetting a module package; the
 connector-only fields in the vetting template do not apply to one
-(the template names the fields that replace them). Until the
-library phase ships the package format, a package without a
-`module.yaml` is vetted as a third-party skill pack under the
-standard record, not under the field-module rules.
+(the template names the fields that replace them). A package
+without a `module.yaml` is not a kit-library package at all:
+it is vetted as a third-party skill pack under the standard
+record, not under the field-module rules.
 
 **Provenance tiers.** Classify the item before anything else, and
 record the tier in the vetting entry:

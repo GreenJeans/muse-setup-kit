@@ -63,10 +63,10 @@ Connectors and MCP servers add these fields (module 06's vetting pack):
   where the platform exposes it, and at the monthly inventory)
 
 Field modules (kit-library packages) replace the connector fields
-above with these (rules in `docs/library.md`). **Not applicable
-until the library phase ships the package format: a package
-without a `module.yaml` is vetted as a third-party skill pack
-under the standard record, not under this block.**
+above with these (rules in `docs/library.md`). **A package
+without a `module.yaml` is not a kit-library package: it is
+vetted as a third-party skill pack under the standard record,
+not under this block.**
 
 - **Library / module:** <library-id>/<module-id>
 - **module.yaml fields present:** <the fields docs/library.md

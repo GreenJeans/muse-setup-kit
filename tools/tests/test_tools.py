@@ -15,7 +15,14 @@ found, so the fix cannot silently regress:
   - stage_check expiry and the shadow-folder exemption;
   - kit_doctor going blind on mixed pins, missing overdue
     deferred checks, and deleted accumulating files (run 15: a
-    deleted service log passed the doctor without a word).
+    deleted service log passed the doctor without a word);
+  - the EX-024/025 verification round's residuals: advisory
+    module ids that resolve to nothing, the doctor offering
+    repairs the wizard refuses, symlink escapes from declared
+    paths, catalog staleness the regenerate-and-diff check
+    cannot see, and the parser's last uncaught spellings
+    (YAML 1.1 booleans, a block-list item that is a list,
+    negated class prose).
 
 Run: python3 -m unittest discover -s tools/tests
 """
@@ -378,6 +385,24 @@ class KitDoctorTest(unittest.TestCase):
             self.assertTrue(any("repair, or record the removal" in p
                                 for p in rep["problems"]))
 
+    def test_missing_static_verbatim_without_source_offers_no_repair(self):
+        # EX-024/025 (R11): a legacy static-verbatim line with no
+        # from: token is not repairable — the wizard's repair
+        # reads the source from that token and refuses without
+        # it. The doctor must not offer a repair that will abort.
+        import hashlib
+        with tempfile.TemporaryDirectory() as td:
+            h = hashlib.sha256(b"tool\n").hexdigest()
+            rep = self._doctor_workspace(
+                td, "# Plan\n- install — commit aaaaaaa1111\n"
+                    "## Installed files (baseline)\n"
+                    f"- installed: tool.py sha256:{h} static-verbatim"
+                    " core/example\n")
+            self.assertTrue(any("not repairable" in p
+                                for p in rep["problems"]))
+            self.assertFalse(any("repair, or record the removal" in p
+                                 for p in rep["problems"]))
+
     def test_two_modules_claiming_one_path_is_a_problem(self):
         import hashlib
         with tempfile.TemporaryDirectory() as td:
@@ -542,6 +567,58 @@ class BuildDirectoryTest(unittest.TestCase):
             r = run(BUILD_DIR, "--repo", td, "--library", "core")
             self.assertEqual(r.returncode, 1)
 
+    def _advisory_repo(self, td, module_field):
+        make_repo(td, [("example", "core/example")])
+        with open(os.path.join(td, "advisories.yaml"), "w") as fh:
+            fh.write("advisories:\n"
+                     "  - id: ADV-2026-001\n"
+                     f"    module: {module_field}\n"
+                     "    pin: all\n"
+                     "    date: 2026-11-21\n"
+                     "    reason: a bad pin shipped\n"
+                     "    remedy: suspend it\n")
+        git(td, "add", "-A")
+        git(td, "commit", "-qm", "advisories")
+
+    def test_advisory_module_must_resolve(self):
+        # EX-024/025 (R3): resolvability used to be void for any
+        # id containing "/" — a typoed own-library advisory
+        # (core/exampl) passed validation and would never match
+        # an installed module at audit. Only the library itself
+        # or a module this catalog carries resolves.
+        with tempfile.TemporaryDirectory() as td:
+            self._advisory_repo(td, "core/exampl")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("does not resolve", r.stderr)
+        with tempfile.TemporaryDirectory() as td:
+            self._advisory_repo(td, "bogus/example")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("does not resolve", r.stderr)
+        with tempfile.TemporaryDirectory() as td:
+            self._advisory_repo(td, "core")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            doc = json.load(open(os.path.join(td, "advisories.json")))
+            self.assertEqual(len(doc["advisories"]), 1)
+
+    def test_pitch_cap_is_enforced(self):
+        # Fix item 26's missing fixture: catalog text is
+        # length-capped, and the generator is where it bites.
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("example", "core/example")])
+            p = os.path.join(td, "modules", "example", "module.yaml")
+            text = open(p).read().replace(
+                'pitch: "A pitch."', 'pitch: "' + "x" * 401 + '"')
+            with open(p, "w") as fh:
+                fh.write(text)
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "long pitch")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("capped", r.stderr)
+
 
 class SelfcheckFieldTest(unittest.TestCase):
     def _field_repo(self, td, extra_yaml="", files_line="files: []\n"):
@@ -599,6 +676,169 @@ class SelfcheckFieldTest(unittest.TestCase):
             r = run(SELFCHECK, "--repo", td, "--field", "field")
             self.assertEqual(r.returncode, 1)
             self.assertIn("duplicate module id", r.stdout)
+
+    def test_field_mode_flags_an_undeclared_shipped_file(self):
+        # Fix item 26's missing fixture (library #13's inverse
+        # check): a file shipped under templates/ that
+        # module.yaml never declares is counted by the audit
+        # counter but invisible to the catalog.
+        with tempfile.TemporaryDirectory() as td:
+            self._field_repo(td)
+            tdir = os.path.join(td, "modules", "home-operations",
+                                "templates")
+            os.makedirs(tdir)
+            with open(os.path.join(tdir, "extra.md"), "w") as fh:
+                fh.write("# Extra\n")
+            r = run(SELFCHECK, "--repo", td, "--field", "field")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("shipped file not declared", r.stdout)
+
+    def test_field_mode_flags_a_symlink_escape(self):
+        # EX-024/025 (R13): confinement used to be lexical only,
+        # so a symlink inside the module pointing outside passed.
+        # Resolution is confinement too.
+        with tempfile.TemporaryDirectory() as td:
+            self._field_repo(
+                td, files_line="files:\n"
+                               "  - path: link.md\n"
+                               "    class: static-verbatim\n")
+            outside = os.path.join(td, "outside.md")
+            with open(outside, "w") as fh:
+                fh.write("# Outside\n")
+            os.symlink(outside, os.path.join(
+                td, "modules", "home-operations", "link.md"))
+            r = run(SELFCHECK, "--repo", td, "--field", "field")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("escapes the module directory", r.stdout)
+
+    def test_records_changed_after_the_catalog_pin_is_a_finding(self):
+        # EX-024/025 (R14): the regenerate-and-diff check is
+        # blind to payload-invisible edits (a same-word-count
+        # prose change alters nothing the catalog stores). The
+        # git half of the check reads the pin: records changed
+        # after generated_from are a finding even then.
+        with tempfile.TemporaryDirectory() as td:
+            self._field_repo(td)
+            git(td, "init", "-q")
+            git(td, "config", "user.email", "t@example.com")
+            git(td, "config", "user.name", "Test")
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "fixture")
+            r = run(BUILD_DIR, "--repo", td, "--library", "field")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "catalog")
+            r = run(SELFCHECK, "--repo", td, "--field", "field")
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            mp = os.path.join(td, "modules", "home-operations",
+                              "MODULE.md")
+            with open(mp) as fh:
+                prose = fh.read()
+            with open(mp, "w") as fh:
+                fh.write(prose.replace("1. Do it.", "1. Do it!"))
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "payload-invisible prose edit")
+            r = run(SELFCHECK, "--repo", td, "--field", "field")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("changed after directory.json's "
+                          "generated_from pin", r.stdout)
+            self.assertNotIn("directory.json is stale", r.stdout)
+
+
+class SelfcheckCoreTest(unittest.TestCase):
+    def _core_repo(self, td, compat="[kit-1]"):
+        sys.path.insert(0, os.path.join(REPO, "tools"))
+        import kit_selfcheck as ks
+        mdir = os.path.join(td, "modules", "02-example")
+        os.makedirs(mdir)
+        with open(os.path.join(mdir, "module.yaml"), "w") as fh:
+            fh.write(MODULE_FIXTURE.format(
+                mid="core/example", folder="02-example").replace(
+                    "[kit-1]", compat))
+        with open(os.path.join(mdir, "MODULE.md"), "w") as fh:
+            fh.write("# Module — Example\n\n"
+                     "**Reads:** the files. **Writes:** a register.\n"
+                     "**Network:** none. **Jobs:** none.\n"
+                     "**Data classes:** personal. "
+                     "**Action classes:** none.\n\n"
+                     "## Install\n\n1. Do it.\n")
+        with open(os.path.join(mdir, "VERIFY.md"), "w") as fh:
+            fh.write("# Verify\n\n## At install\n\n- x\n\n"
+                     "## Deferred\n\n- y\n")
+        wdir = os.path.join(td, "wizard")
+        os.makedirs(wdir)
+        manifest = os.path.join(wdir, "manifest.yaml")
+        with open(manifest, "w") as fh:
+            fh.write("library: core\n"
+                     "interface_version: 1\n"
+                     "profiles:\n"
+                     "  - id: starter\n"
+                     "    modules: [core/example]\n"
+                     "    audit_words: 0\n"
+                     "  - id: standard\n"
+                     "    modules: [core/example]\n"
+                     "    audit_words: 0\n")
+        everything = ks.round100(ks.words(manifest)
+                                 + ks.count_module_words(mdir))
+        with open(os.path.join(td, "README.md"), "w") as fh:
+            fh.write("# Fixture\n\n"
+                     "| 02 | Example | x |\n\n"
+                     "| **Starter** | 02 | ~0 words |\n"
+                     "| **Standard** | 02 | ~0 words |\n"
+                     f"| Everything | all | ~{everything} words |\n")
+        git(td, "init", "-q")
+        git(td, "config", "user.email", "t@example.com")
+        git(td, "config", "user.name", "Test")
+        git(td, "add", "-A")
+        git(td, "commit", "-qm", "fixture")
+        return td
+
+    def test_missing_directory_json_is_a_finding_in_core_mode(self):
+        # EX-024/025 (R14): the freshness block used to run only
+        # when directory.json existed, so a core repo with no
+        # catalog at all passed clean.
+        with tempfile.TemporaryDirectory() as td:
+            self._core_repo(td)
+            r = run(SELFCHECK, "--repo", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("directory.json is missing", r.stdout)
+            r = run(BUILD_DIR, "--repo", td)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "catalog")
+            r = run(SELFCHECK, "--repo", td)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+
+    def test_kit_compat_gate_is_checked(self):
+        # Fix item 26's missing fixture: a module whose
+        # kit_compat does not name the manifest's interface
+        # version may not be offered by the wizard.
+        with tempfile.TemporaryDirectory() as td:
+            self._core_repo(td, compat="[kit-9]")
+            r = run(SELFCHECK, "--repo", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("kit_compat", r.stdout)
+            self.assertIn("does not name kit-1", r.stdout)
+
+    def test_stale_catalog_is_a_finding(self):
+        # Fix item 26's missing fixture: records edited after
+        # generation, catalog not regenerated.
+        with tempfile.TemporaryDirectory() as td:
+            self._core_repo(td)
+            r = run(BUILD_DIR, "--repo", td)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "catalog")
+            p = os.path.join(td, "modules", "02-example",
+                             "module.yaml")
+            with open(p) as fh:
+                text = fh.read()
+            with open(p, "w") as fh:
+                fh.write(text.replace('title: Example',
+                                      'title: Example Revised'))
+            r = run(SELFCHECK, "--repo", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("directory.json is stale", r.stdout)
 
 
 class ModuleYamlTest(unittest.TestCase):
@@ -688,6 +928,10 @@ class ModuleYamlTest(unittest.TestCase):
             'reviewed_by: null # pending review',
             'reviewed_by: Null',
             'reviewed_by: false',
+            'reviewed_by: yes',
+            'title: on',
+            'title: Off',
+            'title: No',
             'title: say "hi" there',
             'title: "unterminated',
         ]
@@ -710,6 +954,57 @@ class ModuleYamlTest(unittest.TestCase):
             self.assertEqual(r.returncode, 1)
             self.assertIn("bad.yaml:3", r.stderr)
             self.assertIn("nested", r.stderr)
+
+    def test_block_list_item_that_is_a_list_fails_loud(self):
+        # EX-024/025 (R19): `- [a, b]` used to parse into a
+        # nested list no check caught — the one list form the
+        # original probes missed.
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "bad.yaml",
+                            "id: core/example\n"
+                            "files:\n"
+                            "  - [a, b]\n")
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("bad.yaml:3", r.stderr)
+            self.assertIn("nested", r.stderr)
+
+    def test_block_list_map_may_hold_an_inline_list(self):
+        # The manifest's own shape: a block-list map item whose
+        # value is an inline list of scalars is one level, and
+        # parses (the profiles in wizard/manifest.yaml rely on it).
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "ok.yaml",
+                            "profiles:\n"
+                            "  - id: starter\n"
+                            "    modules: [core/example]\n")
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 0, r.stderr)
+            doc = json.loads(r.stdout)
+            self.assertEqual(doc["profiles"][0]["modules"],
+                             ["core/example"])
+
+    def test_parity_negated_class_mention_is_not_a_declaration(self):
+        # EX-024/025 (R19): _class_tokens matched negated prose —
+        # "no financial data is held" declared financial. A
+        # negation is not a declaration.
+        with tempfile.TemporaryDirectory() as td:
+            self._write(td, "module.yaml",
+                        'id: core/example\n'
+                        'reads: "the files."\n'
+                        'writes: "a register."\n'
+                        'network: "none."\n'
+                        'jobs: "none."\n'
+                        'data_classes: [none]\n'
+                        'action_classes: [none]\n')
+            self._write(td, "MODULE.md",
+                        "# Module — Example\n\n"
+                        "**Reads:** the files. **Writes:** a register.\n"
+                        "**Network:** none. **Jobs:** none.\n"
+                        "**Data classes:** none — no financial data "
+                        "is held. **Action classes:** none.\n")
+            r = run(MODULE_YAML, "--parity", td)
+            self.assertEqual(r.returncode, 0, r.stderr)
 
     def test_parity_binds_class_sets(self):
         with tempfile.TemporaryDirectory() as td:

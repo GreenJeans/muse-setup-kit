@@ -152,9 +152,13 @@ def collect_entries(repo, library):
 def validate_advisories(entries, known_ids, library):
     """Return a list of problems with advisory entries. `pin` is
     the module's checkout pin (docs/library.md), or the literal
-    `all`; `known_ids` is the set of module ids resolvable in
-    this repo — an entry may also name the library itself, or a
-    qualified id from another library the core index carries."""
+    `all`; `known_ids` is the set of module ids the catalog
+    being built or validated carries. An entry resolves only if
+    it names the library itself or a module in `known_ids` —
+    a qualified-looking id from a library this catalog does not
+    carry does not resolve, and neither does a typo: an advisory
+    that names nothing real would sail through validation and
+    never match an installed module at audit."""
     problems = []
     if not isinstance(entries, list):
         return ["advisories: not a list"]
@@ -168,9 +172,10 @@ def validate_advisories(entries, known_ids, library):
         mod = adv.get("module")
         if not isinstance(mod, str) or not mod:
             problems.append(f"{aid}: module missing")
-        elif mod != library and mod not in known_ids \
-                and "/" not in mod:
-            problems.append(f"{aid}: module {mod!r} does not resolve")
+        elif mod != library and mod not in known_ids:
+            problems.append(f"{aid}: module {mod!r} does not resolve "
+                            f"to the library or a module in this "
+                            f"catalog")
         pin = adv.get("pin")
         if pin != "all" and not (isinstance(pin, str)
                                  and FULL_HASH.match(pin)):

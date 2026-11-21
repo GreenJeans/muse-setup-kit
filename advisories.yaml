@@ -13,6 +13,8 @@
 #     date: YYYY-MM-DD
 #     reason: what was found, in one or two sentences
 #     remedy: what an install should do (e.g. "suspend core/<id>")
+#     fixed_in: optional — the full commit hash that fixed the
+#       issue, recorded once a fix exists; absent until then
 #
 # An advisory against an installed module's pin surfaces to the user
 # through the audit verb and the brief's monthly pass, with suspend

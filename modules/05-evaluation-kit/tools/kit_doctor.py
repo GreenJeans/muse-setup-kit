@@ -29,7 +29,11 @@ Checks, in the workspace:
      into a note (the file was deleted on purpose, and repair must
      never resurrect it). For a missing static-verbatim file with
      no removal line, the problem names the choice the wizard
-     offers: repair, or record the removal.
+     offers: repair, or record the removal — but only when the
+     line names its from: source, the one repair reads. A
+     static-verbatim line without one is not repairable, and the
+     problem says so and offers the removal record only: the
+     doctor never sends the user into a repair that will abort.
      Lines ending in "accumulating" name files that grow by design
      (the queue, JOBS.md, ledgers): inventoried, never diffed. A
      baselined accumulating file that no longer exists is reported
@@ -164,6 +168,7 @@ def main():
         baselined += 1
         rel, want = m.group(1), m.group(2)
         fclass, owner = m.group(3), m.group(4)
+        source = m.group(5)
         if owner:
             if rel in claimed and claimed[rel] != owner:
                 problems.append(f"baseline path claimed by two "
@@ -176,9 +181,14 @@ def main():
                 notes.append(f"recorded removal (repair will not "
                              f"resurrect it): {rel} — removed "
                              f"{removed[rel][0]}: {removed[rel][1]}")
-            elif fclass == "static-verbatim":
+            elif fclass == "static-verbatim" and source:
                 problems.append(f"baselined file missing: {rel} — "
                                 f"repair, or record the removal")
+            elif fclass == "static-verbatim":
+                problems.append(f"baselined file missing: {rel} — "
+                                f"not repairable (the baseline line "
+                                f"names no from: source for repair "
+                                f"to read); record the removal")
             else:
                 problems.append(f"baselined file missing: {rel}")
             continue

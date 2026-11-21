@@ -11,7 +11,7 @@ license: MIT
 kit_compat: [kit-1]
 depends_on: [core/core-procedures, core/memory-architecture]
 requires: []
-degrades_without: [other-agents, scheduling]
+degrades_without: [other-agents, scheduling, shell-python]
 reads: "your procedures and memory, frozen into an audit packet."
 writes: "packets, findings, adoption records."
 network: "a second model if used for blind review."

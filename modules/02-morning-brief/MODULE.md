@@ -77,14 +77,26 @@ never creates drafts. Delivery window: the user's waking hours only.
 
 The scan is a watch in the script-first architecture below: a
 script detector polls the mailbox every few minutes inside the
-window, checks the never-mute classes first (VIP senders, security
-alerts, anything the shield must grade), applies its noise list to
-the rest, and wakes the agent only for mail that survives. The
-grading and interrupt judgment in this section and the shield's
-are the woken agent's work — the detector classifies nothing it
-would take judgment to classify. The scan's run records are the
-detector's poll records, one per poll, so the brief's
-detector-silence checks read them unchanged.
+window, checks the never-mute classes first — by fixed pattern,
+not judgment: a sender on the VIP list or the immediacy set, a
+security-alert shape, or a message matching a shield pattern
+recorded in the job file is never muted and always wakes the
+agent — then applies its noise list to what remains, and wakes
+the agent for mail that survives. The grading and interrupt
+judgment in this section and the shield's are the woken agent's
+work — the detector classifies nothing it would take judgment
+to classify; its shield patterns are a recorded list it matches
+mechanically, and a match is a wake, not a grade. The scan's run
+records are the detector's poll records, one per poll, so the
+brief's detector-silence checks read them unchanged.
+
+**Degraded mode.** The detector needs shell + python. Without
+them the scan does not stop; it degrades to an agent-run scan
+at a reduced cadence — the brief's own pass, plus one
+mid-window check at a time the user sets — and the plan
+records the degradation like any other. The shield and
+interrupt rules are unchanged; only the polling is coarser,
+and a coarser scan is named in the brief until it ends.
 
 ## The scam & impersonation shield (part of triage)
 
@@ -254,16 +266,25 @@ it has failed, quietly. Three guardrails keep a detector honest:
 ### Learning filters
 
 Where the noise is recurring — the same senders, the same
-sources — the woken worker feeds what it muted back into the
-detector's state file, as a noise list. The filter gets quieter
-over time without code changes: each wake that ends in a mute
-teaches the detector not to wake for that again.
+sources — the woken worker proposes additions to the detector's
+noise list, and confirmed additions live in the state file. The
+filter gets quieter over time without code changes — but a
+mute is a small standing decision, and it is the user's, not
+the agent's: each proposal rides the decision queue (the
+sender, the source, and the wake that prompted it), and the
+sender joins the noise list only when the user clears the
+item. Silence does not add it — the same guard the immediacy
+set and the money-watch baseline carry. Until a proposal is
+confirmed, that sender keeps waking the agent.
 
 The ordering is a safety rule, not a preference: the classes
 that must never be muted — VIP senders, security and account
 alerts, anything the shield must grade — are checked **before**
 any mute rule is consulted, in the detector and in the worker
-alike. Those wake regardless of the noise list. A mute learned
+alike. In the detector the check is mechanical: the recorded
+sender lists and the job file's recorded shield patterns.
+Grading is the woken worker's, on everything that wakes.
+Those wake regardless of the noise list. A mute learned
 from a hundred newsletters can never swallow an alert, because
 an alert never reaches the mute rule.
 
@@ -482,7 +503,7 @@ seen to have happened.
    time (user's morning, their timezone) and delivery (main chat).
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
-4. Optional: the triage scan — script-first (see Watches, above), same interrupt rules. Stand up the detector script: it polls the mailbox every few minutes inside the delivery window, keeps the state file (seen-IDs and the noise list), checks the never-mute classes before any mute, and wakes the agent under the job file's rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and address, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the detector appends on every poll, a flag log the brief reads, and the state file (the template names all three).
+4. Optional: the triage scan — script-first (see Watches, above), same interrupt rules. Stand up the detector script: it polls the mailbox every few minutes inside the delivery window, keeps the state file (seen-IDs and the noise list), checks the never-mute classes before any mute, and wakes the agent under the job file's rules. The script authenticates the way procedures §10 requires: through the platform's own credential store — the connected account's authorized session, held by the platform — never a password or token written into the script, its configuration, or the state file. If the platform gives a script no such route, the scan gets none by a side door: it runs in the degraded agent-run mode (see Inbox triage, above) until one exists. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and address, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the detector appends on every poll, a flag log the brief reads, and the state file (the template names all three).
 5. Optional: the money watch — weekly cadence. Build the baseline
    with the user from their exports into
    `finance/money-watch-baseline.md`, from
