@@ -1,5 +1,5 @@
 {
-  "generated_from": "cd97b024908c03a74e826c0a26cfc29bdd252e2f",
+  "generated_from": "7a184039238a9b44cb13a2c7f777b2c3fb89b1f8",
   "library": "core",
   "modules": [
     {
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 5490,
+      "audit_words": 6892,
       "data_classes": [
         "personal"
       ],
@@ -73,6 +73,26 @@
         {
           "class": "static-rendered",
           "path": "templates/continuity-handover.template.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "templates/feature_list.template.json"
+        },
+        {
+          "class": "static-rendered",
+          "path": "templates/STATE.template.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "templates/AGENTS.repo.template.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/verify_done.py"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/compact_error.py"
         }
       ],
       "id": "core/core-procedures",
@@ -85,7 +105,7 @@
       "network": "none.",
       "pitch": "Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.",
       "reads": "your existing agent instructions and workspace layout.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending; harness additions (verifier gate, error compaction, STATE card) exercised in run 19 on the harness branch pre-commit, changed surfaces only",
       "requires": [],
       "title": "Core Procedures",
       "version": "0.9",
@@ -170,7 +190,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2897,
+      "audit_words": 3701,
       "data_classes": [
         "personal",
         "third-party"
@@ -193,6 +213,74 @@
         {
           "class": "static-verbatim",
           "path": "tools/kit_doctor.py"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/run_eval.py"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/README.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/001-memory-supersede/instruction.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/001-memory-supersede/verify.py"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/001-memory-supersede/seed/MEMORY.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/001-memory-supersede/solution/MEMORY.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/002-feature-list-gate/instruction.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/002-feature-list-gate/verify.py"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/002-feature-list-gate/seed/feature_list.json"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/002-feature-list-gate/solution/feature_list.json"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/002-feature-list-gate/solution/hello.txt"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/003-error-compaction/instruction.md"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/003-error-compaction/verify.py"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/003-error-compaction/seed/config.txt"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/003-error-compaction/seed/error.txt"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/003-error-compaction/solution/config.txt"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "evals/tasks/003-error-compaction/solution/error.txt"
         }
       ],
       "id": "core/evaluation-kit",
@@ -205,11 +293,11 @@
       "network": "a second model if used for blind review.",
       "pitch": "Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.",
       "reads": "your procedures and memory, frozen into an audit packet.",
-      "rehearsed_at": null,
+      "rehearsed_at": "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed",
       "requires": [],
       "title": "Evaluation Kit",
       "version": "0.8",
-      "writes": "packets, findings, adoption records."
+      "writes": "packets, findings, adoption records, eval results."
     },
     {
       "action_classes": [
