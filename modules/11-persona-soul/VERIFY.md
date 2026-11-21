@@ -11,25 +11,38 @@
       separately from the plan's own approval.
 - [ ] The examples block holds four filled exchanges plus an
       anti-example, in the template's blockquote form. Each
-      exchange is one the adopter supplied, or one drafted
-      from their real interaction history and marked as
-      drafted for their veto or pick. None was invented from
-      nothing; the plan names which kind each is.
+      exchange is one the adopter supplied, one drafted from
+      their real interaction history and marked as drafted
+      for their veto or pick, or — where no history exists —
+      one drafted from the interview answers applied to a
+      situation the adopter named, marked drafted/provisional
+      the same way. None was invented from nothing; the plan
+      names which kind each is, and ledgers replacing
+      drafted-from-answers exchanges with real-history ones
+      at the first reread. Fewer than four filled exchanges,
+      recorded in the plan as a gap, is not a failed install;
+      a recorded examples gap is the one lint finding that
+      may stand at install.
 - [ ] The priority order in the file is the adopter's ranking
       from the interview, compared against the recorded
-      answers, not the template's candidate order, and not
-      the agent's guess.
+      answers, not the order in which the template lists the
+      candidates, and not the agent's guess.
 - [ ] The governance section names the core's owner, the
       staged-diff rule, the evidence threshold for a change,
       the reread cadence, the size cap, and the adopter's
-      drift signs. All six, in the adopter's terms.
+      drift signs. All six, in the adopter's terms. Where
+      the short subset was used, the reread cadence and the
+      size cap may stand at the template's defaults; the
+      plan records them as defaults adopted, not answers
+      given.
 - [ ] The failure-mode checklist in MODULE.md was run against
       the draft before it was shown; the plan records the
       result, including any mode left knowingly unaddressed.
 - [ ] Word count at or under the cap the governance section
       states (about 1,200 by default). Where a shell is
-      available, `tools/soul_lint.py` runs against the file
-      with no findings; any boilerplate warnings are
+      available, `tools/soul_lint.py --cap <the cap the
+      governance section states>` runs against the file with
+      no findings; any boilerplate warnings are
       dispositioned in the plan (kept lines name the behavior
       they change). Where no shell is available, the same
       checks were worked by hand and the plan says so.

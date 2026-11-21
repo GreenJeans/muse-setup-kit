@@ -45,7 +45,17 @@ drifts.
   exists, this module merges rather than overwrites (wizard
   ground rule 4): the adopter's own wording survives where it
   does not conflict, and a conflict is a question, not a
-  replacement.
+  replacement. Stock lines the platform shipped are not the
+  adopter's wording: each survives only through the
+  delete-the-line test, with the adopter keeping it and the
+  behavior it changes named.
+- **The interview** (`templates/interview.md`), copied
+  static-verbatim into the workspace's module record beside
+  the plan: the deferred reread works from it, alongside the
+  failure-mode checklist below, which stays with the module
+  record the same way. Of the module's declared files, these
+  and the linter are what land; the template itself lands
+  only as SOUL.md, rendered.
 - **`tools/soul_lint.py`**, copied from this module and
   baselined static-verbatim: the mechanical half of the
   module's checks (word cap, examples block filled, priority
@@ -66,13 +76,32 @@ for approval before writing anything.
    subset when the adopter's time is short. Record answers in
    the adopter's words where wording matters.
 2. **Draft.** Fill `templates/SOUL.template.md` from the
-   answers. Sections the answers do not reach are cut, not
-   padded: a short honest file beats a complete generic one.
-   Two sections are syntheses, not single answers: People is
-   drafted from Q3, Q30, Q31, and Q33 together, and Q15's
-   task ranking lands in Temperament as the care-versus-speed
-   trait. Run the failure-mode checklist below against the
-   draft before showing it.
+   answers. Every must-answer answer lands in a named slot;
+   an answer with no line in the draft is a drafting error,
+   not an optional cut. The routing: Who I am from Q1, Q2,
+   and Q4 (the AI-nature stance is its own line); the
+   priority order from Q14; Voice and Modes from Q7–Q13,
+   Modes merging the interview's two axes (tasks from Q10,
+   audiences from Q9) into one table; Examples from Q8, Q24,
+   and Q28, with the fallback below; Disagreement from Q17
+   (the sequence), Q18 (loyalty's limits, which bound the
+   ladder), Q20 (the threshold), Q21 (the form and the
+   hold rule), Q22 (the re-raise), and Q23 (where to push
+   harder, where to just execute); Temperament from Q15's
+   task ranking (the care-versus-speed trait) and Q16's named
+   habits; People as a synthesis of Q3, Q30 (hard lines),
+   Q31 (the sharing posture), Q32 (who else), Q33 (quiet
+   topics), and Q34 (other agents); Repair from Q36 (the
+   disclosure threshold), Q37 (the repair shape), and Q38
+   (repeated mistakes); governance from Q40–Q43. Sections
+   the answers do not reach are cut, not padded: a short
+   honest file beats a complete generic one. On a
+   short-subset run, sections no subset answer reaches
+   (Voice beyond what the examples show, Modes beyond the
+   warm row) are cut the same way, and governance stands at
+   the template's defaults where the subset does not ask —
+   VERIFY.md sanctions the defaults. Run the failure-mode
+   checklist below against the draft before showing it.
 3. **Show.** Present the full draft. Approval of the setup
    plan was approval to run the interview, not to write the
    file; the draft needs its own approval, and edits the
@@ -85,10 +114,19 @@ for approval before writing anything.
 answers are the examples, and they are the ones adopters most
 often cannot supply on demand ("name a reply that sounded
 right" draws a blank). The fallback is never to invent a
-persona from nothing: the agent drafts candidate exchanges
-from the adopter's real interaction history, marks them as
-drafted, and the adopter vetoes or picks. A drafted example
-the adopter has not seen does not enter the file.
+persona from nothing. Where interaction history exists, the
+agent drafts candidate exchanges from it, marks them as
+drafted, and the adopter vetoes or picks. Where no history
+exists — a first-run install, the cold start — candidates
+are drafted from the adopter's interview answers applied to
+situations the adopter names (named on the spot, or the
+recurring tasks from Q10 where it was asked), each marked
+drafted/provisional and individually approved the same way;
+the plan ledgers replacing them with real-history exchanges
+at the first reread. Fewer than four surviving exchanges is
+a recorded gap in the plan, not a failed install. A drafted
+example the adopter has not seen does not enter the file
+either way.
 
 ## The failure-mode checklist
 
@@ -167,7 +205,8 @@ its output is staged proposals, not edits.
    show, approval, write. The wizard's persona step carries
    the same flow; a skip at any point is recorded in the plan
    with its cost stated (generic behavior, no examples, no
-   governance), and no file is written.
+   priority order of yours, no governance), and no file is
+   written.
 4. Copy `tools/soul_lint.py` into the workspace's tools and
    baseline it static-verbatim; baseline SOUL.md
    static-rendered at the path the plan records.

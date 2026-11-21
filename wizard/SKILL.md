@@ -151,8 +151,10 @@ the answers for the gating step:
 - Does the platform keep a persistent persona file (a SOUL.md or
   equivalent) that the agent reads at the start of every session?
 - **Which billing bucket does this session draw on?** An install is
-  heavy work: a full one reads on the order of 37,000 words of kit and
-  writes dozens of files; a Starter install is about 16,900 of that.
+  heavy work: it writes dozens of files, and the reading runs about
+  24,200 words for a Starter install, about 31,300 for Standard
+  (about 37,400 with module 11 added), and about 53,800 for
+  everything on the shelf.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
   rule 2 applied to the kit itself, and it is a stop condition, not a
@@ -248,8 +250,12 @@ user their answers don't matter.
    `persona-file` capability from Step 1; without one, persona-soul is
    not offerable and this question is skipped.)* Your agent reads a
    persona file (SOUL.md or its equivalent) every session. (a) Author
-   it deliberately during this install: an interview, a draft in your
-   own terms, written only when you approve the draft. (b) Keep the
+   it deliberately during this install: an interview — the full
+   question set, or the short subset if time is short (the subset
+   drafts thinner: governance stands at the template's defaults, and
+   the examples come largely from the drafting fallback rather than
+   named by you) — a draft in your own terms, written only when you
+   approve the draft. (b) Keep the
    stock file for now. *(If (b): persona-soul is not selected, and the
    plan states the cost plainly: the agent keeps generic behavior, no
    examples in its own voice, no priority order of yours, no governance
@@ -441,7 +447,13 @@ runs the authoring interview in
 `modules/11-persona-soul/templates/interview.md` (the short subset
 where the user chose it), drafts SOUL.md from the answers into the
 module's template, runs the module's failure-mode checklist against
-the draft, and shows the draft in full. Nothing is written until the
+the draft, and shows the draft in full. Where a persona file already
+exists, the step merges rather than overwrites: the user's own
+wording survives where it does not conflict, and a conflict is a
+question, not a replacement. Stock lines the platform shipped are
+not the user's wording; each survives only through the module's
+delete-the-line test, with the user keeping it and the behavior it
+changes named. Nothing is written until the
 user approves the draft itself: approval of the plan was approval to
 run the interview, not to write the file. Examples the user could
 not supply are drafted from the user's real interaction history and
@@ -449,7 +461,8 @@ marked as drafted, for the user to veto or pick, never invented
 from nothing. The written file is baselined static-rendered and the
 module's linter static-verbatim. If the user skips the interview at
 this point after all, record the skip in the plan with its cost
-stated (generic behavior, no examples, no governance) and write no
+stated (generic behavior, no examples, no priority order of yours,
+no governance) and write no
 persona file.
 
 ## Step 6 — Handover
