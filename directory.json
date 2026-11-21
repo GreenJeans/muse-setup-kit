@@ -1,12 +1,12 @@
 {
-  "generated_from": "4e6bd9950c9e044bdff8545c7e92b283f5eb1b89",
+  "generated_from": "4dfca735cf4d772b183f77997c26cb4f66ff3a71",
   "library": "core",
   "modules": [
     {
       "action_classes": [
         "none"
       ],
-      "audit_words": 1685,
+      "audit_words": 1770,
       "data_classes": [
         "personal",
         "third-party"
@@ -33,22 +33,20 @@
       "network": "your cloud storage.",
       "pitch": "Multiple AI agents exchanging work through shared storage \u2014 protocol, queue, blind reviews, published pages, ingest discipline.",
       "reads": "the exchange folders and queue.",
-      "rehearsed_at": "v0.1 household dry run",
+      "rehearsed_at": "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [
         "shared-storage",
         "other-agents"
       ],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "AI Exchange",
       "version": "0.3",
-      "writes": "a protocol doc, a queue sheet, per-agent inboxes/outboxes, published pages."
+      "writes": "a protocol doc, a queue sheet, per-agent inboxes/outboxes, published pages, a `Work/` folder for the maintainer's own outputs, and `Snapshots/` with ingest memos."
     },
     {
       "action_classes": [
         "none"
       ],
-      "audit_words": 4188,
+      "audit_words": 5064,
       "data_classes": [
         "personal"
       ],
@@ -87,19 +85,17 @@
       "network": "none.",
       "pitch": "Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.",
       "reads": "your existing agent instructions and workspace layout.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "Core Procedures",
       "version": "0.9",
-      "writes": "an operating-procedures file, a decision queue, SCOPE notes."
+      "writes": "an operating-procedures file, a decision queue, SCOPE notes, a JOBS.md, a continuity handover, and a pointer line in the agent's main instruction file."
     },
     {
       "action_classes": [
         "none"
       ],
-      "audit_words": 1454,
+      "audit_words": 1518,
       "data_classes": [
         "financial"
       ],
@@ -126,10 +122,8 @@
       "network": "your providers' billing pages only, with you present.",
       "pitch": "Bucket discipline for agent spending \u2014 know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.",
       "reads": "your model/provider usage and billing pages (with you present), the bucket register.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "Cost & Billing Guardrails",
       "version": "0.8",
       "writes": "a bucket register in the procedures; decision-queue items when a cap is approached."
@@ -138,9 +132,10 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2040,
+      "audit_words": 2714,
       "data_classes": [
-        "personal"
+        "personal",
+        "third-party"
       ],
       "degrades_without": [
         "core/morning-brief"
@@ -165,10 +160,8 @@
       "network": "none.",
       "pitch": "One register of what expires \u2014 passports, licences, warranties, policies, certifications \u2014 each with a lead time and a pointer to the original; no document numbers are stored.",
       "reads": "the register file; a source document when its date needs re-reading at the original.",
-      "rehearsed_at": "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending",
+      "rehearsed_at": "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "Deadlines & Expiry Register",
       "version": "0.9",
       "writes": "the register \u2014 one local file, updated in place."
@@ -177,7 +170,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2335,
+      "audit_words": 2619,
       "data_classes": [
         "personal",
         "third-party"
@@ -213,8 +206,6 @@
       "reads": "your procedures and memory, frozen into an audit packet.",
       "rehearsed_at": null,
       "requires": [],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "Evaluation Kit",
       "version": "0.8",
       "writes": "packets, findings, adoption records."
@@ -223,7 +214,7 @@
       "action_classes": [
         "contact"
       ],
-      "audit_words": 1938,
+      "audit_words": 2010,
       "data_classes": [
         "personal",
         "third-party"
@@ -255,14 +246,12 @@
       "network": "your shared accounts.",
       "pitch": "Two people, two agents, one shared coordination system \u2014 shared task layer, shared memory layer, a notebook protocol, and a principles doc.",
       "reads": "the shared surfaces both people agreed to share.",
-      "rehearsed_at": "v0.1 household dry run; changed in v0.8, re-rehearsal pending",
+      "rehearsed_at": "v0.1 household dry run; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [
         "second-person",
         "shared-docs",
         "shared-tasks"
       ],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "Household HQ",
       "version": "0.8",
       "writes": "shared lists, a shared notebook, a shared ops sheet."
@@ -271,7 +260,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2538,
+      "audit_words": 2724,
       "data_classes": [
         "personal",
         "third-party"
@@ -308,10 +297,8 @@
       "network": "none.",
       "pitch": "Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.",
       "reads": "your memory files.",
-      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending",
+      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "Memory Architecture",
       "version": "0.8",
       "writes": "a schema file, header stamps, a linter and its reports."
@@ -320,7 +307,7 @@
       "action_classes": [
         "send"
       ],
-      "audit_words": 5616,
+      "audit_words": 8601,
       "data_classes": [
         "personal",
         "third-party"
@@ -359,7 +346,7 @@
         }
       ],
       "id": "core/morning-brief",
-      "jobs": "daily brief; optional 30-minute triage scan.",
+      "jobs": "daily brief; optional 30-minute triage scan; optional weekly money watch.",
       "kit_compat": [
         "kit-1"
       ],
@@ -367,20 +354,18 @@
       "maintainer": "Muse Setup Kit maintainer",
       "network": "your connected accounts.",
       "pitch": "A failures-first daily brief, a numbered decision queue review, inbox interrupt rules with a scam & impersonation shield, silent-by-design watches, an optional money watch, and an optional promises & waiting-on ledger.",
-      "reads": "calendar, mailbox, task lists, decision queue, watch outputs.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending",
+      "reads": "calendar, mailbox, task lists, decision queue, watch outputs; for the money watch, the statement/CSV exports the user supplies.",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "Morning Brief & Inbox Triage",
       "version": "0.9",
-      "writes": "one brief per day; draft replies only, sent only with approval."
+      "writes": "one brief per day; draft replies only, sent only with approval; the promises & waiting-on ledger, when installed (other people's commitments, in their words); the triage flag log and the scan's run records, when the scan is installed; for the money watch, its baseline and run-record files and its job file."
     },
     {
       "action_classes": [
         "none"
       ],
-      "audit_words": 2678,
+      "audit_words": 4237,
       "data_classes": [
         "none"
       ],
@@ -411,10 +396,8 @@
       "network": "only the source of what you are vetting.",
       "pitch": "Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share.",
       "reads": "anything you are about to install, in full, at a pinned version.",
-      "rehearsed_at": "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending",
+      "rehearsed_at": "v0.1 wizard dry run (solo); v0.8 run 11 at df56774 (install + vetting exercise); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "title": "Security Pack",
       "version": "0.9",
       "writes": "vetting records; standing-rule additions."
@@ -423,7 +406,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 6889,
+      "audit_words": 7002,
       "data_classes": [
         "personal",
         "third-party"
@@ -465,10 +448,8 @@
       "network": "none.",
       "pitch": "A session-review rubric that stages skill lessons instead of writing them live, plus staged-diff approval through the decision queue. Installs at the Lite tier by default; the Full tier adds a nightly sweep and a deterministic curator that archives unused skills but never deletes.",
       "reads": "session transcripts, your custom skills, the decision queue, scheduled-job records.",
-      "rehearsed_at": "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run",
+      "rehearsed_at": "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
       "requires": [],
-      "reviewed_at": null,
-      "reviewed_by": null,
       "tiers": [
         {
           "description": "In-session + explicit staging and staged-diff approval. No tools, no jobs, no ledger.",
@@ -481,7 +462,7 @@
       ],
       "title": "Skill Lifecycle",
       "version": "0.5",
-      "writes": "staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills."
+      "writes": "staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills, and a pointer line in the agent's main instruction file (added at the Lite install)."
     }
   ]
 }
