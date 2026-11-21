@@ -95,9 +95,12 @@ order. The anchor stays in every rendering. -->
    named here like any other due check.
    (g) [IF deadlines register installed] Register items past their
    expiry — an expired document is a failure, not a deadline, and
-   stays here until it is renewed or dropped (an item whose
-   register field reads "on expiry: lapse" appears once, then
-   retires to the register's History as lapsed).
+   stays here until it is renewed or dropped. The transitions
+   are this job's to write (module 10): mark each newly expired
+   item's state expired in the register, with a dated note, and
+   move an item whose register field reads "on expiry: lapse"
+   to the register's History as lapsed once it has appeared
+   here.
    (h) [IF triage scan installed] Shield flags from the triage flag
    log since the last brief, each with its one-line reason; and
    the scan's own liveness — no run record 2 hours into its

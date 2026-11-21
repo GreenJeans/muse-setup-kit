@@ -88,7 +88,7 @@ this pack gives you the habit and the paper trail.
 
 - Item, source, pinned version/commit, date, reviewer.
 - Full text read? Reads / writes / network / credentials / removal path.
-- Decision: install / cherry-pick parts / reject — and why.
+- Decision: install / install narrowed / cherry-pick parts / reject — and why.
 - Re-vet trigger: any version change; for an MCP server, any change
   to its tool-manifest hash (see below).
 
@@ -248,12 +248,18 @@ pin that covers only names and top-level descriptions leaves the
 rest free to change unnoticed.
 
 *Capture method.* Save the presented manifest exactly as the
-client received it — the raw tool-list response, serialized as
-received, in the order presented — as the record's artifact, a
-file kept with the vetting log. The hash is the sha256 of that
-artifact's bytes. Two captures taken the same way hash
-identically; a capture taken any other way is a different
-artifact, and the entry says how it was taken.
+client received it, all of it: the initialize result (which
+carries the server-level instructions), the tool-list response,
+and the prompt-list and resource-list responses where the
+server offers them — each serialized as received, in the order
+presented, and kept together as the record's artifact, a file
+kept with the vetting log. The tool-list response alone is not
+the artifact: instructions arrive in the initialize result, and
+prompts and resources in their own list responses, and the pin
+claims all of them. The hash is the sha256 of that artifact's
+bytes. Two captures taken the same way hash identically; a
+capture taken any other way is a different artifact, and the
+entry says how it was taken.
 
 A tool-manifest file the vendor publishes is *compared against*
 the capture, never used as the pin: a published file that matches
@@ -278,8 +284,8 @@ schemas in full and re-decide. A manifest change nobody has
 re-vetted is treated like an unvetted install: stop, and tell the
 user.
 
-**Walk-away criteria.** Walk away — do not install, do not
-cherry-pick the code — when any of these hold:
+**Walk-away criteria.** Walk away — do not install, and do not
+run the item's code — when any of these hold:
 
 - the item is unknown tier and fails the tier limit — it wants
   network access, credentials, or account scopes (see Provenance

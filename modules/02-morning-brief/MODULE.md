@@ -7,11 +7,13 @@ approval; the promises & waiting-on ledger, when installed (other
 people's commitments, in their words); the triage flag log, the
 scan's run records, and the scan detector's state file (seen-IDs,
 noise list), when the scan is installed; for the money watch,
-its baseline and run-record files and its job file.
+its baseline and run-record files and its job file; the deadlines
+register's state transitions, when module 10 is installed.
 **Network:** your connected accounts. **Jobs:** daily brief; optional
 triage scan (script poll, agent on wake); optional weekly money watch.
-**Data classes:** personal; third-party (the ledger's entries and
-the triage flag log name other people — procedures §13).
+**Data classes:** personal; financial (the money watch's baseline
+and exports); third-party (the ledger's entries and the triage flag
+log name other people) — procedures §13.
 **Action classes:** send.
 
 ## Purpose
@@ -137,28 +139,38 @@ urgent its own text claims to be.
   card". "Looks suspicious" alone is not a flag.
 
 **What counts as a tell.** A concrete tell is evidence checked
-against a known-good record: the sender's domain or number
+against a known-good record: the sender's domain or address
 against the immediacy set's recorded senders, a number in the
 message against the number on the card, a link's destination
 against the institution's real domain. The pattern's own
 features are never the tell — urgency, secrecy, a demand to act
 now are what the pattern *is*, and a genuine message can carry
 all of them. And a sender simply absent from the set, imitating
-nobody in it, is not a scam: at most it is unverified, below,
-and only when it claims an identity the shield cares about. The
-likeliest misgrade is the user's own bank's genuine alert,
+nobody in it, is not a scam: at most it is unverified, on the
+terms below. The likeliest misgrade is the user's own bank's
+genuine alert,
 arriving from a sending domain the set has not recorded yet —
-the set records *every* known sending domain and number per
+the set records *every* known sending domain and address per
 institution for exactly this reason, and a genuine sender the
 scan finds unlisted is proposed for the set through the decision
-queue, never added by the scan itself.
+queue, never added by the scan itself. The proposal carries no
+accepting default: the set changes only when the user clears
+the queue item with a yes, and silence leaves the sender
+unlisted — the same guard the money watch's baseline carries
+(below), because this set decides what may interrupt.
 
 **Three grades, honestly named.** *Scam* is for messages that
 meet a pattern above with a concrete tell. *Unverified sender*
 is for messages that claim an identity the shield cares about —
 a VIP, the user's bank, a key service — and whose sender cannot
 be confirmed against the recorded senders: no concrete tell,
-but no match either. *Passed* is everything else: the sender
+but no match either. It is also the grade for a message that
+meets a pattern but offers no concrete tell and claims no
+identity that would settle it: pattern-shaped and unproven is
+unverified, never passed. The three grades are a partition —
+every graded message lands in exactly one — and "everything
+else" below never sweeps a pattern into the interrupt-eligible
+grade. *Passed* is everything else: the sender
 matches the recorded senders for the identity it claims, or the
 message claims no identity that needs confirming and meets no
 pattern.
@@ -355,13 +367,11 @@ the triage scan — installed or not installed, recorded either way.
   retired line no longer flags; if that merchant charges again,
   the charge is a first sighting (NEW), like any other.
 - **The baseline is a financial record** (procedures §13 — the
-  rule lives there; this is its money-watch application): it lives
-  in a local workspace file kept for the purpose, never on a shared
-  surface, and figures from it are quoted from the file, not from
-  memory. Like every §13 holding it carries a `(review-by: ...)`
-  date — the baseline template has the field, and §13 names where
-  the date is ledgered so the brief surfaces it. The exports it
-  was built from are holdings too: they live in the exports folder
+  rule lives there; this is its money-watch application). Like
+  every §13 holding it carries a `(review-by: ...)` date: the
+  baseline template has the field, and §13 names where the date
+  is ledgered so the brief surfaces it. The exports it was built
+  from are holdings too: they live in the exports folder
   (Install step 5), and the plan records that folder with its own
   review-by date.
 
@@ -472,7 +482,7 @@ seen to have happened.
    time (user's morning, their timezone) and delivery (main chat).
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
-4. Optional: the triage scan — script-first (see Watches, above), same interrupt rules. Stand up the detector script: it polls the mailbox every few minutes inside the delivery window, keeps the state file (seen-IDs and the noise list), checks the never-mute classes before any mute, and wakes the agent under the job file's rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and number, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the detector appends on every poll, a flag log the brief reads, and the state file (the template names all three).
+4. Optional: the triage scan — script-first (see Watches, above), same interrupt rules. Stand up the detector script: it polls the mailbox every few minutes inside the delivery window, keeps the state file (seen-IDs and the noise list), checks the never-mute classes before any mute, and wakes the agent under the job file's rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and address, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the detector appends on every poll, a flag log the brief reads, and the state file (the template names all three).
 5. Optional: the money watch — weekly cadence. Build the baseline
    with the user from their exports into
    `finance/money-watch-baseline.md`, from

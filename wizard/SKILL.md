@@ -301,7 +301,7 @@ approval updates its status line):
   name and their agent's name, and other agents' names for the Exchange —
   brief time and timezone, VIP senders for triage, the shield's
   immediacy set (the user's bank, toll operator, package carrier,
-  and key services, each with every sending domain and number
+  and key services, each with every sending domain and address
   they use), household members,
   storage locations, HQ options: food layer and change detector in/out).
 - For two-person installs, **partner checkpoints** are plan items in

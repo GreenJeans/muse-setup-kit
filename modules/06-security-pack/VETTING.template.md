@@ -23,7 +23,9 @@ a version change means a new entry.
 - **Network:** <endpoints it contacts>
 - **Credentials:** <what it wants, and where they are stored>
 - **Removal:** <how to uninstall it completely>
-- **Decision:** install / install with recorded reservations (name
+- **Decision:** install / install narrowed (a reduced scope set,
+  per module 06's scope audit — a different outcome from
+  cherry-pick) / install with recorded reservations (name
   them — e.g. an abandoned but credential-free item) / cherry-pick
   (parts taken as patterns, rewritten locally) / reject
 - **Why:** <one or two lines>
