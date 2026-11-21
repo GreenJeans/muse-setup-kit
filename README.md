@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 55,700
+install is heavy work — a full one reads on the order of 59,100
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -79,9 +79,9 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~24,600 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~31,800 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all eleven modules | ~55,700 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~26,000 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~33,200 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all eleven modules | ~59,100 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -179,6 +179,14 @@ This kit is a distillation, and some of its best ideas started elsewhere:
   its reviewer to "be active"; the kit's version is gates-on, with
   staged diffs the user approves, and "nothing to save" as a neutral
   outcome.
+
+- **The harness-engineering shelf** — Harbor's task-run shape (a task,
+  a verifier, an oracle check) behind module 05's Track B; HumanLayer's
+  **12-Factor Agents** checklist, borrowed from twice in module 00
+  (error compaction, factor 9; pause/resume cards, factor 6); and
+  walkinglabs' **Learn Harness Engineering** course, the fuller
+  treatment of the verifier-gated feature list in module 00. Patterns
+  studied and adapted; none of the three is a kit dependency.
 
 Where a technique came from somewhere else, the module says so. The
 procedures, templates, and the wizard itself are original to this kit.

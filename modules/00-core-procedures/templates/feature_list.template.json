@@ -1,0 +1,13 @@
+{
+  "features": [
+    {
+      "acceptance": "The verifier command exits 0 against the finished work.",
+      "id": "F1",
+      "status": "pending",
+      "title": "Example feature \u2014 replace with a real one",
+      "verifier": "test -f REPLACE-ME.txt"
+    }
+  ],
+  "note": "Agent reads this file and works features. Agent must NOT edit status or verifier fields. Only tools/verify_done.py flips status, after the verifier command exits 0. Run verify_done.py init once at creation to stamp verifier_hash values.",
+  "project": "REPLACE-ME"
+}

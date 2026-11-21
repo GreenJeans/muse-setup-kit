@@ -1,7 +1,7 @@
 # Module 05 — Evaluation Kit
 
 **Reads:** your procedures and memory, frozen into an audit packet.
-**Writes:** packets, findings, adoption records. **Network:** a second
+**Writes:** packets, findings, adoption records, eval results. **Network:** a second
 model if used for blind review. **Jobs:** an audit reminder on cadence.
 **Data classes:** personal, third-party. **Action classes:** none.
 
@@ -11,6 +11,11 @@ The procedures and memory that govern the agent were written by the agent
 and its user, in the flow of work, with shared blind spots. This module is
 how the setup reviews *itself*: scheduled, blind, evidence-based audits
 whose findings the user adopts or rejects one by one.
+
+The module has two tracks. The audit method below (Track A) reviews the
+governing documents. Track B, after it, runs the agent itself on
+measured tasks, so a proposed change to the setup can be compared
+instead of argued.
 
 ## The audit method
 
@@ -47,6 +52,42 @@ whose findings the user adopts or rejects one by one.
    numbered list ("adopt 1–12"). Each adopted change is applied, and the
    adoption is recorded with date and source. Nothing is adopted by
    default, by silence, or by the reviewers' say-so.
+
+## Track B — task runs (measured)
+
+The audit method reviews the documents. This track runs the agent.
+When a change to the setup is proposed — a new rule, a new tool, a
+different way of declaring work done — judgment plus one rehearsal is
+how most setups decide, and it is not measurement. Track B borrows
+its shape from Harbor's task runs, deliberately smaller:
+
+- A **task** is a directory: `instruction.md` (what the agent gets),
+  `verify.py` (a deterministic checker), optional `seed/` (the
+  starting files) and `solution/` (a known-good end state). The
+  verifier judges the final state the agent leaves behind, never its
+  final message.
+- **The oracle rule.** A task is trustworthy only if its verifier
+  FAILS on the untouched seed and PASSES on the solution. Run the
+  oracle check (`tools/run_eval.py --oracle`) after adding or
+  changing a task, before trusting anything it reports.
+- A **comparison** is the same tasks under the old setup and the new
+  one, the model held fixed and named in the job record, at least 3
+  trials per arm. Report pass rate, human interventions, and wall
+  time. A single run is a smoke test, not a measurement.
+- Decide the adoption rule before running, and record negative
+  results with the same care as positive ones. A change adopted
+  without a comparison is labelled **provisional** wherever it is
+  recorded, until a comparison replaces the label.
+- No task may require a ticket, a send, money, or a live account.
+
+The module ships three fictional seed tasks and the runner, in
+`evals/` and `tools/run_eval.py`: a memory-supersede task (module
+01), a feature-gate task (module 00's verifier-gated done), and an
+error-compaction task (module 00). They are worked examples and a
+starting set; the tasks that matter most are the ones written from
+your own work. The fuller treatment of the pattern is the Learn
+Harness Engineering course (walkinglabs), named in module 00's
+further reading.
 
 ## Standing evaluations (cheap, continuous)
 

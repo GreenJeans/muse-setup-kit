@@ -29,6 +29,10 @@ found, so the fix cannot silently regress:
     a finding, and the module is registered in the catalog,
     the matrix, and the README while staying out of the
     profiles until the maintainer's merge call;
+  - the harness build's verifier gate running verifiers in the
+    caller's working directory instead of the feature list's, so
+    a finished feature failed from any other folder; the gate
+    now runs each verifier from the list's own directory;
   - the EX-030..033 final round's module 11 findings: the
     soul linter counted blockquote lines instead of exchanges
     (two exchanges plus an anti-example totaling eight lines
@@ -57,6 +61,9 @@ LINT = os.path.join(REPO, "modules/01-memory-architecture/tools/memory_lint.py")
 CURATOR = os.path.join(REPO, "modules/08-skill-lifecycle/tools/curator.py")
 STAGE = os.path.join(REPO, "modules/08-skill-lifecycle/tools/stage_check.py")
 DOCTOR = os.path.join(REPO, "modules/05-evaluation-kit/tools/kit_doctor.py")
+GATE = os.path.join(REPO, "modules/00-core-procedures/tools/verify_done.py")
+COMPACT = os.path.join(REPO, "modules/00-core-procedures/tools/compact_error.py")
+RUN_EVAL = os.path.join(REPO, "modules/05-evaluation-kit/tools/run_eval.py")
 TODAY = datetime.date.today()
 
 
@@ -1392,3 +1399,59 @@ class PersonaSoulRegistrationTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HarnessToolsTest(unittest.TestCase):
+    """Module 00's gate + compaction tools and module 05's Track B runner."""
+
+    def _feature_list(self, td):
+        p = os.path.join(td, "feature_list.json")
+        data = {"project": "t", "features": [{
+            "id": "F1", "title": "make hello", "status": "pending",
+            "verifier": "test -f hello.txt",
+            "acceptance": "verifier exits 0"}]}
+        with open(p, "w") as fh:
+            json.dump(data, fh)
+        return p
+
+    def test_gate_flips_only_on_verifier_pass_from_any_cwd(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._feature_list(td)
+            self.assertEqual(run(GATE, "init", p).returncode, 0)
+            r = run(GATE, "check", p, cwd="/")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("FAIL", r.stdout)
+            with open(os.path.join(td, "hello.txt"), "w") as fh:
+                fh.write("hello")
+            r = run(GATE, "check", p, cwd="/")
+            self.assertEqual(r.returncode, 0)
+            self.assertIn("PASS", r.stdout)
+            with open(p) as fh:
+                self.assertEqual(json.load(fh)["features"][0]["status"], "done")
+
+    def test_gate_refuses_a_tampered_verifier(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._feature_list(td)
+            self.assertEqual(run(GATE, "init", p).returncode, 0)
+            with open(p) as fh:
+                data = json.load(fh)
+            data["features"][0]["verifier"] = "true"
+            with open(p, "w") as fh:
+                json.dump(data, fh)
+            r = run(GATE, "check", p)
+            self.assertEqual(r.returncode, 2)
+            self.assertIn("TAMPER", r.stdout)
+
+    def test_compact_error_bounds_and_addresses_the_original(self):
+        raw = "Traceback (most recent call last):\n" + "noise line\n" * 200 + "ValueError: bad\n"
+        r = subprocess.run([sys.executable, COMPACT], input=raw,
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0)
+        self.assertLessEqual(len(r.stdout), 1200)
+        self.assertIn("ERROR-COMPACT sha256:", r.stdout)
+        self.assertIn("lines:202", r.stdout)
+
+    def test_track_b_oracle_holds_on_the_shipped_seed_tasks(self):
+        r = run(RUN_EVAL, "--oracle")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(r.stdout.count("OK  "), 3)
