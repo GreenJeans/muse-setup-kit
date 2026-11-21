@@ -12,6 +12,9 @@
 - [ ] The main instruction file (or the created `INSTRUCTIONS.md`) carries
       the pointer line to the procedures.
 - [ ] `JOBS.md` exists at the workspace root, built from the module's JOBS template (canonical entry format; empty of jobs is fine).
+- [ ] The continuity handover exists, filled with the user, with a
+      review-by date — or is ledgered as a deferred check with the
+      user named as its owner.
 
 ## Deferred
 

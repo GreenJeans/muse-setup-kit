@@ -20,6 +20,18 @@ a version change means a new entry.
   locally) / reject
 - **Why:** <one or two lines>
 
+Connectors and MCP servers add these fields (module 06's vetting pack):
+
+- **Provenance tier:** official / community / unknown
+- **Typosquat check:** <name and source compared character-by-character
+  against the official source — match, or the difference found>
+- **OAuth scopes:** <each scope requested, and the feature it maps to;
+  "none" for a local-only item>
+- **Tool-manifest hash:** <sha256 of the tool names and descriptions, in
+  order, as presented at vetting; MCP servers only>
+- **Re-vet trigger:** any version change; any scope increase; any
+  tool-manifest hash change
+
 ## Entries
 
 <!-- The first entry is the Muse Setup Kit itself. -->

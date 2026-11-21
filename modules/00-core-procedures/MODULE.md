@@ -48,6 +48,11 @@ summary has a bug.
   complete it or re-home it, repoint or retire its machinery, sync drifted
   copies, report once, then archive. Nothing open may live only in a
   transcript.
+- **Continuity.** The agent accumulates access and context quietly. A
+  one-page handover — where things are, who to call, what to stop, how
+  to pause the agent itself — is written with the user for the person
+  who would pick things up if the user were unavailable, and carries a
+  review-by date like any other time-bound claim.
 
 ## Where each rule lives (canonical text)
 
@@ -74,8 +79,31 @@ governs and the application has a bug.
 | Audit cadence | procedures §11 |
 | Verify-before-install (application: module 06) | procedures §10 |
 | Billing buckets; declare before heavy work (application: module 09) | procedures §12 |
+| Sensitive records — where financial, health, and third-party data may live (applications: modules 02, 03, 06) | procedures §13 |
 - **Done means verified.** Completion is checked against live state or the
   original record, never accepted from a worker's report alone.
+
+## Extension points (anchors)
+
+Core prose files that other modules amend carry **named anchors**:
+HTML comments of the form `<!-- ext:<name> -->`. The rules:
+
+- A module may amend a core file **only at a declared anchor** — it
+  never appends wherever it likes, and it never renumbers sections.
+- Each anchor has exactly **one owner** at a time. The owner's block
+  runs from the anchor comment to the matching
+  `<!-- /ext:<name> -->` marker. The install plan (SETUP-PLAN.md)
+  records which module owns each anchor it uses.
+- Uninstalling the owner removes its block, and nothing else.
+- A new anchor is added by editing this registry and the target file
+  in the same change. An anchor with no registry entry is a defect;
+  so is a registry entry with no anchor.
+
+Registry, as shipped:
+
+| Anchor | File | Purpose | Owner |
+|---|---|---|---|
+| `ext:billing-buckets` | OPERATING_PROCEDURES.md (from this module's procedures template) | Module 09 inserts its bucket register and declare-before-heavy-work rule as §12 | module 09 (cost-guardrails), when installed |
 
 ## Install
 
@@ -100,6 +128,12 @@ governs and the application has a bug.
    Every later module records its scheduled jobs there; the morning
    brief and the memory linter read it. (This module's VERIFY checks
    for it — a step that creates what the check requires.)
+7. Create the continuity handover from
+   `templates/continuity-handover.template.md`, filled with the user:
+   where things live, who to call, what to stop, how to pause the
+   agent. It carries a review-by date. The user names where the
+   handover itself lives and who it is for; an unfilled handover is
+   ledgered as a deferred check, never silently skipped.
 
 ## Verify
 

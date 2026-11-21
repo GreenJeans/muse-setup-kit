@@ -35,7 +35,9 @@ agents read, and a notebook where agents leave each other dated notes.
   corrections are new dated entries.
 - **Shared surfaces hold shared facts only.** Never gifts (surprises die),
   finances, health detail, or anything one person hasn't agreed to share.
-  The notebook is a coordination surface, not a diary.
+  The notebook is a coordination surface, not a diary. Where those
+  records live instead is procedures §13 (sensitive records): local
+  files only, each person's own.
 - **Standing authorizations are written down.** If one person wants the
   other's agent to just handle a class of request (e.g. "a book request in
   the notebook means deliver it"), that rule lives in the Principles doc,

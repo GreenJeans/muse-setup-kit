@@ -65,6 +65,34 @@ tripwires, dead-man's switches) follow the same pattern; the
 maintainer's recipes live in docs/patterns/infra-patterns.md, a
 reference document the wizard does not install.
 
+## The money watch (optional component)
+
+An optional watch over recurring charges, decided in the plan like
+the triage scan — installed or not installed, recorded either way.
+
+- **The baseline comes from data the user supplies**: statement or
+  CSV exports the user downloads, or alert emails the user forwards.
+  Never credentials, never a bank login, never a scraped banking
+  session. If a source cannot be exported, the watch does not run
+  on it (procedures §13).
+- **Exclusion categories** are named with the user at install —
+  charges whose variation is normal (variable utilities, groceries,
+  fuel) — and recorded in the watch's instructions. Excluded
+  categories are never flagged.
+- **It flags three things only**: a new recurring charge, a changed
+  amount on a known charge, a duplicate. Everything else is
+  silence, and every run writes a run record — the detector-silence
+  rule applies to this watch like any other (no run record 48 hours
+  past cadence means the watch is the failure).
+- **It never acts.** The watch does not cancel, dispute, or contact
+  anyone. A flag that warrants action becomes a decision-queue
+  item; cancelling or disputing then needs a ticket, like any
+  irreversible action.
+- **The baseline is a financial record** (procedures §13): it lives
+  in a local workspace file kept for the purpose, never on a shared
+  surface, and figures from it are quoted from the file, not from
+  memory.
+
 ## Install
 
 1. Adapt `brief.template.md` into the brief job's instructions; set the
@@ -72,6 +100,11 @@ reference document the wizard does not install.
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
 4. Optional: the triage scan job, 30-minute cadence, same interrupt rules.
+5. Optional: the money watch — weekly cadence; build the baseline
+   with the user from their exports, record the exclusion
+   categories in the watch's instructions, and record the job in
+   `JOBS.md`. The decision (installed / not installed) goes in the
+   plan either way.
 
 ## Verify
 

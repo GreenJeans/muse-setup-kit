@@ -12,6 +12,11 @@ watch checks.
       as unread — never as clear.
 - [ ] If triage was installed: the VIP list and interrupt rules are
       filled in, and the delivery window matches the user's waking hours.
+- [ ] If the money watch was installed: the baseline file exists in a
+      local workspace file, was built from user-supplied exports (no
+      credentials stored anywhere in the workspace), the exclusion
+      categories are recorded in the watch's instructions, and the
+      job is recorded in `JOBS.md`.
 
 ## Deferred
 
@@ -23,3 +28,7 @@ watch checks.
 - [ ] **Detector-silence drill** (due: first month; only if watches
       exist): with the user's knowledge, pause one watch past 48 hours;
       the brief flags the silence.
+- [ ] **Money-watch first run** (due: first scheduled week; money
+      watch installs only): the run's flags match a hand-check of the
+      same period's exports, and a no-change week produces a run
+      record and no flag.

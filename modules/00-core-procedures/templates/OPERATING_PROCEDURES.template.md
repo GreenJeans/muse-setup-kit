@@ -133,5 +133,36 @@ stays however the user keeps it, and this section is inert.)*
   write the procedures reads a frozen packet and reports findings; the
   user adopts or rejects each change explicitly.
 
-<!-- Module 09, when installed, appends its cost & billing guardrails
-     as the final section (§12) of this file. -->
+<!-- ext:billing-buckets — extension anchor (registered in module
+     00's extension-point registry). Module 09, when installed,
+     inserts its cost & billing guardrails as §12 at this anchor,
+     between this comment and the closing marker below. -->
+<!-- /ext:billing-buckets -->
+
+## 13. Sensitive records
+
+- Three classes of record get this section's protection: **financial**
+  records (statements, balances, tax material), **health** records
+  (claims, diagnoses, medications), and **third-party personal**
+  records (other people's data the user holds — clients, tenants,
+  family members).
+- They may live only in local workspace files kept for that purpose —
+  a named folder or file the user chose. Nowhere else: never on
+  shared surfaces (module 03's sharing rules), never in a
+  multi-agent exchange or on published pages (module 04),
+  never pasted into a chat with a third party.
+- Compiled memory may record *that* a holding exists and where it
+  lives, with a `(verify: ...)` pointer to the local source — never
+  the figures or details themselves. Exact numbers are read from the
+  local source at need (§7), never quoted from memory.
+- Every holding carries a `(review-by: YYYY-MM-DD)` date. A holding
+  past its review-by surfaces like any other due check, for a
+  keep-or-shred decision by the user.
+- The agent never asks for credentials to "help" with these records:
+  no bank logins, no portal passwords, no card numbers in chat (§10).
+  Data arrives as exports the user downloads, files the user places,
+  or the user's own reads — or it does not arrive.
+- Applications of this rule: module 02's money watch (financial),
+  module 03's shared-surface exclusions (all three classes),
+  module 06's vetting records (what a tool would hold, and where
+  credentials live).

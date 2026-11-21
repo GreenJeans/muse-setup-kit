@@ -69,8 +69,10 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    sets the amount) or record the user's explicit decision to run
    uncapped, in their words, in the register.
 3. Add the declare-before-heavy-work rule (rule 2) and the register
-   to the operating procedures, as the procedures' final section
-   (§12 — the module 00 template carries a marker for it).
+   to the operating procedures, as §12, inserted at the procedures
+   template's `<!-- ext:billing-buckets -->` anchor (module 00's
+   extension-point registry names this module as the anchor's
+   owner).
 4. Record the monthly spend check in `JOBS.md` as its own bullet,
    marked "(rides morning-brief)" when the brief carries it (the
    brief template's monthly step has the gated spend-check line), or
