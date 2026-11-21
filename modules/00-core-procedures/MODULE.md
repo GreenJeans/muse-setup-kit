@@ -105,6 +105,21 @@ stamps a hash of each verifier; a changed verifier is flagged as
 tampering and refused, never silently run. "Done" stops being a
 claim the agent makes and becomes a state a script checked.
 
+**What the gate is, measured.** The kit's own Track B comparison
+(module 05) ran the gate against prose records: 30 trials, model
+fixed, short fully-specified tasks. Both arms passed 15/15; the
+pre-registered adoption bar was not met. On tasks like these the
+model does not produce the premature "done" the gate guards
+against, so its correctness benefit is **unproven** — and the
+conditions it was designed for (long, multi-session,
+underspecified work) are the ones a task-run eval cannot
+reproduce. Its measured benefit is the record: in all 12 gated
+trials the scope record ended accurate and hash-stamped, where
+the prose arm's feature list still read "pending" in 3 of 3
+trials after the work was done. Ship the gate as a record and
+audit mechanism. Do not claim it makes the work more correct
+until a long-horizon eval shows that.
+
 **Error compaction** (implements §7, ground truth; 12-Factor Agents
 factor 9). When a failed command is retried, the raw log does not
 re-enter context. `tools/compact_error.py` reduces it to a bounded

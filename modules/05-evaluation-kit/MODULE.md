@@ -91,6 +91,14 @@ your own work. The fuller treatment of the pattern is the Learn
 Harness Engineering course (walkinglabs), named in module 00's
 further reading.
 
+The kit's first recorded comparison is a negative, kept on
+purpose: module 00's verifier gate, run against prose records
+over 30 trials with the model fixed, passed 15/15 in both arms
+and met its adoption bar in neither. The mechanism was
+reclassified as a record/audit mechanism on the strength of what
+the run did measure (module 00 tells the story). A negative
+result recorded this way is the track working as designed.
+
 ## Standing evaluations (cheap, continuous)
 
 - **Memory fidelity sample** (module 01): weekly random claims checked

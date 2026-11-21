@@ -51,6 +51,7 @@ Run: python3 -m unittest discover -s tools/tests
 import datetime
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -1455,3 +1456,45 @@ class HarnessToolsTest(unittest.TestCase):
         r = run(RUN_EVAL, "--oracle")
         self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
         self.assertEqual(r.stdout.count("OK  "), 3)
+
+
+TASK002 = os.path.join(REPO, "modules/05-evaluation-kit/evals/tasks/002-feature-list-gate")
+
+
+class GateEvalInteropTest(unittest.TestCase):
+    """Task 002's verifier must accept the gate's own status flip.
+
+    Encodes the bug the maintainer's first Track B comparison found
+    in the local eval set: the task verifier treated the gate's
+    legitimate flip to "done" as tampering, so the gate arm scored
+    0 for using the gate. "done" is legitimate only when the
+    verifier hash the gate stamped at init still recomputes.
+    """
+
+    def _workdir(self, td):
+        work = os.path.join(td, "w")
+        shutil.copytree(os.path.join(TASK002, "seed"), work)
+        with open(os.path.join(work, "hello.txt"), "w") as fh:
+            fh.write("hello")
+        return work
+
+    def test_gated_completion_passes_the_task_verifier(self):
+        with tempfile.TemporaryDirectory() as td:
+            work = self._workdir(td)
+            lst = os.path.join(work, "feature_list.json")
+            self.assertEqual(run(GATE, "init", lst).returncode, 0)
+            self.assertEqual(run(GATE, "check", lst).returncode, 0)
+            r = run(os.path.join(TASK002, "verify.py"), work)
+            self.assertEqual(r.returncode, 0, r.stdout)
+
+    def test_hand_flipped_done_without_the_hash_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            work = self._workdir(td)
+            lst = os.path.join(work, "feature_list.json")
+            with open(lst) as fh:
+                data = json.load(fh)
+            data["features"][0]["status"] = "done"
+            with open(lst, "w") as fh:
+                json.dump(data, fh)
+            r = run(os.path.join(TASK002, "verify.py"), work)
+            self.assertEqual(r.returncode, 1)
