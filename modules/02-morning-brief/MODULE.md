@@ -153,13 +153,11 @@ the triage scan — installed or not installed, recorded either way.
   retired line no longer flags; if that merchant charges again,
   the charge is a first sighting (NEW), like any other.
 - **The baseline is a financial record** (procedures §13 — the
-  rule lives there; this is its money-watch application): it lives
-  in a local workspace file kept for the purpose, never on a shared
-  surface, and figures from it are quoted from the file, not from
-  memory. Like every §13 holding it carries a `(review-by: ...)`
-  date — the baseline template has the field, and §13 names where
-  the date is ledgered so the brief surfaces it. The exports it
-  was built from are holdings too: they live in the exports folder
+  rule lives there; this is its money-watch application). Like
+  every §13 holding it carries a `(review-by: ...)` date: the
+  baseline template has the field, and §13 names where the date
+  is ledgered so the brief surfaces it. The exports it was built
+  from are holdings too: they live in the exports folder
   (Install step 5), and the plan records that folder with its own
   review-by date.
 

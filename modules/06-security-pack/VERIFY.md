@@ -22,6 +22,13 @@
 - [ ] **First inventory** (due: the 1st of next month): standing grants
       are listed, the user's own grants distinguished from product
       defaults, and anything unrecorded is flagged.
+- [ ] **Manifest re-check** (due: the 1st of next month, with the first
+      inventory): the inventory run re-captures and re-hashes every
+      installed MCP server's presented manifest against its vetting
+      record — or, where the platform exposes the manifest at session
+      start, a session-start re-capture is in place and has fired. A
+      server whose hash differs from its record has been re-vetted
+      before being trusted again, or is stopped and the user told.
 - [ ] **First vetting** (due: with the first third-party vetting after
       install): the entry carries the provenance tier, the typosquat
       result (or "no official comparator"), the scopes or token

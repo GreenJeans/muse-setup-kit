@@ -83,7 +83,7 @@ governs and the application has a bug.
 | Audit cadence | procedures §11 |
 | Verify-before-install (application: module 06) | procedures §10 |
 | Billing buckets; declare before heavy work (application: module 09) | procedures §12 |
-| Sensitive records — where financial, health, and third-party data may live (applications: modules 02, 03, 04, 06, and this module's continuity handover) | procedures §13 |
+| Sensitive records — where financial, health, and third-party data may live (applications: modules 01, 02, 03, 04, 05, 06, 08, 09, and this module's continuity handover) | procedures §13 |
 
 ## Extension points (anchors)
 
