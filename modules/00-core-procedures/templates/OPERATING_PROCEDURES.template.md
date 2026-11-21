@@ -10,7 +10,7 @@ agent's main instruction file should point here. -->
 - **Agent:** <AGENT NAME>
 - **Timezone:** <TIMEZONE>
 - **Morning brief:** <BRIEF TIME> local, delivered to the main chat
-- **Interrupt-lane people (VIPs):** <VIP NAMES AND ADDRESSES>
+- **Interrupt-lane people (VIPs):** <VIP NAMES AND ADDRESSES> — if the user names nobody, write "None named yet": an empty lane is a legitimate fill; the placeholder itself must not remain.
 - **Decision queue:** <PATH>
 - **Main instruction file:** <PATH>
 
@@ -65,6 +65,9 @@ agent's main instruction file should point here. -->
   they live.
 
 ## 6. Memory discipline
+
+*(Applies when module 01 is installed. Until then the agent's memory
+stays however the user keeps it, and this section is inert.)*
 
 - Follows the memory schema (module 01): current state at the top,
   superseded claims moved to a History/Superseded section in the same edit,
@@ -126,3 +129,6 @@ agent's main instruction file should point here. -->
 - Audits are blind where possible (module 05): a reviewer who did not
   write the procedures reads a frozen packet and reports findings; the
   user adopts or rejects each change explicitly.
+
+<!-- Module 09, when installed, appends its cost & billing guardrails
+     as the final section (§12) of this file. -->

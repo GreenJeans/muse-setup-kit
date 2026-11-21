@@ -5,6 +5,7 @@ version: 1
 modules:
   - id: core-procedures
     dir: modules/00-core-procedures
+    rehearsed_at: "v0.1 wizard dry runs"
     title: Core Procedures
     pitch: Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules.
     depends_on: []
@@ -16,6 +17,7 @@ modules:
 
   - id: memory-architecture
     dir: modules/01-memory-architecture
+    rehearsed_at: "v0.1 wizard dry runs"
     title: Memory Architecture
     pitch: Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.
     depends_on: [core-procedures]
@@ -28,6 +30,7 @@ modules:
 
   - id: morning-brief
     dir: modules/02-morning-brief
+    rehearsed_at: "v0.1 wizard dry runs"
     title: Morning Brief & Inbox Triage
     pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules, and silent-by-design watches.
     depends_on: [core-procedures]
@@ -40,6 +43,7 @@ modules:
 
   - id: household-hq
     dir: modules/03-household-hq
+    rehearsed_at: "v0.1 household dry run"
     title: Household HQ
     pitch: Two people, two agents, one shared coordination system — shared task layer, shared memory layer, a notebook protocol, and a principles doc.
     depends_on: [core-procedures]
@@ -52,6 +56,7 @@ modules:
 
   - id: ai-exchange
     dir: modules/04-ai-exchange
+    rehearsed_at: "v0.1 household dry run"
     title: AI Exchange
     pitch: Multiple AI agents exchanging work through shared storage — protocol, queue, blind reviews, published pages, ingest discipline.
     depends_on: [core-procedures, memory-architecture]
@@ -63,6 +68,7 @@ modules:
 
   - id: evaluation-kit
     dir: modules/05-evaluation-kit
+    rehearsed_at: null   # method exercised on the kit itself; install unrehearsed
     title: Evaluation Kit
     pitch: Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.
     depends_on: [core-procedures, memory-architecture]
@@ -75,6 +81,7 @@ modules:
 
   - id: security-pack
     dir: modules/06-security-pack
+    rehearsed_at: "v0.1 wizard dry run (solo)"
     title: Security Pack
     pitch: Verify-before-install for skills/connectors, one-time permission grants, content-exclusion lists, session canary, retitle-before-share.
     depends_on: [core-procedures]
@@ -85,19 +92,9 @@ modules:
     network: "Only the source of what you are vetting."
     jobs: "Monthly standing-grants inventory — rides the morning brief if installed, otherwise its own monthly job."
 
-  - id: infra-patterns
-    dir: modules/07-infra-patterns
-    title: Infra Patterns
-    pitch: Layered backups with a verification pass, health watches, disk tripwires, and an alert channel that reaches your phone.
-    depends_on: [core-procedures]
-    requires: [own-host]
-    reads: "Host and backup status."
-    writes: "Backup jobs, watch scripts, alert configuration."
-    network: "Your hosts and your offsite storage."
-    jobs: "Nightly backups; periodic health watches."
-
   - id: skill-lifecycle
     dir: modules/08-skill-lifecycle
+    rehearsed_at: "v0.4 upgrade-path re-run"
     title: Skill Lifecycle
     pitch: A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, and a deterministic curator that archives unused skills but never deletes.
     depends_on: [core-procedures, memory-architecture]
@@ -110,6 +107,7 @@ modules:
 
   - id: cost-guardrails
     dir: modules/09-cost-guardrails
+    rehearsed_at: "v0.4 Starter dry run"
     title: Cost & Billing Guardrails
     pitch: Bucket discipline for agent spending — know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.
     depends_on: [core-procedures]
@@ -119,3 +117,21 @@ modules:
     writes: "A bucket register in the procedures; spend-check entries in the decision queue when a cap is approached."
     network: "Your providers' billing pages only, with you present."
     jobs: "One monthly spend check (rides the brief if installed)."
+
+# Install profiles — the wizard offers these first (Step 3), then the
+# per-module checklist. Audit cost = wizard + manifest + the profile's
+# MODULE.md files and tools, counted at v0.4; tools/kit_selfcheck.py
+# recomputes them.
+profiles:
+  - id: starter
+    title: Starter
+    modules: [core-procedures, morning-brief, cost-guardrails]
+    audit_words: 5100
+    pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
+  - id: standard
+    title: Standard
+    modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
+    audit_words: 7100
+    pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
+  # Everything else (household-hq, ai-exchange, evaluation-kit,
+  # skill-lifecycle) is offered per module after the profiles.

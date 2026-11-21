@@ -8,8 +8,10 @@ upgrade is a small, deliberate procedure, not a `git pull`.
    at that hash and confirm `git rev-parse HEAD` matches. *(Evaluation
    installs — a dry run or rehearsal against unreleased changes — are
    the one exception: they may proceed from an uncommitted tree when
-   the vetting entry records HEAD plus the dirty state and the plan
-   is labeled EVALUATION. A production install never does.)*
+   the vetting entry records HEAD plus the dirty state — the output
+   of `git status --porcelain` and `git diff --stat HEAD`, verbatim —
+   and the plan is labeled EVALUATION. A production install never
+   does.)*
 2. **Diff the pins.** List what changed between your installed commit
    and the new one (`git diff --stat <old>..<new>`), and read the
    changed files in full — at minimum every changed `MODULE.md`,

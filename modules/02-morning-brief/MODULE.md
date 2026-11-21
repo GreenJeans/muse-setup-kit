@@ -60,14 +60,17 @@ when nothing changed**, it **always writes a run record** (so its own
 silence is detectable), and it **flags failed runs**. Build watches for
 recurring-charge changes, shared-list changes, backup health, and anything
 else where "no news" is the common case and "something changed" is the
-only thing worth a message.
+only thing worth a message. Host-level watches (backup jobs, disk
+tripwires, dead-man's switches) follow the same pattern; the
+maintainer's recipes live in docs/patterns/infra-patterns.md, a
+reference document the wizard does not install.
 
 ## Install
 
 1. Adapt `brief.template.md` into the brief job's instructions; set the
    time (user's morning, their timezone) and delivery (main chat).
-2. Create the VIP list and interrupt rules with the user.
-3. Seed the decision queue (module 00) — the brief is its delivery vehicle.
+2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
+3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
 4. Optional: the triage scan job, 30-minute cadence, same interrupt rules.
 
 ## Verify

@@ -3,7 +3,10 @@
 
 Mechanical checks only; a mind decides what to do about findings.
 Checks, in the workspace:
-  1. SETUP-PLAN.md exists and records the kit commit it installed from.
+  1. SETUP-PLAN.md exists and records the kit commit(s) it installed
+     from — per module where the plan names them. Mixed pins are
+     normal (UPGRADING.md); hidden mixed pins are not, so every pin
+     found is listed, not just the first.
   2. JOBS.md exists (the scheduler-of-record).
   3. OPERATING_PROCEDURES.md exists.
   4. Deferred checks ledgered in SETUP-PLAN.md: any line marked
@@ -45,11 +48,24 @@ def main():
         problems.append("SETUP-PLAN.md missing — no install plan of record")
     else:
         plan_text = open(plan_path, encoding="utf-8", errors="replace").read()
-        m = COMMIT_RE.search(plan_text)
-        notes.append(f"install commit of record: {m.group(1)}" if m
-                     else "SETUP-PLAN.md records no kit commit")
-        if not m:
+        pins = []
+        for m in COMMIT_RE.finditer(plan_text):
+            if m.group(1) not in pins:
+                pins.append(m.group(1))
+        if not pins:
             problems.append("SETUP-PLAN.md records no kit commit hash")
+        elif len(pins) == 1:
+            notes.append(f"install commit of record: {pins[0]}")
+        else:
+            notes.append(f"mixed pins (normal per UPGRADING.md): "
+                         f"{len(pins)} distinct commits recorded")
+            for line in plan_text.splitlines():
+                ms = COMMIT_RE.findall(line)
+                if ms:
+                    label = line.strip().lstrip("-| ").strip()
+                    notes.append(f"  pin {ms[0]}: {label[:80]}")
+            notes.append("if a module's pin is not attributable to a "
+                         "plan line above, record it per module")
 
     if not os.path.isfile(os.path.join(ws, "JOBS.md")):
         problems.append("JOBS.md missing — jobs have no scheduler-of-record")

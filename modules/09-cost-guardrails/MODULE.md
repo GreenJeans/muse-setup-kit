@@ -59,7 +59,8 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
 
 ## Install
 
-1. Build the bucket register with the user: every surface the agent
+1. Build the bucket register with the user, from
+   `templates/bucket-register.template.md`: every surface the agent
    can currently reach (the subscription itself, each API key/org,
    each router or gateway), its bucket, its cap, its usage page.
    Surfaces nobody can classify are listed as UNKNOWN — an unknown
@@ -68,9 +69,14 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    sets the amount) or record the user's explicit decision to run
    uncapped, in their words, in the register.
 3. Add the declare-before-heavy-work rule (rule 2) and the register
-   to the operating procedures.
-4. Record the monthly spend check in `JOBS.md` (scheduled, riding the
-   brief, or a manual chore — per the manifest's degraded mode).
+   to the operating procedures, as the procedures' final section
+   (§12 — the module 00 template carries a marker for it).
+4. Record the monthly spend check in `JOBS.md` as its own bullet,
+   marked "(rides morning-brief)" when the brief carries it (the
+   brief template's monthly step has the gated spend-check line), or
+   as a scheduled job or manual chore per the manifest's degraded
+   mode. Detector silence reads cadences from `JOBS.md`, so the
+   riding shape must be stated, not implied.
 
 ## Verify
 

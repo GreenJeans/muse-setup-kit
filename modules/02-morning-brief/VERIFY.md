@@ -5,7 +5,7 @@ watch checks.
 
 ## At install
 
-- [ ] The brief job exists with the chosen time, timezone, and delivery,
+- [ ] The brief job exists — scheduler entry, or a job file at `jobs/morning-brief.md` plus its `JOBS.md` entry where the workspace is file-based — with the chosen time, timezone, and delivery,
       and is recorded in `JOBS.md`.
 - [ ] The brief instructions name every source, mark conditional blocks
       `[IF ...]`, and contain the rule that an unread source is reported
