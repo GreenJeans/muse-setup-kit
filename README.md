@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 37,000
+install is heavy work — a full one reads on the order of 53,800
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 

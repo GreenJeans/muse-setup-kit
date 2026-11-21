@@ -251,9 +251,16 @@ rest free to change unnoticed.
 client received it, all of it: the initialize result (which
 carries the server-level instructions), the tool-list response,
 and the prompt-list and resource-list responses where the
-server offers them — each serialized as received, in the order
+server offers them, and the resource-template list alongside
+the resource list where it offers one — templates name what
+the server can be asked to read, and an uncovered template is
+an uncovered channel — each serialized as received, in the order
 presented, and kept together as the record's artifact, a file
-kept with the vetting log. The tool-list response alone is not
+kept with the vetting log. Every list is followed to its last
+page: where a response carries a continuation cursor, the
+pages are captured in order until no cursor remains — a pin
+built from a first page alone does not cover the pages behind
+it. The tool-list response alone is not
 the artifact: instructions arrive in the initialize result, and
 prompts and resources in their own list responses, and the pin
 claims all of them. The hash is the sha256 of that artifact's

@@ -14,13 +14,19 @@ watch checks.
       reported as unread — never as clear.
 - [ ] If triage was installed: the triage job file exists, built
       from `triage-job.template.md`, with the VIP list, the
-      interrupt rules, and the shield's immediacy set (the VIPs
+      interrupt rules, the recorded shield-pattern list, and the
+      shield's immediacy set (the VIPs
       plus the institutions named at install, each with every
       known sending domain and address recorded) filled in; the
       shield check is ordered before the interrupt rules; the
       delivery window matches the user's waking hours; the
       detector script exists and polls on the stated cadence,
-      checking the never-mute classes before its noise list; and
+      checking the never-mute classes before its noise list —
+      or the install runs in module 02's degraded mode (the
+      platform gave the script no credential route): the plan
+      records the degradation, the scan runs agent-run at the
+      reduced cadence MODULE.md states, and the brief
+      template's triage line names the degraded scan; and
       the run-record, flag-log, and state files exist at the
       paths the job file names.
 - [ ] If the money watch was installed: the baseline file exists in a

@@ -83,9 +83,9 @@ Fields beyond today's manifest entry:
   artifact — no file or format in this repo holds a core
   module's review record. Until the maintainer defines one, a
   core module's review record lives in the maintainer's
-  vetting log, and every module's standing state in the
-  catalog is "no review recorded" — which is also, today,
-  simply the fact.
+  vetting log, and `list available` reports "no review
+  recorded" for every core module — the catalog itself
+  carries no review state.
 - **audit_words** — computed by the tooling on the all-files basis,
   not hand-written.
 - **kit_compat** — the core interface versions the module depends
@@ -172,12 +172,21 @@ as the human-readable form.
    label that `list upgradable` and `audit` surface ("archived
    upstream at <date>"); it never reaches into anyone's install.
 4. **Risk class.** Data and action classes (above) set the
-   evidence bar. A module in the higher classes (financial,
-   health, or third-party data; send/file/spend/delete/contact
-   actions) cannot enter a default profile, needs two install
-   rehearsals — one including a leak check in the shape of
-   module 03's boundary test — and must comply with the
-   sensitive-records rule (procedures §13).
+   bars — two bars, kept separate. The **evidence bar** binds
+   on data: a module holding higher-class data (financial,
+   health, or third-party data) needs two install rehearsals
+   — one including a leak check in the shape of module 03's
+   boundary test — and must comply with the sensitive-records
+   rule (procedures §13), whether or not it sits in a default
+   profile. The **profile bar** binds on outward action: a
+   module whose declared actions are outward-acting —
+   send/file/spend/delete/contact directed at third parties
+   or external systems — cannot enter a default profile. A
+   send whose only recipient is the user (a module that
+   delivers the user's own brief and reports to the user,
+   module 02's shape) is not outward-acting and does not trip
+   the profile bar; the module's data, if higher-class, still
+   answers to the evidence bar.
 
 ## Vetting: three claims, kept separate
 

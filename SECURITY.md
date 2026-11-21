@@ -14,6 +14,13 @@ private route and what belongs on it.
 - A module, pattern, or listed library that sends data
   somewhere its declared reads and writes do not admit, or
   that instructs an agent to do so.
+- Injection text planted in a module's or a catalog's fields:
+  text written to be followed as an instruction by an agent,
+  carried in a description, a pitch, or any field an installer
+  would read as data.
+- A defect in the kit's own tools (the linters, the
+  selfcheck, the catalog generator) that makes a check pass
+  when it should fail, or that leaks what a check read.
 
 ## The route
 
@@ -28,9 +35,10 @@ points at it. The maintainer will open the channel.
 
 ## Never in a public issue
 
-Credentials or tokens, anyone's personal data, the location
-of leaked material beyond the repository and file it sits in,
-or working detail on how a module exfiltrates data. Public
+Credentials or tokens, anyone's personal data, anything that
+identifies where leaked material sits — naming the repository
+and the file is already a pointer — or working detail on how
+a module exfiltrates data. Public
 issues are public on arrival and are mirrored by feeds and
 notification mail; a detail posted there cannot be taken
 back.
@@ -51,5 +59,9 @@ because a quiet fix does not reach an existing install.
 
 For a field library, report to that library's maintainer as
 well if you can. The core maintainer's part is the listing:
-removal, and an advisory where the core catalog or this page
-pointed at the problem.
+removal, recorded in the Removed section of
+`docs/known-libraries.md` with the reason. Where the core
+catalog or this page pointed at the problem, the core
+maintainer asks the library's maintainer to publish the
+advisory in the library's own advisories channel; core
+advisories cover core modules only.

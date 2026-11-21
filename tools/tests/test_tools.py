@@ -28,7 +28,19 @@ found, so the fix cannot silently regress:
     lints clean, inherited boilerplate is a warning and never
     a finding, and the module is registered in the catalog,
     the matrix, and the README while staying out of the
-    profiles until the maintainer's merge call.
+    profiles until the maintainer's merge call;
+  - the EX-030..033 final round's module 11 findings: the
+    soul linter counted blockquote lines instead of exchanges
+    (two exchanges plus an anti-example totaling eight lines
+    passed, as did one exchange wrapped over eight lines and
+    a placeholder anti-example), check D accepted a bare
+    governance heading, check C missed bolded placeholders,
+    no check saw a placeholder left outside the examples and
+    priority sections, and check E missed boilerplate wrapped
+    across lines; the parser still accepted bare float and
+    hex spellings, and a negation in class prose covered only
+    the next token ("no personal or financial data" declared
+    financial).
 
 Run: python3 -m unittest discover -s tools/tests
 """
@@ -608,6 +620,15 @@ class BuildDirectoryTest(unittest.TestCase):
             self.assertEqual(r.returncode, 0, r.stderr)
             doc = json.load(open(os.path.join(td, "advisories.json")))
             self.assertEqual(len(doc["advisories"]), 1)
+        # The positive module case (EX-030/031, S16): a valid
+        # module id validates clean — the rejections above are
+        # only meaningful if the real thing passes.
+        with tempfile.TemporaryDirectory() as td:
+            self._advisory_repo(td, "core/example")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 0, r.stderr)
+            doc = json.load(open(os.path.join(td, "advisories.json")))
+            self.assertEqual(len(doc["advisories"]), 1)
 
     def test_pitch_cap_is_enforced(self):
         # Fix item 26's missing fixture: catalog text is
@@ -1012,6 +1033,51 @@ class ModuleYamlTest(unittest.TestCase):
             r = run(MODULE_YAML, "--parity", td)
             self.assertEqual(r.returncode, 0, r.stderr)
 
+    def test_float_and_hex_scalars_fail_loud(self):
+        # EX-030/031 (S13): a bare float or hex spelling parsed
+        # silently into a string, neither rejected nor
+        # documented — full YAML would read both as numbers,
+        # and the subset has no float type. Quote the string
+        # if the string is meant.
+        for line in ('version: 0.9', 'pin: 0x1F', 'ratio: 1e3'):
+            with tempfile.TemporaryDirectory() as td:
+                p = self._write(td, "bad.yaml",
+                                "id: core/example\n" + line + "\n")
+                r = run(MODULE_YAML, p)
+                self.assertEqual(r.returncode, 1,
+                                 f"accepted out-of-subset: {line}")
+                self.assertIn("bad.yaml:2", r.stderr)
+                self.assertIn("float/hex", r.stderr)
+        with tempfile.TemporaryDirectory() as td:
+            p = self._write(td, "ok.yaml",
+                            'id: core/example\nversion: "0.9"\n')
+            r = run(MODULE_YAML, p)
+            self.assertEqual(r.returncode, 0, r.stderr)
+
+    def test_parity_negation_governs_its_clause(self):
+        # EX-030/031 (S13): the negation check covered only the
+        # token immediately after the negation word, so "no
+        # personal or financial data is held" declared
+        # financial. A negation governs its whole clause.
+        with tempfile.TemporaryDirectory() as td:
+            self._write(td, "module.yaml",
+                        'id: core/example\n'
+                        'reads: "the files."\n'
+                        'writes: "a register."\n'
+                        'network: "none."\n'
+                        'jobs: "none."\n'
+                        'data_classes: [none]\n'
+                        'action_classes: [none]\n')
+            self._write(td, "MODULE.md",
+                        "# Module — Example\n\n"
+                        "**Reads:** the files. **Writes:** a register.\n"
+                        "**Network:** none. **Jobs:** none.\n"
+                        "**Data classes:** none — no personal or "
+                        "financial data is held. "
+                        "**Action classes:** none.\n")
+            r = run(MODULE_YAML, "--parity", td)
+            self.assertEqual(r.returncode, 0, r.stderr)
+
     def test_parity_binds_class_sets(self):
         with tempfile.TemporaryDirectory() as td:
             self._write(td, "module.yaml",
@@ -1170,7 +1236,7 @@ class SoulLintTest(unittest.TestCase):
         # must not count as filled examples or as a ranking.
         r = run(SOUL_LINT, SOUL_TEMPLATE)
         self.assertEqual(r.returncode, 1)
-        self.assertIn("0 filled exchange lines", r.stdout)
+        self.assertIn("holds 0 filled exchanges", r.stdout)
         self.assertIn("priority order holds 0 filled items",
                       r.stdout)
 
@@ -1178,6 +1244,109 @@ class SoulLintTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as td:
             text = VALID_SOUL + \
                 "\nYou're not a chatbot. You're becoming someone.\n"
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertIn("[warning]", r.stdout)
+            self.assertIn("inherited boilerplate", r.stdout)
+
+    # The EX-032/033 false-quiet fixtures: every shape below
+    # passed the linter as first shipped while failing the
+    # module's own VERIFY checks. Check B counts exchanges
+    # (whole blockquote blocks), never lines.
+
+    _HEAD = ("# Agent\n\n## What wins when things collide\n\n"
+             "1. Truth\n2. The household\n3. The instruction\n\n")
+    _GOV = ("\n## How this file changes (governance)\n\n"
+            "- The core is the user's. Changes are staged "
+            "diffs, approved first.\n")
+    _PAIR = "> User: a request\n> Agent: a reply\n"
+    _ANTI = "\n### Anti-example\n\n" + \
+        "> User: a request\n> Agent: a bad reply\n"
+
+    def _examples(self, blocks, anti=_ANTI):
+        body = "\n## Examples\n"
+        for i, block in enumerate(blocks):
+            body += f"\n### Exchange {i + 1}\n\n{block}\n"
+        return self._HEAD + body + anti + self._GOV
+
+    def test_two_exchanges_and_anti_at_eight_lines_fails(self):
+        # 2 exchanges + a 4-line anti-example = 8 blockquote
+        # lines: the old line count passed this.
+        anti = ("\n### Anti-example\n\n> User: a request\n"
+                "> Agent: a bad reply\n> Agent: still bad\n"
+                "> Agent: and still bad\n")
+        text = self._examples([self._PAIR, self._PAIR], anti)
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("holds 2 filled exchanges", r.stdout)
+
+    def test_placeholder_anti_example_fails(self):
+        anti = ("\n### Anti-example\n\n> <USER: any request>\n"
+                "> <AGENT: a reply that gets it wrong>\n")
+        text = self._examples([self._PAIR] * 4, anti)
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("anti-example is unfilled", r.stdout)
+
+    def test_one_wrapped_exchange_is_one_exchange(self):
+        wrapped = ("> User: a long request that wraps over\n"
+                   "> many lines of quoted text without ever\n"
+                   "> becoming a second exchange, it just\n"
+                   "> keeps going and going for eight\n"
+                   "> lines in a single block, which the\n"
+                   "> old line count read as four filled\n"
+                   "> exchanges and passed without a word\n"
+                   "> said about the missing three\n")
+        text = self._examples([wrapped])
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("holds 1 filled exchanges", r.stdout)
+
+    def test_empty_governance_section_fails(self):
+        text = self._examples([self._PAIR] * 4)
+        text = text.replace(self._GOV,
+                            "\n## How this file changes "
+                            "(governance)\n")
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("no filled line naming", r.stdout)
+
+    def test_bolded_placeholders_are_not_a_ranking(self):
+        text = self._examples([self._PAIR] * 4).replace(
+            "1. Truth\n2. The household\n3. The instruction",
+            "1. **<FIRST>**\n2. **<SECOND>**\n3. **<THIRD>**")
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("priority order holds 0 filled items",
+                          r.stdout)
+
+    def test_leftover_placeholder_anywhere_is_a_finding(self):
+        # VERIFY check 1 requires zero remaining tokens; a
+        # slot left in Temperament used to draw no finding
+        # from any check.
+        text = VALID_SOUL + "\n## Temperament\n\n- **<TRAIT>.**\n"
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("still carry a placeholder", r.stdout)
+
+    def test_angle_bracketed_address_is_not_a_placeholder(self):
+        text = VALID_SOUL.replace(
+            "> Agent: Done.",
+            "> Agent: Sent to <client@example.com>, done.")
+        with tempfile.TemporaryDirectory() as td:
+            r = self._lint(td, text)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertEqual(r.stdout, "")
+
+    def test_wrapped_boilerplate_still_warns(self):
+        text = VALID_SOUL + "\nThis file is yours to\ngrow into.\n"
+        with tempfile.TemporaryDirectory() as td:
             r = self._lint(td, text)
             self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
             self.assertIn("[warning]", r.stdout)

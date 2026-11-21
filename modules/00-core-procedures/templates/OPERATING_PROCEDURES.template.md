@@ -122,13 +122,17 @@ stays however the user keeps it, and this section is inert.)*
   pack: pin the exact version or commit, read the full text at that pin,
   record its reads, writes, network use, credential needs, and removal
   path. Approval is per item per pinned version and never covers an update.
-  Where the source cannot be read — a hosted connector whose code the
-  vendor does not publish is the common case — vetting runs on the
-  observable surface instead, the entry records the source as not
-  readable, and proceeding on that basis is the user's recorded
-  decision. One floor is not the user's to waive: for a connector or
-  an MCP server, the full presented tool manifest must have been read
-  before anything is installed (module 06 carries the practice).
+  Where the source cannot be read — a hosted connector or MCP server
+  whose code the vendor does not publish is the case this exception
+  exists for — vetting runs on the observable surface instead, the
+  entry records the source as not readable, and proceeding on that
+  basis is the user's recorded decision. The exception reaches
+  connectors and MCP servers only: a skill, a prompt pack, or any
+  other item whose full text cannot be read is not installed on its
+  observable surface — unreadable means unvetted. And one floor is
+  not the user's to waive even inside the exception: for a connector
+  or an MCP server, the full presented tool manifest must have been
+  read before anything is installed (module 06 carries the practice).
 - Retitle sensitive files and artifacts to neutral titles before sharing;
   titles leak through previews and logs.
 - Verify access at the source with a live read, never by an agent's

@@ -25,9 +25,11 @@ markers — and the scalar spellings full YAML would reinterpret:
 inline comments (`value # note`), single-quoted scalars, tags
 (`!!str x`), nested lists in either form, YAML's other null and
 boolean spellings (`~`, `Null`, `true`, `false`, and the YAML 1.1
-family `y`, `yes`, `n`, `no`, `on`, `off`, in any case), and
-unescaped double quotes inside a bare scalar. A scalar that needs
-one of those spellings gets double quotes and stays a string.
+family `y`, `yes`, `n`, `no`, `on`, `off`, in any case), bare float
+and hex spellings (`0.9`, `1e3`, `0x1F` — this subset has integers
+and strings, no float type), and unescaped double quotes inside a
+bare scalar. A scalar that needs one of those spellings gets double
+quotes and stays a string.
 Every error names the file and the line. Generated files
 (directory.json, advisories.json) are JSON instead; this parser is
 only for files a human authors.
@@ -49,6 +51,9 @@ import sys
 
 KEY = re.compile(r"^([a-z][a-z0-9_]*):")
 INT = re.compile(r"^-?\d+$")
+FLOAT = re.compile(r"^-?(\d+\.\d*|\.\d+)([eE][+-]?\d+)?$")
+EXP = re.compile(r"^-?\d+[eE][+-]?\d+$")
+HEX = re.compile(r"^-?0x[0-9a-fA-F]+$")
 
 # YAML spellings this subset refuses to reinterpret. Only the
 # literal `null` is a null here; the rest are strings a full YAML
@@ -172,6 +177,12 @@ def _parse_scalar(raw, path, lineno):
                             "map, which is outside the subset)")
     if INT.match(raw):
         return int(raw)
+    if FLOAT.match(raw) or EXP.match(raw) or HEX.match(raw):
+        _fail(path, lineno, f"{raw!r} is a bare float/hex spelling "
+                            f"outside the subset (full YAML would "
+                            f"read it as a number; this subset has "
+                            f"integers and strings, no float type — "
+                            f"quote the value if the string is meant)")
     return raw
 
 
@@ -349,25 +360,45 @@ def header_fields(module_md_text):
 
 
 NEGATIONS = ("no", "not", "never", "without")
+CLAUSE_END = re.compile(r"[;.]|\bbut\b")
+
+
+def _negation_spans(value):
+    """The (start, end) spans a negation governs in a class line:
+    from the negation word to the next clause boundary — a
+    semicolon, a period, or the word "but". A comma does not end
+    a negation's clause: "no personal or financial data" negates
+    both classes, the way the sentence reads. A header that
+    negates one class and declares another in the same breath
+    must separate the two into clauses of their own, or the
+    declaration reads as part of the negation."""
+    low = value.lower()
+    spans = []
+    for neg in NEGATIONS:
+        for m in re.finditer(r"(?<![a-z-])" + neg + r"(?![a-z-])",
+                             low):
+            end = CLAUSE_END.search(low, m.end())
+            spans.append((m.start(),
+                          end.start() if end else len(low)))
+    return spans
 
 
 def _class_tokens(value, vocabulary):
     """The vocabulary tokens a header class line names, as a set.
     The line may carry prose around the tokens (module 02's line
     explains itself); parity binds the token set, not the prose.
-    A token named only under an immediate negation — "no financial
-    data is held" — does not count: the header there is denying
-    the class, not declaring it, and a negation is not a
-    declaration. (A class the header both declares and negates
-    in different clauses counts as declared.)"""
+    A token named only under a negation — "no personal or
+    financial data is held" — does not count: the header there
+    is denying the classes, not declaring them, and a negation
+    is not a declaration. A negation governs its clause (see
+    _negation_spans). (A class the header both declares and
+    negates in different clauses counts as declared.)"""
+    spans = _negation_spans(value)
     found = set()
     for token in vocabulary:
         for m in re.finditer(r"(?<![a-z-])" + re.escape(token) +
                              r"(?![a-z-])", value):
-            before = value[:m.start()].rstrip()
-            prev = before.rsplit(" ", 1)[-1].strip("—–-();,").lower() \
-                if before else ""
-            if prev in NEGATIONS:
+            if any(s <= m.start() < e for s, e in spans):
                 continue
             found.add(token)
             break

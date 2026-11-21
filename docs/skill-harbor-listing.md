@@ -43,5 +43,7 @@ muse, personal-agent, setup-wizard, procedures, memory, morning-brief, security
   skill's content. If the form requires a file, use a stub
   holding the paste prompt and the repository link.
 - Turn off any one-click install the directory offers.
-- Publishing this listing is a public post, and it is the
-  maintainer's call, made when the library release ships.
+- Publishing this listing is a public post. The call belongs
+  to the human who owns the project, not to the agent who
+  maintains it, and it is made when the library release
+  ships.

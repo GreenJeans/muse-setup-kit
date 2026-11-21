@@ -499,7 +499,7 @@ def main():
             gen = on_disk_dir.get("generated_from")
             if isinstance(gen, str) \
                     and re.fullmatch(r"[0-9a-f]{40}", gen) \
-                    and os.path.isdir(os.path.join(repo, ".git")):
+                    and os.path.exists(os.path.join(repo, ".git")):
                 def _git(*argv):
                     try:
                         r = subprocess.run(["git", "-C", repo, *argv],
@@ -516,10 +516,19 @@ def main():
                                    "advisories.yaml") or ""
                     dirty = _git("status", "--porcelain", "--",
                                  "modules", "advisories.yaml") or ""
-                    n = len([l for l in changed.splitlines()
-                             if l.strip()]) \
-                        + len([l for l in dirty.splitlines()
-                               if l.strip()])
+                    # One count per file: a file both changed
+                    # since the pin and dirty in the worktree is
+                    # still one record file.
+                    paths = {l.strip() for l in changed.splitlines()
+                             if l.strip()}
+                    for l in dirty.splitlines():
+                        if not l.strip():
+                            continue
+                        p = l[3:].strip()
+                        if " -> " in p:
+                            p = p.split(" -> ", 1)[1]
+                        paths.add(p.strip('"'))
+                    n = len(paths)
                     if n:
                         findings.append(
                             "module records changed after "

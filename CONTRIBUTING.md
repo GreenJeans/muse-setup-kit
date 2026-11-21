@@ -101,10 +101,11 @@ The full spec is `docs/library.md`. The short version:
 
 The gates that apply to any module, core or field:
 
-- **Reading cost.** Budgets bind per profile and per module,
-  counted on the all-files basis, never the library total.
-  The printed figure is a cost disclosure, not a promise that
-  a human read every word.
+- **Reading cost.** Budgets bind per profile, counted on the
+  all-files basis, never the library total. Per-module
+  figures are printed at selection time as disclosure; no
+  per-module budget is set. The printed figure is a cost
+  disclosure, not a promise that a human read every word.
 - **Rehearsal at a pin.** A module is rehearsed only if a
   fresh agent installed it at that commit and the run is
   recorded. Unrehearsed modules cannot enter the default
@@ -119,13 +120,21 @@ The gates that apply to any module, core or field:
   not an idle timer: a stable module is not a decaying one.
   *Archived* is a catalog label that `list upgradable` and
   `audit` surface; it never reaches into anyone's install.
-- **Risk class.** A module holding financial, health, or
-  third-party data, or one that can set send/file/spend/
-  delete/contact actions in motion, cannot enter a default
-  profile. It needs two install rehearsals, one including a
-  leak check in the shape of module 03's boundary test, and
-  must comply with the sensitive-records rule (procedures
-  §13).
+- **Risk class.** Two bars, kept separate. The evidence bar
+  binds on data: a module holding financial, health, or
+  third-party data needs two install rehearsals, one
+  including a leak check in the shape of module 03's boundary
+  test, and must comply with the sensitive-records rule
+  (procedures §13), whether or not it sits in a default
+  profile. The profile bar binds on outward action: a module
+  whose declared actions are outward-acting — send/file/
+  spend/delete/contact directed at third parties or external
+  systems — cannot enter a default profile. A send whose only
+  recipient is the user (a module that delivers the user's
+  own brief and reports to the user, module 02's shape) is
+  not outward-acting and does not trip the profile bar; the
+  module's data, if higher-class, still answers to the
+  evidence bar.
 
 Field modules never enter the default profiles; core is the
 only library that can.

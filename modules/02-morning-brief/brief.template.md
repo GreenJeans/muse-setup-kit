@@ -20,7 +20,9 @@ tight: the user reads this in two minutes. Failures first, always.
 - [IF triage scan installed] Triage flag log: <path> — shield
   flags logged since the last brief go to Failures (step 0), each
   with its one-line reason; the scan's run records ride the same
-  file's sibling (step 0 reads the gaps, too)
+  file's sibling (step 0 reads the gaps, too). Where the scan
+  runs degraded (agent-run, no detector script), this line names
+  the degraded scan, and its flags ride the same log
 - [IF deadlines register installed] Deadlines register: <path> —
   items past expiry go to Failures (step 0); items inside their
   lead window (today >= expiry − lead time) and not yet expired

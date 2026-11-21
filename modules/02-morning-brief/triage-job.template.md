@@ -19,7 +19,8 @@ WAKING HOURS, e.g. 07:00–22:00> <TIMEZONE>; outside the window
 it does not poll and nothing interrupts. On each poll it checks
 the never-mute classes first — by pattern, not judgment: the
 VIP and immediacy lists, security and account alerts, and the
-shield patterns in module 02; a match is never muted and always
+shield patterns recorded in this job file (the recorded list,
+below); a match is never muted and always
 wakes the agent — then the noise list in its state file; mail
 that survives wakes the agent, and the rules below run. A daily
 full sweep reads the whole mailbox the slow way, as the safety
@@ -42,8 +43,11 @@ or fixture in this job reaches them.
    immediacy-set identity and its sender cannot be confirmed
    against the recorded senders — and a message that matches a
    pattern with no concrete tell and claims no identity that
-   would settle it grades unverified too: pattern-shaped is
-   never passed. Never graded scam on a hunch,
+   would settle it grades unverified too: pattern shape alone
+   never passes a message, and a pattern-shaped message passes
+   only when its sender matches the recorded senders for the
+   identity it claims (module 02's grade partition governs,
+   not this summary). Never graded scam on a hunch,
    and not ordinary mail either: it earns no interrupt of any
    class and is written to the flag log (below) with the
    identity it claimed; *passed* when the sender matches the
@@ -118,6 +122,28 @@ Everything else accrues to the next brief.
   from the message into the log. The brief consumes the log
   (Failures, with the reason attached) — the log is the only
   route a flag has into the brief.
+
+## Shield patterns (the recorded list)
+
+The detector's half of the shield: the pattern shapes it
+matches mechanically, recorded here at install from module
+02's shield prose. This list is the detector's only home for
+them — module 02's prose describes the shapes for the woken
+agent's grading, and this list is what the script matches. A
+match is a wake, never a grade: grading is the woken agent's,
+against the full prose. The scan never adds to this list
+itself; an addition is proposed through the decision queue,
+like an immediacy-set change, and lands only on the user's
+yes.
+
+- Sender shapes: <e.g. a sending domain one character off a
+  recorded institution domain; a display name naming an
+  immediacy-set institution, sent from an unrecorded domain>
+- Subject shapes: <e.g. an account-suspension threat paired
+  with a same-day deadline>
+- Body shapes: <e.g. a payment demand in gift cards or by
+  wire transfer; a link whose visible text names one domain
+  and whose target is another>
 
 ## VIP list
 

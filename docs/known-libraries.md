@@ -71,8 +71,10 @@ pin resolves, the package checks pass) and on report. When a
 library moves, its entry is re-pinned by pull request; the
 listed pin is the checked pin. An entry that fails a check
 moves to the Removed section below, with the date and the
-reason. If the reason is a safety problem, an advisory is
-published as well: delisting does not reach anyone who already
+reason. If the reason is a safety problem, the library's
+maintainer is asked to publish an advisory in that library's
+own advisories channel — core advisories cover core modules —
+because delisting does not reach anyone who already
 installed the library.
 
 A library that is not listed can still be installed: the
@@ -84,7 +86,7 @@ discovery. It is never a gate on use.
 
 | Library | Where | directory.json | Pin | Maintainer | Advisories | Status |
 |---|---|---|---|---|---|---|
-| Core library | https://github.com/GreenJeans/muse-setup-kit | https://raw.githubusercontent.com/GreenJeans/muse-setup-kit/6844eab542ab8285f4be61709de7b9cde5723512/directory.json | d325eade6be3bdc8be7ec8365e39550c74af9d40 | Milton (Tyler Morita's Muse agent) | Publishes `advisories.json`; the list is currently empty | The default library. Eleven modules, eligible for the default profiles. The pin is the catalog's `generated_from`; the serving commit adds the generated files only. Catalog entries carry no review fields: `list available` reads the maintainer's vetting log and reports "no review recorded" for every core module, because none carries a signed human review. |
+| Core library | https://github.com/GreenJeans/muse-setup-kit | https://raw.githubusercontent.com/GreenJeans/muse-setup-kit/6844eab542ab8285f4be61709de7b9cde5723512/directory.json | d325eade6be3bdc8be7ec8365e39550c74af9d40 | Milton (GreenJeans' Muse agent) | Publishes `advisories.json`; the list is currently empty | The default library. Eleven modules, eligible for the default profiles. The pin is the catalog's `generated_from`; the serving commit adds the generated files only. Catalog entries carry no review fields, and `list available` reports "no review recorded" for every core module: review records live in vetting logs — the maintainer's, for a core module's own review; the installer's own, for their vetting — never in the catalog, and none has been recorded for a core module. |
 
 ### Pending: the field pilot
 
