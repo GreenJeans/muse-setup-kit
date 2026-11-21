@@ -88,6 +88,105 @@ governs and the application has a bug.
 | Billing buckets; declare before heavy work (application: module 09) | procedures §12 |
 | Sensitive records — where financial, health, and third-party data may live; document numbers never recorded (applications: modules 01, 02, 03, 04, 05, 06, 08, 09, 10, and this module's continuity handover) | procedures §13 |
 
+## Mechanical forms (machinery shipped with this module)
+
+Three of this module's rules have mechanical forms, shipped as tools
+and templates here. The gate implements §5. The other two forms carry
+their rule with them: the retry rule (Error compaction) extends §7,
+and the pause rule (Pause and resume) extends §9, and this section
+is those two rules' home — the templates and tools point back here
+rather than restating them.
+
+**Verifier-gated done** (implements §5: "done" requires a verified
+deliverable). A workstream may keep a `feature_list.json` (from
+`templates/feature_list.template.json`): features, each with a
+verifier command. The agent works the features but never edits the
+file's status or verifier fields. Only `tools/verify_done.py` sets
+a status: done when the verifier exits 0, failed otherwise. At
+creation (`init`) the tool stamps a hash of each verifier, and
+refuses to re-stamp a list that already carries hashes —
+re-stamping would bless a changed verifier, so it needs `--force`
+and is the user's call, never a routine step. `check` validates
+every hash before running anything (a missing hash is reported as
+not initialized, a mismatch as tampering; either stops the run,
+exit 2), then re-runs every verifier, including for features
+already marked done — a done whose verifier now fails flips back
+to failed. "Done" stops being a claim the agent makes and becomes
+a state a script checked. One limit, stated plainly: the agent
+holds write access to the file, so no stamp inside it makes the
+record proof against an agent willing to forge its own record.
+What the gate guarantees is that a status it set was set by a
+verifier run, and that check re-verifies rather than trusting the
+file. Verifier commands run through the system shell; the
+examples assume a POSIX shell.
+
+**What the gate is, measured.** The maintainer's Track B
+comparison (module 05; the job records are not shipped with the
+kit) ran the gate against prose records: 30 trials, model fixed,
+short fully-specified tasks. Both arms passed 15/15; the
+pre-registered adoption bar was not met. On tasks like these the
+model does not produce the premature "done" the gate guards
+against, so its correctness benefit is **unproven** — and the
+conditions it was designed for (long, multi-session,
+underspecified work) are the ones a task-run eval cannot
+reproduce. Its measured benefit is the record: in all 12 gated
+trials — the feature-list trials; 3 of the 15 gate-arm trials
+ran a task with no feature list — the scope record ended
+accurate and hash-stamped, where the prose arm's list on the
+seed task still read "pending" in 3 of 3 trials after the work
+was done. Ship the gate as a record and audit mechanism. Do not
+claim it makes the work more correct until a long-horizon eval
+shows that.
+
+**Error compaction** (implements §7, ground truth; 12-Factor Agents
+factor 9). When a failed command is retried, the raw log does not
+re-enter context. `tools/compact_error.py` reduces it to a bounded
+block: the first error, file:line references, the tail, and a hash
+plus line count of the original. The original stays where it was,
+addressable by that hash; the compact block is a locator, never a
+replacement for the source.
+
+**Pause and resume** (12-Factor Agents factor 6). A long task keeps
+a `STATE.md` card (from `templates/STATE.template.md`) in its
+workspace: status, what is verified-done with addresses, the next
+single step, the blocker, what not to redo. A task is pausable only
+while its card is current, and resumable only from the card, not
+from a chat transcript. Room close-out (§9) is this card's final
+form; the card is the same discipline applied mid-flight.
+
+## Two files named AGENTS.md
+
+Sooner or later the user will meet the name collision. A
+personal-agent `AGENTS.md` — the operating manual this kit's
+procedures live beside — is one thing. A repo-local `AGENTS.md` in
+the open agents.md format is another: build, test, and PR
+instructions for coding agents working in that repository —
+guidance for tools, not a constitution and not a security
+boundary. Neither file's rules bind the other's reader. Tools
+load by filename, not by audience, though: a coding agent opened
+at the personal workspace root will read the personal file as
+project instructions. Keep coding-agent sessions inside the repo
+they are working on. When the user works in code repositories,
+`templates/AGENTS.repo.template.md` is the repo kind; keep the
+two separate, and name each for its audience.
+
+## Further reading
+
+- **12-Factor Agents** (HumanLayer; github.com/humanlayer/12-factor-agents):
+  a checklist this module borrows from twice (factors 6 and 9
+  above). Worth reading whole; apply it as a checklist, not a
+  framework.
+- **Learn Harness Engineering** (walkinglabs;
+  https://github.com/walkinglabs/learn-harness-engineering/blob/HEAD/README.md):
+  a project-based course on the environment around a coding agent —
+  instructions, state, verification, scope. Module 05's Track B and
+  the verifier gate above both come from this line of thinking.
+- **Spec Kit** (GitHub): the heavyweight spec-first option —
+  constitution, specify, plan, tasks, converge — for users whose
+  work is mostly building software. Named here so the choice is
+  visible; it is not this kit's default process, which stays
+  procedures-first.
+
 ## Extension points (anchors)
 
 Core prose files that other modules amend carry **named anchors**:
@@ -199,6 +298,17 @@ another module's surfacing; the extraction step is not optional.
    the handover in the plan's installed-file baseline as
    `accumulating` — it is filled in and revised by design, and
    hashing it would make ordinary updates read as drift.
+8. Copy the module's tools (`tools/verify_done.py`,
+   `tools/compact_error.py`) into the workspace tools folder named
+   in the plan. The remaining templates are per-task, not
+   install-time: `templates/feature_list.template.json` is copied
+   into a workstream when it adopts verifier-gated done,
+   `templates/STATE.template.md` into a task's workspace when the
+   task becomes long enough to pause, and
+   `templates/AGENTS.repo.template.md` into a code repository the
+   user works in. The plan records which workstreams adopt the
+   feature-list gate at install; the rest adopt it when they need
+   it, and the module's mechanical-forms section is the reference.
 
 ## Verify
 

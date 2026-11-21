@@ -26,6 +26,17 @@
       it is in. The middle state is a pass, stated as what it
       is — not silently read as "filled".
 
+- [ ] The module's tools are in the workspace tools folder, and the
+      verifier gate smoke-checks on a scratch copy of
+      `templates/feature_list.template.json`: `verify_done.py init`
+      stamps the hash, `check` fails the example feature while its
+      file is missing and passes it once the file exists, and
+      editing the verifier text by hand makes `check` refuse with a
+      tamper flag instead of running it. Re-running `init` on the
+      stamped list is refused, and hand-setting the feature's
+      status to done with its file still missing does not survive
+      `check`: the verifier re-runs and the status flips to failed.
+
 ## Deferred
 
 - [ ] **Fresh-session test** (due: the user's next new conversation;

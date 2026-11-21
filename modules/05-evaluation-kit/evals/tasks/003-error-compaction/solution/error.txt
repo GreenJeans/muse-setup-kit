@@ -1,0 +1,5 @@
+ERROR-COMPACT sha256:demo lines:3
+first-error: ConfigError: port must be 8080, got 8000 (config.txt:2)
+refs: config.txt:2
+tail:
+  ConfigError: port must be 8080

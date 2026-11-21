@@ -1,0 +1,1 @@
+{"features":[{"id":"F1","title":"hello file","verifier":"test \"$(cat hello.txt)\" = hello","status":"pending"}]}

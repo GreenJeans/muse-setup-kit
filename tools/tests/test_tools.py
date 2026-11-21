@@ -29,6 +29,20 @@ found, so the fix cannot silently regress:
     a finding, and the module is registered in the catalog,
     the matrix, and the README while staying out of the
     profiles until the maintainer's merge call;
+  - the EX-034/035 harness review round: the gate trusting a
+    hand-flipped "done" (check now re-runs every verifier), init
+    re-blessing a tampered verifier on re-run (refused without
+    --force), the tamper exit code clobbered by a later failure
+    (hash validation is now a pre-pass that runs nothing), an
+    unhandled verifier timeout, compact_error hashing decoded
+    text instead of the raw bytes and losing the exception line
+    of a Python traceback, the eval oracle passing a task with
+    no solution, and task 002's verifier rejecting the gate's
+    legitimate "failed" status;
+  - the harness build's verifier gate running verifiers in the
+    caller's working directory instead of the feature list's, so
+    a finished feature failed from any other folder; the gate
+    now runs each verifier from the list's own directory;
   - the EX-030..033 final round's module 11 findings: the
     soul linter counted blockquote lines instead of exchanges
     (two exchanges plus an anti-example totaling eight lines
@@ -47,6 +61,7 @@ Run: python3 -m unittest discover -s tools/tests
 import datetime
 import json
 import os
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -57,6 +72,9 @@ LINT = os.path.join(REPO, "modules/01-memory-architecture/tools/memory_lint.py")
 CURATOR = os.path.join(REPO, "modules/08-skill-lifecycle/tools/curator.py")
 STAGE = os.path.join(REPO, "modules/08-skill-lifecycle/tools/stage_check.py")
 DOCTOR = os.path.join(REPO, "modules/05-evaluation-kit/tools/kit_doctor.py")
+GATE = os.path.join(REPO, "modules/00-core-procedures/tools/verify_done.py")
+COMPACT = os.path.join(REPO, "modules/00-core-procedures/tools/compact_error.py")
+RUN_EVAL = os.path.join(REPO, "modules/05-evaluation-kit/tools/run_eval.py")
 TODAY = datetime.date.today()
 
 
@@ -1392,3 +1410,264 @@ class PersonaSoulRegistrationTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HarnessToolsTest(unittest.TestCase):
+    """Module 00's gate + compaction tools and module 05's Track B runner."""
+
+    def _feature_list(self, td):
+        p = os.path.join(td, "feature_list.json")
+        data = {"project": "t", "features": [{
+            "id": "F1", "title": "make hello", "status": "pending",
+            "verifier": "test -f hello.txt",
+            "acceptance": "verifier exits 0"}]}
+        with open(p, "w") as fh:
+            json.dump(data, fh)
+        return p
+
+    def test_gate_flips_only_on_verifier_pass_from_any_cwd(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._feature_list(td)
+            self.assertEqual(run(GATE, "init", p).returncode, 0)
+            r = run(GATE, "check", p, cwd="/")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("FAIL", r.stdout)
+            with open(os.path.join(td, "hello.txt"), "w") as fh:
+                fh.write("hello")
+            r = run(GATE, "check", p, cwd="/")
+            self.assertEqual(r.returncode, 0)
+            self.assertIn("PASS", r.stdout)
+            with open(p) as fh:
+                self.assertEqual(json.load(fh)["features"][0]["status"], "done")
+
+    def test_gate_refuses_a_tampered_verifier(self):
+        with tempfile.TemporaryDirectory() as td:
+            p = self._feature_list(td)
+            self.assertEqual(run(GATE, "init", p).returncode, 0)
+            with open(p) as fh:
+                data = json.load(fh)
+            data["features"][0]["verifier"] = "true"
+            with open(p, "w") as fh:
+                json.dump(data, fh)
+            r = run(GATE, "check", p)
+            self.assertEqual(r.returncode, 2)
+            self.assertIn("TAMPER", r.stdout)
+
+    def test_compact_error_bounds_and_addresses_the_original(self):
+        raw = "Traceback (most recent call last):\n" + "noise line\n" * 200 + "ValueError: bad\n"
+        r = subprocess.run([sys.executable, COMPACT], input=raw,
+                           capture_output=True, text=True)
+        self.assertEqual(r.returncode, 0)
+        self.assertLessEqual(len(r.stdout), 1200)
+        self.assertIn("ERROR-COMPACT sha256:", r.stdout)
+        self.assertIn("lines:202", r.stdout)
+
+    def test_track_b_oracle_holds_on_the_shipped_seed_tasks(self):
+        r = run(RUN_EVAL, "--oracle")
+        self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+        self.assertEqual(r.stdout.count("OK  "), 3)
+
+
+TASK002 = os.path.join(REPO, "modules/05-evaluation-kit/evals/tasks/002-feature-list-gate")
+
+
+class GateEvalInteropTest(unittest.TestCase):
+    """Task 002's verifier must accept the gate's own status flip.
+
+    Encodes the bug the maintainer's first Track B comparison found
+    in the local eval set: the task verifier treated the gate's
+    legitimate flip to "done" as tampering, so the gate arm scored
+    0 for using the gate. "done" is legitimate only when the
+    verifier hash the gate stamped at init still recomputes.
+    """
+
+    def _workdir(self, td):
+        work = os.path.join(td, "w")
+        shutil.copytree(os.path.join(TASK002, "seed"), work)
+        with open(os.path.join(work, "hello.txt"), "w") as fh:
+            fh.write("hello")
+        return work
+
+    def test_gated_completion_passes_the_task_verifier(self):
+        with tempfile.TemporaryDirectory() as td:
+            work = self._workdir(td)
+            lst = os.path.join(work, "feature_list.json")
+            self.assertEqual(run(GATE, "init", lst).returncode, 0)
+            self.assertEqual(run(GATE, "check", lst).returncode, 0)
+            r = run(os.path.join(TASK002, "verify.py"), work)
+            self.assertEqual(r.returncode, 0, r.stdout)
+
+    def test_hand_flipped_done_without_the_hash_fails(self):
+        with tempfile.TemporaryDirectory() as td:
+            work = self._workdir(td)
+            lst = os.path.join(work, "feature_list.json")
+            with open(lst) as fh:
+                data = json.load(fh)
+            data["features"][0]["status"] = "done"
+            with open(lst, "w") as fh:
+                json.dump(data, fh)
+            r = run(os.path.join(TASK002, "verify.py"), work)
+            self.assertEqual(r.returncode, 1)
+
+
+EVALS05 = os.path.join(REPO, "modules/05-evaluation-kit/evals")
+
+
+def write_list(path, features):
+    with open(path, "w") as fh:
+        json.dump({"features": features}, fh)
+
+
+def feat(fid, verifier):
+    return {"id": fid, "title": fid, "verifier": verifier, "status": "pending"}
+
+
+class HarnessReviewFixTest(unittest.TestCase):
+    """EX-034/035 regressions: gate trust, init, exit codes, timeout."""
+
+    def test_init_refuses_restamp_unless_forced(self):
+        with tempfile.TemporaryDirectory() as td:
+            lst = os.path.join(td, "feature_list.json")
+            write_list(lst, [feat("F1", "true")])
+            self.assertEqual(run(GATE, "init", lst).returncode, 0)
+            r = run(GATE, "init", lst)
+            self.assertEqual(r.returncode, 2)
+            self.assertIn("REFUSED", r.stdout)
+            r = run(GATE, "init", lst, "--force")
+            self.assertEqual(r.returncode, 0)
+
+    def test_check_before_init_is_not_called_tamper(self):
+        with tempfile.TemporaryDirectory() as td:
+            lst = os.path.join(td, "feature_list.json")
+            write_list(lst, [feat("F1", "true")])
+            r = run(GATE, "check", lst)
+            self.assertEqual(r.returncode, 2)
+            self.assertIn("NOT INITIALIZED", r.stdout)
+            self.assertNotIn("TAMPER", r.stdout)
+
+    def test_tamper_prepass_runs_nothing_and_saves_nothing(self):
+        with tempfile.TemporaryDirectory() as td:
+            lst = os.path.join(td, "feature_list.json")
+            write_list(lst, [feat("F1", "true"), feat("F2", "false")])
+            self.assertEqual(run(GATE, "init", lst).returncode, 0)
+            with open(lst) as fh:
+                data = json.load(fh)
+            data["features"][0]["verifier"] = "true # edited"
+            write_list(lst, data["features"])
+            r = run(GATE, "check", lst)
+            self.assertEqual(r.returncode, 2)
+            self.assertIn("TAMPER F1", r.stdout)
+            with open(lst) as fh:
+                after = json.load(fh)
+            self.assertEqual([f["status"] for f in after["features"]],
+                             ["pending", "pending"])
+
+    def test_timeout_marks_the_feature_failed(self):
+        with tempfile.TemporaryDirectory() as td:
+            lst = os.path.join(td, "feature_list.json")
+            write_list(lst, [feat("F1", "sleep 2")])
+            self.assertEqual(run(GATE, "init", lst).returncode, 0)
+            r = run(GATE, "check", lst, "--timeout", "1")
+            self.assertEqual(r.returncode, 1)
+            with open(lst) as fh:
+                f = json.load(fh)["features"][0]
+            self.assertEqual(f["status"], "failed")
+            self.assertIn("timeout", f["last_verifier_output"])
+
+    def test_hand_flip_does_not_survive_the_gate(self):
+        with tempfile.TemporaryDirectory() as td:
+            work = os.path.join(td, "w")
+            shutil.copytree(os.path.join(TASK002, "seed"), work)
+            lst = os.path.join(work, "feature_list.json")
+            self.assertEqual(run(GATE, "init", lst).returncode, 0)
+            with open(lst) as fh:
+                data = json.load(fh)
+            data["features"][0]["status"] = "done"
+            write_list(lst, data["features"])
+            r = run(GATE, "check", lst)
+            self.assertEqual(r.returncode, 1)
+            with open(lst) as fh:
+                f = json.load(fh)["features"][0]
+            self.assertEqual(f["status"], "failed")
+
+    def test_task_verifier_accepts_the_failed_status(self):
+        with tempfile.TemporaryDirectory() as td:
+            work = os.path.join(td, "w")
+            shutil.copytree(os.path.join(TASK002, "seed"), work)
+            with open(os.path.join(work, "hello.txt"), "w") as fh:
+                fh.write("hello")
+            lst = os.path.join(work, "feature_list.json")
+            self.assertEqual(run(GATE, "init", lst).returncode, 0)
+            with open(lst) as fh:
+                data = json.load(fh)
+            data["features"][0]["status"] = "failed"
+            write_list(lst, data["features"])
+            r = run(os.path.join(TASK002, "verify.py"), work)
+            self.assertEqual(r.returncode, 0, r.stdout)
+
+
+class CompactAndRunnerFixTest(unittest.TestCase):
+    """EX-034/035 regressions: compaction cap/hash/traceback, runner."""
+
+    def test_compact_cap_holds_on_long_lines(self):
+        with tempfile.TemporaryDirectory() as td:
+            log = os.path.join(td, "big.log")
+            with open(log, "w") as fh:
+                for i in range(50):
+                    fh.write(f"line {i} " + "x" * 200 + "\n")
+                fh.write("ValueError: boom\n")
+            r = run(COMPACT, log)
+            self.assertLessEqual(len(r.stdout), 1200)
+            self.assertIn("ValueError: boom", r.stdout)
+
+    def test_compact_traceback_names_the_exception(self):
+        with tempfile.TemporaryDirectory() as td:
+            log = os.path.join(td, "tb.log")
+            with open(log, "w") as fh:
+                fh.write('Traceback (most recent call last):\n')
+                fh.write('  File "app/main.py", line 12, in <module>\n')
+                fh.write("    run()\n")
+                fh.write("ValueError: bad value\n")
+            r = run(COMPACT, log)
+            self.assertIn("first-error: ValueError: bad value", r.stdout)
+            self.assertIn("app/main.py:12", r.stdout)
+
+    def test_compact_hash_is_over_the_raw_bytes(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as td:
+            log = os.path.join(td, "crlf.log")
+            blob = b"first line\r\nValueError: x\r\n"
+            with open(log, "wb") as fh:
+                fh.write(blob)
+            r = run(COMPACT, log)
+            self.assertIn("sha256:" + hashlib.sha256(blob).hexdigest()[:12],
+                          r.stdout)
+
+    def test_oracle_calls_a_task_without_solution_unverified(self):
+        with tempfile.TemporaryDirectory() as td:
+            task = os.path.join(td, "evals", "tasks", "999-nosol")
+            os.makedirs(os.path.join(task, "seed"))
+            with open(os.path.join(task, "verify.py"), "w") as fh:
+                fh.write("import sys; sys.exit(1)\n")
+            r = run(RUN_EVAL, "--evals-dir", os.path.join(td, "evals"),
+                    "--oracle")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("UNVERIFIED", r.stdout)
+
+    def test_verify_records_variant_and_never_overwrites(self):
+        with tempfile.TemporaryDirectory() as td:
+            evals = os.path.join(td, "evals")
+            shutil.copytree(EVALS05, evals)
+            sol = os.path.join(evals, "tasks", "002-feature-list-gate",
+                               "solution")
+            for trial in ("1", "2"):
+                r = run(RUN_EVAL, "--evals-dir", evals, "--verify",
+                        "002-feature-list-gate", sol,
+                        "--variant", "B", "--trial", trial)
+                self.assertEqual(r.returncode, 0, r.stdout)
+            results = os.listdir(os.path.join(evals, "results"))
+            self.assertEqual(len(results), 2)
+            with open(os.path.join(evals, "results", results[0])) as fh:
+                rec = json.load(fh)
+            self.assertEqual(rec["variant"], "B")
+            self.assertIn(rec["trial"], ("1", "2"))

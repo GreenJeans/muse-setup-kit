@@ -13,14 +13,48 @@ depends_on: [core/core-procedures, core/memory-architecture]
 requires: []
 degrades_without: [other-agents, scheduling, shell-python]
 reads: "your procedures and memory, frozen into an audit packet."
-writes: "packets, findings, adoption records."
+writes: "packets, findings, adoption records, eval results."
 network: "a second model if used for blind review."
 jobs: "an audit reminder on cadence."
-rehearsed_at: null
+rehearsed_at: "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal"
 data_classes: [personal, third-party]
 action_classes: [none]
 files:
   - path: templates/fictional-seeds.md
     class: static-verbatim
   - path: tools/kit_doctor.py
+    class: static-verbatim
+  - path: tools/run_eval.py
+    class: static-verbatim
+  - path: evals/README.md
+    class: static-verbatim
+  - path: evals/tasks/001-memory-supersede/instruction.md
+    class: static-verbatim
+  - path: evals/tasks/001-memory-supersede/verify.py
+    class: static-verbatim
+  - path: evals/tasks/001-memory-supersede/seed/MEMORY.md
+    class: static-verbatim
+  - path: evals/tasks/001-memory-supersede/solution/MEMORY.md
+    class: static-verbatim
+  - path: evals/tasks/002-feature-list-gate/instruction.md
+    class: static-verbatim
+  - path: evals/tasks/002-feature-list-gate/verify.py
+    class: static-verbatim
+  - path: evals/tasks/002-feature-list-gate/seed/feature_list.json
+    class: static-verbatim
+  - path: evals/tasks/002-feature-list-gate/solution/feature_list.json
+    class: static-verbatim
+  - path: evals/tasks/002-feature-list-gate/solution/hello.txt
+    class: static-verbatim
+  - path: evals/tasks/003-error-compaction/instruction.md
+    class: static-verbatim
+  - path: evals/tasks/003-error-compaction/verify.py
+    class: static-verbatim
+  - path: evals/tasks/003-error-compaction/seed/config.txt
+    class: static-verbatim
+  - path: evals/tasks/003-error-compaction/seed/error.txt
+    class: static-verbatim
+  - path: evals/tasks/003-error-compaction/solution/config.txt
+    class: static-verbatim
+  - path: evals/tasks/003-error-compaction/solution/error.txt
     class: static-verbatim
