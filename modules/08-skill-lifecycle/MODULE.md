@@ -3,8 +3,9 @@
 **Reads:** session transcripts, your custom skills, the decision queue,
 scheduled-job records. **Writes:** staged proposals (never live skills
 directly), a skill-usage ledger, decision-queue items, an archive folder
-for retired skills. **Network:** none. **Jobs:** one nightly
-session-review sweep; one weekly curator run.
+for retired skills. **Network:** none. **Jobs:** none at the
+Lite tier; at Full, one nightly session-review sweep and one weekly
+curator run.
 
 ## Purpose
 
@@ -24,6 +25,35 @@ missed opportunity." This module inverts both. **Gates on, and "nothing
 to save" is a neutral outcome.** A reviewer pressured to produce will
 produce noise; a gate left off turns that noise into live instructions.
 
+## Tiers
+
+This module installs at one of two tiers. **Lite is the default**;
+Full is an upgrade, offered under the conditions below.
+
+- **Lite** — Pattern 1's in-session and explicit triggers only, plus
+  Pattern 2's staged-diff approval. No tools, no scheduled jobs, no
+  usage ledger, no shadow week: staging happens in sessions the user
+  is present for, so the rollout gate the shadow week provides for
+  the sweep is unnecessary. Staging expiry (14 days) still applies;
+  with no runner, the agent checks staged ages whenever it files or
+  applies a proposal and expires what is overdue, logging it.
+  Everything Lite needs is discipline plus a staging folder.
+- **Full** — everything in this module: the nightly sweep backstop,
+  Pattern 3's curator with its ledger and the two reference tools,
+  the shadow-week rollout, and the 30-day review. Offer Full when
+  the user has **5 or more custom skills**, when Lite proposals are
+  being missed between sessions (the user says so, or corrections
+  visibly recur), or when the user asks. Below that scale the sweep
+  and curator cost more attention than the skills they watch.
+
+Upgrading Lite → Full is Install steps F1–F5 below; nothing Lite
+built is redone.
+
+Reading this module at Lite: Patterns 1–2 are yours. Pattern 3, the
+Rollout section, and the curator's brief-reporting line under
+Pattern 3 are Full-only and are labeled as such where they start —
+a Lite installer can skip them on a first read.
+
 ## Pattern 1 — The session review (capture)
 
 The highest-value skill signals are single-session: a correction, a
@@ -39,7 +69,7 @@ a live skill.
    the rubric below before closing the task and stages a proposal in
    the same session if it fires. No machinery — a discipline plus a
    staging folder.
-2. **Nightly sweep (backstop).** A scheduled job scans the day's
+2. **Nightly sweep (backstop; Full tier only).** A scheduled job scans the day's
    sessions one by one (never pooled — pooling is the platform-level
    loop's job, below), runs the same rubric, and stages anything the
    in-session pass missed. Silent unless it stages something or fails;
@@ -160,17 +190,21 @@ Contents:
   sweep / platform loop); session reference.
 
 Staging expires undecided after **14 days**: expiry auto-rejects the
-proposal (logged), it never applies it. Expiry has a runner: the
-nightly sweep checks `staged/` on every run, and the weekly curator
-run backstops it (`tools/stage_check.py` is the mechanical helper).
+proposal (logged), it never applies it. Expiry has a runner at the
+Full tier: the nightly sweep checks `staged/` on every run, and the
+weekly curator run backstops it (`tools/stage_check.py` is the
+mechanical helper). At Lite there is no runner; the agent checks
+staged ages whenever it files or applies a proposal, as the Tiers
+section states.
 An expired item moves to `staged/expired/` and its queue item is
 marked expired, freeing its cap slot.
 
 ### Queue items
 
 Two item types, defined in the queue's header when this module
-installs: `[type: skill-write]` for proposals from Pattern 1, and
-`[type: skill-curator]` for Pattern 3. Formats:
+installs: `[type: skill-write]` for proposals from Pattern 1 (both
+tiers), and `[type: skill-curator]` for Pattern 3 (Full tier only —
+a Lite install defines only the first). Formats:
 `templates/skill-queue-items.template.md`. The rules that make them
 work:
 
@@ -198,7 +232,13 @@ work:
   results, terser output) is presentation, not spending, even though
   it is adjacent to money. Escalated proposals need the
   verify-before-install record (module 06) plus an explicit ticket.
-  When unsure, escalate.
+  When unsure, escalate. One boundary case, worked: a patch that
+  changes *when or how often* an existing, already-gated action
+  happens — a reminder's cadence, the wording of an existing
+  draft-first flow — adds no new action, recipient, or send, and
+  stays a queue item. A patch that adds a send, a recipient, a
+  channel, or any new instructed action escalates, however small
+  the diff.
 
 ### Apply procedure (on approval, in session)
 
@@ -212,8 +252,8 @@ work:
    are present and the rest of the file is unchanged outside the diff;
    for a create, confirm the skill appears where the index should show
    it; for an archive, confirm the folder listing on both sides.
-4. Update the usage ledger (patch counts, `last_patched`, curator
-   states), move the queue item to Resolved with outcome and date,
+4. At Full, update the usage ledger (patch counts, `last_patched`,
+   curator states). Move the queue item to Resolved with outcome and date,
    move the staging folder to `staged/applied/` (kept 30 days, then
    cleanup is proposed — not automatic), and log the change.
 5. If the skill carries a managed review record, the apply also sets
@@ -221,7 +261,7 @@ work:
    approved change is itself audited. A change that fails its review
    is staged for revert as a new queue item — never auto-reverted.
 
-## Pattern 3 — The curator (retire)
+## Pattern 3 — The curator (retire) — Full tier only
 
 Deterministic only: a small script plus a ledger. No LLM pass, no
 automatic consolidation or merging of skills.
@@ -305,9 +345,12 @@ job's own monthly note if no brief is installed): total custom skills,
 active / stale / archived counts, exemptions in force. No standalone
 curator report.
 
-## Rollout — shadow week
+## Rollout — shadow week (Full tier only)
 
-Do not switch the sweep on live. Roll out in phases:
+Lite needs no rollout: its triggers fire in sessions the user is
+present for, and its first staged proposal is itself the test. Full
+adds machinery that runs while the user is away, so: do not switch
+the sweep on live. Roll out in phases:
 
 1. **Format first.** Queue header gains the two item types; staging
    conventions live; ledger built and seeded; curator script written
@@ -343,52 +386,62 @@ Do not switch the sweep on live. Roll out in phases:
    the reviewer reports corrections it saw in transcripts that never
    became proposals (the recall gap) alongside its precision.
 
-## Install
+## Install — Lite
 
 1. Choose the module's home: a workstream folder with a `SCOPE.md`
-   (module 00), holding `staged/`, the ledger, the curator script, and
-   run logs. Defaults, unless the plan renames them: home folder
-   `skill-lifecycle/`, ledger `skill-lifecycle/skill-usage.json`. The
-   ledger's record format is the one `tools/curator.py` writes —
-   fields listed under Pattern 3 — and the installer's seeding matches
-   it exactly. Seeding happens one way: the curator's first hand run
-   (Rollout step 1) creates records for skills not yet ledgered. Do
-   not hand-write records ahead of it. A "verifiable" created date is
-   one from a record (a dated log, a commit, the user's statement);
-   anything else seeds as null and is reported unseeded — never
-   backfill a date from a file's mtime and call it created.
-2. Add the two item types to the decision queue's header, using the
-   definitions in `templates/skill-queue-items.template.md`, and
-   confirm the queue template's never-consent rule is stated there.
-3. Create the staging area with its `staged/applied/` and
-   `staged/expired/` holding folders;
-   copy `templates/staged-proposal.template.md` where reviewers will
-   find it.
-4. Seed the usage ledger: one record per existing custom skill,
-   created dates from verifiable records only — the skills folder's
-   own records, a git history, dated session logs (a date asserted
-   only inside the skill's own file is taken as given, and recorded
-   as taken-as-given, not dressed up as verified) (null when no record
-   exists — the curator anchors those to the `seeded_on` stamp it
-   writes on every record, and reports dateless records as unseeded),
-   counts zero where unverifiable — counts are never null (a null
-   count reads as "used" to the curator and defeats the grace floor;
-   null is for dates only).
-5. Copy `tools/curator.py` and `tools/stage_check.py` into the module
-   home, point the curator at your
-   skills folder, ledger, procedures/instructions files, and job
-   records; run it once by hand and show the user its first report.
-   Do not schedule it yet. "Pointing" the curator is command-line
-   flags — there is no config file — so record the full invocation,
-   flags included, in the `JOBS.md` entries when the jobs are created
-   (Install step 7 / Rollout); the flags live there.
-6. Add a pointer line to the agent's main instruction file: skill
+   (module 00). Create `staged/` inside it, with `staged/applied/`
+   and `staged/expired/` holding folders. Defaults, unless the plan
+   renames them: home folder `skill-lifecycle/`.
+2. Add the `[type: skill-write]` item type to the decision queue's
+   header, using the definition in
+   `templates/skill-queue-items.template.md`, and confirm the
+   never-consent rule is stated in that header definition.
+3. Copy `templates/staged-proposal.template.md` where reviewers
+   will find it (the module home).
+4. Add a pointer line to the agent's main instruction file: skill
    self-modification stages through this module; nothing writes a
    live skill without the user's approval of the staged diff.
-7. After the user approves the rollout, schedule the two jobs with
-   the cadences above (sweep nightly, after the day's work; curator
-   weekly, early enough that its item makes the next brief), record
-   both in `JOBS.md`, and start the sweep in shadow mode.
+
+That is the whole Lite install: no tools copied, no jobs scheduled,
+no ledger created.
+
+## Install — upgrading to Full (F1–F5)
+
+Assumes Lite is installed; nothing below redoes a Lite step.
+
+F1. Add the `[type: skill-curator]` item type to the queue header
+    (same template file).
+F2. Seed the usage ledger (`skill-lifecycle/skill-usage.json` by
+    default): one record per existing custom skill, created dates
+    from verifiable records only — the skills folder's own records,
+    a git history, dated session logs (a date asserted only inside
+    the skill's own file is taken as given, and recorded as
+    taken-as-given, not dressed up as verified) — null when no
+    record exists; the curator anchors those to the `seeded_on`
+    stamp it writes on every record, and reports dateless records
+    as unseeded. Counts are zero where unverifiable — counts are
+    never null (a null count reads as "used" to the curator and
+    defeats the grace floor; null is for dates only). The ledger's
+    record format is the one `tools/curator.py` writes — fields
+    listed under Pattern 3 — and seeding matches it exactly, one
+    way only: the curator's first hand run (F3) creates records for
+    skills not yet ledgered. Do not hand-write records ahead of it.
+    A "verifiable" created date is one from a record (a dated log,
+    a commit, the user's statement); never backfill a date from a
+    file's mtime and call it created.
+F3. Copy `tools/curator.py` and `tools/stage_check.py` into the
+    module home, point the curator at your skills folder, ledger,
+    procedures/instructions files, and job records; run it once by
+    hand and show the user its first report. Do not schedule it
+    yet. "Pointing" the curator is command-line flags — there is
+    no config file — so record the full invocation, flags
+    included, in the `JOBS.md` entries when the jobs are created
+    (F5); the flags live there.
+F4. Run the shadow week (Rollout, above).
+F5. After the user approves the rollout, schedule the two jobs
+    (sweep nightly, after the day's work; curator weekly, early
+    enough that its item makes the next brief), record both in
+    `JOBS.md`, and start the sweep live.
 
 ## Verify
 

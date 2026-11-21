@@ -1,7 +1,9 @@
 # Bucket register (template — module 09)
 
 Copy this table into the procedures file (or wherever the install
-keeps it) and fill it in with the user. One row per surface the
+keeps it) and fill it in with the user. The angle-bracket tokens are
+fill-ins: a row that still contains one is unfilled, and module 00's
+placeholder check will correctly flag the procedures file for it. One row per surface the
 agent can spend from. A surface nobody can classify is a row with
 Bucket: UNKNOWN — an unknown bucket is a finding, not a footnote,
 and it blocks heavy work on that surface until it is classified.

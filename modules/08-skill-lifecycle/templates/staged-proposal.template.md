@@ -1,7 +1,6 @@
 # Staged Proposal Template
 
-Staged: <YYYY-MM-DD — the staging date, in this exact form; the
-expiry runner reads this line>
+Staged: <YYYY-MM-DD — the staging date, in this exact form; the expiry check reads this line (the stage_check runner at Full, the agent's filing-time check at Lite)>
 
 Staged by the reviewer as `staged/draft-<skill-name>-<date>/`;
 renamed to `staged/<queue-number>-<skill-name>/` when filed:

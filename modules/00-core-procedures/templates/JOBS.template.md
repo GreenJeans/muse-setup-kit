@@ -29,8 +29,8 @@ on, and a fresh agent's future jobs must keep:
 ## Jobs
 
 <!-- Entries land here as modules install them, e.g.:
-- `morning-brief` — daily at 07:19; the failures-first brief; delivers to the main chat; run record: the brief itself
-- `spend-check` — monthly on the 1st (rides morning-brief); bucket usage vs caps; delivers via the brief; run record: the brief's monthly section
+- `sample-brief` — EXAMPLE ONLY: daily at 07:19; the failures-first brief; delivers to the main chat; run record: the brief itself
+- `sample-spend-check` — EXAMPLE ONLY: monthly on the 1st (rides sample-brief); bucket usage vs caps; delivers via the brief; run record: the brief's monthly section
 A check that rides another job still gets its own bullet, marked as
 riding — detector silence reads the cadences stated here. -->
 

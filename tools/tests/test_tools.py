@@ -170,6 +170,62 @@ class KitDoctorTest(unittest.TestCase):
             self.assertIn("bbbbbbb2222", notes)
             self.assertTrue(any("overdue" in p for p in rep["problems"]))
 
+    def test_baseline_reports_edits_and_missing(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as td:
+            keep = os.path.join(td, "keep.md")
+            with open(keep, "w") as fh:
+                fh.write("original\n")
+            keep_hash = hashlib.sha256(b"original\n").hexdigest()
+            gone_hash = hashlib.sha256(b"gone\n").hexdigest()
+            with open(os.path.join(td, "gone.md"), "w") as fh:
+                fh.write("gone\n")
+            with open(os.path.join(td, "SETUP-PLAN.md"), "w") as fh:
+                fh.write("# Plan\n- install — commit aaaaaaa1111\n"
+                         "## Installed files (baseline)\n"
+                         f"- installed: keep.md sha256:{keep_hash}\n"
+                         f"- installed: gone.md sha256:{gone_hash}\n")
+            with open(os.path.join(td, "JOBS.md"), "w") as fh:
+                fh.write("# Jobs\n")
+            with open(os.path.join(td, "OPERATING_PROCEDURES.md"), "w") as fh:
+                fh.write("# Procedures\n")
+            # clean state: no edit note, no missing problem
+            rep = json.loads(run(DOCTOR, "--workspace", td, "--json").stdout)
+            self.assertFalse(any("edited since install" in n
+                                 for n in rep["notes"]))
+            self.assertFalse(any("baselined file missing" in p
+                                 for p in rep["problems"]))
+            # edit keep.md -> note; delete gone.md -> problem
+            with open(keep, "w") as fh:
+                fh.write("edited\n")
+            os.remove(os.path.join(td, "gone.md"))
+            rep = json.loads(run(DOCTOR, "--workspace", td, "--json").stdout)
+            self.assertTrue(any("edited since install: keep.md" in n
+                                for n in rep["notes"]))
+            self.assertTrue(any("baselined file missing: gone.md" in p
+                                for p in rep["problems"]))
+
+    def test_accumulating_files_are_inventoried_not_diffed(self):
+        import hashlib
+        with tempfile.TemporaryDirectory() as td:
+            q = os.path.join(td, "queue.md")
+            with open(q, "w") as fh:
+                fh.write("item 1\n")
+            with open(os.path.join(td, "SETUP-PLAN.md"), "w") as fh:
+                fh.write("# Plan\n- install — commit aaaaaaa1111\n"
+                         "## Installed files (baseline)\n"
+                         "- installed: queue.md accumulating\n")
+            with open(os.path.join(td, "JOBS.md"), "w") as fh:
+                fh.write("# Jobs\n")
+            with open(os.path.join(td, "OPERATING_PROCEDURES.md"), "w") as fh:
+                fh.write("# Procedures\n")
+            with open(q, "w") as fh:
+                fh.write("item 1\nitem 2\nitem 3\n")
+            rep = json.loads(run(DOCTOR, "--workspace", td, "--json").stdout)
+            self.assertFalse(any("edited since install" in n
+                                 for n in rep["notes"]))
+            self.assertTrue(any("1 hashed, 0 accumulating" not in n and
+                                "accumulating" in n for n in rep["notes"]))
 
 if __name__ == "__main__":
     unittest.main()

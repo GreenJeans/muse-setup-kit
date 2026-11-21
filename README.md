@@ -70,9 +70,9 @@ files and tools — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~5,100 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~7,100 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all nine modules | ~14,000 words | Module 08 alone is ~4,500 of that. The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~5,600 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~7,700 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all nine modules | ~15,600 words | Module 08 at Full is ~5,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -171,7 +171,8 @@ procedures, templates, and the wizard itself are original to this kit.
 ```
 README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
-docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · governance-test.md (standalone check) · patterns/ (reference, not installed)
+UNINSTALL.md         ← removing an install, verified clean
+docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (modules)
 modules/
   00-core-procedures/      MODULE.md · VERIFY.md · templates/
@@ -187,21 +188,16 @@ tools/               ← kit_selfcheck.py (the kit lints itself) · tests/ (tool
 
 ## Status
 
-Rehearsed, and then audited: the wizard was run end to end twice by
-fresh agents with no memory of the original setup (a solo user, and a
-two-person household), in sandboxes, and every friction finding from
-both runs was fixed. The kit was then given to two outside models for
-a blind adversarial review (module 05's method, applied to the kit
-itself); their convergent findings — including a fictional quickstart
-pin, an install that failed the kit's own linter, and a module with no
-install section — drove v0.3, and module 08 was dry-run a third time,
-by another fresh agent, before v0.3 was tagged. A second outside
-round (a roadmap brainstorm, same blind method) drove v0.4: starter
-profiles with printed reading costs, a rehearsal ledger
-(`docs/REHEARSALS.md`) that names what has *not* been rehearsed —
-the v0.3 text missed that module 07 never had been — infra patterns
-demoted to a reference doc, and the kit's own structural self-check
-in CI. What has not been rehearsed is said plainly in
-`docs/REHEARSALS.md`, per module.
+Rehearsed, and then audited — repeatedly, by fresh agents in
+sandboxes and by two outside models in blind review rounds. The
+record, including what has *not* been rehearsed, is
+`docs/REHEARSALS.md`; the history is `docs/ROADMAP.md`. v0.5 adds:
+module 08's Lite tier (the default — no tools, jobs, or ledger
+until a setup outgrows it), an installed-file baseline that makes
+upgrades and uninstalls mechanical (`UPGRADING.md`,
+`UNINSTALL.md`), an audit-first wizard mode for existing setups, a
+worked example built from a real rehearsal's artifacts
+(`docs/examples/`), and an install-report form — the project now
+asks its first strangers how the install went.
 
 License: MIT (see `LICENSE`).

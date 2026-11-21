@@ -94,16 +94,19 @@ modules:
 
   - id: skill-lifecycle
     dir: modules/08-skill-lifecycle
-    rehearsed_at: "v0.4 upgrade-path re-run"
+    rehearsed_at: "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run"
     title: Skill Lifecycle
-    pitch: A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, and a deterministic curator that archives unused skills but never deletes.
+    pitch: A session-review rubric that stages skill lessons instead of writing them live, plus staged-diff approval through the decision queue. Installs at the Lite tier by default; the Full tier adds a nightly sweep and a deterministic curator that archives unused skills but never deletes.
+    tiers:
+      lite: "In-session + explicit staging and staged-diff approval. No tools, no jobs, no ledger."
+      full: "Adds the nightly sweep, the curator with its usage ledger and reference tools, the shadow-week rollout, and the 30-day review. Offer at 5+ custom skills."
     depends_on: [core-procedures, memory-architecture]
     requires: []
-    degrades_without: [scheduling, shell-python]   # sweep and curator on demand; without shell/python the curator is a manual ledger review
-    reads: "Session transcripts, your custom skills, the decision queue, scheduled-job records."
-    writes: "Staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills."
+    degrades_without: [scheduling, shell-python]   # Full tier: sweep and curator on demand; without shell/python the curator is a manual ledger review. Lite needs neither.
+    reads: "Session transcripts, your custom skills, the decision queue, scheduled-job records (Full)."
+    writes: "Staged proposals (never live skills directly), decision-queue items; at Full also a skill-usage ledger and an archive folder for retired skills."
     network: none
-    jobs: "One nightly session-review sweep; one weekly curator run."
+    jobs: "None at Lite. At Full: one nightly session-review sweep; one weekly curator run."
 
   - id: cost-guardrails
     dir: modules/09-cost-guardrails
@@ -126,12 +129,12 @@ profiles:
   - id: starter
     title: Starter
     modules: [core-procedures, morning-brief, cost-guardrails]
-    audit_words: 5100
+    audit_words: 5600
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
-    audit_words: 7100
+    audit_words: 7700
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle) is offered per module after the profiles.

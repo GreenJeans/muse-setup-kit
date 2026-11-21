@@ -16,7 +16,10 @@ upgrade is a small, deliberate procedure, not a `git pull`.
    and the new one (`git diff --stat <old>..<new>`), and read the
    changed files in full — at minimum every changed `MODULE.md`,
    `wizard/` file, and anything under a `tools/` folder. A module you
-   did not install can be skimmed; a module you run gets read.
+   did not install can be skimmed; a module you run gets read. (If
+   the old install was itself an EVALUATION install from an
+   uncommitted tree, the recorded HEAD is the diff base and the diff
+   is approximate — the plan says so; the tree has moved since.)
 3. **Write a fresh vetting entry** for the new pin: source, new hash,
    files read, anything new the changed modules read, write, or
    contact. It lives in module 06's vetting log if that module is
@@ -26,15 +29,21 @@ upgrade is a small, deliberate procedure, not a `git pull`.
    which stay untouched, which jobs change cadence or content, and any
    new disclosures. Local edits the user (or their agent) made to
    installed files are listed as conflicts and merged, never
-   overwritten silently. Approval names the new pin.
+   overwritten silently. The conflict list is mechanical where a
+   baseline exists: run `kit_doctor.py` — every "edited since
+   install" line is a conflict to list. (An install with no baseline
+   falls back to comparing against the old pin's files by hand.)
+   Approval names the new pin.
 5. **Apply module by module**, in dependency order, re-running each
    changed module's `VERIFY.md` at-install checks as you go. A failed
    check stops the upgrade at that module; earlier modules stay
    upgraded, later ones stay on the old pin, and the plan records
    exactly that state.
 6. **Record the new pin** in `SETUP-PLAN.md` (the old pin stays in the
-   plan's history), and note the upgrade in the decision queue's
-   resolved items or the vetting log.
+   plan's history), re-stamp the baseline line of every file the
+   upgrade rewrote or merged (new sha256, as it now stands — the
+   baseline always describes the last approved state), and note the
+   upgrade in the decision queue's resolved items or the vetting log.
 
 Taking a single new module without a full upgrade works the same way,
 scoped to that module: read it at the new pin, vet it, plan it, and
