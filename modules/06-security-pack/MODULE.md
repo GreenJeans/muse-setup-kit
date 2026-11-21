@@ -50,6 +50,14 @@ working form, and where the wording differs, §10 governs.
    through the platform's secure flows, never pasted into chat, never
    written into memory or ordinary files, never repeated in reports.
 
+**Rule 3, turned outward.** The shield in module 02's triage is this
+rule applied to the user's inbox instead of the agent's inputs:
+impersonation notices, forged VIP senders, and emergency money
+requests are content trying to instruct the *user*. The procedure —
+the patterns, the two grades (scam / unverified sender), the
+verify-through-a-channel-you-already-have rule — lives in module 02;
+the principle lives here.
+
 ## What this module adds
 
 Module 00's procedures (§10) state the rules. This pack is the *practice*:

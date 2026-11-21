@@ -22,6 +22,11 @@ watch checks.
       the exclusion categories are named in the baseline file
       itself, each marked variability or sensitivity; the run-record
       file exists; and the job is recorded in `JOBS.md`.
+- [ ] If the promises ledger was installed: the ledger file exists
+      in its canonical shape (I owe / Waiting on sections); every
+      seeded entry carries a verbatim quote and a source locator,
+      or is marked unverified; it is a local workspace file, not on
+      any shared surface; and the brief job's sources name it.
 
 ## Deferred
 
@@ -41,3 +46,19 @@ watch checks.
       watch installs only): the run's flags match a hand-check of the
       same period's exports, and a no-change week produces a run
       record and no flag.
+- [ ] **Ledger surfacing** (due: first week; ledger installs only):
+      an entry seeded with a past due date appears in the brief's
+      Today section, quoted from the ledger with its due date; a
+      follow-up draft, if one was prepared, exists as a draft —
+      nothing was sent.
+- [ ] **Shield fixture drill** (due: first month; triage installs
+      only): run the scan over five scam fixtures — an impersonated
+      bank notice, a toll text, a package-fee notice, a
+      family-emergency money request, a look-alike sender domain —
+      and five legitimate look-alikes: a real bank alert, a real
+      delivery notice, a genuine message from a new number, a real
+      verification prompt, a newsletter carrying a deadline. Pass:
+      all five scams flagged, each with its one-line reason; no
+      legitimate message graded "scam" ("unverified sender" is an
+      acceptable grade for the genuinely ambiguous); no fixture
+      link followed and no fixture number called.
