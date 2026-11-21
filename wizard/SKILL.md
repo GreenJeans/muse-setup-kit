@@ -67,6 +67,33 @@ and approved.**
    at-install check passed and every deferred check is ledgered — never
    that a check was skipped silently.
 
+## Step 0 — Audit first (optional, for existing setups)
+
+If the user already has a working setup — their own procedures,
+memory, jobs, or skills — offer this mode before Step 1. It is
+**read-only**: the wizard writes nothing, creates nothing, and
+schedules nothing in this mode. It produces one report:
+
+1. **Inventory.** What exists: instruction and procedure files,
+   memory stores, scheduled jobs (names and cadences), custom
+   skills, connected accounts and services, and any approval or
+   queue mechanism already in use. Read-only inspection only; where
+   a fact cannot be checked without a write, say so instead of
+   checking.
+2. **Map.** Each inventory item against the kit's modules: already
+   covered (and by what), partially covered, or absent. Where the
+   user's existing piece is stronger than the kit's, say so — the
+   map is not a sales document.
+3. **Recommend.** Which modules would add something the setup
+   lacks, which would duplicate what exists (skip those), and the
+   reading cost of the recommended set, from the manifest's audit
+   figures.
+
+The report ends the mode. Installing anything starts the normal
+wizard at Step 1, with the audit attached to the plan as context —
+the plan still needs its own approval, and the audit's existence
+does not count as one.
+
 ## Step 1 — Capability check
 
 Before the interview, establish what this install can do. Check, and note
@@ -179,6 +206,11 @@ From `manifest.yaml`, compute the offerable set:
   A module with no rehearsal at or near the pinned commit is offered
   with the words "unrehearsed at this pin — you would be the first."
   Never let the plan imply a rehearsal the ledger doesn't show.
+- If a module's manifest entry has `tiers`, present the default
+  tier (Lite, for skill-lifecycle) as the offer, with its share of
+  the reading cost; name the higher tier, what it adds, and the
+  condition that triggers offering it (for skill-lifecycle: 5 or
+  more custom skills). The plan records the tier chosen.
 
 ## Step 4 — The plan
 
@@ -235,7 +267,26 @@ For each module:
    and ask — do not improvise a fix that changes the plan. Ledger every
    deferred check in `SETUP-PLAN.md` with its due date.
 5. Log the module, its source commit, and the verification result in
-   `SETUP-PLAN.md`.
+   `SETUP-PLAN.md`. For every file the install created or copied from
+   the kit (procedures, filled templates, copied tools — not
+   locally-authored content like memory pages), also record its
+   baseline line in the plan's `## Installed files (baseline)`
+   section, in one of two forms. Static files — content the kit
+   supplied, which changes only by an approved edit — take a hash:
+   `- installed: <path relative to the workspace> sha256:<sha256 of the file as installed>`.
+   Accumulating files — content that grows by design in ordinary
+   use (the decision queue, `JOBS.md`, ledgers) — take the word
+   instead: `- installed: <path> accumulating`. Hashing an
+   accumulating file would make ordinary use read as drift at every
+   upgrade, so the doctor never diffs them; the line still puts
+   them on the install's inventory for UPGRADING and UNINSTALL.
+   This baseline is what makes upgrades mechanical: `kit_doctor.py`
+   reports any hash-baselined file that has been edited since
+   install, and UPGRADING.md uses that list as its conflict list.
+   Re-stamp a static file's line whenever an approved change
+   rewrites it (an upgrade, an approved skill-style edit the user
+   asked for) — the baseline always describes the last approved
+   state.
 
 ## Step 6 — Handover
 

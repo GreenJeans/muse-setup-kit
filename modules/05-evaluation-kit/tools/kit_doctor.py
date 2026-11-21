@@ -11,6 +11,14 @@ Checks, in the workspace:
   3. OPERATING_PROCEDURES.md exists.
   4. Deferred checks ledgered in SETUP-PLAN.md: any line marked
      DEFERRED carrying a YYYY-MM-DD date that has passed is overdue.
+  5. Installed-file baseline: SETUP-PLAN.md lines of the form
+     "- installed: <relpath> sha256:<hex>" record the hash of every
+     file the wizard installed. A baselined file whose current hash
+     differs is reported as edited since install (a note — editing
+     is legitimate; UPGRADING.md consumes the list as its conflict
+     list). A baselined file that no longer exists is a problem.
+     Lines ending in "accumulating" name files that grow by design
+     (the queue, JOBS.md, ledgers): inventoried, never diffed.
 
 Usage:
     python3 kit_doctor.py [--workspace ~/workspace] [--json]
@@ -20,6 +28,7 @@ Nothing is written, ever.
 """
 import argparse
 import datetime
+import hashlib
 import json
 import os
 import re
@@ -52,6 +61,17 @@ def main():
         for m in COMMIT_RE.finditer(plan_text):
             if m.group(1) not in pins:
                 pins.append(m.group(1))
+        # Older plans also record pins as a bare 40-hex hash on a line
+        # naming the pin or HEAD ("installed from HEAD <hash>"). A
+        # baseline line is not a pin: skip any line carrying sha256:.
+        for line in plan_text.splitlines():
+            if "sha256:" in line:
+                continue
+            low = line.lower()
+            if "pin" in low or "head" in low:
+                for h in re.findall(r"\b[0-9a-f]{40}\b", line):
+                    if h not in pins:
+                        pins.append(h)
         if not pins:
             problems.append("SETUP-PLAN.md records no kit commit hash")
         elif len(pins) == 1:
@@ -71,6 +91,33 @@ def main():
         problems.append("JOBS.md missing — jobs have no scheduler-of-record")
     if not os.path.isfile(os.path.join(ws, "OPERATING_PROCEDURES.md")):
         problems.append("OPERATING_PROCEDURES.md missing")
+
+    base_re = re.compile(r"^-\s+installed:\s+(\S+)\s+sha256:([0-9a-f]{64})\s*$")
+    acc_re = re.compile(r"^-\s+installed:\s+(\S+)\s+accumulating\s*$")
+    baselined = 0
+    accumulating = 0
+    for line in plan_text.splitlines():
+        if acc_re.match(line.strip()):
+            accumulating += 1
+            continue
+        m = base_re.match(line.strip())
+        if not m:
+            continue
+        baselined += 1
+        rel, want = m.group(1), m.group(2)
+        fp = os.path.join(ws, rel)
+        if not os.path.isfile(fp):
+            problems.append(f"baselined file missing: {rel}")
+            continue
+        got = hashlib.sha256(open(fp, "rb").read()).hexdigest()
+        if got != want:
+            notes.append(f"edited since install: {rel}")
+    if baselined or accumulating:
+        notes.append(f"installed-file baseline: {baselined} hashed, "
+                     f"{accumulating} accumulating (not diffed)")
+    elif plan_text:
+        notes.append("no installed-file baseline recorded (pre-v0.5 "
+                     "install, or the wizard has not stamped one yet)")
 
     today = datetime.date.today()
     overdue = []

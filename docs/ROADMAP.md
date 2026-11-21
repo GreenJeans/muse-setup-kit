@@ -89,7 +89,7 @@ failure was the kit's own job-matching rule, fixed above). Not yet
 rehearsed: a fresh full install including module 09, and the wizard
 on a small-group (Q1c) interview.
 
-## Phase 6 — v0.4: prove it, then make it easy (this release)
+## Phase 6 — v0.4: prove it, then make it easy — DONE 2026-11-20
 
 Driven by a blind roadmap brainstorm (two outside models, same
 packet method; their wild ideas converged on the Governance Test).
@@ -119,3 +119,19 @@ audit-first wizard mode, the full worked example.
 - Worked example (fully fictional) of a filled-in memory store and brief, so
   adopters can see the target state without any real data.
 - Localization of the templates.
+
+## Phase 7 — v0.5: the first stranger (this release)
+
+From the v0.4 synthesis's held list, in the order the lineup
+adopted: module 08 restructured into tiers (Lite default, Full at
+5+ skills); the installed-file baseline (hash lines in
+SETUP-PLAN.md; accumulating files inventoried, never diffed) with
+kit_doctor reporting edits since install; UNINSTALL.md, rehearsed;
+the worked example in docs/examples/, generated from that
+rehearsal's artifacts; the install-report issue form; and
+audit-first wizard mode (Step 0, read-only). Three rehearsals
+(runs 6–8 in docs/REHEARSALS.md): a Lite install, a cross-pin
+upgrade whose planted edit the doctor caught exactly, and an
+install → uninstall that left the workspace empty. Removal this
+release: the README's Status narrative, which duplicated this
+file's history, is now a pointer here.

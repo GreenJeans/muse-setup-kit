@@ -1,0 +1,101 @@
+name: Install report
+description: You installed (or tried to install) the kit. Report how it went — structured fields only, no personal data.
+title: "Install report: [profile]"
+labels: ["install-report"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. Every field is a dropdown or a count on
+        purpose: **do not paste personal data, names, file contents,
+        or transcripts into this form.** If you got stuck, the
+        "where stuck" dropdown is enough — detail can follow in a
+        separate issue with anything sensitive removed.
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Outcome
+      options:
+        - Installed and using it
+        - Installed, then uninstalled
+        - Started, did not finish
+        - Read it, decided not to install
+    validations:
+      required: true
+  - type: dropdown
+    id: profile
+    attributes:
+      label: What did you install?
+      options:
+        - Starter profile (00+02+09)
+        - Standard profile (00+01+02+06+09)
+        - Custom module selection
+        - A single module only
+        - Nothing yet (audit-first / reading only)
+    validations:
+      required: true
+  - type: dropdown
+    id: modules
+    attributes:
+      label: Which other modules, if any?
+      multiple: true
+      options:
+        - 03 Household HQ
+        - 04 AI Exchange
+        - 05 Evaluation Kit
+        - 08 Skill Lifecycle (Lite)
+        - 08 Skill Lifecycle (Full)
+        - None
+    validations:
+      required: true
+  - type: dropdown
+    id: platform
+    attributes:
+      label: Platform capabilities you had
+      multiple: true
+      options:
+        - Scheduling / cron
+        - Shell + Python
+        - Email connected
+        - Calendar connected
+        - A second person with their own agent
+        - None of these
+    validations:
+      required: true
+  - type: dropdown
+    id: checks
+    attributes:
+      label: At-install VERIFY checks passed
+      options:
+        - All of them
+        - Most (one or two failed or were skipped)
+        - About half
+        - Few — I got stuck early
+        - I did not run the checks
+    validations:
+      required: true
+  - type: dropdown
+    id: stuck
+    attributes:
+      label: Where did you get stuck, if anywhere?
+      options:
+        - I did not get stuck
+        - The interview / planning step
+        - A module's install steps
+        - Scheduling or jobs setup
+        - A VERIFY check failing
+        - Deciding whether to trust it
+        - Reading cost — too much to audit
+        - Other (dropdown can't say it; open a regular issue instead)
+    validations:
+      required: true
+  - type: dropdown
+    id: pin
+    attributes:
+      label: Installed from a release pin?
+      options:
+        - Yes — a tagged release, hash verified
+        - Yes — a tagged release, did not verify the hash
+        - No — main branch or an archive download
+    validations:
+      required: true

@@ -1,21 +1,33 @@
 # Skill Queue Items — Template
 
 Add the header definitions to your decision queue when module 08
-installs, then use the two item shapes below. Both extend the queue's
+installs (the skill-curator definition only at the Full tier), then
+use the two item shapes below. Both extend the queue's
 normal item shape (module 00); numbering is the queue's own and is
 never reused.
 
 ## Header definitions (add to the queue file, near the top)
 
+Copy the skill-write block at any install. Copy the skill-curator
+block only at the Full tier (Install step F1 adds it to a queue that
+already carries the first block — the two are independent paragraphs,
+in this order).
+
 > Skill items carry a type tag. `[type: skill-write]` is a staged
-> skill change from the module 08 review pass; `[type: skill-curator]`
-> is a stale/archive proposal from the module 08 curator. For both
-> types, silence is NEVER consent: an undecided item's only default is
+> skill change from the module 08 review pass. For this type,
+> silence is NEVER consent: an undecided item's only default is
 > to stay staged, and staging expires (auto-reject, logged) after 14
-> days. "N: approve" authorizes exactly the staged diff or move, one
+> days. "N: approve" authorizes exactly the staged diff, one
 > application, and is void if the target has changed since staging.
 > "N: edit: <change>" voids the item; the agent restages as a new
 > numbered item.
+
+> `[type: skill-curator]` is a stale/archive proposal from the
+> module 08 curator. Silence is NEVER consent: an undecided item's
+> only default is that nothing moves, and archive candidates expire
+> with the item after 14 days. "N: approve" authorizes exactly the
+> stated move, one application. "N: edit: <change>" voids the item;
+> the agent restages as a new numbered item.
 
 ## Item shape — skill-write
 
