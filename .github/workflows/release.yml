@@ -1,0 +1,50 @@
+name: draft-release
+
+# On a version tag, prepare a DRAFT GitHub release whose notes carry
+# the full commit hash and a pre-filled quickstart block (the hash
+# must come from outside the repo — the release page — and until now
+# the maintainer assembled that by hand). The release stays a draft
+# until the maintainer reviews and publishes it; nothing here
+# publishes anything.
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Build release notes
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          SHA=$(git rev-parse HEAD)
+          PREV=$(git describe --tags --abbrev=0 "${TAG}^" 2>/dev/null || echo "")
+          {
+            echo "Pin for this release: **${SHA}**"
+            echo ""
+            echo "The quickstart prompt takes this full hash. Get it from this page, not from a file inside the repo."
+            echo ""
+            echo '```'
+            echo "Clone https://github.com/GreenJeans/muse-setup-kit and check out commit ${SHA}. Confirm git rev-parse HEAD matches it exactly; if it does not match, or I gave you no hash, stop and ask me. Then read wizard/SKILL.md and run the setup wizard."
+            echo '```'
+            echo ""
+            if [ -n "$PREV" ]; then
+              echo "## Changes since ${PREV} (files, by area)"
+              echo ""
+              git diff --stat "${PREV}..HEAD" | sed 's/^/- /'
+            fi
+          } > notes.md
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+        run: gh release create "$TAG" --draft --title "$TAG" --notes-file notes.md
