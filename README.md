@@ -30,17 +30,24 @@ install it, and what it costs to read first.
 
 ## Quickstart
 
-Tell your Muse:
+Copy this to your Muse. That's the whole install step:
 
 ```
-Clone https://github.com/GreenJeans/muse-setup-kit and check out commit
-<PASTE THE FULL HASH FROM THE RELEASE PAGE>. Confirm git rev-parse HEAD
-matches it exactly; if it does not match, or I gave you no hash, stop and
-ask me. Then read wizard/SKILL.md and run the setup wizard.
+Install the Muse Setup Kit for me: clone
+https://github.com/GreenJeans/muse-setup-kit, check out the latest
+release tag, then read wizard/SKILL.md and run the setup wizard.
 ```
 
-The hash is the trust anchor: get it from the release page (outside the
-repo), never from a file inside the checkout you are about to trust.
+Nothing to fill in. The wizard checks out the latest release tag,
+resolves the full commit hash itself, and shows it to you in the
+plan before anything is installed, so you can compare it against
+the release page if you want to. Nothing installs before you
+approve that plan.
+
+Want an exact pin instead of the latest tag? The release page
+carries the full hash for each release. Give it to your Muse with
+the prompt and the wizard will verify the checkout matches it
+exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An

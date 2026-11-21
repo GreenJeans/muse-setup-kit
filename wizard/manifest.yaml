@@ -5,7 +5,7 @@ version: 1
 modules:
   - id: core-procedures
     dir: modules/00-core-procedures
-    rehearsed_at: "v0.1 wizard dry runs"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run"
     title: Core Procedures
     pitch: Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules.
     depends_on: []
@@ -17,7 +17,7 @@ modules:
 
   - id: memory-architecture
     dir: modules/01-memory-architecture
-    rehearsed_at: "v0.1 wizard dry runs"
+    rehearsed_at: "v0.1 wizard dry runs; seeded in later runs, not re-installed"
     title: Memory Architecture
     pitch: Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.
     depends_on: [core-procedures]
@@ -30,7 +30,7 @@ modules:
 
   - id: morning-brief
     dir: modules/02-morning-brief
-    rehearsed_at: "v0.1 wizard dry runs"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run"
     title: Morning Brief & Inbox Triage
     pitch: A failures-first daily brief, a numbered decision queue review, inbox interrupt rules, and silent-by-design watches.
     depends_on: [core-procedures]
@@ -110,7 +110,7 @@ modules:
 
   - id: cost-guardrails
     dir: modules/09-cost-guardrails
-    rehearsed_at: "v0.4 Starter dry run"
+    rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run"
     title: Cost & Billing Guardrails
     pitch: Bucket discipline for agent spending — know whether a run draws on a subscription, an API key, or a third-party router before it starts; hard caps set in advance; a monthly spend check.
     depends_on: [core-procedures]
@@ -129,12 +129,12 @@ profiles:
   - id: starter
     title: Starter
     modules: [core-procedures, morning-brief, cost-guardrails]
-    audit_words: 5800
+    audit_words: 5900
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core-procedures, morning-brief, cost-guardrails, memory-architecture, security-pack]
-    audit_words: 7900
+    audit_words: 8000
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle) is offered per module after the profiles.

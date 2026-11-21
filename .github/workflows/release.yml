@@ -31,10 +31,10 @@ jobs:
           {
             echo "Pin for this release: **${SHA}**"
             echo ""
-            echo "The quickstart prompt takes this full hash. Get it from this page, not from a file inside the repo."
+            echo "The wizard resolves this hash from the release tag and shows it in the plan before installing. Compare it here if you want to check."
             echo ""
             echo '```'
-            echo "Clone https://github.com/GreenJeans/muse-setup-kit and check out commit ${SHA}. Confirm git rev-parse HEAD matches it exactly; if it does not match, or I gave you no hash, stop and ask me. Then read wizard/SKILL.md and run the setup wizard."
+            echo "Install the Muse Setup Kit for me: clone https://github.com/GreenJeans/muse-setup-kit, check out tag ${TAG}, then read wizard/SKILL.md and run the setup wizard."
             echo '```'
             echo ""
             if [ -n "$PREV" ]; then

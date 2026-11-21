@@ -3,9 +3,11 @@
 An approval covers exactly one pin. It never covers an update — so an
 upgrade is a small, deliberate procedure, not a `git pull`.
 
-1. **Get the new pin from outside the repo.** The full commit hash of
-   the release you want, from its release page. Check the checkout out
-   at that hash and confirm `git rev-parse HEAD` matches. *(Evaluation
+1. **Get the new pin from outside the repo.** The release you want,
+   named by its tag (or by the full commit hash from its release
+   page). Check the checkout out at that tag or hash, resolve
+   `git rev-parse HEAD`, and record the full hash as the new pin;
+   if the user supplied a hash, it must match exactly. *(Evaluation
    installs — a dry run or rehearsal against unreleased changes — are
    the one exception: they may proceed from an uncommitted tree when
    the vetting entry records HEAD plus the dirty state — the output

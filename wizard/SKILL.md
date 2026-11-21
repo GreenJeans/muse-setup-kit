@@ -11,14 +11,21 @@ and approved.**
 1. **Read before you act.** Read `../docs/DESIGN.md` and `manifest.yaml` in
    this folder, and the `MODULE.md` of every module the user selects,
    before presenting the plan.
-2. **Pinned source only.** Before anything else, compare this checkout's
-   full commit hash with the hash the user gave you (from the release
-   page, not from inside this repo). If the user gave none, or the two
-   differ, stop and ask — never default to the current commit. Install
-   only from files at that commit, and never fetch module content from a
-   URL at install time. One exception, for evaluation installs (a dry
-   run or a release-candidate rehearsal): the user may hand you a local
-   tree with uncommitted changes. Then the plan records HEAD plus the
+2. **Pinned source only.** Before anything else, establish what this
+   checkout is, one of two ways. If the user gave you a full commit
+   hash (from the release page, not from inside this repo), compare it
+   with `git rev-parse HEAD`: a mismatch stops the install. If the
+   user gave no hash, the checkout must sit exactly on a release tag
+   (`git describe --tags --exact-match`): resolve the tag and the full
+   hash, and state both in the plan ("installing v0.6, commit <full
+   hash>") so the user can compare against the release page. A
+   checkout on no tag and with no user-supplied hash stops the
+   install — offer to check out the latest release tag, and never
+   default to the current commit. Install only from files at that
+   commit, and never fetch module content from a URL at install time.
+   One exception, for evaluation installs (a dry run or a
+   release-candidate rehearsal): the user may hand you a local tree
+   with uncommitted changes. Then the plan records HEAD plus the
    dirty state (`git status --porcelain` and `git diff --stat HEAD`,
    verbatim) and is labeled EVALUATION, per UPGRADING.md. A
    production install never proceeds this way.
@@ -207,8 +214,9 @@ From `manifest.yaml`, compute the offerable set:
 
 ## Step 4 — The plan
 
-Produce one plan document (show it in chat; also save it as
-`SETUP-PLAN.md` in the workspace once approved):
+Produce one plan document (show it in chat, and save it as
+`SETUP-PLAN.md` in the workspace, marked "presented for approval";
+approval updates its status line):
 
 - Selected modules, in dependency order.
 - For each: files created/edited (paths), jobs scheduled (cadence,
