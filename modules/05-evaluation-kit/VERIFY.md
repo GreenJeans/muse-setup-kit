@@ -22,7 +22,8 @@
       staleness was caught by at least one reviewer — or the miss is
       recorded and the reviewer brief improved before the next audit.
 - [ ] **Track B oracle** (due: before the first Track B job):
-      `tools/run_eval.py --oracle` passes on every shipped seed task —
+      `tools/run_eval.py`, run with `--oracle`, passes on every
+      shipped seed task —
       each verifier fails on its seed and passes on its solution.
 - [ ] **First comparison recorded** (due: first Track B adoption):
       the job record names the model (held fixed), runs at least 3

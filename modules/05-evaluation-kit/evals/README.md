@@ -6,17 +6,17 @@ old setup and the new setup, and comparing verifier results.
 
 ## Shape (borrowed from Harbor, deliberately smaller)
 - A **task** is a directory: `instruction.md` (what the agent gets),
-  `verify.py` (deterministic checker; exits 0 = pass, prints reasons),
+  verify.py (deterministic checker; exits 0 = pass, prints reasons),
   optional `seed/` (starting files copied into a fresh work dir per
   trial) and `solution/` (a known-good end state).
 - A **trial** = one agent run in a fresh copy of `seed/`, then
-  `verify.py` against what the agent left behind.
+  verify.py against what the agent left behind.
 - A **job** = N trials x tasks for one variant. The runner records
   each trial's result in `results/`; the job record adds the variant
   label, the model, human interventions, and wall time.
 - An **oracle** check: each task's verify.py must FAIL on the
   untouched seed and PASS on the solution — run
-  `tools/run_eval.py --oracle`, run from the module's folder,
+  `tools/run_eval.py` with `--oracle`, run from the module's folder,
   after adding a task, before trusting it.
 
 ## Rules

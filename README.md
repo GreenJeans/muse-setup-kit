@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 59,100
+install is heavy work — a full one reads on the order of 57,900
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -81,7 +81,7 @@ and tools) — the reading the request above actually asks for:
 |---|---|---|---|
 | **Starter** | 00 + 02 + 09 | ~26,000 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
 | **Standard** | Starter + 01 + 06 | ~33,200 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all eleven modules | ~59,100 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| Everything | all eleven modules | ~57,900 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the

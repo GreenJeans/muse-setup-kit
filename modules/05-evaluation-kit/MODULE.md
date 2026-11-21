@@ -62,13 +62,15 @@ how most setups decide, and it is not measurement. Track B borrows
 its shape from Harbor's task runs, deliberately smaller:
 
 - A **task** is a directory: `instruction.md` (what the agent gets),
-  `verify.py` (a deterministic checker), optional `seed/` (the
+  a verifier script (verify.py, a deterministic checker), optional
+  `seed/` (the
   starting files) and `solution/` (a known-good end state). The
   verifier judges the final state the agent leaves behind, never its
   final message.
 - **The oracle rule.** A task is trustworthy only if its verifier
   FAILS on the untouched seed and PASSES on the solution. Run the
-  oracle check (`tools/run_eval.py --oracle`) after adding or
+  oracle check (`tools/run_eval.py`, run with `--oracle`) after
+  adding or
   changing a task, before trusting anything it reports.
 - A **comparison** is the same tasks under the old setup and the new
   one, the model held fixed and named in the job record, at least 3
