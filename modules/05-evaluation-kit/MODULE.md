@@ -59,6 +59,27 @@ whose findings the user adopts or rejects one by one.
   drift check — plan, jobs, and procedures files present, install
   commit recorded, deferred checks not overdue.
 
+## The usage audit (part of the audit)
+
+Once a month, folded into the audit cycle above, inventory every
+scheduled job and hook — `JOBS.md` is the register — and rank
+them by **estimated load**: runs per week × context weight. A
+full agent run is the heavy unit; a refresh or partial run
+weighs less; a script poll (module 02's detectors) weighs
+almost nothing. The ranking is the deliverable. It flags the
+jobs whose cadence exceeds their source's rate of change — a
+daily agent run watching a source that moves monthly — and
+names the fix for each: band the cadence, convert the watch to
+script-first, or retire it.
+
+Rankings only, never figures. Per-run token numbers circulate
+in field reports and blog posts, and they are unreliable —
+self-reported, method-free, and usually inflated; an audit that
+quotes them has invented its evidence. Relative load is enough
+to act on: the heaviest job is the heaviest job whether or not
+anyone can price its runs to the token. Money is the spend
+check's question (module 09); load is this one's.
+
 ## Install
 
 1. Write the audit cadence into the procedures (the audit-cadence
@@ -87,7 +108,9 @@ whose findings the user adopts or rejects one by one.
 Monthly on the 1st while the procedures are changing; quarterly once
 stable; out-of-cycle when a new incident class appears or a gate rule is
 edited. The brief's monthly pass reports whether an audit is due — it
-never runs one inside the brief.
+never runs one inside the brief. The usage audit stays monthly even
+once the procedures audit goes quarterly: jobs accumulate faster
+than rules change.
 
 ## Verify
 

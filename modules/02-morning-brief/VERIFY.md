@@ -18,9 +18,11 @@ watch checks.
       plus the institutions named at install, each with every
       known sending domain and number recorded) filled in; the
       shield check is ordered before the interrupt rules; the
-      delivery window matches the user's waking hours; and the
-      run-record and flag-log files exist at the paths the job
-      file names.
+      delivery window matches the user's waking hours; the
+      detector script exists and polls on the stated cadence,
+      checking the never-mute classes before its noise list; and
+      the run-record, flag-log, and state files exist at the
+      paths the job file names.
 - [ ] If the money watch was installed: the baseline file exists in a
       local workspace file and was built from user-supplied exports
       (no credentials stored anywhere in the workspace); every
@@ -57,6 +59,12 @@ watch checks.
 - [ ] **Interrupt test** (due: first week; triage installs only): a test
       message from a VIP address with a direct question interrupts; a
       newsletter does not.
+- [ ] **Detector dry run, both ways** (due: first week; triage
+      installs only): with unjudged mail in the mailbox, a poll
+      wakes the agent; with every new message on the noise list,
+      a poll stays silent and still writes its run record. A
+      detector that only ever demonstrates one direction is
+      unverified in the other.
 - [ ] **Detector-silence drill** (due: first month; only if watches
       exist): with the user's knowledge, pause one watch past 48 hours;
       the brief flags the silence.

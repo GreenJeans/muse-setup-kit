@@ -4,11 +4,12 @@
 for the money watch, the statement/CSV exports the user supplies.
 **Writes:** one brief per day; draft replies only, sent only with
 approval; the promises & waiting-on ledger, when installed (other
-people's commitments, in their words); the triage flag log and the
-scan's run records, when the scan is installed; for the money watch,
+people's commitments, in their words); the triage flag log, the
+scan's run records, and the scan detector's state file (seen-IDs,
+noise list), when the scan is installed; for the money watch,
 its baseline and run-record files and its job file.
 **Network:** your connected accounts. **Jobs:** daily brief; optional
-30-minute triage scan; optional weekly money watch.
+triage scan (script poll, agent on wake); optional weekly money watch.
 **Data classes:** personal; third-party (the ledger's entries and
 the triage flag log name other people — procedures §13).
 **Action classes:** send.
@@ -71,6 +72,17 @@ A frequent lightweight scan that interrupts only for:
 
 Everything else accrues to the next brief. The scan never sends mail and
 never creates drafts. Delivery window: the user's waking hours only.
+
+The scan is a watch in the script-first architecture below: a
+script detector polls the mailbox every few minutes inside the
+window, checks the never-mute classes first (VIP senders, security
+alerts, anything the shield must grade), applies its noise list to
+the rest, and wakes the agent only for mail that survives. The
+grading and interrupt judgment in this section and the shield's
+are the woken agent's work — the detector classifies nothing it
+would take judgment to classify. The scan's run records are the
+detector's poll records, one per poll, so the brief's
+detector-silence checks read them unchanged.
 
 ## The scam & impersonation shield (part of triage)
 
@@ -177,6 +189,86 @@ only thing worth a message. Host-level watches (backup jobs, disk
 tripwires, dead-man's switches) follow the same pattern; the
 maintainer's recipes live in docs/patterns/infra-patterns.md, a
 reference document the wizard does not install.
+
+### Script-first: the script polls, the agent judges
+
+A watch's default shape is a cheap script, not an agent run. The
+script polls the source on cadence, diffs what it finds against a
+small state file (last-seen values, seen-IDs), writes its run
+record, and stays silent when nothing changed — silence on
+no-change is procedures §4's rule, and the script is where it is
+cheapest to keep. The script costs almost nothing: no system
+prompt, no memory, no chat context. It wakes an agent only on a
+verified change — a diff the script itself confirmed — and the
+agent's judgment is spent on the change: what it means, whether
+it flags, what the user hears. Polling is not judgment. An agent
+run per poll pays a full context to learn "nothing happened,"
+dozens of times a day, and the bill is the least of it — a watch
+that expensive gets its cadence cut or gets switched off, and
+then it watches nothing.
+
+An agent-run watch is the exception, kept for a source only an
+agent can read or a change only an agent can judge. It earns its
+cadence under the volatility rule below, not by habit, and it is
+the first candidate when the usage audit (module 05) ranks the
+jobs by load.
+
+### Detector guardrails
+
+A script that cannot read its source has not found "nothing" —
+it has failed, quietly. Three guardrails keep a detector honest:
+
+- **Unreadable is a report, once.** After N straight unreadable
+  polls, the detector wakes the agent once to report the detector
+  degraded, then stays silent until a good read resets the count.
+  N is set per watch: small (2) where unreachable is itself the
+  finding — a health watch whose source is down — larger (6)
+  where the source is merely flaky, like a mailbox. Detector
+  silence is a failure (procedures §4); a detector that has
+  stopped being able to see is exactly the silence that rule
+  exists to catch.
+- **A full sweep stays as the safety net.** On a slower cadence
+  (daily, in the maintainer's installs) an agent reads the whole
+  source the slow way — everything, not just the diff — so a
+  change the filter misses is still caught within the sweep's
+  period. The sweep is also where checks that need judgment over
+  the whole source live; the detector never pretends to them.
+- **Over-sensitive on purpose.** The detector wakes on anything
+  it cannot classify as known-quiet. A wake is a suspicion, not a
+  finding: the woken worker verifies against the live source
+  before reporting anything (procedures §7), and most wakes end
+  as verified non-events, recorded and silent.
+
+### Learning filters
+
+Where the noise is recurring — the same senders, the same
+sources — the woken worker feeds what it muted back into the
+detector's state file, as a noise list. The filter gets quieter
+over time without code changes: each wake that ends in a mute
+teaches the detector not to wake for that again.
+
+The ordering is a safety rule, not a preference: the classes
+that must never be muted — VIP senders, security and account
+alerts, anything the shield must grade — are checked **before**
+any mute rule is consulted, in the detector and in the worker
+alike. Those wake regardless of the noise list. A mute learned
+from a hundred newsletters can never swallow an alert, because
+an alert never reaches the mute rule.
+
+### Cadence matched to volatility
+
+Never poll faster than the source changes. A slow source steps
+its cadence down and back up as the event it watches approaches
+— banding: a watch on a flight booked months out runs daily at
+booking, steps down to every three days while nothing is likely
+to move, and steps back up to daily inside 30 days of departure,
+automatically. A fast source stays script-cheap rather than
+agent-frequent: raise the poll rate, not the agent rate — the
+triage scan polls every few minutes and still spends agent time
+only on mail that survives its filter. When a watch's cadence
+exceeds its source's rate of change, the usage audit (module
+05) flags it; the fix is a band, a script, or a slower clock —
+never a shrug.
 
 ## The money watch (optional component)
 
@@ -380,7 +472,7 @@ seen to have happened.
    time (user's morning, their timezone) and delivery (main chat).
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
-4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and number, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the scan appends on every run, and a flag log the brief reads (the template names both).
+4. Optional: the triage scan — script-first (see Watches, above), same interrupt rules. Stand up the detector script: it polls the mailbox every few minutes inside the delivery window, keeps the state file (seen-IDs and the noise list), checks the never-mute classes before any mute, and wakes the agent under the job file's rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and number, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the detector appends on every poll, a flag log the brief reads, and the state file (the template names all three).
 5. Optional: the money watch — weekly cadence. Build the baseline
    with the user from their exports into
    `finance/money-watch-baseline.md`, from

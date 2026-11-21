@@ -51,6 +51,52 @@ reader can use it without the wizard taxing every install for it.
   the backup may not be the only writer. Log sizes in the window
   before concluding.
 
+## Script-first detectors
+
+Module 02's watch pattern states the architecture — a cheap
+script polls and diffs against a small state file, silent on
+no-change, waking an agent only on a verified change — and the
+guardrails (unreadable is a report once, a full sweep stays as
+the safety net, over-sensitive on purpose, VIP/security checks
+before any mute rule). What follows is the shape of three real
+conversions, generalized: each began as an agent run on a clock
+and ended as a detector that spends agent time only on judgment.
+
+- **Inbox triage.** An agent scan every 30 minutes across the
+  waking day is 48 agent runs a day, nearly all of them learning
+  that nothing needed it. Converted: a script polls the mailbox
+  every 5 minutes, diffs against its state file (seen message
+  IDs, a noise list), and wakes the agent only for mail that is
+  neither seen nor muted. The agent grades and judges what
+  survives — the shield, the interrupt rules — and feeds its
+  mutes back into the noise list, so the detector gets quieter
+  weekly. Verify the conversion both ways before trusting it:
+  unjudged mail must wake, all-muted mail must stay silent, and
+  both runs write their records.
+- **Host health watch.** An agent checking host health every
+  2 hours is 12 runs a day reading mostly-green dashboards.
+  Converted: a script detector every 30 minutes (thresholds,
+  liveness, freshness — the checks above, mechanized), waking
+  the agent only on an exception, plus a daily full agent sweep.
+  The honest coverage note matters more than the savings: the
+  checks that need judgment over the whole estate — which
+  automations are off, a full device census — live in the
+  sweep, not the detector. The detector does not cover them,
+  and the layout record says so, so nobody reads the detector's
+  silence as the sweep's all-clear.
+- **A booked flight, months out.** No detector needed — the
+  lesson is cadence banding. Daily agent checks on a flight
+  half a year away buy nothing; the schedule rarely moves that
+  far out. The watch bands: daily at booking, every 3 days
+  through the quiet middle, daily again inside 30 days of
+  departure, stepping up automatically as the event nears.
+  Match the cadence to how fast the source can change, and let
+  the calendar, not habit, set the rate.
+
+The common thread: the agent's context is the expensive,
+judgment-bearing resource. Spend it on the change, the
+exception, and the periodic full read — never on the polling.
+
 ## Alerts that reach a human
 
 - Route alerts to a phone notification channel the user actually

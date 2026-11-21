@@ -56,7 +56,8 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    approached, spend with no matching work — in the decision queue.
    The check rides the morning brief's monthly pass if one is
    installed; without scheduling it is a manual chore with a named
-   owner.
+   owner. Its sibling is the usage audit (module 05) — jobs ranked
+   by load, no figures invented; money here, load there.
 
 **Billing data is a financial record (procedures §13).** Usage
 figures live in the register and on the providers' pages; a spend

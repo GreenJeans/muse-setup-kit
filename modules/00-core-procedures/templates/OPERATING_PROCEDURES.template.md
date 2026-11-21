@@ -90,6 +90,8 @@ stays however the user keeps it, and this section is inert.)*
   stays open as unverified.
 - Originals outrank derivatives for files and media: work from the original
   photo, file, or recording, never from a treated or re-rendered copy.
+- Fetch before browsing: read a page's text first; use a live browser
+  only when the fetch fails, is blocked, or can't settle the answer.
 - Document work: quote ambiguous passages verbatim — never paraphrase
   ambiguity into a fact — and mark any section not actually read as
   "not verified", never summarized.

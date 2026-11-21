@@ -43,6 +43,8 @@ summary has a bug.
   agent will act on is re-read at the original in the same session, or it
   stays marked unverified. In document work: quote ambiguous passages
   verbatim, and mark unread sections "not verified", never summarized.
+  On the web: fetch a page's text first; a live browser is the last
+  resort, not the first (procedures §7).
 - **Done means verified.** Completion is checked against live state or the
   original record, never accepted from a worker's report alone.
 - **Abort on mismatch.** Unexpected state from a live system — a wrong
@@ -175,7 +177,7 @@ another module's surfacing; the extraction step is not optional.
    `ext:instruction-pointer` anchor pair (see the registry above)
    around the line: later modules add their own pointer lines inside
    the same markers, each line owned by the module that added it.
-6. Create `JOBS.md` at the workspace root from `templates/JOBS.template.md` — header and entry format, no jobs yet. The format is canonical: module 01's linter and module 08's curator both parse this file, and the brief's detector-silence check reads cadences from it. Do not improvise a different shape.
+6. Create `JOBS.md` at the workspace root from `templates/JOBS.template.md` — header and entry format, no jobs yet. The format is canonical: module 01's linter and module 08's curator both parse this file, and the brief's detector-silence check reads cadences from it. Do not improvise a different shape. The template also carries the slim-definitions rule — job bodies are short pointers, baselines and long instructions live in state files and design docs — which every later module's job files follow.
    Every later module records its scheduled jobs there; the morning
    brief and the memory linter read it. (This module's VERIFY checks
    for it — a step that creates what the check requires.)

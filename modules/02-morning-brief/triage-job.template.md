@@ -1,14 +1,24 @@
 # Job — Inbox triage scan
 
 <!-- Template from the Muse Setup Kit (module 02). The job file
-for the triage scan; record the job in JOBS.md with the same
-cadence. The scan never sends mail and never creates drafts. It
-keeps two records (below): a run record, appended every run, and
-a flag log the brief reads — a shield flag that is not written
-down is a flag that never reaches the user. -->
+for the triage scan; record the job in JOBS.md with the scan's
+cadence. The scan is script-first (module 02, Watches): a
+detector script polls, and this file is the woken agent's rule
+book — the grading and interrupt judgment the detector wakes it
+for — plus the daily full sweep's. The scan never sends mail
+and never creates drafts. It keeps three records (below): a run
+record the detector appends every poll, a flag log the brief
+reads — a shield flag that is not written down is a flag that
+never reaches the user — and the detector's state file. -->
 
-Run every 30 minutes, <USER'S WAKING HOURS, e.g. 07:00–22:00>
-<TIMEZONE>. Outside the window, do not scan and do not interrupt.
+The detector polls every <FEW MINUTES, e.g. 5> inside <USER'S
+WAKING HOURS, e.g. 07:00–22:00> <TIMEZONE>; outside the window
+it does not poll and nothing interrupts. On each poll it checks
+the never-mute classes first — VIP senders, security and account
+alerts, anything the shield must grade — then the noise list in
+its state file; mail that survives wakes the agent, and the
+rules below run. A daily full sweep reads the whole mailbox the
+slow way, as the safety net for anything the filter missed.
 The scan reads the mailbox only — the channels in module 02's
 Reads. Text messages and calls are out of scope: no rule, drill,
 or fixture in this job reaches them.
@@ -57,14 +67,25 @@ or fixture in this job reaches them.
 
 Everything else accrues to the next brief.
 
-## Records (every run)
+## Records (every poll, every wake)
 
-- **Run record** — append one line to <RUN-RECORD FILE, e.g.
-  `jobs/triage-runs.md`> on every run: time, messages scanned,
-  flags raised. A run that finds nothing still writes its line;
-  the brief reads the gaps — no run record 2 hours into the
-  delivery window means the scan itself has failed, and the
-  brief names it in Failures.
+- **Run record** — the detector appends one line to <RUN-RECORD
+  FILE, e.g. `jobs/triage-runs.md`> on every poll: time,
+  messages scanned, flags raised, agent woken or not. A poll
+  that finds nothing still writes its line; the brief reads the
+  gaps — no run record 2 hours into the delivery window means
+  the scan itself has failed, and the brief names it in
+  Failures.
+- **State file** — the detector's <STATE FILE, e.g.
+  `jobs/triage-state.md`>: the seen message IDs (so a poll only
+  judges what is new) and the noise list. When a wake ends in a
+  mute — a recurring sender or source the user never wants to
+  hear about — the woken agent adds it to the noise list there;
+  that is how the detector learns, and no code changes. The
+  never-mute classes are checked before the noise list is
+  consulted, in the detector and in this job alike: a learned
+  mute can never swallow a VIP, a security alert, or a message
+  the shield must grade.
 - **Flag log** — append every flag, and every message graded
   *unverified sender*, to <FLAG-LOG FILE, e.g.
   `jobs/triage-flags.md`>, immediate or not: date and time,
