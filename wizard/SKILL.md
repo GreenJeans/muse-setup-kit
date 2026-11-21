@@ -152,8 +152,8 @@ the answers for the gating step:
   equivalent) that the agent reads at the start of every session?
 - **Which billing bucket does this session draw on?** An install is
   heavy work: it writes dozens of files, and the reading runs about
-  26,100 words for a Starter install, about 33,300 for Standard
-  (about 40,800 with module 11 added), and about 58,100 for
+  26,700 words for a Starter install, about 33,900 for Standard
+  (about 41,400 with module 11 added), and about 59,000 for
   everything on the shelf.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
