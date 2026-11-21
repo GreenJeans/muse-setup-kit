@@ -16,7 +16,12 @@ and approved.**
    page, not from inside this repo). If the user gave none, or the two
    differ, stop and ask — never default to the current commit. Install
    only from files at that commit, and never fetch module content from a
-   URL at install time.
+   URL at install time. One exception, for evaluation installs (a dry
+   run or a release-candidate rehearsal): the user may hand you a local
+   tree with uncommitted changes. Then the plan records HEAD plus the
+   dirty state (`git status --porcelain` and `git diff --stat HEAD`,
+   verbatim) and is labeled EVALUATION, per UPGRADING.md. A
+   production install never proceeds this way.
 3. **Plan before changes.** Present one consolidated plan: every file you
    will create or edit, every scheduled job, every shared surface, with each
    module's reads/writes/network disclosure from the manifest. List
@@ -77,6 +82,13 @@ the answers for the gating step:
   agents) they might exchange work with?
 - Can you run local scripts (shell / Python 3) and read files on this
   machine, including session transcripts where the platform keeps them?
+- **Which billing bucket does this session draw on?** An install is
+  heavy work: a full one reads on the order of 20,000 words of kit and
+  writes dozens of files; a Starter install is about a fifth of that.
+  If neither you nor the user can name the bucket (subscription, API
+  org, router), pause and check before planning — this is module 09's
+  rule 2 applied to the kit itself, and it is a stop condition, not a
+  footnote.
 
 Map the answers to the manifest's requirement tokens:
 
@@ -126,8 +138,11 @@ user's answers verbatim in the plan.
    *(If (c): the modules that depend on the memory schema —
    ai-exchange, evaluation-kit, skill-lifecycle — are not offerable;
    say so plainly at selection time.)*
-6. **Infrastructure:** (a) I have a host/server I control and want backup
-   and health patterns. (b) Cloud only, skip infra. (c) Later.
+6. **Infrastructure:** (a) I have a host/server I control. (b) Cloud
+   only. *(No module gates on this since v0.4 — infra patterns are a
+   reference document, docs/patterns/infra-patterns.md, not an
+   install. Note the answer in the plan; a host user may want module
+   02's watches pointed at it later.)*
 7. **Existing work:** Name any ongoing workstreams or projects the agent
    should treat as separate topics (each gets a SCOPE.md), and point to
    the file the agent reads as its main instructions, if one exists. If
@@ -149,13 +164,21 @@ From `manifest.yaml`, compute the offerable set:
   chore; no shell/python → the linter and the curator degrade to
   manual reviews against the same checklists; no second person →
   household-hq is not offerable; no shared storage or no other agents →
-  ai-exchange is not offerable; no host → infra-patterns is not offerable.
+  ai-exchange is not offerable.
 - If a module's manifest entry lists `degrades_without` and the user lacks
   that capability, offer the module in its degraded mode and say plainly
   what won't work (for example: evaluation-kit without other agents runs
   single-reviewer; the morning brief without scheduling runs on demand).
-- Present the offerable modules as a checklist with their one-line pitches
-  and disclosures. The user picks: all, none-but-core, or by number.
+- Offer the manifest's **profiles first** (Starter, then Standard),
+  each with its audit word count from the manifest, then the full
+  checklist. First time, the sensible default is Starter; modules can
+  be added later, one at a time (UPGRADING.md). The user picks: a
+  profile, all, none-but-core, or by number.
+- State each offered module's rehearsal status from its manifest
+  `rehearsed_at` field, and check docs/REHEARSALS.md for the record.
+  A module with no rehearsal at or near the pinned commit is offered
+  with the words "unrehearsed at this pin — you would be the first."
+  Never let the plan imply a rehearsal the ledger doesn't show.
 
 ## Step 4 — The plan
 
@@ -178,6 +201,15 @@ Produce one plan document (show it in chat; also save it as
 - Anything in the user's existing setup that conflicts, with your proposed
   resolution.
 
+Expect a short second question round here: several placeholders (the
+agent's own name, brief time and timezone, VIP senders) are collected
+at plan time rather than in the interview, because the answers depend
+on which modules were selected. The plan also states every optional
+component's decision explicitly — installed or not installed —
+including module 02's triage scan and module 03's food layer and
+change detector; an unrecorded "not installed" is how features get
+silently dropped or silently assumed.
+
 Collect every placeholder answer first, then re-render the plan in its
 final form with zero `<PLACEHOLDER>` tokens remaining. Placeholder
 answers are not approval. Ask for explicit approval of that exact final
@@ -192,7 +224,12 @@ For each module:
 2. Copy/adapt its templates, filling placeholders from the approved plan.
 3. Create its scheduled jobs with the cadences the user chose, and record
    each one in `JOBS.md` at the workspace root (name, cadence, what it
-   owes, where it delivers). `JOBS.md` is the kit's scheduler-of-record:
+   owes, where it delivers). A "created job" means: the scheduler entry
+   where the platform provides one; where the workspace is file-based
+   and no scheduler entry exists, a job file at `jobs/<name>.md`
+   holding the cadence, instructions, and delivery target, plus its
+   `JOBS.md` entry — that pair is the job, and it is the evidence the
+   module's VERIFY checks cite. `JOBS.md` is the kit's scheduler-of-record:
    the brief's detector-silence check and the memory linter read it.
 4. Run its `VERIFY.md` at-install checks. If a check fails, stop, report,
    and ask — do not improvise a fix that changes the plan. Ledger every

@@ -58,11 +58,14 @@ closed. Every other module assumes this one.
 3. Create the decision queue from `templates/decision-queue.template.md`
    (its example item is an HTML comment — the first real item is #1).
 4. For each workstream named in the interview (wizard Q7), create a
-   `SCOPE.md` from `templates/SCOPE.template.md`.
+   `SCOPE.md` from `templates/SCOPE.template.md`, in the workstream's
+   home folder — create `workspace/<workstream-slug>/` when it has
+   none; the plan names each home. The SCOPE's fields are drafted with
+   the user and approved as part of the plan, not invented after it.
 5. Add a pointer line to the agent's main instruction file (wizard Q7;
    create `INSTRUCTIONS.md` if none exists): "Operating procedures live
    in OPERATING_PROCEDURES.md and govern daily work."
-6. Create `JOBS.md` at the workspace root, empty apart from its header.
+6. Create `JOBS.md` at the workspace root from `templates/JOBS.template.md` — header and entry format, no jobs yet. The format is canonical: module 01's linter and module 08's curator both parse this file, and the brief's detector-silence check reads cadences from it. Do not improvise a different shape.
    Every later module records its scheduled jobs there; the morning
    brief and the memory linter read it. (This module's VERIFY checks
    for it — a step that creates what the check requires.)

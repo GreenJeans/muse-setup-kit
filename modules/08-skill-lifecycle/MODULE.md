@@ -351,7 +351,12 @@ Do not switch the sweep on live. Roll out in phases:
    `skill-lifecycle/`, ledger `skill-lifecycle/skill-usage.json`. The
    ledger's record format is the one `tools/curator.py` writes —
    fields listed under Pattern 3 — and the installer's seeding matches
-   it exactly.
+   it exactly. Seeding happens one way: the curator's first hand run
+   (Rollout step 1) creates records for skills not yet ledgered. Do
+   not hand-write records ahead of it. A "verifiable" created date is
+   one from a record (a dated log, a commit, the user's statement);
+   anything else seeds as null and is reported unseeded — never
+   backfill a date from a file's mtime and call it created.
 2. Add the two item types to the decision queue's header, using the
    definitions in `templates/skill-queue-items.template.md`, and
    confirm the queue template's never-consent rule is stated there.

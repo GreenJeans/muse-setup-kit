@@ -136,6 +136,9 @@ def main():
     report = {"date": str(today), "skills": {}, "stale": [],
               "archive_candidates": [], "new": [], "unseeded": []}
 
+    # all_names for exemption matching is on_disk (every skill that
+    # exists), never the ledger-so-far: on a first run the ledger is
+    # still being built, and a partial name list breaks longest-match.
     for name in on_disk:
         if name not in skills:
             skills[name] = {"created": str(today), "seeded_on": str(today),
@@ -145,11 +148,17 @@ def main():
                             "patches": 0, "exemptions": [], "state": "active"}
             report["new"].append(name)
         rec = skills[name]
+        # Unseeded check comes BEFORE the stamp below: a record with
+        # no verifiable created date is reported on the run that
+        # first seeds it. (Checking after stamping makes this branch
+        # unreachable — the stamp guarantees an anchor.)
+        if parse(rec.get("created")) is None and not rec.get("seeded_on"):
+            report["unseeded"].append(name)
         if not rec.get("seeded_on"):
             rec["seeded_on"] = str(today)
         rec["exemptions"] = exemptions_for(name, rec, jobs_text,
                                            reference_texts, skill_texts,
-                                           skills_dir, list(skills))
+                                           skills_dir, on_disk)
 
         activity = [parse(rec.get(k)) for k in ("last_viewed", "last_used", "last_patched")]
         activity = [d for d in activity if d]
@@ -157,10 +166,7 @@ def main():
         # day the ledger first seeded the record. A record with neither
         # anchors to today AND is reported unseeded — it must surface,
         # not silently idle at 0 forever.
-        anchor = parse(rec.get("created")) or parse(rec.get("seeded_on"))
-        if anchor is None:
-            anchor = today
-            report["unseeded"].append(name)
+        anchor = parse(rec.get("created")) or parse(rec.get("seeded_on")) or today
         last_activity = max(activity) if activity else anchor
         idle = (today - last_activity).days
         age = (today - anchor).days

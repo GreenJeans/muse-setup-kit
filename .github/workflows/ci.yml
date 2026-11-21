@@ -1,0 +1,26 @@
+name: kit-selfcheck
+
+# The kit lints itself: structural checks (tools/kit_selfcheck.py)
+# plus regression fixtures for the shipped tools (tools/tests/).
+# Report-only machinery checking the repo — CI never touches an
+# install.
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  selfcheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Structural self-check
+        run: python3 tools/kit_selfcheck.py
+      - name: Tool regression fixtures
+        run: python3 -m unittest discover -s tools/tests -v

@@ -6,7 +6,7 @@
       `[type: skill-write]` and `[type: skill-curator]` — and states
       that silence is never consent for a skill write: the only
       default is stay staged, then expire.
-- [ ] The staging area exists (`staged/` plus `staged/applied/`), and
+- [ ] The staging area exists (`staged/` plus `staged/applied/` and `staged/expired/`), and
       the staged-proposal template is in place where a reviewer will
       find it.
 - [ ] The usage ledger exists with one record per existing custom

@@ -50,6 +50,22 @@
   kit's own verify-before-install discipline in reverse — publish the pinned
   commit hash alongside any listing.
 
+## Phase 4 — Module 08: Skill Lifecycle — DONE 2026-11-20
+
+- Module 08 added via PR #1 (merged the same day it opened): a
+  session-review rubric that stages skill lessons instead of writing
+  them live, staged-diff approval through the decision queue
+  (`[type: skill-write]` / `[type: skill-curator]`, base-hash voiding,
+  14-day staging expiry), and a deterministic curator (stale 14d,
+  archive candidate 30d, never deletes) — adapted from Hermes Agent
+  with the gates-on divergence, plus a shadow-week rollout. Ships the
+  staged-proposal and queue-item templates and a reference curator
+  script (fixture-tested).
+- Manifest, README (module table, layout, attribution), and the
+  wizard's gating list updated in the same PR.
+- Tagged **v0.2** at the merge commit
+  (7e15e075b3873e019357f9fddde0df8c7a80478e).
+
 ## Phase 5 — v0.3: adversarial-review fixes + module 09 (this release)
 
 Blind dual review of the v0.2 kit (two outside models, identical
@@ -73,21 +89,28 @@ failure was the kit's own job-matching rule, fixed above). Not yet
 rehearsed: a fresh full install including module 09, and the wizard
 on a small-group (Q1c) interview.
 
-## Phase 4 — Module 08: Skill Lifecycle — DONE 2026-11-20
+## Phase 6 — v0.4: prove it, then make it easy (this release)
 
-- Module 08 added via PR #1 (merged the same day it opened): a
-  session-review rubric that stages skill lessons instead of writing
-  them live, staged-diff approval through the decision queue
-  (`[type: skill-write]` / `[type: skill-curator]`, base-hash voiding,
-  14-day staging expiry), and a deterministic curator (stale 14d,
-  archive candidate 30d, never deletes) — adapted from Hermes Agent
-  with the gates-on divergence, plus a shadow-week rollout. Ships the
-  staged-proposal and queue-item templates and a reference curator
-  script (fixture-tested).
-- Manifest, README (module table, layout, attribution), and the
-  wizard's gating list updated in the same PR.
-- Tagged **v0.2** at the merge commit
-  (7e15e075b3873e019357f9fddde0df8c7a80478e).
+Driven by a blind roadmap brainstorm (two outside models, same
+packet method; their wild ideas converged on the Governance Test).
+Adopted: the four verified defect fixes (kit_doctor reads every
+pin, not the first; JOBS.md gains a canonical template both tools
+parse; module 09 ships the bucket-register template it always
+improvised; module 07's missing rehearsal is named, not implied);
+docs/REHEARSALS.md, the rehearsal ledger, with `rehearsed_at`
+labels in the manifest and the wizard stating rehearsal status at
+selection time; tools/kit_selfcheck.py plus tool regression
+fixtures in CI (the fixtures caught a real bug on their first run:
+the curator's unseeded report was unreachable in both the kit and
+the maintainer's live copy — fixed in both); starter profiles with
+printed audit word counts; module 07 demoted to
+docs/patterns/infra-patterns.md; the Governance Test
+(docs/governance-test.md) as a standalone companion; release-notes
+automation that drafts the release with the pin pre-filled.
+Rehearsals for this release are recorded in docs/REHEARSALS.md
+(rows 4–5). Held for v0.5: the module 08 restructure, the
+installed-file upgrade baseline, UNINSTALL.md, install reports,
+audit-first wizard mode, the full worked example.
 
 ## Ideas parking lot
 

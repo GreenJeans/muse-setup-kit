@@ -10,6 +10,24 @@ or personal data from the original setup appear anywhere in this repo.
 
 ---
 
+## What you actually get
+
+A morning, a few weeks in (fictional, but true to format):
+
+> **Brief — Tue 07:19**
+> ⚠ Backup watch: no run record in 52h. The watch is the failure.
+> ⚠ Decision queue: 3 items waiting (oldest 6 days).
+> ✓ All scheduled jobs ran. Inbox: 2 need you, 9 filed silently.
+>
+> **Decisions:** 1) Renew the domain ($14, auto-renew is off).
+> 2) Skill proposal `weather-brief`: 6-char hash `a91f3c` — reply
+> "2: approve" and exactly that diff lands, nothing else.
+
+And when something irreversible comes up, your agent stops and
+writes a ticket — exact action, exact total, exact fallback — and
+waits. That's the kit working. The rest of this page is how to
+install it, and what it costs to read first.
+
 ## Quickstart
 
 Tell your Muse:
@@ -23,6 +41,12 @@ ask me. Then read wizard/SKILL.md and run the setup wizard.
 
 The hash is the trust anchor: get it from the release page (outside the
 repo), never from a file inside the checkout you are about to trust.
+
+One more thing before you start: know which billing bucket the
+install session draws on (subscription, API key, a router). An
+install is heavy work — a full one reads on the order of 20,000
+words of kit — and the wizard's first step will ask. If you don't
+know, that's worth finding out before, not after.
 
 That's the whole path. The wizard interviews you (multiple choice, a few
 minutes), checks which capabilities your install actually has, shows you a
@@ -40,13 +64,28 @@ that the pinned-commit, plan-before-changes, and nothing-fetched-at-
 install-time rules are intact; if any is missing, you're looking at a
 fork that dropped the safety properties.
 
+**First time? Install a profile, not the whole shelf.** The audit
+cost below is the wizard, the manifest, and that profile's module
+files and tools — the reading the request above actually asks for:
+
+| Profile | Modules | Audit cost | What you get |
+|---|---|---|---|
+| **Starter** | 00 + 02 + 09 | ~5,100 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~7,100 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all nine modules | ~14,000 words | Module 08 alone is ~4,500 of that. The remaining modules (03, 04, 05, 08) are each offered on their own merits. |
+
+Modules can be added later, one at a time (see `UPGRADING.md`).
+Each module's rehearsal status is in `docs/REHEARSALS.md`; the
+wizard states it at selection time, including "unrehearsed at this
+pin — you would be the first" where that is true.
+
 ## How it works
 
 1. **Interview** — who it's for, how much autonomy, daily rhythm, other
    agents, memory, infrastructure.
-2. **Selection** — modules are capability-gated: no second person, no
-   Household HQ offer; no host, no Infra. Degraded modes are named, not
-   silent.
+2. **Selection** — profiles first, then modules, capability-gated:
+   no second person, no Household HQ offer. Degraded modes are named,
+   not silent, and so is each module's rehearsal status.
 3. **Plan → approve → install → verify** — at-install checks run
    immediately; checks that need live operation are ledgered as deferred
    with due dates, never skipped quietly.
@@ -62,10 +101,15 @@ fork that dropped the safety properties.
 | 04 | **AI Exchange** | Several AI agents exchanging work through shared storage — protocol, queue, blind reviews, ingest discipline | 00, 01; shared cloud storage; at least one other agent |
 | 05 | **Evaluation kit** | Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks | 00, 01 |
 | 06 | **Security pack** | Verify-before-install, one-time permission grants, content-exclusion lists, session canary, retitle-before-share | 00 |
-| 07 | **Infra patterns** | Layered backups with a verification pass, health watches, an alert channel that reaches your phone | 00; a host you control |
 | 08 | **Skill lifecycle** | A session-review rubric that stages skill lessons instead of writing them live, staged-diff approval through the decision queue, a curator that archives unused skills but never deletes — gates on, unlike the system it adapts | 00, 01 |
 | 09 | **Cost & billing guardrails** | Bucket discipline for agent spending: know whether a run draws on a subscription, an API key, or a router before it starts; hard caps set in advance; a monthly spend check | 00 |
 
+Not a module: **infra patterns** (layered backups, health watches,
+alert discipline for people with a host) live in
+`docs/patterns/infra-patterns.md` as a reference document — sound
+practice, but never rehearsed as an install, so the wizard doesn't
+install it. And `docs/governance-test.md` is a standalone discipline
+check you can run against your *current* setup, kit or no kit.
 ## Design principles
 
 - **Reversible work is pre-authorized; irreversible work needs a ticket.**
@@ -127,7 +171,7 @@ procedures, templates, and the wizard itself are original to this kit.
 ```
 README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
-docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status)
+docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · governance-test.md (standalone check) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (modules)
 modules/
   00-core-procedures/      MODULE.md · VERIFY.md · templates/
@@ -137,10 +181,9 @@ modules/
   04-ai-exchange/          MODULE.md · VERIFY.md · protocol template
   05-evaluation-kit/       MODULE.md · VERIFY.md · templates/ (fictional seeds) · tools/ (kit doctor)
   06-security-pack/        MODULE.md · VERIFY.md · vetting-log template
-  07-infra-patterns/       MODULE.md · VERIFY.md
   08-skill-lifecycle/      MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator, stage check)
-  09-cost-guardrails/      MODULE.md · VERIFY.md
-```
+  09-cost-guardrails/      MODULE.md · VERIFY.md · templates/ (bucket register)
+tools/               ← kit_selfcheck.py (the kit lints itself) · tests/ (tool fixtures)```
 
 ## Status
 
@@ -152,7 +195,13 @@ a blind adversarial review (module 05's method, applied to the kit
 itself); their convergent findings — including a fictional quickstart
 pin, an install that failed the kit's own linter, and a module with no
 install section — drove v0.3, and module 08 was dry-run a third time,
-by another fresh agent, before v0.3 was tagged. What has not been
-rehearsed is said plainly in `docs/ROADMAP.md`.
+by another fresh agent, before v0.3 was tagged. A second outside
+round (a roadmap brainstorm, same blind method) drove v0.4: starter
+profiles with printed reading costs, a rehearsal ledger
+(`docs/REHEARSALS.md`) that names what has *not* been rehearsed —
+the v0.3 text missed that module 07 never had been — infra patterns
+demoted to a reference doc, and the kit's own structural self-check
+in CI. What has not been rehearsed is said plainly in
+`docs/REHEARSALS.md`, per module.
 
 License: MIT (see `LICENSE`).

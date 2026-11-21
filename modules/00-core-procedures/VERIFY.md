@@ -11,7 +11,7 @@
       five fields and a `## Closed` section.
 - [ ] The main instruction file (or the created `INSTRUCTIONS.md`) carries
       the pointer line to the procedures.
-- [ ] `JOBS.md` exists at the workspace root (empty is fine).
+- [ ] `JOBS.md` exists at the workspace root, built from the module's JOBS template (canonical entry format; empty of jobs is fine).
 
 ## Deferred
 
