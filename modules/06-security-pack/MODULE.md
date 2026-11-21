@@ -13,6 +13,9 @@ own grants from quietly becoming permanent.
 
 ## The rules
 
+The operative statements are procedures §10; this list is the
+working form, and where the wording differs, §10 governs.
+
 1. **Verify before install.** For any third-party skill, connector, or
    prompt pack: pin the exact version or commit; read the full text at
    that pin (not the landing page, not a summary); record what it reads,

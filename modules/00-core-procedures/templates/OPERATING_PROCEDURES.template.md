@@ -2,7 +2,10 @@
 
 <!-- Template from the Muse Setup Kit. Fill the <PLACEHOLDERS>, delete the
 comments, and make it yours. This file is the agent's constitution; the
-agent's main instruction file should point here. -->
+agent's main instruction file should point here. It is also the operative
+text of the kit's constitutional rules: module summaries and other
+modules' applications point back to these sections, and where any of
+them differ from this file, this file governs. -->
 
 ## Local configuration
 

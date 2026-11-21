@@ -85,7 +85,9 @@ pin — you would be the first" where that is true.
    agents, memory, infrastructure.
 2. **Selection** — profiles first, then modules, capability-gated:
    no second person, no Household HQ offer. Degraded modes are named,
-   not silent, and so is each module's rehearsal status.
+   not silent, and so is each module's rehearsal status. The full
+   matrix of what each platform capability buys is
+   `docs/capability-profiles.md`.
 3. **Plan → approve → install → verify** — at-install checks run
    immediately; checks that need live operation are ledgered as deferred
    with due dates, never skipped quietly.
@@ -111,6 +113,10 @@ practice, but never rehearsed as an install, so the wizard doesn't
 install it. And `docs/governance-test.md` is a standalone discipline
 check you can run against your *current* setup, kit or no kit.
 ## Design principles
+
+One-line summaries of the kit's constitutional rules; the operative
+text is module 00's procedures template, whose canonical-location
+table says where each rule lives.
 
 - **Reversible work is pre-authorized; irreversible work needs a ticket.**
   Sending, buying, booking, filing, deleting — each needs an exact,
