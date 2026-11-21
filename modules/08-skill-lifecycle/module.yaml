@@ -16,7 +16,7 @@ reads: "session transcripts, your custom skills, the decision queue, scheduled-j
 writes: "staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills."
 network: "none."
 jobs: "none at the Lite tier; at Full, one nightly session-review sweep and one weekly curator run."
-rehearsed_at: "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run"
+rehearsed_at: "v0.4 upgrade-path re-run (Full); v0.5 Lite dry run; changed by EX-018/019 review fixes, re-rehearsal pending"
 reviewed_at: null
 reviewed_by: null
 tiers:

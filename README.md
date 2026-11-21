@@ -188,17 +188,17 @@ procedures, templates, and the wizard itself are original to this kit.
 README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
-docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
+docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (profiles + library data)
 directory.json       ← generated catalog of the core library (tools/build_directory.py) · advisories.json (generated; advisories.yaml is its human-maintained source)
 modules/
   00-core-procedures/      module.yaml · MODULE.md · VERIFY.md · templates/
   01-memory-architecture/  module.yaml · MODULE.md · VERIFY.md · SCHEMA + MEMORY templates · tools/ (reference linter)
-  02-morning-brief/        module.yaml · MODULE.md · VERIFY.md · brief, money-watch, and ledger templates
+  02-morning-brief/        module.yaml · MODULE.md · VERIFY.md · brief, money-watch (baseline, run records, job), and ledger templates
   03-household-hq/         module.yaml · MODULE.md · VERIFY.md · principles + partner-prompt templates
   04-ai-exchange/          module.yaml · MODULE.md · VERIFY.md · protocol template
   05-evaluation-kit/       module.yaml · MODULE.md · VERIFY.md · templates/ (fictional seeds) · tools/ (kit doctor)
-  06-security-pack/        module.yaml · MODULE.md · VERIFY.md · vetting-log template
+  06-security-pack/        module.yaml · MODULE.md · VERIFY.md · vetting-log template · grants-inventory job template
   08-skill-lifecycle/      module.yaml · MODULE.md · VERIFY.md · templates/ (staged proposal, queue items) · tools/ (reference curator, stage check)
   09-cost-guardrails/      module.yaml · MODULE.md · VERIFY.md · templates/ (bucket register)
   10-deadlines-register/   module.yaml · MODULE.md · VERIFY.md · register template
@@ -212,9 +212,10 @@ record, including what has *not* been rehearsed, is
 `docs/REHEARSALS.md`; the history is `docs/ROADMAP.md`. v0.9 adds:
 module 10, the deadlines & expiry register — the first module
 designed under the library spec in `docs/library.md`, its data
-class declared and its register an accumulating file; it ships
-unrehearsed and is labeled that way until a fresh agent installs
-it. Module 02 gains the promises & waiting-on ledger (the
+class declared and its register an accumulating file; it was
+rehearsed once at the v0.9 candidate (run 13, at abb9f86) and has
+changed since — unrehearsed at this pin, and labeled that way.
+Module 02 gains the promises & waiting-on ledger (the
 return-and-refund tracker is its worked example) and the scam &
 impersonation shield in triage — module 06's
 content-is-not-instructions rule turned outward, with a pointer

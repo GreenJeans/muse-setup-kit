@@ -186,6 +186,24 @@ REHEARSALS ledger are repaired. Rehearsals for the 06 pack and
 the money watch are specified from the reviewers' pass bars and
 run before tagging.
 
+Review fixes (EX-018/019 — the blind dual review of this
+release, run against the v0.8 tree before tagging): 39 distinct
+findings, every one verified against the tree, the fixes in this
+phase's tree. The scope audit now decides on the scopes as
+observed at connection time (and audits token privilege where
+there are no scopes); manifest pinning captures the presented
+manifest in full — schemas, annotations, server instructions —
+with a named capture method and a re-check cadence; money-watch
+queue items can never resolve by silence; §13's review-by has a
+surfacing path for local holdings, and the §13 pointers are
+completed across modules 01, 04, 05, 08, and 09. Two findings
+were maintainer decisions, since taken: a user may accept
+excess scopes as a recorded decision — official tier only, in
+their own words, naming each scope accepted — and an official
+hosted connector whose source cannot be read is vetted on its
+observable surface with the user's decision recorded, floored
+by a full read of the presented manifest.
+
 ## Phase 11 — v0.9: everyday (this release)
 
 The everyday release: modules for the user's own life rather than
@@ -201,10 +219,29 @@ section, follow-ups as drafts under ticket rules — with the
 return-window/refund tracker as its worked example. The
 scam/impersonation shield joins module 02's triage, running
 before the VIP interrupt rule, with a pointer from module 06:
-rule 3 turned outward. Module 10 ships unrehearsed and is
-labeled that way; its rehearsals (Starter and Standard installs,
-ledger and shield fixture runs) are specified from the reviewers'
-pass bars and run before the library phase builds on it.
+rule 3 turned outward. Module 10 was rehearsed once at the v0.9
+candidate (run 13, at abb9f86); changed since, it is unrehearsed
+at this pin and labeled that way. Further rehearsals (Standard
+installs, ledger and shield fixture runs) are specified from the
+reviewers' pass bars and run before the library phase builds on
+it.
+
+Review fixes (EX-020/021 — the blind dual review of this
+release, run against the v0.9 tree before tagging): 29 distinct
+findings, every one verified against the tree, the fixes in this
+phase's tree. Shield flags now have a route into the brief (the
+triage flag log, consumed in Failures, and the scan's own
+silence is a brief-visible failure); procedures §13 states the
+identifiers rule module 10 cites, with module 10 in its
+applications; the ledger's grade system is one system across
+MODULE, template, and VERIFY, with a `Grade:` marker on every
+entry; the immediacy set records every known sender per
+institution and is collected as a plan question; module 10's
+deferred checks all carry event-plus-fallback due dates. One
+finding was a maintainer decision, since taken: a message
+graded "unverified sender" earns no interrupt of any class on
+its sender claim alone — it is written to the flag log and
+surfaces in the brief's Failures.
 
 ## Phase 12 — the library (implemented on the library branch, 2026-11-20 — unreleased)
 

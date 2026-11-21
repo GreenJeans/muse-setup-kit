@@ -1,9 +1,16 @@
 # Module 02 — Morning Brief & Inbox Triage
 
-**Reads:** calendar, mailbox, task lists, decision queue, watch outputs.
-**Writes:** one brief per day; draft replies only, sent only with approval.
+**Reads:** calendar, mailbox, task lists, decision queue, watch outputs;
+for the money watch, the statement/CSV exports the user supplies.
+**Writes:** one brief per day; draft replies only, sent only with
+approval; the promises & waiting-on ledger, when installed (other
+people's commitments, in their words); the triage flag log and the
+scan's run records, when the scan is installed; for the money watch,
+its baseline and run-record files and its job file.
+**Data classes:** personal; third-party (the ledger's entries and
+the triage flag log name other people — procedures §13).
 **Network:** your connected accounts. **Jobs:** daily brief; optional
-30-minute triage scan.
+30-minute triage scan; optional weekly money watch.
 
 ## Purpose
 
@@ -17,13 +24,19 @@ urgent mail interrupts and everything else waits for the brief.
    unreadable sources (named, with the section they starve — "unread" is
    never reported as "clear"); backup or watch anomalies; past-due shared
    tasks; detector silence (a watch with no run record 48 hours past its
-   cadence).
+   cadence); shield flags from the triage flag log, each with its reason,
+   and the triage scan's own silence (no run record 2 hours into its
+   delivery window); register items past their expiry (module 10, when
+   installed).
 1. **Watches.** Anything the standing watches flagged; silence from a
    conditional watch is normal and is not reported.
 2. **Decisions.** The queue: new and resurfacing items printed in full, the
    rest counted. The user clears by number.
 3. **Today.** Calendar, arrivals, deadlines, the one or two things that
-   will hurt if forgotten.
+   will hurt if forgotten. Plus what the optional components surface:
+   register items inside their lead window and unknown-date register
+   items as chase lines (module 10); ledger entries overdue or due
+   today, quoted with their grade carried (below).
 4. **Waiting replies.** Up to two inbox threads that need the user, with
    draft replies prepared (real drafts, never sent without per-message
    approval).
@@ -32,7 +45,9 @@ urgent mail interrupts and everything else waits for the brief.
    live sources, corrections made and attributed to the brief.
 7. **Grants inventory (1st of the month).** Standing permission grants
    listed; the user's own grants distinguished from product defaults;
-   unrecorded grants flagged. Plus: audit-due check (module 05) and a
+   unrecorded grants flagged. Plus: audit-due check (module 05), the
+   spend check (module 09, when installed), ledger entries with no date
+   set named until dated or dropped, and a
    room sweep — workstreams that no longer meet the keep test (live
    machinery, an open next action, or a dated future gate) are proposed
    for close-out.
@@ -48,8 +63,8 @@ A frequent lightweight scan that interrupts only for:
 - a direct question to the user;
 - a deadline inside 24 hours *on the user* — an action the user
   owes by then. A deadline in marketing copy ("offer ends
-  tonight"), or inside a message the shield has flagged, is not
-  one;
+  tonight"), or inside a message the shield graded scam or
+  unverified, is not one;
 - a security or account alert;
 - a shared task tagged `urgent` (if household-hq is installed).
 
@@ -65,9 +80,14 @@ of the triage scan, not an optional extra: a scan without it treats
 a spoofed VIP as a VIP.
 
 **Order matters.** The shield check runs *before* the interrupt
-rules above. A message claiming to be from a VIP, a bank, or a key
-service earns interrupt treatment only after it passes the shield —
-sender names and addresses are exactly what impersonation forges.
+rules above, and it grades every message first — scam,
+unverified, or passed (the grades are defined below). Interrupts
+of every class are for *passed* messages only: VIP treatment, a
+direct question, a deadline, a security alert, an urgent task.
+Sender names and addresses are exactly what impersonation
+forges, so a sender claim by itself earns nothing — a message
+graded unverified interrupts for no reason at all, however
+urgent its own text claims to be.
 
 **Patterns it watches for:**
 
@@ -103,12 +123,47 @@ sender names and addresses are exactly what impersonation forges.
   card", "the number in the message is not the number on the
   card". "Looks suspicious" alone is not a flag.
 
-**Two grades, honestly named.** *Scam* is for messages that meet a
-pattern above with a concrete tell. *Unverified sender* is for
-messages that cannot be confirmed either way; they are handled as
-ordinary mail. A legitimate message graded "scam" is the shield's
-worst failure — it trains the user to ignore the shield — so when
-the evidence is not there, the grade is unverified, never scam.
+**What counts as a tell.** A concrete tell is evidence checked
+against a known-good record: the sender's domain or number
+against the immediacy set's recorded senders, a number in the
+message against the number on the card, a link's destination
+against the institution's real domain. The pattern's own
+features are never the tell — urgency, secrecy, a demand to act
+now are what the pattern *is*, and a genuine message can carry
+all of them. And a sender simply absent from the set, imitating
+nobody in it, is not a scam: at most it is unverified, below,
+and only when it claims an identity the shield cares about. The
+likeliest misgrade is the user's own bank's genuine alert,
+arriving from a sending domain the set has not recorded yet —
+the set records *every* known sending domain and number per
+institution for exactly this reason, and a genuine sender the
+scan finds unlisted is proposed for the set through the decision
+queue, never added by the scan itself.
+
+**Three grades, honestly named.** *Scam* is for messages that
+meet a pattern above with a concrete tell. *Unverified sender*
+is for messages that claim an identity the shield cares about —
+a VIP, the user's bank, a key service — and whose sender cannot
+be confirmed against the recorded senders: no concrete tell,
+but no match either. *Passed* is everything else: the sender
+matches the recorded senders for the identity it claims, or the
+message claims no identity that needs confirming and meets no
+pattern.
+
+The grades decide what a message may do. Only a passed message
+can interrupt, in any class — VIP treatment, a security alert,
+a deadline, a direct question all require *passed*. An
+unverified message earns no interrupt on its sender claim
+alone, and it is not ordinary mail either: it is written to the
+flag log like a flag and surfaces in the brief's Failures, with
+its grade attached, for the user to confirm or dismiss there.
+(That is the message being held, not heard. A scam flag
+impersonating an immediacy-set member still surfaces
+immediately, as above — that is the shield speaking, not the
+message.) A legitimate message graded "scam" is the shield's
+worst failure — it trains the user to ignore the shield — so
+when the evidence is not there, the grade is unverified, never
+scam.
 
 ## Watches (the pattern)
 
@@ -140,7 +195,18 @@ the triage scan — installed or not installed, recorded either way.
   amounts move normally — variable utilities, groceries, fuel) and
   *sensitivity* exclusions (categories the user does not want
   watched or quoted at all — veterinary and medical care, in the
-  maintainer's own install). Excluded categories are never flagged.
+  maintainer's own install). An exclusion narrows what is flagged;
+  it never makes a charge invisible. A first sighting in a
+  variability-excluded category still flags NEW — the exclusion
+  silences its later amount changes, not its existence. A first
+  sighting in a sensitivity-excluded category flags as NEW with no
+  merchant or amount printed: the user learns a charge exists in
+  that category, and nothing more. Which category a charge belongs
+  to comes only from the baseline's exclusion listing or the
+  export's own category field — never from the agent's inference
+  about a merchant. Exclusions change only on the user's explicit
+  instruction, and the change is recorded in the baseline with its
+  date.
 - **"Recurring" is a baseline property, not a guess.** A charge is
   in scope when it is in the baseline. A charge sighted for the
   first time is flagged NEW — a candidate, nothing more. It enters
@@ -161,22 +227,50 @@ the triage scan — installed or not installed, recorded either way.
   anyone. A flag that warrants action becomes a decision-queue
   item; cancelling or disputing then needs a ticket, like any
   irreversible action.
+- **Silence never settles a money-watch flag.** A decision-queue
+  item from this watch never carries an accepting default: its
+  only printed default is no action — the charge stays flagged and
+  the baseline stays unchanged. Procedures §3 lets silence consent
+  to a printed low-stakes default, and enrolling or repricing a
+  charge in the baseline is exactly the quiet change that consent
+  must not reach here. A money-watch item is resolved by the
+  user's word, or it is not resolved.
 - **A run never edits the baseline.** When a flag is raised — a
   price change, a confirmed new charge, a refunded duplicate — the
   baseline keeps reading the old state until the user resolves the
-  flag's decision-queue item. On resolution, the agent updates the
-  affected line and records the decision and its date on the line
-  itself. Until then, the same change flags again on the next run
-  that brings new data — that repetition is the mechanism working,
-  not spam: the flag is unresolved.
+  flag's decision-queue item (by their word — never by silence;
+  see above). On resolution, the agent updates the affected line
+  and records the decision and its date on the line itself. Until
+  then, the same change flags again on the next run that brings
+  new data — that repetition is the mechanism working, not spam:
+  the flag is unresolved.
 - **Cadence is weekly; data may not be.** A run with no new export
   since the last run records "no new data" in the run record and
   stays silent — it does not re-compare the old export. Flags are
   computed only on new data. The run record is written either way.
-- **The baseline is a financial record** (procedures §13): it lives
+- **"New data" is judged by transaction date, not by file.** An
+  export whose period overlaps the last run's re-delivers old
+  rows. A row dated inside the period the last run already covered
+  that matches a covered row on date + merchant + amount is
+  neither new nor a duplicate — it is the overlap, and it is
+  ignored. Only transactions dated after the last run's covered
+  period are new data, whatever file they arrived in.
+- **A cancelled charge retires; it is not deleted.** When the user
+  confirms a baseline charge is cancelled, its line moves to a
+  Retired section of the baseline file, carrying the cancellation
+  date and the number of the queue item that resolved it. A
+  retired line no longer flags; if that merchant charges again,
+  the charge is a first sighting (NEW), like any other.
+- **The baseline is a financial record** (procedures §13 — the
+  rule lives there; this is its money-watch application): it lives
   in a local workspace file kept for the purpose, never on a shared
   surface, and figures from it are quoted from the file, not from
-  memory.
+  memory. Like every §13 holding it carries a `(review-by: ...)`
+  date — the baseline template has the field, and §13 names where
+  the date is ledgered so the brief surfaces it. The exports it
+  was built from are holdings too: they live in the exports folder
+  (Install step 5), and the plan records that folder with its own
+  review-by date.
 
 ## The promises & waiting-on ledger (optional component)
 
@@ -192,10 +286,12 @@ such surface until this one.
 **Data classes:** personal, third-party — entries name the other
 party and quote their words (procedures §13). The ledger lives in
 a local workspace file kept for the purpose, never on a shared
-surface.
+surface. Like every §13 holding, the ledger file carries a
+`(review-by: ...)` date, set at install.
 
 - **The quote is the record — and entries carry a grade.** Every
-  entry names how its words are held, one of three grades:
+  entry carries an explicit `Grade:` marker naming how its words
+  are held, one of three grades:
   *verbatim* — the commitment in the words as actually said or
   written, with a source locator (the message, email, or note it
   came from, and its date); *user's own record* — the commitment
@@ -205,22 +301,45 @@ surface.
   the user's record; *unverified* — the words cannot be
   recovered: the entry records the paraphrase as a note, explicitly
   not in quotes, marked unverified. A paraphrase is never dressed
-  as a quote, and nothing is reconstructed from memory.
+  as a quote, and nothing is reconstructed from memory. The grade
+  is decided by what the agent has actually read: *verbatim*
+  requires the words themselves in a message, email, or note the
+  agent read. A person's report of what someone said — the user
+  recounting a call, a note summarizing a conversation — is never
+  verbatim, however confident the report; it is the user's own
+  record when the user's note is the source, unverified when even
+  that is missing.
 - **Direction and due date.** Each entry is *I owe* or *waiting
   on*, names the other party, and carries a due date — the date in
   the quote, or the date the user sets when the quote names none.
-  `Due: not set` is a legal state: an entry nobody could date.
+  A relative date in the quote ("refund in five business days")
+  is recorded with its computation shown — `Due <date> (computed:
+  5 business days from <anchor date>)` — never as a bare inferred
+  date. `Due: not set` is a legal state: an entry nobody could date.
   A dateless entry cannot surface by date, so it resurfaces the
   other way (below) until the user dates or drops it.
 - **States: open, done, dropped.** Done means verified: the quote
   arrived, the refund posted, the thing was seen to happen — not
   assumed, not "probably". A dropped entry records who dropped it
   (the user, or the other party by their own words) and when.
+- **Adding entries after install.** Seeding is an install act;
+  life after install is governed too. An entry is added in
+  conversation with the user, or proposed from a message the
+  shield graded *passed* and confirmed by the user before it is
+  written. A message the shield graded scam never seeds an entry;
+  an unverified one proposes nothing until the user confirms it
+  in conversation.
+  And an *I owe* is never created from another party's demand
+  alone: a message claiming the user owes something is evidence
+  of a claim, not of a commitment.
 - **Surfacing.** Open entries that are overdue or due today appear
   in the brief's **Today** section — not Decisions: the queue is
   for items the user clears by number, and a ledger entry is not
   cleared, it is chased, done, or dropped. The brief quotes the
-  entry's quote and due date from the ledger, never from memory.
+  entry's quote and due date from the ledger, never from memory,
+  and carries the entry's grade with it: a non-verbatim entry is
+  named as such ("unverified" / "wording unverified"), never
+  surfaced with a verbatim entry's authority.
   Open entries with `Due: not set` are named in the brief's
   monthly (1st-of-the-month) pass, alongside the grants
   inventory, until each is dated or dropped — a dateless entry is
@@ -231,20 +350,28 @@ surface.
   is a message like any other — it needs a ticket with a
   content-exclusion list (module 00) before it goes anywhere.
 
-**Worked example — returns and refunds.** A purchase return is a
-waiting-on entry: the merchant owes the refund. The entry's quote
-is the return confirmation's own words when there are words to
-quote, its source the confirmation message, and its due date the
-return window's close — the last day the return can still be
-made. An in-store return on a paper receipt the agent never sees
-is entered on the user's own record instead: firm as to the
-refund owed, wording unverified, source locator the user's note.
-Drop-off is not done:
-the entry stays open after the package is mailed, until the
-refund is verified — posted to the account, or confirmed in the
-merchant's own record. That is the ledger's whole discipline in
-one everyday case: an errand is not finished when it is sent, it
-is finished when the other side's part is seen to have happened.
+**Worked example — returns and refunds.** A purchase return is
+two entries, because two different parties owe two different
+things. The return itself is an *I owe*: the user owes the
+merchant the goods, due at the return window's close — the last
+day the return can still be made — and it surfaces with a lead
+time, or as due-within-3-days, so the window is not discovered
+as it shuts. The refund is a *waiting on*: the merchant owes the
+money, its quote the return confirmation's own words when there
+are words to quote, its source the confirmation message, and its
+due date the confirmation's stated refund period counted from
+drop-off or receipt (`Due <date> (computed: ...)` when the
+period is relative) — so a refund that never posts surfaces when
+it should have landed, not weeks later. An in-store return on a
+paper receipt the agent never sees is entered on the user's own
+record instead: firm as to the refund owed, wording unverified,
+source locator the user's note. Drop-off is not done:
+the waiting-on entry stays open after the package is mailed,
+until the refund is verified — posted to the account, or
+confirmed in the merchant's own record. That is the ledger's
+whole discipline in one everyday case: an errand is not finished
+when it is sent, it is finished when the other side's part is
+seen to have happened.
 
 ## Install
 
@@ -252,7 +379,7 @@ is finished when the other side's part is seen to have happened.
    time (user's morning, their timezone) and delivery (main chat).
 2. Create the VIP list and interrupt rules with the user. "None named yet" is a legitimate list — an empty interrupt lane is a state, not a gap.
 3. Confirm module 00's decision queue exists in its canonical shape — the brief is its delivery vehicle. There is nothing to seed: the queue starts empty and its first real item is #1.
-4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected in the interview (the user's bank, toll operator, package carrier, key services). The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional.
+4. Optional: the triage scan job, 30-minute cadence, same interrupt rules. Create `jobs/inbox-triage.md` from `triage-job.template.md`, filling in the VIP list, the interrupt rules, the delivery window, and the shield's **immediacy set** — the VIPs plus the institutions collected at install (the user's bank, toll operator, package carrier, key services), each with *every* known sending domain and number, one per line: institutions send genuine mail from several domains, and an unlisted genuine sender is the shield's likeliest misgrade. The wizard collects the set as a plan question (Step 4); a set nobody collected is a defense that exists only on paper. The shield check is part of the scan's rules — it runs before the interrupt rules — and is not separately optional. The job also names the scan's records: a run-record file the scan appends on every run, and a flag log the brief reads (the template names both).
 5. Optional: the money watch — weekly cadence. Build the baseline
    with the user from their exports into
    `finance/money-watch-baseline.md`, from
@@ -263,18 +390,45 @@ is finished when the other side's part is seen to have happened.
    file `finance/money-watch-runs.md` from
    `money-watch-runs.template.md` and the job file
    `jobs/money-watch.md` from `money-watch-job.template.md`, and
-   record the job in `JOBS.md`. (The plan may choose other paths;
+   record the job in `JOBS.md`. Statement exports live in
+   `finance/exports/` — the folder the job file reads as "the
+   newest user-supplied export"; the plan records the folder as a
+   §13 holding with a review-by date. Record the baseline and
+   run-record files in the plan's installed-file baseline as
+   `accumulating`: resolutions rewrite baseline lines and runs
+   append records by design, and hashing either would make
+   ordinary use read as drift. (The plan may choose other paths;
    it records them, and the job file names them.) The decision
    (installed / not installed) goes in the plan either way.
 6. Optional: the promises ledger — create
    `commitments/promises-ledger.md` from
    `promises-ledger.template.md` (the plan may choose another
-   path; it records it), and keep the brief template's
-   `[IF promises ledger installed]` block in the brief job's
-   instructions — the block carries the surfacing rules (overdue
-   and due-today entries in Today; `Due: not set` entries named
-   in the monthly pass). Record the decision (installed / not
-   installed) in the plan either way.
+   path; it records it), and keep — or, if the blocks were
+   dropped at an earlier install because the ledger was not yet
+   part of it, restore from the template at this pin — all three
+   of the brief template's `[IF promises ledger installed]`
+   blocks (the ledger as a source, entries in Today, undated
+   entries in the monthly pass) in the brief job's instructions —
+   the blocks carry the surfacing rules (overdue and due-today
+   entries in Today, with their grade carried; `Due: not set`
+   entries named in the monthly pass). Inventory the ledger in
+   the plan's installed-file baseline as `accumulating`: entries
+   are added and closed by design, and hashing it would make
+   ordinary use read as drift. Record the decision (installed /
+   not installed) in the plan either way.
+
+## Uninstall
+
+Removing the promises ledger component while the brief stays
+installed (or removing this module's brief while the ledger file
+remains the user's content): remove the three
+`[IF promises ledger installed]` blocks from the brief job's
+instructions, re-stamp that file's line in the installed-file
+baseline, and record the removal in the plan. The ledger file
+itself is the user's content, not kit machinery — the export
+offer in `UNINSTALL.md` applies, and it is never deleted without
+the user's say-so. The same shape applies to the triage scan's
+blocks and records when the scan alone is removed.
 
 ## Verify
 

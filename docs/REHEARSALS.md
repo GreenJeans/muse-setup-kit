@@ -34,11 +34,13 @@ known and no more.
 
 ## What has never been rehearsed (as of the library branch)
 
-- A fresh **full** install (all nine modules) at any single pin.
+- A fresh **full** install (all ten modules) at any single pin.
 - The wizard on a **small-group (Q1c)** interview.
 - A module 05 **install** (its method — blind dual review — has
-  been run against the kit itself five times; the install path
-  has not).
+  been run against the kit itself in the rounds ROADMAP records
+  by phase: Phase 2 (pre-v0.1), Phase 5 (adversarial, v0.3), and
+  two direction rounds, Phase 6 (v0.4) and Phase 10 (v0.8) —
+  four rounds; the install path has not).
 - An uninstall of anything larger than the Starter profile, and
   any uninstall involving shares to revoke (run 8's install had
   none; the revocation steps are unrehearsed).
@@ -49,3 +51,17 @@ known and no more.
   no static-verbatim file to restore in a prose-only install;
   repair's class gates were exercised, its restore path was
   not).
+- The tree at the v0.8 pin itself: modules 00, 01, 02, 03, 06,
+  and 09 changed after runs 11–12 (the friction fixes, then the
+  EX-018/019 review fixes), so their current text is unrehearsed
+  at this pin — each module's `rehearsed_at` string says so.
+- The tree at the v0.9 pin itself: modules 00, 02, and 10
+  changed after runs 13–14 (the friction fixes, then the
+  EX-020/021 review fixes), so their current text is unrehearsed
+  at this pin — each module's `rehearsed_at` string says so.
+- The **Standard profile** (00+01+02+06+09) installed as a unit.
+  Profiles need their own rehearsals — cross-module amendments
+  are where breakage lives — and no ledger row installs Standard.
+- **Release gate for v0.8:** the tag is not cut until a fresh
+  install rehearsal runs at the release commit itself, so the
+  release ships with at least one row at its own pin.

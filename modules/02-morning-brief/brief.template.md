@@ -17,9 +17,14 @@ tight: the user reads this in two minutes. Failures first, always.
   output 72 hours after assignment (once, and again when the output
   lands)
 - [IF watches exist] Watches: <each watch's state file / last run record>
+- [IF triage scan installed] Triage flag log: <path> — shield
+  flags logged since the last brief go to Failures (step 0), each
+  with its one-line reason; the scan's run records ride the same
+  file's sibling (step 0 reads the gaps, too)
 - [IF deadlines register installed] Deadlines register: <path> —
   items past expiry go to Failures (step 0); items inside their
-  lead window (today >= expiry − lead time) go to Today (step 3);
+  lead window (today >= expiry − lead time) and not yet expired
+  go to Today (step 3);
   items whose date is still unknown go to Today as a one-line
   chase item
 - [IF promises ledger installed] Promises ledger: <path> — open
@@ -61,10 +66,20 @@ rendering, empty until a module registers into it.
    consecutive flag, fold to a count). (e) [IF shared lists exist] Tasks
    tagged `urgent` — these also interrupt between briefs, like a triage
    item. (f) Deferred checks: SETUP-PLAN.md's verification ledger — any
-   check due today or overdue is named here, with its owner.
+   check due today or overdue is named here, with its owner. The
+   ledger is also where review-by dates for local §13 holdings are
+   recorded (procedures §13), so a holding past its review-by is
+   named here like any other due check.
    (g) [IF deadlines register installed] Register items past their
    expiry — an expired document is a failure, not a deadline, and
-   stays here until it is renewed or dropped.
+   stays here until it is renewed or dropped (an item whose
+   register field reads "on expiry: lapse" appears once, then
+   retires to the register's History as lapsed).
+   (h) [IF triage scan installed] Shield flags from the triage flag
+   log since the last brief, each with its one-line reason; and
+   the scan's own liveness — no run record 2 hours into its
+   delivery window is a failure of the scan, named here like any
+   other dead detector.
 1. **Watch findings.** Anything flagged since the last brief.
 2. **Decision queue.** Print new, resurfacing, and firing-default items in
    full; count the rest. Never invent a default for an item; defaults are
@@ -72,13 +87,20 @@ rendering, empty until a module registers into it.
 3. **Today.** Calendar events, deadlines, arrivals. Flag anything the user
    is likely to have forgotten that matters today.
    [IF deadlines register installed] Register items inside their
-   lead window, with the expiry quoted from the register; register
+   lead window and not yet expired, with the expiry quoted from
+   the register (expired items are in Failures, step 0 — never
+   here); register
    items whose date is still unknown, as a one-line chase item
    ("expiry unknown — the date needs reading") in every brief
    until the item is dated or dropped.
    [IF promises ledger installed] Ledger entries overdue or due
-   today, quoted from the ledger with their due dates — chased,
-   not cleared by number.
+   today, quoted from the ledger with their due dates and their
+   grade carried — a non-verbatim entry is named unverified, not
+   quoted with a verbatim entry's authority — chased,
+   not cleared by number. For a waiting-on entry that is due,
+   prepare a follow-up draft where a channel exists: a real
+   draft, never sent; sending one needs a ticket with a
+   content-exclusion list (module 00).
 4. **Waiting replies.** Up to two threads needing the user. Prepare draft
    replies as real drafts; never send. Drafts add no facts about money,
    health, legal matters, or other people that the thread doesn't contain.

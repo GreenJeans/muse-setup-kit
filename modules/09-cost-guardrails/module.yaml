@@ -16,7 +16,7 @@ reads: "your model/provider usage and billing pages (with you present), the buck
 writes: "a bucket register in the procedures; decision-queue items when a cap is approached."
 network: "your providers' billing pages only, with you present."
 jobs: "one monthly spend check (rides the brief if installed)."
-rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending"
+rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774; v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending"
 reviewed_at: null
 reviewed_by: null
 data_classes: [financial]

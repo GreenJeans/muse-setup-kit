@@ -16,7 +16,7 @@ reads: "calendar, mailbox, task lists, decision queue, watch outputs."
 writes: "one brief per day; draft replies only, sent only with approval."
 network: "your connected accounts."
 jobs: "daily brief; optional 30-minute triage scan."
-rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending"
+rehearsed_at: "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 run 12 at df56774 (Starter + money watch); v0.9 runs 13-14 at abb9f86 (run 14: triage, shield, ledger exercised); changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending"
 reviewed_at: null
 reviewed_by: null
 data_classes: [personal, third-party]

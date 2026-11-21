@@ -51,10 +51,14 @@ the same human's other agents). There is no open enrollment.
    constraints, active-area pointers. Never: personal facts about people,
    financial figures, legal or family matters, or synthesized profiles.
 7. **Data hygiene.** No credentials, no raw personal data, no third-party
-   private information in the exchange. Tasks carry the minimum context
-   the work needs.
+   private information in the exchange — and no financial or health
+   records at all, the user's own included (procedures §13: sensitive
+   records never live in a multi-agent exchange). Tasks carry the
+   minimum context the work needs.
 8. **Staleness.** Outputs unclaimed after 72 hours are flagged once, and
-   again on ingest or rejection.
+   again on ingest or rejection. An output that never arrives is
+   flagged once at 72 hours after assignment, and again when the
+   output lands.
 9. **Cheap-model triage.** A small local model may classify and pre-sort
    exchange traffic. It never synthesizes, decides supersession, or
    adopts changes.

@@ -56,6 +56,8 @@ coordinate through shared state, as follows.
 
 - Gift purchases or anything meant to be a surprise.
 - Financial figures, health details, or legal matters.
+- Third-party personal records — data about anyone outside this
+  household.
 - Edits to <AGENT A>'s notebook section.
 - Sharing any HQ surface with anyone new.
 

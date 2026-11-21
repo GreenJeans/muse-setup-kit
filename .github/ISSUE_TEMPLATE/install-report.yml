@@ -45,6 +45,7 @@ body:
         - 05 Evaluation Kit
         - 08 Skill Lifecycle (Lite)
         - 08 Skill Lifecycle (Full)
+        - 10 Deadlines & Expiry Register
         - None
     validations:
       required: true

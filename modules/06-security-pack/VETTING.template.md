@@ -11,8 +11,13 @@ a version change means a new entry.
 - **Source:** <where it came from>
 - **Pinned:** <version or commit hash>
 - **Read in full at the pin:** yes / no / scoped — full for <scope>,
-  <rest> not read (if no, stop — do not install; an unscoped "yes"
-  for a partial read is a false record)
+  <rest> not read (an unscoped "yes" for a partial read is a false
+  record. If no: say plainly what was read instead — for a hosted
+  connector, "source not readable — hosted" — and what observable
+  surface the vetting ran on. Proceeding on that basis is the
+  user's decision, recorded in their words under **Why**. For a
+  connector or MCP server the presented manifest must still have
+  been read in full; if it was not, stop)
 - **Reads:** <files, accounts, data it accesses>
 - **Writes:** <what it creates or changes>
 - **Network:** <endpoints it contacts>
@@ -27,19 +32,39 @@ Connectors and MCP servers add these fields (module 06's vetting pack):
 
 - **Provenance tier:** official / community / unknown
 - **Typosquat check:** <name and source compared character-by-character
-  against the official source — match, or the difference found>
-- **OAuth scopes:** <each scope requested, and the feature it maps to;
-  "none" for a local-only item>
-- **Tool-manifest hash:** <sha256 of the named manifest artifact: the
-  vendor-published manifest file (name it), or the tool list exactly
-  as presented at first connection, saved verbatim as the artifact;
-  a vendor-stated hash with no artifact behind it is recorded as
-  "vendor-stated, unverifiable"; MCP servers only>
+  against the official source — match, or the difference found;
+  "no official comparator" when no official item exists>
+- **Scopes / token privilege, as observed:** <each scope on the
+  consent screen (or requested-scope list) at connection time, and
+  the feature it maps to — vendor statements are not the record;
+  for key/PAT servers, the token's breadth and whether a narrower
+  or read-only token exists; "none" for a local-only item>
+- **Accepted excess scopes:** none / <official tier only: each
+  observed scope that maps to no wanted feature and that the user
+  accepted anyway — the connector named, each scope named, in the
+  user's own words, stating that a narrower configuration was
+  unavailable or declined. This record is the user's decision,
+  not an audit pass; community and unknown tiers have no such
+  record — excess there is a walk-away>
+- **Presented-manifest hash:** <sha256 of the presented manifest
+  captured at first connection — server instructions, every tool's
+  name, description, and input schema including parameter
+  descriptions, and prompt/resource descriptions — saved exactly
+  as received, in the order presented, as an artifact kept with
+  this log; name the capture method if it was anything else. A
+  vendor-published manifest file is compared against the capture,
+  never used as the pin; a vendor-stated hash with no artifact
+  behind it is recorded as "vendor-stated, unverifiable"; MCP
+  servers only>
 - **Re-vet trigger:** any version change; any scope increase; any
-  tool-manifest hash change
+  presented-manifest hash change (re-checked at session start
+  where the platform exposes it, and at the monthly inventory)
 
 Field modules (kit-library packages) replace the connector fields
-above with these (rules in `docs/library.md`):
+above with these (rules in `docs/library.md`). **Not applicable
+until the library phase ships the package format: a package
+without a `module.yaml` is vetted as a third-party skill pack
+under the standard record, not under this block.**
 
 - **Library / module:** <library-id>/<module-id>
 - **module.yaml fields present:** <the fields docs/library.md

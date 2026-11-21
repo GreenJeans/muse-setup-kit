@@ -21,10 +21,14 @@
 - [ ] If the seed includes an item already past its expiry, its
       state reads expired — not current, not clear.
 - [ ] Surfacing is wired as the plan states: the brief job's
-      sources name the register (brief installs), or the manual
-      deferred check is recorded in the plan's verification ledger
-      with its cadence (no-brief installs) — and the plan says in
-      words which of the two is true.
+      sources name the register and its instructions keep — or,
+      for a module installed after the brief, restore — all three
+      `[IF deadlines register installed]` blocks (brief installs),
+      or the manual deferred check is recorded in the plan's
+      verification ledger with its cadence (no-brief installs) —
+      and the plan says in words which of the two is true.
+- [ ] Every row carries its On expiry field (renew or lapse),
+      set with the user or recorded as the module's default.
 
 ## Deferred
 
@@ -45,12 +49,17 @@
       the old expiry sits in History with the renewal date, and
       the item stops surfacing.
 - [ ] **Expired handling** (due: the first item to expire after
-      install; an item already expired at install makes it due at
-      the first brief after install): the expired item appears in
-      the brief's Failures
+      install, or install + 12 months, whichever comes first —
+      the ledger row names the event and `due:` carries the
+      operative date; an item already expired at install makes it
+      due at the first brief after install): the expired item
+      appears in the brief's Failures
       section — never in Today, never described as clear — and
-      keeps appearing until it is renewed or dropped.
-- [ ] **Unknown-date chase** (due: the first brief after install;
+      keeps appearing until it is renewed or dropped (a lapse
+      item appears once, then sits in History as lapsed).
+- [ ] **Unknown-date chase** (due: the first brief after install,
+      or install + 7 days, whichever comes first — the ledger row
+      names the event and `due:` carries the operative date;
       brief installs only, and only when the seed holds an
       `unknown` item): the item appears in the brief's Today
       section as a one-line chase item, and keeps appearing in

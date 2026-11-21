@@ -22,3 +22,10 @@
 - [ ] **First inventory** (due: the 1st of next month): standing grants
       are listed, the user's own grants distinguished from product
       defaults, and anything unrecorded is flagged.
+- [ ] **First vetting** (due: with the first third-party vetting after
+      install): the entry carries the provenance tier, the typosquat
+      result (or "no official comparator"), the scopes or token
+      breadth *as observed* at connection time, and — for an MCP
+      server — the presented-manifest hash with its capture method
+      named: the presented manifest captured in full, not a
+      vendor-published file or a vendor-stated number.
