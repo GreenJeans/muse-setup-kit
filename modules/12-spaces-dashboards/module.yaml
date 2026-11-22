@@ -16,7 +16,7 @@ reads: "the user's space catalog (each space's actions, snapshot and state, vers
 writes: "a spaces audit and redesign plan in the workspace; new or edited spaces only after the user approves the plan; sidebar order only on approval; deletes only per space, individually confirmed."
 network: "public web, for pattern research when the platform's own literature is thin."
 jobs: "none of its own; each dynamic page names its refresh machinery (a scheduled space action preferred) at build time, and those schedules belong to the pages."
-rehearsed_at: "run 21 (2026-11-21) on the spaces-module branch pre-commit: scripted-persona audit of a fictional 9-space catalog; procedure and templates exercised, platform mechanics not"
+rehearsed_at: "run 21 (2026-11-21) on the spaces-module branch pre-commit: scripted-persona audit of a fictional 9-space catalog; procedure and templates exercised, platform mechanics not. Texts and the run record amended in the EX-036/037 fix pass (branch tip b7844ce); re-rehearsal at the committed pin pending"
 data_classes: [personal]
 action_classes: [delete]
 files:
