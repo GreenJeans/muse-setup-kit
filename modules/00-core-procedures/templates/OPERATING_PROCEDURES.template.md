@@ -105,6 +105,15 @@ stays however the user keeps it, and this section is inert.)*
   panels), canary-check the signed-in identity.
 - Identity gates (logins, approvals, verification codes) are the user's
   job, handled through the platform's secure flows.
+- When a second agent verifies work, it is shown the task and the
+  resulting state — the diff, the files, the test output — never the
+  builder's working notes or chain of reasoning. A verifier that reads
+  the reasoning tends to ratify it.
+- Multi-agent shapes get one chance to fail cheap: if a builder and a
+  second-agent verifier disagree twice on the same change, or two
+  parallel lanes turn out to touch a shared contract neither declared,
+  stop parallelizing — collapse to a single thread and put the
+  disagreement in front of the user.
 
 ## 9. Room close-out
 

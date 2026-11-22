@@ -16,7 +16,7 @@ reads: "the exchange folders and queue."
 writes: "a protocol doc, a queue sheet, per-agent inboxes/outboxes, published pages, a `Work/` folder for the maintainer's own outputs, and `Snapshots/` with ingest memos."
 network: "your cloud storage."
 jobs: "optional outbox polling in the brief."
-rehearsed_at: "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending"
+rehearsed_at: "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by orchestration-patterns additions, re-rehearsal pending"
 data_classes: [personal, third-party]
 action_classes: [none]
 files:
