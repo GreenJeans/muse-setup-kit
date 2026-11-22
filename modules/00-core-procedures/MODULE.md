@@ -146,7 +146,11 @@ notes or chain of reasoning. A verifier that reads the reasoning
 tends to ratify it: the assumptions that produced the work read,
 in the builder's own telling, as justifications for it. Fresh
 eyes are the entire value of the second agent; the builder's
-scratch work spends them.
+scratch work spends them. The ratification claim — here, and in
+the stop condition below — is the kit's working assumption,
+offered as design rationale rather than a measured result; it
+changes nothing about the gate's standing above as a record and
+audit mechanism.
 
 **Error compaction** (implements §7, ground truth; 12-Factor Agents
 factor 9). When a failed command is retried, the raw log does not
@@ -185,16 +189,36 @@ shape, not an upgrade. Pick by the work: a simple task goes to a
 single thread; a medium one to a builder plus a verifier (the
 gate above, or a second agent under the input rule just stated);
 work that divides cleanly goes to parallel lanes; a hard task
-with a deterministic gate goes to best-of-N sampling under
-module 05's Track B; a hard, open-ended question goes to a
-council (module 04); a large or risky change finishes with lens
-reviewers (module 05's audit method).
+with a deterministic gate goes to best-of-N sampling (below);
+a hard question whose answers can be checked against a source —
+a review, an audit, a factual dispute — goes to a council
+(module 04), and a question of taste goes to one decider; a
+large or risky change finishes with lens reviewers (module 05's
+audit method).
+
+**Best-of-N, in production.** Sampling one task N times and
+keeping the best result is a way of doing work. It is not
+module 05's Track B: Track B *measures* setups by running tasks
+repeatedly, and its trials per arm are a different N from this
+one — here N is samples of a single task. Production sampling
+pays only when a gate can reject: a deterministic check, or a
+verifier strong enough to tell the best sample from a plausible
+one. Cap N by that gate's strength; the coverage arithmetic,
+and why coverage is not a pass rate, is in module 05's Track B.
+
+Modules 04 and 05 are optional, and the routing above assumes
+them. Where they are not installed, the shapes collapse:
+builder plus verifier covers the medium and hard cases, and a
+question that would have gone to a council goes in front of
+the human instead.
 
 Lanes are a coordination problem before they are a parallelism
-win. In CooperBench (Khatua et al., COLM 2026; 652 coding
-tasks), two agents cooperating on shared code succeeded about
-30% less often than one agent doing both tasks, and frontier
-models lost closer to 50% — not because their edits collided,
+win. In CooperBench (Khatua et al., COLM 2026,
+arXiv:2601.13295; 652 coding tasks), two agents cooperating on
+shared code succeeded about 30% less often than one agent doing
+both tasks, and frontier models lost closer to 50% — both
+figures relative, not percentage points — not because their
+edits collided,
 but because coordination failed: messages went unread,
 commitments drifted, each agent's picture of the other's work
 went stale. So split only on a frozen contract: the interface
@@ -206,10 +230,10 @@ bandwidth — every lane's output lands on the same human, and
 past the number they can actually review, extra lanes produce
 unreviewed work, not speed.
 
-**Stop condition.** Parallel shapes get one chance to fail
-cheap. If a builder and its verifier disagree twice on the same
-change, or two lanes turn out to touch a shared contract
-neither declared, stop parallelizing: collapse to a single
+**Stop condition.** Multi-agent shapes get one chance to fail
+cheap. If a builder and a second-agent verifier disagree twice
+on the same change, or two lanes turn out to touch a shared
+contract neither declared, stop parallelizing: collapse to a single
 thread and put the disagreement in front of the human. A
 failure rooted in a shared assumption is not fixed by more
 agents — each new agent inherits the assumption and returns a
