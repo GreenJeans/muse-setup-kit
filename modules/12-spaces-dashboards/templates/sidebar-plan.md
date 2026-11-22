@@ -25,6 +25,9 @@ recorded)
 |       |                                        |              |
 
 ## Deletes (each individually confirmed)
+(A delete approved in step 3 whose page has changed since
+the approval is void: re-present the page and record the
+fresh confirmation in this table — procedure step 5.)
 | Space | Slug / id | Confirmed (date) | Substance carried by | Substance verified (date) |
 |-------|-----------|------------------|----------------------|---------------------------|
 |       |           |                  |                      |                           |
