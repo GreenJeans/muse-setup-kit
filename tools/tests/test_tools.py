@@ -1671,3 +1671,37 @@ class CompactAndRunnerFixTest(unittest.TestCase):
                 rec = json.load(fh)
             self.assertEqual(rec["variant"], "B")
             self.assertIn(rec["trial"], ("1", "2"))
+
+
+class SpacesDashboardsRegistrationTest(unittest.TestCase):
+    def test_directory_carries_the_module(self):
+        doc = json.load(open(os.path.join(REPO, "directory.json")))
+        entries = {m["id"]: m for m in doc["modules"]}
+        self.assertIn("core/spaces-dashboards", entries)
+        entry = entries["core/spaces-dashboards"]
+        files = {f["path"]: f["class"] for f in entry["files"]}
+        for t in ("templates/space-audit.md",
+                  "templates/space-scope.md",
+                  "templates/sidebar-plan.md"):
+            self.assertEqual(files[t], "static-rendered")
+        self.assertIn("personal", entry["data_classes"])
+        self.assertEqual(entry["depends_on"], ["core/core-procedures"])
+        self.assertEqual(entry["requires"], ["spaces"])
+
+    def test_profiles_do_not_include_spaces_dashboards(self):
+        # Profile membership is the maintainer's merge call;
+        # until then the module is offered per module only.
+        sys.path.insert(0, os.path.join(REPO, "tools"))
+        import module_yaml
+        doc = module_yaml.parse_file(
+            os.path.join(REPO, "wizard", "manifest.yaml"))
+        for prof in doc["profiles"]:
+            self.assertNotIn("core/spaces-dashboards", prof["modules"])
+
+    def test_matrix_and_readme_carry_the_module(self):
+        matrix = open(os.path.join(
+            REPO, "docs", "capability-profiles.md")).read()
+        self.assertIn("12 Spaces", matrix)
+        self.assertIn("| spaces |", matrix)
+        readme = open(os.path.join(REPO, "README.md")).read()
+        self.assertRegex(readme, r"(?m)^\| 12 \|")

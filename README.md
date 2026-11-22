@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 59,200
+install is heavy work — a full one reads on the order of 62,200
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -79,9 +79,9 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~26,900 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~34,100 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all eleven modules | ~59,200 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~26,800 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~34,000 words | Plus the memory schema with its linter, and the security pack. |
+| Everything | all twelve modules | ~62,200 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -116,6 +116,7 @@ pin — you would be the first" where that is true.
 | 09 | **Cost & billing guardrails** | Bucket discipline for agent spending: know whether a run draws on a subscription, an API key, or a router before it starts; hard caps set in advance; a monthly spend check | 00 |
 | 10 | **Deadlines & expiry register** | One local register of what expires — passports, licences, warranties, policies, certifications — each with a lead time and a pointer to the original; no document numbers stored | 00; 02 surfaces it in the brief (manual check without) |
 | 11 | **Persona & soul** | Author the persona file instead of inheriting the stock template: an authoring interview, a front-loaded SOUL template filled with real examples, a mechanical linter, and staged-diff governance for every later change | 00; a persistent persona file |
+| 12 | **Spaces & living dashboards** | Audit the pages your setup accumulates against live state, merge peers, fold research into lineage, set a sidebar budget, and build the survivors as living pages: exception-first, status as an enum, freshness-stamped, refreshed by machinery | 00; a spaces surface |
 
 Not a module: **infra patterns** (layered backups, health watches,
 alert discipline for people with a host) live in
@@ -212,6 +213,7 @@ modules/
   09-cost-guardrails/      module.yaml · MODULE.md · VERIFY.md · templates/ (bucket register)
   10-deadlines-register/   module.yaml · MODULE.md · VERIFY.md · register template
   11-persona-soul/         module.yaml · MODULE.md · VERIFY.md · templates/ (SOUL template, authoring interview) · tools/ (soul linter)
+  12-spaces-dashboards/    module.yaml · MODULE.md · VERIFY.md · templates/ (space audit, space scope, sidebar plan)
 tools/               ← kit_selfcheck.py (the kit lints itself) · module_yaml.py (the strict package parser) · build_directory.py (generates directory.json + advisories.json) · tests/ (tool fixtures)```
 
 ## Status

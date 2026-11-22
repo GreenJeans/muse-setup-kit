@@ -1,5 +1,5 @@
 {
-  "generated_from": "2dc3e42cf7d9ae0079ba2526f2b5ef702a8b42c0",
+  "generated_from": "93bed3e5a948c8cd68abe667eeff4884e8dafdd4",
   "library": "core",
   "modules": [
     {
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 7803,
+      "audit_words": 7646,
       "data_classes": [
         "personal"
       ],
@@ -603,6 +603,53 @@
       "title": "Skill Lifecycle",
       "version": "0.5",
       "writes": "staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills, and a pointer line in the agent's main instruction file (added at the Lite install)."
+    },
+    {
+      "action_classes": [
+        "delete"
+      ],
+      "audit_words": 3120,
+      "data_classes": [
+        "personal"
+      ],
+      "degrades_without": [
+        "scheduling"
+      ],
+      "depends_on": [
+        "core/core-procedures"
+      ],
+      "dir": "modules/12-spaces-dashboards",
+      "files": [
+        {
+          "class": "static-rendered",
+          "path": "templates/space-audit.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "templates/space-scope.md"
+        },
+        {
+          "class": "static-rendered",
+          "path": "templates/sidebar-plan.md"
+        }
+      ],
+      "id": "core/spaces-dashboards",
+      "jobs": "none of its own; each dynamic page names its refresh machinery (a scheduled space action preferred) at build time, and those schedules belong to the pages.",
+      "kit_compat": [
+        "kit-1"
+      ],
+      "license": "MIT",
+      "maintainer": "Muse Setup Kit maintainer",
+      "network": "public web, for pattern research when the platform's own literature is thin.",
+      "pitch": "Audit the pages your setup accumulates, merge and budget them, and build the few that stay alive: exception-first, enum status, freshness-stamped, auto-refreshed.",
+      "reads": "the user's space catalog (each space's actions, snapshot and state, version history), the sidebar order, refresh schedules, and the tracked items or goals a page claims to reflect. Metadata and freshness first; page content only as needed.",
+      "rehearsed_at": "run 21 (2026-11-21) on the spaces-module branch pre-commit: scripted-persona audit of a fictional 9-space catalog; procedure and templates exercised, platform mechanics not",
+      "requires": [
+        "spaces"
+      ],
+      "title": "Spaces & Living Dashboards",
+      "version": "0.1",
+      "writes": "a spaces audit and redesign plan in the workspace; new or edited spaces only after the user approves the plan; sidebar order only on approval; deletes only per space, individually confirmed."
     }
   ]
 }

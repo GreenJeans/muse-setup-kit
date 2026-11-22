@@ -12,17 +12,18 @@ Legend: **required** = the module will not install without it.
 **degrades** = installs and works; the named function weakens.
 **—** = unaffected.
 
-| Capability | 00 Procedures | 01 Memory | 02 Brief | 03 HQ | 04 Exchange | 05 Evaluation | 06 Security | 08 Skill lifecycle | 09 Cost | 10 Deadlines | 11 Persona |
-|---|---|---|---|---|---|---|---|---|---|---|---|
-| scheduling | — | degrades | degrades | — | — | degrades | degrades | degrades (Full only) | degrades | — | degrades |
-| shell + python | — | degrades | degrades | — | — | degrades | — | degrades (Full only) | — | — | degrades |
-| second person | — | — | — | required | — | — | — | — | — | — | — |
-| shared docs | — | — | — | required | — | — | — | — | — | — | — |
-| shared tasks | — | — | — | required | — | — | — | — | — | — | — |
-| shared storage | — | — | — | — | required | — | — | — | — | — | — |
-| other agents | — | — | — | — | required | degrades | — | — | — | — | — |
-| persona file | — | — | — | — | — | — | — | — | — | — | required |
-| module 02 installed | — | — | — | degrades | — | — | — | — | — | degrades | — |
+| Capability | 00 Procedures | 01 Memory | 02 Brief | 03 HQ | 04 Exchange | 05 Evaluation | 06 Security | 08 Skill lifecycle | 09 Cost | 10 Deadlines | 11 Persona | 12 Spaces |
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| scheduling | — | degrades | degrades | — | — | degrades | degrades | degrades (Full only) | degrades | — | degrades | degrades |
+| shell + python | — | degrades | degrades | — | — | degrades | — | degrades (Full only) | — | — | degrades | — |
+| second person | — | — | — | required | — | — | — | — | — | — | — | — |
+| shared docs | — | — | — | required | — | — | — | — | — | — | — | — |
+| shared tasks | — | — | — | required | — | — | — | — | — | — | — | — |
+| shared storage | — | — | — | — | required | — | — | — | — | — | — | — |
+| other agents | — | — | — | — | required | degrades | — | — | — | — | — | — |
+| persona file | — | — | — | — | — | — | — | — | — | — | required | — |
+| spaces | — | — | — | — | — | — | — | — | — | — | — | required |
+| module 02 installed | — | — | — | degrades | — | — | — | — | — | degrades | — | — |
 
 ## What each degradation means
 
@@ -40,7 +41,9 @@ Legend: **required** = the module will not install without it.
   Module 09's monthly spend check becomes a manual read. Module
   11's periodic persona reread has no pass to ride and becomes a
   manual or session-start check, ledgered like any deferred check.
-  Nothing
+  Module 12's living pages cannot auto-refresh; the module
+  degrades to the audit and the plan, its pages declared static
+  until scheduling exists. Nothing
   fails loudly; the risk is that manual steps get skipped, which is
   why JOBS.md separates scheduled jobs from planned ones.
 - **No shell + python.** The kit's five tools (memory linter,
