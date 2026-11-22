@@ -1,5 +1,5 @@
 {
-  "generated_from": "4d879bd186c0e02a3fe860e625ac71904e07484e",
+  "generated_from": "27fe21b87297fe63e8651ab9e068f14a3ef1dede",
   "library": "core",
   "modules": [
     {
@@ -349,7 +349,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 3191,
+      "audit_words": 3418,
       "data_classes": [
         "personal",
         "third-party"
@@ -386,7 +386,7 @@
       "network": "none.",
       "pitch": "Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.",
       "reads": "your memory files.",
-      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by the 'Forgetting cleanly' section, rehearsed in run 25 (2026-11-22) on the forgetting-section branch \u2014 verb choice, plan-first flow, approval scope, and closing verification exercised on a fictional store, changed surface only; the module's install path was not re-run",
+      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by the 'Forgetting cleanly' section, rehearsed in run 25 (2026-11-22) at pin 25ced3b on the forgetting-section branch \u2014 verb choice, plan-first flow, approval scope, and closing verification exercised on a fictional store, changed surface only; the module's install path was not re-run",
       "requires": [],
       "title": "Memory Architecture",
       "version": "0.8",
