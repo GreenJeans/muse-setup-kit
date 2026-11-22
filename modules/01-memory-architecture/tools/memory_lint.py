@@ -29,7 +29,14 @@ run, findings count. Exit code 0 = no high-severity findings, 1 = some.
 Usage:
   memory_lint.py --memory-dir ~/memory --procedures ~/OPERATING_PROCEDURES.md \
                  --jobs ~/JOBS.md --report ~/memory/reports/lint-report.md
-All arguments optional; defaults suit a kit-style workspace layout.
+All arguments optional. The defaults name the workspace this
+linter is installed into — the folder two levels above the
+script, since it installs at <workspace>/tools/ — never the
+user's home directory: a default that silently lints a different
+store produces a valid-looking report about the wrong memory.
+Every report's run receipt names the store it scanned, so the
+default is checkable from the report itself. Pass explicit flags
+to lint any other store.
 This is a starting point — adapt the heuristics to your store.
 """
 
@@ -114,12 +121,20 @@ def check_review_by(pages, today=None):
     return findings
 
 
+def install_workspace():
+    """The workspace this linter is installed into: the folder
+    two levels above the script (it installs at
+    <workspace>/tools/). Defaults resolve from here, never from
+    the user's home directory."""
+    return os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
 def main():
     ap = argparse.ArgumentParser()
-    home = os.path.expanduser("~")
-    ap.add_argument("--memory-dir", default=os.path.join(home, "memory"))
-    ap.add_argument("--procedures", default=os.path.join(home, "OPERATING_PROCEDURES.md"))
-    ap.add_argument("--jobs", default=os.path.join(home, "JOBS.md"))
+    ws = install_workspace()
+    ap.add_argument("--memory-dir", default=os.path.join(ws, "memory"))
+    ap.add_argument("--procedures", default=os.path.join(ws, "OPERATING_PROCEDURES.md"))
+    ap.add_argument("--jobs", default=os.path.join(ws, "JOBS.md"))
     ap.add_argument("--report", default=None)
     args = ap.parse_args()
 
@@ -171,7 +186,7 @@ def main():
     high = sum(1 for sev, _ in findings if sev == "high")
     now = datetime.datetime.now().astimezone().isoformat(timespec="seconds")
     lines = [
-        f"run_receipt: {now} files_scanned={len(pages)} checks=A,B,C,D findings={len(findings)} high={high}",
+        f"run_receipt: {now} memory_dir={args.memory_dir} files_scanned={len(pages)} checks=A,B,C,D findings={len(findings)} high={high}",
         "",
         "# Memory lint report",
         "",
