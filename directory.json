@@ -1,12 +1,12 @@
 {
-  "generated_from": "e93fc28b0902c24f6d867a8475a575cdcc9f06d3",
+  "generated_from": "34f7c326d48626a12cbc0018a85a4067d5b471dd",
   "library": "core",
   "modules": [
     {
       "action_classes": [
         "none"
       ],
-      "audit_words": 1910,
+      "audit_words": 2070,
       "data_classes": [
         "personal",
         "third-party"
@@ -33,7 +33,7 @@
       "network": "your cloud storage.",
       "pitch": "Multiple AI agents exchanging work through shared storage \u2014 protocol, queue, blind reviews, published pages, ingest discipline.",
       "reads": "the exchange folders and queue.",
-      "rehearsed_at": "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "rehearsed_at": "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by orchestration-patterns additions, re-rehearsal pending",
       "requires": [
         "shared-storage",
         "other-agents"
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 8230,
+      "audit_words": 8552,
       "data_classes": [
         "personal"
       ],
@@ -105,7 +105,7 @@
       "network": "none.",
       "pitch": "Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.",
       "reads": "your existing agent instructions and workspace layout.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending; harness additions (verifier gate, error compaction, STATE card) exercised in run 19 on the harness branch pre-commit, changed surfaces only; EX-034/035 review fixes re-rehearsed in run 20 (gate surface) on the harness branch",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending; harness additions (verifier gate, error compaction, STATE card) exercised in run 19 on the harness branch pre-commit, changed surfaces only; EX-034/035 review fixes re-rehearsed in run 20 (gate surface) on the harness branch; changed by orchestration-patterns additions, re-rehearsal pending",
       "requires": [],
       "title": "Core Procedures",
       "version": "0.9",
@@ -190,7 +190,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 4257,
+      "audit_words": 4294,
       "data_classes": [
         "personal",
         "third-party"
@@ -293,7 +293,7 @@
       "network": "a second model if used for blind review.",
       "pitch": "Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.",
       "reads": "your procedures and memory, frozen into an audit packet.",
-      "rehearsed_at": "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal",
+      "rehearsed_at": "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal; changed by orchestration-patterns additions, re-rehearsal pending",
       "requires": [],
       "title": "Evaluation Kit",
       "version": "0.8",
