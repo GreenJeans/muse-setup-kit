@@ -1,5 +1,5 @@
 {
-  "generated_from": "93bed3e5a948c8cd68abe667eeff4884e8dafdd4",
+  "generated_from": "a8759593256f9b492e59f2b5e47c769c33f9205e",
   "library": "core",
   "modules": [
     {
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 7646,
+      "audit_words": 7803,
       "data_classes": [
         "personal"
       ],
@@ -608,7 +608,7 @@
       "action_classes": [
         "delete"
       ],
-      "audit_words": 3120,
+      "audit_words": 3140,
       "data_classes": [
         "personal"
       ],
@@ -643,7 +643,7 @@
       "network": "public web, for pattern research when the platform's own literature is thin.",
       "pitch": "Audit the pages your setup accumulates, merge and budget them, and build the few that stay alive: exception-first, enum status, freshness-stamped, auto-refreshed.",
       "reads": "the user's space catalog (each space's actions, snapshot and state, version history), the sidebar order, refresh schedules, and the tracked items or goals a page claims to reflect. Metadata and freshness first; page content only as needed.",
-      "rehearsed_at": "run 21 (2026-11-21) on the spaces-module branch pre-commit: scripted-persona audit of a fictional 9-space catalog; procedure and templates exercised, platform mechanics not",
+      "rehearsed_at": "run 21 (2026-11-21) on the spaces-module branch pre-commit: scripted-persona audit of a fictional 9-space catalog; procedure and templates exercised, platform mechanics not. Texts and the run record amended in the EX-036/037 fix pass (branch tip b7844ce); re-rehearsal at the committed pin pending",
       "requires": [
         "spaces"
       ],
