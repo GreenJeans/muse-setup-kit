@@ -65,6 +65,16 @@ instead of argued.
    adoption is recorded with date and source. Nothing is adopted by
    default, by silence, or by the reviewers' say-so.
 
+**One snapshot per round.** A review under this method runs against
+one recorded snapshot: the frozen packet for a document audit, a
+named commit or tree for code. The snapshot is recorded before the
+review starts, and findings cite it. Anything that lands after the
+snapshot is a new round, not a silent amendment to the one under
+review. A finding is a claim about a specific state of the work;
+made against a moving target, it cannot be checked afterward, and
+neither reviewer nor maintainer can say which version it belongs
+to.
+
 **When the packet is code.** The same method reviews a large code
 change, with one ordering rule: deterministic checks first. Every
 mechanical check the repository has — type checker, lint, the test
