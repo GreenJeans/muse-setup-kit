@@ -1804,7 +1804,10 @@ class DuetProfileRegistrationTest(unittest.TestCase):
                          ["core/core-procedures", "core/security-pack",
                           "core/cost-guardrails",
                           "core/deadlines-register"])
-        self.assertIsNone(duet["rehearsed_at"])
+        # Run 22 (v0.13-rc1) was a partial rehearsal; the profile
+        # changed after it, and its rehearsed_at must say both.
+        self.assertIn("00e6dd0", duet["rehearsed_at"])
+        self.assertIn("unrehearsed at this pin", duet["rehearsed_at"])
         for rel in duet["platform_files"]:
             self.assertTrue(os.path.isfile(os.path.join(REPO, rel)), rel)
 
@@ -1833,3 +1836,75 @@ class DuetProfileRegistrationTest(unittest.TestCase):
                                  "SKILL.md")).read()
         self.assertTrue(text.startswith("---\nname: muse-setup-kit-duet\n"))
         self.assertIn("\ndescription: ", text.split("\n---\n")[0])
+
+    def test_duet_text_has_no_main_chat_routine_owner(self):
+        # Run 22: a routine belongs to the chat that creates it, so
+        # the Duet material must not say only the main chat makes one.
+        for rel in ("platforms/duet/WIZARD.md",
+                    "platforms/duet/skill/SKILL.md",
+                    "docs/capability-profiles.md"):
+            text = open(os.path.join(REPO, rel)).read()
+            self.assertNotIn("only the main chat", text, rel)
+            self.assertNotIn("by the main chat", text, rel)
+
+    def test_duet_overlay_routines_read_the_state_doc(self):
+        # Run 22: a routine run has no project folder, so no routine
+        # prompt may point at kit/ files.
+        text = open(os.path.join(REPO, "platforms", "duet",
+                                 "WIZARD.md")).read()
+        section = text.split("## The profile's routines", 1)[1]
+        section = section.split("\n## ", 1)[0]
+        prompts = [p.split('"', 1)[0] for p in
+                   section.split('Prompt template: "')[1:]]
+        self.assertEqual(len(prompts), 2)
+        for prompt in prompts:
+            self.assertIn("<doc id>", prompt)
+            self.assertNotIn("kit/", prompt)
+            self.assertIn("Change nothing.", prompt)
+
+    def test_duet_git_wording(self):
+        for rel in ("platforms/duet/WIZARD.md",
+                    "platforms/duet/skill/SKILL.md"):
+            text = open(os.path.join(REPO, rel)).read()
+            self.assertIn("safe.directory=<resolved", text, rel)
+            self.assertIn("resolves to", text, rel)
+            self.assertNotIn("names that folder exactly", text, rel)
+
+
+class StalenessGitAccessTest(unittest.TestCase):
+    """Run 22: the staleness report went silent when git refused the
+    checkout. It must read through a symlink and say so when git
+    cannot read the tree, never print nothing."""
+
+    def _staleness(self, repo):
+        sys.path.insert(0, os.path.join(REPO, "tools"))
+        import kit_selfcheck
+        meta = {"id": "core/x", "dir": "modules/x",
+                "rehearsed_at": None}
+        return kit_selfcheck.staleness_lines(repo, [meta])
+
+    def test_unreadable_work_tree_says_so(self):
+        with tempfile.TemporaryDirectory() as td:
+            os.mkdir(os.path.join(td, ".git"))  # not a repository
+            lines = self._staleness(td)
+            self.assertEqual(len(lines), 1)
+            self.assertTrue(lines[0].startswith("unavailable: git "
+                                                "could not read"))
+
+    def test_reads_through_a_symlink(self):
+        with tempfile.TemporaryDirectory() as td:
+            real = os.path.join(td, "real")
+            os.mkdir(real)
+            env = dict(os.environ, GIT_AUTHOR_NAME="t",
+                       GIT_AUTHOR_EMAIL="t@example.invalid",
+                       GIT_COMMITTER_NAME="t",
+                       GIT_COMMITTER_EMAIL="t@example.invalid")
+            for argv in (["init", "-q"],
+                         ["commit", "-q", "--allow-empty", "-m", "x"]):
+                subprocess.run(["git", "-C", real, *argv], check=True,
+                               env=env, capture_output=True)
+            link = os.path.join(td, "link")
+            os.symlink(real, link)
+            lines = self._staleness(link)
+            self.assertEqual(lines, ["core/x: unrehearsed "
+                                     "(no rehearsed_at)"])

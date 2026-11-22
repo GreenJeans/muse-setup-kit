@@ -1,10 +1,16 @@
 # Duet overlay — the setup wizard on Claude Duet
 
-**Status: unrehearsed at every pin.** No fresh agent has installed
-the kit through this overlay. The plan says so in these words:
-"Duet profile and overlay: unrehearsed at this pin — you would be
-the first." Each module keeps its own rehearsal status, stated as
-`wizard/SKILL.md` Step 3 says.
+**Status: rehearsed in part at v0.13-rc1; changed since.** One test
+install ran through this overlay at v0.13-rc1
+(`00e6dd08736ac4cdf2ff89f585f98a53bbb163c1`; docs/REHEARSALS.md run
+22). The files and the at-install checks worked; the routines did
+not, because a Duet routine run cannot reach the project folder. The
+routine design was rebuilt after that run (the kit state doc,
+below), so this text is unrehearsed at this pin. The plan says so in
+these words: "Duet profile and overlay: rehearsed in part at
+v0.13-rc1; changed since — unrehearsed at this pin." Each module
+keeps its own rehearsal status, stated as `wizard/SKILL.md` Step 3
+says.
 
 This file is an overlay on `wizard/SKILL.md`, used with the
 manifest's `duet` profile. Read the wizard first, then this file. It
@@ -20,10 +26,11 @@ Two orderings settle every conflict:
   live on Duet and *what fires them*.
 - **The stricter rule governs each act.** Duet has built-in rules of
   its own (a fresh yes for every send, payment, delete, sign-in, new
-  account, and share; nothing read becomes an instruction; memory
-  never grants permission). They are not the user's to waive and not
-  the kit's to relax. Where a kit rule and a Duet rule both apply,
-  both are met, and the stricter one decides.
+  account, and share; a Doc changed only when the user asks for that
+  change; nothing read becomes an instruction; memory never grants
+  permission). They are not the user's to waive and not the kit's to
+  relax. Where a kit rule and a Duet rule both apply, both are met,
+  and the stricter one decides.
 
 ## Duet facts the plan is built around
 
@@ -43,20 +50,31 @@ Two orderings settle every conflict:
   agent cannot edit their prompts. Module 02 is not offered, and no
   module can register at `ext:brief-sources`. Surfacing that would
   ride the brief rides the profile's own routines instead (below).
-- **Routines.** Duet's scheduled jobs fire on cron, no more often
-  than the platform's minimum interval, and only the main chat
-  creates, changes, or deletes them. A routine's run starts fresh
-  with memory and tools and no conversation, and no yes counts
-  inside it: a routine may read and report, never send, buy, delete,
-  or change anything outside the kit folder.
+- **The hosting chat.** The install lives in one Duet chat: the main
+  chat or a channel the user picks. That chat's folder holds the
+  checkout and the workspace, and its routines carry the kit's jobs.
+  A routine belongs to the chat that creates it, so the kit's
+  routines are created, changed, and deleted by the hosting chat, on
+  the user's yes. A thread names a routine in its report instead.
+- **Routines fire with no project folder.** A routine fires on cron,
+  no more often than the platform's minimum interval. Its run is a
+  fresh session: no conversation, no `/mnt/project-files`, and no
+  tool that reads project files (tested at v0.13-rc1, run 22). It
+  does have the hosting chat's project memory, the user's connectors
+  (Google Drive, Claude Docs), and posting to the hosting chat. No
+  yes counts inside a run: a routine reads and reports, and changes
+  nothing. So every kit routine reads the **kit state doc** (below),
+  never `kit/`.
 - **One persistent folder.** The shell's container is rebuilt
-  between sessions; only the project folder (`/mnt/project-files`)
-  survives. The checkout, the workspace, the tools, and every record
-  live there. Each channel has its own folder; the main channel's is
-  the install's home.
+  between sessions; only the hosting chat's project folder
+  (`/mnt/project-files`) survives. The checkout, the workspace, the
+  tools, and every record live there. Another chat's session sees
+  its own folder, not this one; it can read this one's files only
+  through Duet's tools for other chats' files, never by path.
 - **Pages and Claude Docs can be shared.** They are never a home for
   procedures §13 records (the bucket register, the deadlines
   register, the handover's contacts). Those stay in the kit folder.
+  The kit state doc holds no §13 record (below).
 - **Connector writes ask every time.** Duet confirms each write to a
   connected account; that confirmation is the platform's, and a kit
   ticket rides inside it (module 00, below).
@@ -69,17 +87,85 @@ Two orderings settle every conflict:
 
 - **Checkout:** `/mnt/project-files/kit-checkout/` — the pinned
   clone. Its HEAD moves only on an approved upgrade. Ground rule 2's
-  checks run here, and `git rev-parse --show-toplevel` must name this
-  folder.
+  checks run here.
+- **The folder is a link.** `/mnt/project-files` is a symlink (on
+  the tested account, to `/mnt/attach/project-files`), so
+  `git rev-parse --show-toplevel` prints the resolved path. The check
+  is that it **resolves to** the checkout: compare
+  `realpath /mnt/project-files/kit-checkout` with the toplevel, never
+  the literal strings.
+- **Git ownership.** The folder belongs to another uid, so git
+  refuses it ("detected dubious ownership"). Pass the resolved path
+  on every git command: `git -c safe.directory=<resolved checkout>
+  ...`. Never change global or system git config, and never use
+  `safe.directory=*`.
 - **Workspace root:** `/mnt/project-files/kit/` — `SETUP-PLAN.md`,
   `INSTRUCTIONS.md` (the record of pointer lines), the procedures,
   the decision queue, `JOBS.md`, the handover, `scopes/`,
   `security/`, `runs/`, and `tools/`.
-- In this file, `kit/...` means that path under the project folder.
-  Baseline lines in `SETUP-PLAN.md` give paths relative to the
-  workspace root, as the wizard says.
+- In this file, `kit/...` means that path under the hosting chat's
+  project folder. Baseline lines in `SETUP-PLAN.md` give paths
+  relative to the workspace root, as the wizard says.
 - Run any kit tool from the workspace's `tools/` copy or the
   checkout with `python3 -I`, passing paths as arguments.
+
+## The kit state doc
+
+The one surface a routine can read. It is a Claude Doc the install
+creates, titled "Muse Setup Kit state (generated — edit kit/, not
+this)". It is a **derived view**: `kit/` is the full record and wins
+every disagreement. The doc carries only what the routines need, as
+dated lines:
+
+1. **Header:** the pin, the hosting chat's name, and "Synced
+   <date, time>".
+2. **Deferred checks:** each open entry of the plan's verification
+   ledger — module, check name, `due:` date (or event plus fallback
+   date).
+3. **Decision queue:** each open item's number and its one-line
+   title. A title that names a §13 record is copied as "item N —
+   open it in the kit chat".
+4. **Deadlines (pointers only):** one line per register row —
+   surfaces-from date (expiry minus lead time), expiry date, On
+   expiry (renew or lapse), or `undated`. **No item name, source,
+   or number**: §13 keeps personal records in local files, so the
+   doc says *when* something is due and the register in `kit/` says
+   *what*. The register's History is not copied.
+5. **Monthly:** the next spend-check date and the count of buckets
+   in the register (no names, no figures); the grants inventory's
+   last recorded date and its connector list (names and write
+   policy only).
+6. **Jobs:** each `JOBS.md` bullet's name and cadence.
+
+It holds no document number, account number, figure, credential,
+or third-party contact. Module 10 stores no document numbers in the
+first place; the doc stores less than the register does.
+
+**How it is refreshed.** A Duet session changes a Doc only when the
+user asks for that change, so every sync is the user's ask:
+
+- **At install:** the plan names the doc, and approving the plan is
+  the ask to create and fill it.
+- **On change:** whenever the hosting chat changes a file the doc
+  mirrors (the ledger, the queue, the register, `JOBS.md`, the
+  bucket register's row count, a grants inventory), it ends that
+  reply by offering the sync in one line ("Should I sync the kit
+  state doc?").
+- **Manual:** the user can say "sync the kit doc" at any time.
+
+A sync reads `kit/` fresh, rewrites the doc's sections whole, and
+stamps the header. Before rewriting, it reads the doc: an edit that
+no sync made is shown to the user and goes nowhere until they say
+which file it belongs in. A sync also reads the hosting chat for the
+routines' posts since the last sync and writes one line per post
+into `kit/runs/<job>.md` (the run record), and records a monthly
+post's grants inventory in `kit/security/`.
+
+**What depends on it.** Module 10's surfacing, the deferred-check
+fallback, the queue reminder, and the monthly prompts all read the
+doc. An item added to `kit/` after the last sync surfaces only after
+the next one. Date-driven items need no sync to fall due: the
+routine compares today with the dates already in the doc.
 
 ## Step 0 — Audit first
 
@@ -95,9 +181,10 @@ The report can be a Claude Doc; it holds no §13 records.
 
 Check each answer live; docs/capability-profiles.md's Duet table is a
 starting point, not evidence. Fixed answers: `persona-file` no,
-`instruction-file` no. Record in the plan the routine minimum
-interval the platform states, that only the main chat creates
-routines, and that the shell is ephemeral with one persistent folder.
+`instruction-file` no. Record in the plan the hosting chat, the
+routine minimum interval the platform states, that the hosting chat
+owns the kit's routines, that a routine run has no project folder,
+and that the shell is ephemeral with one persistent folder.
 `spaces` stays not established until a routine is shown to rebuild a
 page on cadence.
 
@@ -121,10 +208,16 @@ not by a figure read from a usage page.
 - **Q5:** skipped. Duet's memory format belongs to the platform, so
   the answer is (c), leave memory alone, recorded as such; modules
   01, 04, 05, and 08 are not offerable, and the plan says so.
-- **Q6:** as written.
-- **Q7:** ask for workstreams. Each one's home is a Duet channel or
-  the main chat. Do not ask for an instruction file: there is none,
-  and the plan says the front door is a memory line (Step 5).
+- **Q6:** skipped: module 02 is not offerable, so nothing reads the
+  answer (the wizard's Q6 note).
+- **Q7:** ask for workstreams, then each one's home. A new Duet user
+  often has no channels yet. Offer the hosting chat as the default
+  home for every workstream, and a channel per workstream as the
+  option ("a separate chat for each, so its history and tasks stay
+  apart"). A channel the user wants but has not made yet is recorded
+  as planned, and the SCOPE names the hosting chat until it exists.
+  Do not ask for an instruction file: there is none, and the plan
+  says the front door is a memory line (Step 5).
 - **Q8:** skipped (no persona file).
 
 ## Step 3 — Selection
@@ -138,16 +231,22 @@ and skills), 02 (built-in brief), 11 (no persona file), 12 (until
 Step 0 is), and 03, 04, 05 unless the Step 1 tokens and Q5 allow
 them, which on Duet they do not by default.
 
-## Step 4 — The plan, with three additions
+## Step 4 — The plan, with four additions
 
 Save `SETUP-PLAN.md` in the workspace and show it in chat, as the
 wizard says. Besides everything the wizard lists, it carries:
 
-1. **Routines.** Each routine's name, cron, and full prompt, verbatim.
-   They are created by the main chat after approval. If the install
-   runs in a thread, the thread does not create them: it names each
-   one in its report, and the main chat creates it on the user's yes.
-2. **Rules to adopt.** The standing rules this install would like
+1. **Routines.** Each routine's name, cron, and full prompt, verbatim
+   (the templates below, with the doc's id filled in after it
+   exists). The hosting chat creates them after approval. If the
+   install runs in a thread, the thread does not create them: it
+   names each one in its report, and the hosting chat creates it on
+   the user's yes.
+2. **The kit state doc.** Its title, what it mirrors (the six
+   sections above), that `kit/` wins, how it is synced, and the
+   sentence "Module 10's surfacing and the weekly pass read this
+   doc; anything added since the last sync waits for the next one."
+3. **Rules to adopt.** The standing rules this install would like
    Duet to keep, one short line each, in plain words the user could
    say. List only what Duet's built-in rules do not already cover.
    No line may relax a confirmation; a line can only add care. The
@@ -158,6 +257,9 @@ wizard says. Besides everything the wizard lists, it carries:
    default list, for the user to keep, edit, or drop:
    - "Kit files live in the project folder under kit/. Before kit
      work, read the file it concerns." (the front door; module 00)
+   - "After changing a kit file, offer to sync the kit state doc."
+     (keeps the routines' view current; an offer, never a sync on
+     its own)
    - "Non-urgent kit decisions go in the kit decision queue, and I
      clear them by number." (§3)
    - "When a workstream closes, run the close-out in the kit's
@@ -166,7 +268,7 @@ wizard says. Besides everything the wizard lists, it carries:
      version and log it in the kit's vetting log." (module 06)
    - "Before a long or heavy run, say which billing bucket it draws
      on." (module 09, rule 2)
-3. **What is a record, not a front door.** `INSTRUCTIONS.md` exists
+4. **What is a record, not a front door.** `INSTRUCTIONS.md` exists
    and nothing loads it; the procedures bind a session that reads
    them. Say which rules Duet already enforces on its own (§2's
    per-act approval, §7's ground truth, §8's stop-on-mismatch, §10's
@@ -184,15 +286,25 @@ declines leaves its piece as reference text; record that in the plan.
 - Files: copy and fill templates into the workspace root, exactly as
   each module's Install says; baseline lines as Step 5 item 5 says,
   with paths relative to the workspace root.
+- The kit state doc: create it once the files are written, fill it
+  by a first sync, and record its id in `SETUP-PLAN.md`.
 - Jobs: a Duet job is a routine plus its `JOBS.md` bullet. Write the
-  bullet when the routine is created, with the routine's name and
-  cron, and `run record: kit/runs/<job>.md`. File-based job
-  definitions do not count as scheduling here: nothing fires them.
-  A routine requested but not yet created goes under `JOBS.md`'s
-  Planned section, with the approval it waits on.
+  bullet when the routine is created, with the routine's name, cron,
+  "reads the kit state doc", and `run record: kit/runs/<job>.md
+  (copied from its posts at each sync)`. File-based job definitions
+  do not count as scheduling here: nothing fires them. A routine
+  requested but not yet created goes under `JOBS.md`'s Planned
+  section, with the approval it waits on.
+- Test fire: fire each routine once by hand with **no extra text**.
+  Text added to a test fire arrives as a second turn, so the run
+  does its prompt twice and posts twice (run 22). The at-install
+  check passes when the run read the doc (its post quotes the doc's
+  "Synced" stamp) and posted once. A run that cannot read the doc
+  fails the check: pause the routine, and the plan falls back to the
+  no-routine shape (Unchecked, below).
 - Verification: run each module's VERIFY.md at-install checks;
   ledger deferred ones in `SETUP-PLAN.md` with `due:` dates. The
-  weekly pass surfaces them (ground rule 8's fallback, below).
+  weekly pass surfaces them from the doc (ground rule 8's fallback).
 - Adopted rules: record each in the plan in the user's own words,
   with the date. A line the user changes is recorded as they said it.
 
@@ -203,15 +315,16 @@ declines leaves its piece as reference text; record that in the plan.
   shows when it asks for Duet's confirmation; the confirmation is the
   approval, and it stays one execution.
 - Step 3: the decision queue is `kit/decision-queue.md`, numbered as
-  the template says. It is surfaced by the weekly pass (§3's
-  "normally in the morning brief" reads, on Duet, "in the kit's
+  the template says. It is surfaced by the weekly pass from the doc
+  (§3's "normally in the morning brief" reads, on Duet, "in the kit's
   weekly pass"). Duet's Tasks page is not a second queue: an item
   that waits on the user is in the queue, and the pass names it.
 - Step 4: each workstream's `SCOPE.md` lives at
-  `kit/scopes/<slug>/SCOPE.md` in the main channel's folder, naming
-  its home channel. Whether a channel's own session can read it there
-  is unchecked (below); until it is, the user opens the SCOPE from
-  the main chat when a channel's work is in question.
+  `kit/scopes/<slug>/SCOPE.md` in the hosting chat's folder, naming
+  its home (Q7). A channel's own session cannot open it by path; it
+  reads it through Duet's tools for other chats' files (they worked
+  from a channel at v0.13-rc1), or the user opens it from the hosting
+  chat.
 - Step 5: create `kit/INSTRUCTIONS.md` with the pointer line and the
   `ext:instruction-pointer` anchor pair, as written. It is the record
   of what the front door says. The front door itself is the first
@@ -219,7 +332,7 @@ declines leaves its piece as reference text; record that in the plan.
 - Step 6: `kit/JOBS.md`, from the template.
 - Step 7: `kit/continuity-handover.md`, filled with the user. Its
   "how to pause the agent" field names Duet's own controls: ask the
-  main chat to pause or delete the kit's routines, disconnect
+  hosting chat to pause or delete the kit's routines, disconnect
   connectors in settings, and archive the channel. Third-party
   contacts in it are §13 records; the file stays in the kit folder.
 - Step 8: copy the tools into `kit/tools/`. The verifier gate's
@@ -232,12 +345,14 @@ declines leaves its piece as reference text; record that in the plan.
 with this kit's vetting entry: the source, the full commit hash, and
 an honest read scope — this overlay and the bootstrap skill included.
 The monthly standing-grants inventory runs as its own job, from the
-module's job template, on the monthly routine. On Duet it reads the
-connectors the session can see and each one's write policy; what the
-session cannot see (a setting only the user's settings page shows) is
-marked not checkable in the inventory, and the user reads it. A
-skill, plugin, or connector the user adds to Duet later is a vetting
-item like any other: pin, read in full, log, then add.
+module's job template, on the monthly routine. On Duet the run reads
+the connectors it can see and each one's write policy, compares them
+with the doc's last recorded list, and posts the inventory; the next
+sync records it in `kit/security/`. What the run cannot see (a
+setting only the user's settings page shows) is marked not checkable,
+and the user reads it. A skill, plugin, or connector the user adds to
+Duet later is a vetting item like any other: pin, read in full, log,
+then add.
 
 **Module 09.** Install as written, with the register in §12 of the
 installed procedures. The Claude plan is one surface in the register:
@@ -246,86 +361,111 @@ settings", cap "the plan's own limits; the agent does not read them".
 Any API organization, router, or other provider the user's agents
 draw on gets its row and its cap, as rules 1 and 4 say. The monthly
 spend check runs on the monthly routine as a prompt to the user: the
-routine names the buckets due, and the reading happens in a
-conversation with the user present, as the module requires.
+routine says the check is due and how many buckets to read (the doc
+holds no names or figures), and the reading happens in the hosting
+chat with the user present, as the module requires.
 
 **Module 10.** Install as written. The register is
-`kit/deadlines-register.md`, never a Claude Doc. The surfacing shape
-is the module's no-brief shape: a deferred check on a cadence the
-user picks, ledgered in the plan. On Duet a routine fires that check,
-so the plan states, in words: "No morning brief is installed; the
-register is read by the kit's weekly pass on <day>, and an item can
-surface up to six days after it enters its lead window." The pass
-applies the module's own rules — expired items as failures, in-window
-items as due, unknown dates as a chase line — and lead times are set
-with that weekly slack in mind.
+`kit/deadlines-register.md` (module 10 lets the plan choose the
+path), never a Claude Doc. The surfacing shape is the module's
+no-brief shape: a deferred check on a cadence the user picks,
+ledgered in the plan. On Duet a routine fires that check from the
+doc's pointer lines, so the plan states, in words: "No morning brief
+is installed; the register's dates are read from the kit state doc
+by the kit's weekly pass on <day>. An item can surface up to six days
+after it enters its lead window, an item added since the last sync
+surfaces only after the next sync, and the post says when, not what:
+ask the kit chat to read the register." The pass applies the
+module's own rules to the dates — past expiry as failures, in-window
+as due, `undated` as a chase line — and lead times are set with that
+weekly slack in mind.
 
 ## The profile's routines
 
 Two routines carry every job this profile installs. Show both prompts
-verbatim in the plan; keep each prompt a short pointer to files in the
-kit folder, per `JOBS.md`'s slim-definitions rule.
+verbatim in the plan. Each is a short pointer to the doc, per
+`JOBS.md`'s slim-definitions rule, and names the doc by its id
+because a run has no conversation to find it in.
 
 - **`kit-weekly-pass`** — weekly, on the day and time the user chose
-  at Q3. It reads `kit/SETUP-PLAN.md`'s verification ledger and names
-  every deferred check now due (ground rule 8's fallback for the
-  missing session-start line); reads `kit/decision-queue.md` and
-  lists its open items by number; reads `kit/deadlines-register.md`
-  and applies module 10's surfacing rules; compares `kit/JOBS.md`
-  with the routines it can see and reports a mismatch; and appends
-  one line to `kit/runs/kit-weekly-pass.md`. It posts one short
-  message, or a single line saying nothing is due. It writes only
-  under `kit/runs/`.
-- **`kit-monthly`** — monthly, on the 1st. It runs module 06's
-  standing-grants inventory and records it in `kit/security/`, then
-  posts module 09's spend-check prompt (which buckets to read, with
-  the user present), and appends one line to `kit/runs/kit-monthly.md`.
+  at Q3. Prompt template: "Kit weekly pass. Read the Claude Doc
+  <doc id> (the kit state doc) and nothing else of the kit. Using
+  today's date: list every deferred check now due; list the open
+  decision-queue items by number; apply module 10's rules to the
+  deadline lines (past expiry: failure; in lead window: due;
+  undated: chase); if you can see this chat's routines, compare them
+  with the Jobs section and report a mismatch, otherwise say you
+  could not. Post one short message headed 'Kit weekly pass' that
+  quotes the doc's Synced stamp, or one line saying nothing is due.
+  Change nothing."
+- **`kit-monthly`** — monthly, on the 1st. Prompt template: "Kit
+  monthly pass. Read the Claude Doc <doc id> (the kit state doc).
+  List the connectors you can see with each one's write policy, and
+  name any change from the doc's last recorded inventory. Then say
+  the spend check is due and how many buckets to read with me in
+  this chat. Post one message headed 'Kit monthly pass' that quotes
+  the doc's Synced stamp. Change nothing."
 
 `JOBS.md` carries four bullets for them: `kit-weekly-pass`,
 `deadlines-check` (rides kit-weekly-pass), `grants-inventory` (rides
-kit-monthly), and `spend-check` (rides kit-monthly). A run record
-missing 48 hours past its cadence is detector silence (§4); the
-weekly pass reports the monthly one's silence, and module 00's
-fresh-session test is where the user notices the weekly pass's own.
+kit-monthly), and `spend-check` (rides kit-monthly). Each run's post
+is its first trace; a sync copies it into `kit/runs/`. A run record
+missing 48 hours past its cadence is detector silence (§4): a sync
+that finds a post missing says so, and the weekly pass's own post
+going missing is what the user notices first.
 
 ## Step 6 — Handover, on Duet
 
 As the wizard says, and also: which rules the user adopted and in
-what words; which pieces stay reference text; when the first weekly
-pass runs; and the three checks the user can run personally — ask a
-fresh session "What needs a ticket?", open `kit/runs/` after the first
-pass, and read the plan's ledger.
+what words; which pieces stay reference text; the kit state doc and
+how to sync it; when the first weekly pass runs; and the three
+checks the user can run personally — ask a fresh session "What needs
+a ticket?", read the first weekly pass's post, and read the plan's
+ledger.
 
 ## Lifecycle on Duet
 
 - **Upgrade:** UPGRADING.md, in the checkout. Routine prompts that
-  change are shown in the upgrade plan and changed by the main chat.
-  An adopted rule whose wording the new pin changes is put to the
-  user again; the old wording stands until they say otherwise.
-- **Suspend:** pause the module's routine (from the main chat) and
-  move its `JOBS.md` bullets to Suspended, as the wizard says.
+  change are shown in the upgrade plan and changed by the hosting
+  chat. An adopted rule whose wording the new pin changes is put to
+  the user again; the old wording stands until they say otherwise.
+  An upgrade ends with a sync.
+- **Suspend:** pause the module's routine (from the hosting chat)
+  and move its `JOBS.md` bullets to Suspended, as the wizard says.
 - **Uninstall:** UNINSTALL.md, per module, with the export offer
-  first. The main chat deletes the module's routines on the user's
-  yes. Rules the user adopted are theirs: the handover names them,
-  and the user asks Duet to drop the ones they no longer want; the
-  wizard does not remove memory lines itself.
+  first. The hosting chat deletes the module's routines on the
+  user's yes; removing the last module deletes the kit state doc on
+  the user's yes. Rules the user adopted are theirs: the handover
+  names them, and the user asks Duet to drop the ones they no longer
+  want; the wizard does not remove memory lines itself.
+
+## Answered at v0.13-rc1 (run 22)
+
+- A routine run cannot read or write the project folder, by path or
+  by tool. Hard limit; the kit state doc is the answer.
+- Skills added to the user's Claude account load in Duet sessions.
+- A channel's session cannot read another chat's folder by path, but
+  can through Duet's tools for other chats' files.
+- Project memory holds 16 KiB; a larger save is refused, not
+  trimmed. The adopted lines fit easily.
+- No standing-rule card was offered in that channel; rules there are
+  lines the user states.
+- A test fire with extra text runs twice; with none, once.
 
 ## Unchecked on Duet
 
-The Step 0 audit could not check these without a write or a setting
-change. Check each at the first real install, and record the answer
+Check each at the first install of this pin, and record the answer
 in the plan; an answer that breaks a step above stops that step.
 
-- Whether a routine's run can read and write the project folder
-  (the run records and the grants inventory depend on it).
+- Whether a routine's run can read the kit state doc by its id (the
+  test fire checks it). If it cannot, the routines are not created:
+  the plan says the weekly and monthly passes run only when the user
+  asks the hosting chat for "the kit pass", and module 10 surfaces
+  only then.
 - Whether a routine can stay silent when nothing is due, or always
   posts.
-- Whether a channel's own session can read the main channel's kit
-  folder (SCOPE notes depend on it).
-- Whether skills added to the user's Claude account load in Duet
-  sessions (the bootstrap skill depends on it).
+- Whether a routine can see the chat's routine list (the weekly
+  pass's Jobs comparison).
 - Whether Duet offers a card for adopting the kind of rule listed in
-  Step 4, or only memory lines the user states.
-- Project memory's size limit, and whether the front-door line plus
-  any other adopted lines fit it.
+  Step 4 on the user's account, or only memory lines they state.
 - Whether a routine can rebuild a page on cadence (`spaces`).

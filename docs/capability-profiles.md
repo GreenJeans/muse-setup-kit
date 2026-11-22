@@ -137,12 +137,12 @@ Claude Duet (a hosted Claude assistant) is the first
 platform with its own profile (`duet` in `wizard/manifest.yaml`) and
 its own wizard overlay (`platforms/duet/WIZARD.md`). These are the
 token answers a read-only Step 0 audit recorded on one account on
-2026-11-22 — accounts differ in what is connected, so the overlay's
+2026-11-22, corrected by the v0.13-rc1 test install (run 22) — accounts differ in what is connected, so the overlay's
 Step 1 still checks each answer live rather than trusting this table.
 
 | Token | Duet | Caveat the token cannot express |
 |---|---|---|
-| `scheduling` | yes, with a floor | Routines fire on cron, but no more often than the platform's minimum interval (60 minutes on the audited account), and only the main chat creates them. Module 02's triage poll could not run. |
+| `scheduling` | yes, with a floor | Routines fire on cron, but no more often than the platform's minimum interval (60 minutes on the audited account). A routine belongs to the chat that creates it, and its run has no project folder and no project-file tools, only memory, connectors, and posting, so the profile's routines read a generated Claude Doc (the overlay's kit state doc). Module 02's triage poll could not run. |
 | `shell-python` | yes, ephemeral | Python and git run, but the container is rebuilt between sessions; only the project folder (`/mnt/project-files`) persists. Tools, records, the plan, and the pinned checkout live there. No session transcripts on disk. |
 | `shared-docs` | yes | Through the user's connected Google Drive and Docs, acting as the user. |
 | `shared-storage` | yes | The same Drive. |
@@ -152,7 +152,7 @@ Step 1 still checks each answer live rather than trusting this table.
 | `own-host` | depends on the user | Reached through a connector where one exists; there is no shell to the host. |
 | `persona-file` | no | Nothing to author; module 11 does not install. |
 | `instruction-file` | no | The platform's rules and project instructions are server-built. The front door is a memory line the user states (see the degradation above). |
-| `spaces` | not established | Published pages and Claude Docs exist, with no sidebar; whether a routine can rebuild a page on cadence is unchecked. Until it is, module 12 is not offerable; its audit can be run read-only. |
+| `spaces` | not established | Published pages and Claude Docs exist, with no sidebar; a routine can reach Claude Docs, but whether it can rebuild a page on cadence is unchecked. Until it is, module 12 is not offerable; its audit can be run read-only. |
 
 Two Duet properties change how modules install and have no token
 yet: a **built-in brief** the agent cannot edit (surfacing that

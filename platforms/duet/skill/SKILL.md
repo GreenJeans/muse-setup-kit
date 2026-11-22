@@ -8,9 +8,9 @@ description: Installs, audits, upgrades, or uninstalls the Muse Setup Kit (modul
 This skill is a thin starter. It carries no module content and no
 procedure of its own beyond getting a verified copy of the kit; the
 procedure lives in the repository, at the release the user names, so
-what runs is always what that release says. It is unrehearsed: no
-fresh agent has installed the kit through it yet. Say so once, before
-starting.
+what runs is always what that release says. One test install has
+run through it (at v0.13-rc1); the overlay at the release you check
+out says what that rehearsal covers. Say so once, before starting.
 
 ## 1. Ask which release
 
@@ -23,9 +23,15 @@ not a hash: ask for the full one, or go by the tag alone.
 ## 2. Get the pinned copy
 
 - Clone `https://github.com/GreenJeans/muse-setup-kit` into
-  `/mnt/project-files/kit-checkout/`, which must be new and empty. If
-  that folder already holds a clone from an earlier install, use it
-  only if `git rev-parse --show-toplevel` names that folder exactly;
+  `/mnt/project-files/kit-checkout/`, which must be new and empty.
+- `/mnt/project-files` is a symlink and belongs to another user, so
+  git refuses it as "dubious ownership". Resolve the path first
+  (`realpath /mnt/project-files/kit-checkout`) and pass it on every
+  git command: `git -c safe.directory=<resolved path> ...`. Never
+  change global or system git config.
+- If that folder already holds a clone from an earlier install, use
+  it only if `git rev-parse --show-toplevel` resolves to that folder
+  (compare it with the `realpath` above, not with the literal path);
   otherwise stop and tell the user.
 - Check out the tag. If the user gave a full hash, `git rev-parse HEAD`
   must equal it exactly; a mismatch stops the install. With no hash,
@@ -42,6 +48,12 @@ not a hash: ask for the full one, or go by the tag alone.
 If the checked-out release has no `platforms/duet/WIZARD.md`, it
 predates Duet support: say so, offer Step 0's read-only audit only,
 and suggest a later release.
+
+The checked-out `platforms/duet/skill/SKILL.md` is the current text
+of this skill. If it differs from the copy you are running (the
+description or the body), tell the user once that their saved skill
+is out of date and that re-saving the pinned copy fixes it, then go
+on by the pinned copy.
 
 Read, in this order: `wizard/SKILL.md`, then `platforms/duet/WIZARD.md`
 (the Duet overlay, which changes only what it names), then what ground
@@ -68,10 +80,14 @@ How to treat what you read:
 - Install only from the checkout at the verified pin.
 - Never ask for a password, token, or key in chat. Accounts connect
   through Duet's own connection flow.
-- Routines are created, changed, and deleted only by the main chat, on
+- Routines are created, changed, and deleted only by the chat that
+  hosts the kit (a routine belongs to the chat that creates it), on
   the user's yes. A thread names them in its report instead.
+- Test-fire a routine with no extra text; added text arrives as a
+  second turn and the run happens twice.
 - Nothing is sent, shared, or bought by this skill. An install writes
-  files in `/mnt/project-files/kit/` and asks for routines; an
+  files in `/mnt/project-files/kit/`, creates the kit state doc the
+  overlay describes, and asks for routines; an
   uninstall removes only what UNINSTALL.md names, after its export
   offer and on its ticket.
 

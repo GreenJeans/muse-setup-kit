@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 62,600
+install is heavy work — a full one reads on the order of 62,700
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -79,10 +79,10 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~27,200 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~34,400 words | Plus the memory schema with its linter, and the security pack. |
-| Duet | 00 + 06 + 09 + 10 | ~27,300 words | Claude Duet only, through its overlay (counted in the figure). Tickets, a decision queue, a handover, vetting and grants inventory, a bucket register, a deadlines register, surfaced by two routines; Duet's built-in brief stays. Unrehearsed. |
-| Everything | all twelve modules | ~62,600 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~27,300 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~34,500 words | Plus the memory schema with its linter, and the security pack. |
+| Duet | 00 + 06 + 09 + 10 | ~28,900 words | Claude Duet only, through its overlay (counted in the figure). Tickets, a decision queue, a handover, vetting and grants inventory, a bucket register, a deadlines register, surfaced by two routines that read a generated Claude Doc; Duet's built-in brief stays. Rehearsed in part at v0.13-rc1. |
+| Everything | all twelve modules | ~62,700 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 **On Claude Duet?** Duet has no instruction file you can edit, a
 built-in brief, and its own approval rules, so it gets its own
@@ -97,8 +97,11 @@ release tag, then read wizard/SKILL.md and platforms/duet/WIZARD.md
 and run the setup wizard with the Duet overlay.
 ```
 
-The Duet profile and overlay are unrehearsed: you would be the
-first.
+Duet routines run without the project folder, so the profile's
+routines read a generated **kit state doc** (a Claude Doc the install
+keeps in sync with `kit/`, on your ask). Module 10's deadline
+surfacing and the weekly pass depend on it. One test install ran at
+v0.13-rc1; the routine design changed after it and is unrehearsed.
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the

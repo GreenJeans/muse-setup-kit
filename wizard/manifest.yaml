@@ -18,27 +18,28 @@ profiles:
   - id: starter
     title: Starter
     modules: [core/core-procedures, core/morning-brief, core/cost-guardrails]
-    audit_words: 27200
+    audit_words: 27300
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core/core-procedures, core/morning-brief, core/cost-guardrails, core/memory-architecture, core/security-pack]
-    audit_words: 34400
+    audit_words: 34500
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Platform profiles carry `platform:` and are offered only on
   # that platform, through its overlay; they are never Starter or
   # Standard. Their audit cost adds the overlay files named in
   # `platform_files` (paths under platforms/), and
-  # tools/kit_selfcheck.py counts them. rehearsed_at null: no
-  # install has been rehearsed through this profile.
+  # tools/kit_selfcheck.py counts them. rehearsed_at names the
+  # rehearsals run through the profile (null: none), as a module's
+  # does; docs/REHEARSALS.md holds the record.
   - id: duet
     title: Duet
     platform: claude-duet
     modules: [core/core-procedures, core/security-pack, core/cost-guardrails, core/deadlines-register]
     platform_files: [platforms/duet/WIZARD.md, platforms/duet/skill/SKILL.md]
-    audit_words: 27300
-    rehearsed_at: null
-    pitch: "For Claude Duet. Tickets, a decision queue, a continuity handover, the security pack's vetting log and grants inventory, a billing-bucket register, and a deadlines register, surfaced by two routines. The built-in brief stays; kit rules are put to the user to adopt in their own words. Unrehearsed."
+    audit_words: 28900
+    rehearsed_at: "partial: v0.13-rc1 test install, run 22, at 00e6dd0; routines redesigned since (kit state doc), unrehearsed at this pin"
+    pitch: "For Claude Duet. Tickets, a decision queue, a continuity handover, the security pack's vetting log and grants inventory, a billing-bucket register, and a deadlines register, surfaced by two routines that read a generated Claude Doc. The built-in brief stays; kit rules are put to the user to adopt in their own words. Rehearsed in part at v0.13-rc1; changed since."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle, deadlines-register, persona-soul,
   # spaces-dashboards) is offered

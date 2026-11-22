@@ -38,7 +38,11 @@ and approved.**
    silently returns an *ancestor* repository's HEAD, a wrong pin
    that looks valid. Never take a pin from a tree whose git
    top-level is not the checkout itself (`git rev-parse
-   --show-toplevel` must name the checkout). A `.git`-less tree is
+   --show-toplevel` must resolve to the checkout: compare both
+   after resolving symlinks, e.g. with `realpath`). Where git
+   refuses the folder as owned by another user, pass
+   `-c safe.directory=<resolved checkout>` on each command; never
+   change global config. A `.git`-less tree is
    EVALUATION-only: the plan records the state as EVALUATION, the
    user-supplied commit if there is one (labeled user-supplied,
    unverified), and the file list as received.
@@ -162,8 +166,8 @@ the answers for the gating step:
   create, edit, and refresh on a schedule?
 - **Which billing bucket does this session draw on?** An install is
   heavy work: it writes dozens of files, and the reading runs about
-  27,200 words for a Starter install, about 34,400 for Standard
-  (about 41,900 with module 11 added), and about 62,600 for
+  27,300 words for a Starter install, about 34,500 for Standard
+  (about 42,000 with module 11 added), and about 62,700 for
   everything on the shelf.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
@@ -251,8 +255,10 @@ user their answers don't matter.
 6. **Infrastructure:** (a) I have a host/server I control. (b) Cloud
    only. *(No module gates on this since v0.4 — infra patterns are a
    reference document, docs/patterns/infra-patterns.md, not an
-   install. Note the answer in the plan; a host user may want module
-   02's watches pointed at it later.)*
+   install. Its one reader is module 02: a host user may want its
+   watches pointed at the host later. So ask it only where module 02
+   is offerable, and note the answer in the plan; elsewhere the skip
+   rule above applies.)*
 7. **Existing work:** Name any ongoing workstreams or projects the agent
    should treat as separate topics (each gets a SCOPE.md), and point to
    the file the agent reads as its main instructions, if one exists. If
@@ -620,7 +626,7 @@ libraries with their directory URLs.
   other module's pins read from that same clone. Two invariants,
   either failing aborts the repair **with nothing written**: the
   clone is the library's own work tree (`git rev-parse
-  --show-toplevel` names the recorded clone — ground rule 2's
+  --show-toplevel` resolves to the recorded clone — ground rule 2's
   warning applies: an ancestor repo's HEAD is not this library's
   pin), and the **source** file's sha256, read from the pinned
   tree before anything is written, equals the baseline's

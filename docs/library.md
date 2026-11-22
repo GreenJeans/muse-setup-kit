@@ -263,7 +263,7 @@ irreversible (uninstall, repair, adding a library) is ticketed.
   <pin>:<path>`) and never moves the shared clone's HEAD. Two
   invariants, both checked before anything is written, either
   failing aborts the repair: the clone is the library's own
-  work tree (`git rev-parse --show-toplevel` names the recorded
+  work tree (`git rev-parse --show-toplevel` resolves to the recorded
   clone), and the source file's sha256 — read from the pinned
   tree — equals the baseline's recorded sha256. Repair **never re-stamps a baseline** (a correctly
   restored file already hashes to its recorded line; re-stamping

@@ -82,7 +82,11 @@ informational rehearsal-staleness report: for each module, whether
 files in its directory changed after the pin its rehearsed_at
 names. Staleness is printed, never counted in findings — the
 release gate is the findings count — and the check skips silently
-when the checkout is not a git work tree.
+when the checkout is not a git work tree. When git cannot read a
+work tree (a folder owned by another user, say), the report says so
+in one line rather than printing nothing; git runs with a
+per-command safe.directory for the resolved checkout and no config
+is written.
 
 Usage:
     python3 tools/kit_selfcheck.py [--repo .] [--report PATH]
@@ -212,20 +216,34 @@ def parse_manifest(path):
 
 def staleness_lines(repo, metas):
     """Informational rehearsal-staleness report. Uses git when the
-    checkout is a git work tree; returns [] (silence) otherwise."""
-    if not os.path.isdir(os.path.join(repo, ".git")):
+    checkout is a git work tree; returns [] (silence) when it is not.
+    A work tree git cannot read returns one line saying so, never
+    silence: an empty report would read as "nothing to say".
+
+    Git runs with a per-command safe.directory naming the resolved
+    checkout, so a checkout owned by another user (a hosted
+    platform's shared folder) is still read. No git config is
+    written."""
+    if not os.path.exists(os.path.join(repo, ".git")):
         return []
+    real = os.path.realpath(repo)
+    errors = []
 
     def git(*argv):
         try:
-            r = subprocess.run(["git", "-C", repo, *argv],
+            r = subprocess.run(["git", "-c", f"safe.directory={real}",
+                                "-C", real, *argv],
                                capture_output=True, text=True, timeout=30)
-        except (OSError, subprocess.SubprocessError):
+        except (OSError, subprocess.SubprocessError) as exc:
+            errors.append(str(exc))
             return None
+        if r.returncode != 0 and r.stderr.strip():
+            errors.append(r.stderr.strip().splitlines()[0])
         return r.stdout if r.returncode == 0 else None
 
-    if git("rev-parse", "--verify", "--quiet", "HEAD") is None:
-        return []
+    if git("rev-parse", "--verify", "HEAD") is None:
+        why = errors[-1] if errors else "no HEAD"
+        return [f"unavailable: git could not read this checkout ({why})"]
     out = []
     for meta in metas:
         mid, mdir_rel = meta["id"], meta["dir"]
