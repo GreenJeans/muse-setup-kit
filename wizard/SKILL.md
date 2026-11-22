@@ -150,6 +150,9 @@ the answers for the gating step:
   machine, including session transcripts where the platform keeps them?
 - Does the platform keep a persistent persona file (a SOUL.md or
   equivalent) that the agent reads at the start of every session?
+- Does the platform give the user persistent pages or spaces —
+  a sidebar of pages, dashboards, a library — that the agent can
+  create, edit, and refresh on a schedule?
 - **Which billing bucket does this session draw on?** An install is
   heavy work: it writes dozens of files, and the reading runs about
   26,700 words for a Starter install, about 33,900 for Standard
@@ -184,6 +187,7 @@ Map the answers to the module.yaml requirement tokens:
 | A host the user controls | `own-host` |
 | Shell / Python 3 execution | `shell-python` |
 | A persistent persona file | `persona-file` |
+| Persistent pages / spaces | `spaces` |
 
 File-based job definitions count as `scheduling` when the platform
 actually runs them — a scheduler, a heartbeat, a session hook,

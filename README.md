@@ -116,6 +116,7 @@ pin — you would be the first" where that is true.
 | 09 | **Cost & billing guardrails** | Bucket discipline for agent spending: know whether a run draws on a subscription, an API key, or a router before it starts; hard caps set in advance; a monthly spend check | 00 |
 | 10 | **Deadlines & expiry register** | One local register of what expires — passports, licences, warranties, policies, certifications — each with a lead time and a pointer to the original; no document numbers stored | 00; 02 surfaces it in the brief (manual check without) |
 | 11 | **Persona & soul** | Author the persona file instead of inheriting the stock template: an authoring interview, a front-loaded SOUL template filled with real examples, a mechanical linter, and staged-diff governance for every later change | 00; a persistent persona file |
+| 12 | **Spaces & living dashboards** | Audit the pages your setup accumulates against live state, merge peers, fold research into lineage, set a sidebar budget, and build the survivors as living pages: exception-first, status as an enum, freshness-stamped, refreshed by machinery | 00; a spaces surface |
 
 Not a module: **infra patterns** (layered backups, health watches,
 alert discipline for people with a host) live in
@@ -212,6 +213,7 @@ modules/
   09-cost-guardrails/      module.yaml · MODULE.md · VERIFY.md · templates/ (bucket register)
   10-deadlines-register/   module.yaml · MODULE.md · VERIFY.md · register template
   11-persona-soul/         module.yaml · MODULE.md · VERIFY.md · templates/ (SOUL template, authoring interview) · tools/ (soul linter)
+  12-spaces-dashboards/    module.yaml · MODULE.md · VERIFY.md · templates/ (space audit, space scope, sidebar plan)
 tools/               ← kit_selfcheck.py (the kit lints itself) · module_yaml.py (the strict package parser) · build_directory.py (generates directory.json + advisories.json) · tests/ (tool fixtures)```
 
 ## Status

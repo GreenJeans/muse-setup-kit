@@ -1,0 +1,28 @@
+# Module package metadata — the single authored source for this
+# module (docs/library.md). Strict flat subset; tools/module_yaml.py
+# parses it and fails loud on anything outside the subset.
+id: core/spaces-dashboards
+dir: modules/12-spaces-dashboards
+title: Spaces & Living Dashboards
+pitch: "Audit the pages your setup accumulates, merge and budget them, and build the few that stay alive: exception-first, enum status, freshness-stamped, auto-refreshed."
+version: "0.1"
+maintainer: Muse Setup Kit maintainer
+license: MIT
+kit_compat: [kit-1]
+depends_on: [core/core-procedures]
+requires: [spaces]
+degrades_without: [scheduling]
+reads: "the user's space catalog (each space's actions, snapshot and state, version history), the sidebar order, refresh schedules, and the tracked items or goals a page claims to reflect. Metadata and freshness first; page content only as needed."
+writes: "a spaces audit and redesign plan in the workspace; new or edited spaces only after the user approves the plan; sidebar order only on approval; deletes only per space, individually confirmed."
+network: "public web, for pattern research when the platform's own literature is thin."
+jobs: "none of its own; each dynamic page names its refresh machinery (a scheduled space action preferred) at build time, and those schedules belong to the pages."
+rehearsed_at: "run 21 (2026-11-21) on the spaces-module branch pre-commit: scripted-persona audit of a fictional 9-space catalog; procedure and templates exercised, platform mechanics not"
+data_classes: [personal]
+action_classes: [delete]
+files:
+  - path: templates/space-audit.md
+    class: static-rendered
+  - path: templates/space-scope.md
+    class: static-rendered
+  - path: templates/sidebar-plan.md
+    class: static-rendered

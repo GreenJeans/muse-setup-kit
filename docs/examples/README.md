@@ -45,6 +45,14 @@ fixed it (run 8's log is summarized in the REHEARSALS row).
 - **`staged-proposal.md`** — the proposal behind that item:
   verbatim evidence, the preference-order justification, and the
   routing note, exactly as the reviewer staged it.
+- **`spaces-redesign.md`** — the worked run module 12
+  distills: the maintainer's own 14-space sidebar audited and
+  redesigned in a day. Unlike the artifacts above it is not a
+  rehearsal product; it is a narrative of a real run,
+  generalized for publication (counts and the shape of the
+  numbers kept, identifying details removed), included because
+  module 12's concepts and failure case are this run, written
+  down.
 - **`soul.md`** — the SOUL.md from run 16: a fresh agent ran
   module 11's authoring interview with a fictional solo user
   ("Casey," a freelance bookkeeper), drafted the file from the
