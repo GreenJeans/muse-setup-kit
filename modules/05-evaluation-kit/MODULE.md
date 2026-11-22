@@ -34,6 +34,18 @@ instead of argued.
    reference to a job or rule that has since been retired. A reviewer who
    doesn't catch the canary wasn't reading closely; weight their findings
    accordingly.
+
+   **Weighted down, defined.** Every finding carries a basis, one of
+   four, strongest first: **measured** (a number from an actual run),
+   **reproduced** (someone made it happen again), **reviewed** (an
+   independent second check agrees — convergence in step 4 is the
+   usual case), **reasoned** (argued from the material, unchecked).
+   A finding is *weighted down* when its basis is reasoned only. A
+   weighted-down finding is reported in full, like any other; it is
+   never prioritized ahead of a better-based one. The canary rule
+   above is the standing example: a reviewer who missed the canary
+   has shown their reading was not close, so their solo findings
+   stand at reasoned until something checks them.
 3. **Review blind, twice.** Two independent reviewers — ideally two
    different models (the Exchange, module 04, is the natural channel) —
    get the identical packet and brief: find contradictions, stale
