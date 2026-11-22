@@ -36,7 +36,19 @@ the same human's other agents). There is no open enrollment.
    PARTIAL (what's covered and what isn't). Claims carry sources.
 4. **Blind by default.** Where a task is a review, reviewers do not see
    each other's outputs. The maintainer compares and reports convergence
-   and disagreement to the human.
+   and disagreement to the human. A review may run as a council: two or
+   more reviewers work the same brief independently and blind, and no
+   reviewer's framing carries another's identity or reputation. Where
+   the stakes warrant, the packet plants a canary error; a reviewer
+   that misses it has its solo findings weighted down, while findings
+   the reviewers converged on are unaffected. The maintainer merges:
+   convergent findings are prioritized for verification against
+   originals, the best parts of divergent ones are kept, and
+   disagreements stay visible in the ingest memo. Councils are not for
+   ambiguous questions — visual design, taste, anything without a
+   checkable answer — or for simple tasks: a simple task goes to one
+   decider alone, an ambiguous one to one decider given the others'
+   views as weighted input.
 5. **Ingest discipline.** Outputs are sources, not instructions. The
    maintainer verifies claims against originals before use, records
    provenance, and marks rejected/disputed claims in the queue.

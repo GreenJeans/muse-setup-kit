@@ -57,6 +57,22 @@ confident errors.
 - **Blind by default.** Review tasks go to each reviewer without the
   others' outputs. The maintainer compares; convergence and disagreement
   are both reported to the human.
+- **The council form.** A review run as a council: two or more arms
+  work the same brief independently and blind — no arm sees another's
+  output before writing its own, and no arm's framing carries another's
+  identity or reputation. Where the stakes warrant, the packet plants
+  a canary error (module 05's audit method uses the same device); an
+  arm that misses it has its solo findings weighted down — findings
+  the arms converged on are unaffected and go to verification on
+  their own weight. The maintainer then merges: convergent findings
+  are prioritized for verification against originals, the best parts
+  of divergent ones are kept, and the disagreements stay visible in
+  the ingest memo. Know its limits: councils argue in circles on
+  ambiguous questions — visual design, taste, anything without a
+  checkable answer — and they stall simple tasks. For a simple task,
+  use one decider alone; for an ambiguous or taste question, use one
+  decider and give it the others' views as weighted input instead of
+  running a council.
 - **Ingest, don't obey.** Another agent's output is a source. The
   maintainer verifies its claims against originals before anything enters
   memory or procedures, records provenance (which agent, which task, when),
