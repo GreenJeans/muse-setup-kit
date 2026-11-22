@@ -37,9 +37,9 @@ profiles:
     platform: claude-duet
     modules: [core/core-procedures, core/security-pack, core/cost-guardrails, core/deadlines-register]
     platform_files: [platforms/duet/WIZARD.md, platforms/duet/skill/SKILL.md]
-    audit_words: 28900
-    rehearsed_at: "partial: v0.13-rc1 test install, run 22, at 00e6dd0; routines redesigned since (kit state doc), unrehearsed at this pin"
-    pitch: "For Claude Duet. Tickets, a decision queue, a continuity handover, the security pack's vetting log and grants inventory, a billing-bucket register, and a deadlines register, surfaced by two routines that read a generated Claude Doc. The built-in brief stays; kit rules are put to the user to adopt in their own words. Rehearsed in part at v0.13-rc1; changed since."
+    audit_words: 29100
+    rehearsed_at: "partial: v0.13-rc1 test install, run 22, at 00e6dd0; routines redesigned (kit state doc); v0.13-rc3 upgrade and routine test fires, run 23, at 431edb0; prompts changed since, unrehearsed at this pin"
+    pitch: "For Claude Duet. Tickets, a decision queue, a continuity handover, the security pack's vetting log and grants inventory, a billing-bucket register, and a deadlines register, surfaced by two routines that read a generated Claude Doc. The built-in brief stays; kit rules are put to the user to adopt in their own words. Rehearsed in part at v0.13-rc3; changed since."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle, deadlines-register, persona-soul,
   # spaces-dashboards) is offered

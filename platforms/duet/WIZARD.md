@@ -1,16 +1,18 @@
 # Duet overlay — the setup wizard on Claude Duet
 
-**Status: rehearsed in part at v0.13-rc1; changed since.** One test
-install ran through this overlay at v0.13-rc1
+**Status: rehearsed in part at v0.13-rc1 and v0.13-rc3; changed
+since.** A test install ran through this overlay at v0.13-rc1
 (`00e6dd08736ac4cdf2ff89f585f98a53bbb163c1`; docs/REHEARSALS.md run
-22). The files and the at-install checks worked; the routines did
-not, because a Duet routine run cannot reach the project folder. The
-routine design was rebuilt after that run (the kit state doc,
-below), so this text is unrehearsed at this pin. The plan says so in
-these words: "Duet profile and overlay: rehearsed in part at
-v0.13-rc1; changed since — unrehearsed at this pin." Each module
-keeps its own rehearsal status, stated as `wizard/SKILL.md` Step 3
-says.
+22): the files and at-install checks worked, the routines could not
+reach the project folder. The kit state doc (below) replaced that
+design, and the same install upgraded to v0.13-rc3
+(`431edb0e753cdd5b7290f01fef1b3dd5076999b6`; run 23): both routines
+read the doc in test fires and a sync recorded their posts. The
+routine prompts were tightened after run 23, so this text is
+unrehearsed at this pin. The plan says so in these words: "Duet
+profile and overlay: rehearsed in part at v0.13-rc3; changed since —
+unrehearsed at this pin." Each module keeps its own rehearsal
+status, stated as `wizard/SKILL.md` Step 3 says.
 
 This file is an overlay on `wizard/SKILL.md`, used with the
 manifest's `duet` profile. Read the wizard first, then this file. It
@@ -135,7 +137,6 @@ dated lines:
    in the register (no names, no figures); the grants inventory's
    last recorded date and its connector list (names and write
    policy only).
-6. **Jobs:** each `JOBS.md` bullet's name and cadence.
 
 It holds no document number, account number, figure, credential,
 or third-party contact. Module 10 stores no document numbers in the
@@ -147,8 +148,8 @@ user asks for that change, so every sync is the user's ask:
 - **At install:** the plan names the doc, and approving the plan is
   the ask to create and fill it.
 - **On change:** whenever the hosting chat changes a file the doc
-  mirrors (the ledger, the queue, the register, `JOBS.md`, the
-  bucket register's row count, a grants inventory), it ends that
+  mirrors (the ledger, the queue, the register, the bucket
+  register's row count, a grants inventory), it ends that
   reply by offering the sync in one line ("Should I sync the kit
   state doc?").
 - **Manual:** the user can say "sync the kit doc" at any time.
@@ -158,8 +159,11 @@ stamps the header. Before rewriting, it reads the doc: an edit that
 no sync made is shown to the user and goes nowhere until they say
 which file it belongs in. A sync also reads the hosting chat for the
 routines' posts since the last sync and writes one line per post
-into `kit/runs/<job>.md` (the run record), and records a monthly
-post's grants inventory in `kit/security/`.
+into `kit/runs/<job>.md` (the run record), records a monthly
+post's grants inventory in `kit/security/`, and compares `JOBS.md`
+with the hosting chat's routine list, reporting any mismatch. That
+comparison lives in the sync because a routine run cannot see the
+routine list (run 23).
 
 **What depends on it.** Module 10's surfacing, the deferred-check
 fallback, the queue reminder, and the monthly prompts all read the
@@ -242,7 +246,7 @@ wizard says. Besides everything the wizard lists, it carries:
    install runs in a thread, the thread does not create them: it
    names each one in its report, and the hosting chat creates it on
    the user's yes.
-2. **The kit state doc.** Its title, what it mirrors (the six
+2. **The kit state doc.** Its title, what it mirrors (the five
    sections above), that `kit/` wins, how it is synced, and the
    sentence "Module 10's surfacing and the weekly pass read this
    doc; anything added since the last sync waits for the next one."
@@ -319,6 +323,12 @@ declines leaves its piece as reference text; record that in the plan.
   (§3's "normally in the morning brief" reads, on Duet, "in the kit's
   weekly pass"). Duet's Tasks page is not a second queue: an item
   that waits on the user is in the queue, and the pass names it.
+- Deferred checks: the queue drill's event ("first brief or first
+  on-demand review") reads, on Duet, "the first scheduled weekly
+  pass after a test item is added to the queue". A test fire does
+  not count, and neither does a pass with no test item in the queue;
+  the plan says when the test item goes in. The ledger row keeps its
+  install + 7 days `due:` date, as VERIFY.md says.
 - Step 4: each workstream's `SCOPE.md` lives at
   `kit/scopes/<slug>/SCOPE.md` in the hosting chat's folder, naming
   its home (Q7). A channel's own session cannot open it by path; it
@@ -393,18 +403,20 @@ because a run has no conversation to find it in.
   today's date: list every deferred check now due; list the open
   decision-queue items by number; apply module 10's rules to the
   deadline lines (past expiry: failure; in lead window: due;
-  undated: chase); if you can see this chat's routines, compare them
-  with the Jobs section and report a mismatch, otherwise say you
-  could not. Post one short message headed 'Kit weekly pass' that
-  quotes the doc's Synced stamp, or one line saying nothing is due.
-  Change nothing."
+  undated: chase). If none of these has anything to list, post only
+  this one line: 'Kit weekly pass: nothing due (doc synced
+  <stamp>).' Otherwise post one short message headed 'Kit weekly
+  pass' that quotes the doc's Synced stamp and lists only what is
+  due. Change nothing."
 - **`kit-monthly`** — monthly, on the 1st. Prompt template: "Kit
   monthly pass. Read the Claude Doc <doc id> (the kit state doc).
   List the connectors you can see with each one's write policy, and
-  name any change from the doc's last recorded inventory. Then say
-  the spend check is due and how many buckets to read with me in
-  this chat. Post one message headed 'Kit monthly pass' that quotes
-  the doc's Synced stamp. Change nothing."
+  name any change from the doc's last recorded inventory. If today
+  is on or after the doc's next spend-check date, say the spend
+  check is due and how many buckets to read with me in this chat;
+  otherwise say only when it is next due. Post one message headed
+  'Kit monthly pass' that quotes the doc's Synced stamp. Change
+  nothing."
 
 `JOBS.md` carries four bullets for them: `kit-weekly-pass`,
 `deadlines-check` (rides kit-weekly-pass), `grants-inventory` (rides
@@ -413,6 +425,10 @@ is its first trace; a sync copies it into `kit/runs/`. A run record
 missing 48 hours past its cadence is detector silence (§4): a sync
 that finds a post missing says so, and the weekly pass's own post
 going missing is what the user notices first.
+
+Both passes post on every run, even with nothing due: the post is
+the run record, so a silent run would read as detector silence. The
+weekly pass's nothing-due post is one line for that reason.
 
 ## Step 6 — Handover, on Duet
 
@@ -425,7 +441,11 @@ ledger.
 
 ## Lifecycle on Duet
 
-- **Upgrade:** UPGRADING.md, in the checkout. Routine prompts that
+- **Upgrade:** UPGRADING.md, in the checkout. Step 4's conflict list
+  comes from the plan's baseline by hand: `kit_doctor.py` ships with
+  module 05, outside this profile. For each `- installed:` line not
+  marked `accumulating`, compare `sha256sum` of the file with the
+  recorded hash; every mismatch is a conflict to list. Routine prompts that
   change are shown in the upgrade plan and changed by the hosting
   chat. An adopted rule whose wording the new pin changes is put to
   the user again; the old wording stands until they say otherwise.
@@ -439,7 +459,7 @@ ledger.
   names them, and the user asks Duet to drop the ones they no longer
   want; the wizard does not remove memory lines itself.
 
-## Answered at v0.13-rc1 (run 22)
+## Answered by test runs (runs 22 and 23)
 
 - A routine run cannot read or write the project folder, by path or
   by tool. Hard limit; the kit state doc is the answer.
@@ -451,21 +471,23 @@ ledger.
 - No standing-rule card was offered in that channel; rules there are
   lines the user states.
 - A test fire with extra text runs twice; with none, once.
+- A routine run can read the kit state doc by its id (run 23). The
+  test fire still checks it at every install. If it fails there, the
+  routines are not created: the plan says the weekly and monthly
+  passes run only when the user asks the hosting chat for "the kit
+  pass", and module 10 surfaces only then.
+- A routine run cannot see the chat's routine list (run 23), so the
+  `JOBS.md` comparison runs in the sync.
+- Whether a routine can stay silent is no longer asked: the passes
+  post on every run by design (the post is the run record).
 
 ## Unchecked on Duet
 
 Check each at the first install of this pin, and record the answer
 in the plan; an answer that breaks a step above stops that step.
 
-- Whether a routine's run can read the kit state doc by its id (the
-  test fire checks it). If it cannot, the routines are not created:
-  the plan says the weekly and monthly passes run only when the user
-  asks the hosting chat for "the kit pass", and module 10 surfaces
-  only then.
-- Whether a routine can stay silent when nothing is due, or always
-  posts.
-- Whether a routine can see the chat's routine list (the weekly
-  pass's Jobs comparison).
+- Whether a scheduled run behaves as the test fires did (the first
+  weekly pass on its real cadence).
 - Whether Duet offers a card for adopting the kind of rule listed in
   Step 4 on the user's account, or only memory lines they state.
 - Whether a routine can rebuild a page on cadence (`spaces`).

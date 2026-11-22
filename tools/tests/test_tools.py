@@ -1804,9 +1804,11 @@ class DuetProfileRegistrationTest(unittest.TestCase):
                          ["core/core-procedures", "core/security-pack",
                           "core/cost-guardrails",
                           "core/deadlines-register"])
-        # Run 22 (v0.13-rc1) was a partial rehearsal; the profile
-        # changed after it, and its rehearsed_at must say both.
+        # Runs 22 (v0.13-rc1) and 23 (v0.13-rc3) were partial
+        # rehearsals; the profile changed after them, and its
+        # rehearsed_at must say so.
         self.assertIn("00e6dd0", duet["rehearsed_at"])
+        self.assertIn("431edb0", duet["rehearsed_at"])
         self.assertIn("unrehearsed at this pin", duet["rehearsed_at"])
         for rel in duet["platform_files"]:
             self.assertTrue(os.path.isfile(os.path.join(REPO, rel)), rel)
@@ -1854,13 +1856,21 @@ class DuetProfileRegistrationTest(unittest.TestCase):
                                  "WIZARD.md")).read()
         section = text.split("## The profile's routines", 1)[1]
         section = section.split("\n## ", 1)[0]
-        prompts = [p.split('"', 1)[0] for p in
+        prompts = [" ".join(p.split('"', 1)[0].split()) for p in
                    section.split('Prompt template: "')[1:]]
         self.assertEqual(len(prompts), 2)
         for prompt in prompts:
             self.assertIn("<doc id>", prompt)
             self.assertNotIn("kit/", prompt)
             self.assertIn("Change nothing.", prompt)
+        weekly, monthly = prompts
+        # Run 23: a run cannot see the routine list (the comparison
+        # lives in the sync); a quiet week is one line; the spend
+        # check goes by the doc's date, not by the run.
+        self.assertNotIn("routines", weekly)
+        self.assertIn("post only this one line", weekly)
+        self.assertIn("on or after the doc's next spend-check date",
+                      monthly)
 
     def test_duet_git_wording(self):
         for rel in ("platforms/duet/WIZARD.md",

@@ -81,7 +81,7 @@ and tools) — the reading the request above actually asks for:
 |---|---|---|---|
 | **Starter** | 00 + 02 + 09 | ~27,300 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
 | **Standard** | Starter + 01 + 06 | ~34,500 words | Plus the memory schema with its linter, and the security pack. |
-| Duet | 00 + 06 + 09 + 10 | ~28,900 words | Claude Duet only, through its overlay (counted in the figure). Tickets, a decision queue, a handover, vetting and grants inventory, a bucket register, a deadlines register, surfaced by two routines that read a generated Claude Doc; Duet's built-in brief stays. Rehearsed in part at v0.13-rc1. |
+| Duet | 00 + 06 + 09 + 10 | ~29,100 words | Claude Duet only, through its overlay (counted in the figure). Tickets, a decision queue, a handover, vetting and grants inventory, a bucket register, a deadlines register, surfaced by two routines that read a generated Claude Doc; Duet's built-in brief stays. Rehearsed in part at v0.13-rc3. |
 | Everything | all twelve modules | ~62,700 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
 
 **On Claude Duet?** Duet has no instruction file you can edit, a
@@ -100,8 +100,10 @@ and run the setup wizard with the Duet overlay.
 Duet routines run without the project folder, so the profile's
 routines read a generated **kit state doc** (a Claude Doc the install
 keeps in sync with `kit/`, on your ask). Module 10's deadline
-surfacing and the weekly pass depend on it. One test install ran at
-v0.13-rc1; the routine design changed after it and is unrehearsed.
+surfacing and the weekly pass depend on it. A test install at
+v0.13-rc1 and its upgrade to v0.13-rc3 rehearsed it in part (both
+routines read the doc in test fires); no pass has run on its real
+schedule yet.
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the

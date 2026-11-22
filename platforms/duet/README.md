@@ -15,14 +15,16 @@ ephemeral shell with one persistent folder.
   counted in the profile's audit figure.
 - This README is for people; the installing agent does not need it.
 
-**Status: rehearsed in part at v0.13-rc1; changed since.** One test
+**Status: rehearsed in part at v0.13-rc3; changed since.** A test
 install ran at v0.13-rc1 (docs/REHEARSALS.md run 22). Files and
 at-install checks worked; the routines could not, because a Duet
 routine run has no project folder. The routines now read one
 generated Claude Doc, the **kit state doc**, which the hosting chat
 syncs from `kit/` when the user asks. Module 10's surfacing and the
 weekly pass depend on that doc: an item added since the last sync
-waits for the next one. That design is unrehearsed. The token
+waits for the next one. The same install upgraded to v0.13-rc3
+(run 23), where both routines read the doc in test fires; no pass
+has run on its real schedule yet. The token
 answers behind the profile are in docs/capability-profiles.md
 (Platform answers: Claude Duet).
 

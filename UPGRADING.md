@@ -36,9 +36,12 @@ upgrade is a small, deliberate procedure, not a `git pull`.
    new disclosures. Local edits the user (or their agent) made to
    installed files are listed as conflicts and merged, never
    overwritten silently. The conflict list is mechanical where a
-   baseline exists: run `kit_doctor.py` — every "edited since
-   install" line is a conflict to list. (An install with no baseline
-   falls back to comparing against the old pin's files by hand.)
+   baseline exists: run `kit_doctor.py` (it ships with module 05) —
+   every "edited since install" line is a conflict to list. Without
+   module 05, compare by hand: for each baseline line not marked
+   `accumulating`, the file's `sha256sum` against its recorded hash;
+   every mismatch is a conflict. (An install with no baseline falls
+   back to comparing against the old pin's files by hand.)
    Approval names the new pins.
 5. **Apply module by module**, in dependency order, re-running each
    changed module's `VERIFY.md` at-install checks as you go. A failed
