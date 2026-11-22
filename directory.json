@@ -1,5 +1,5 @@
 {
-  "generated_from": "16fb073e432b4d90761b0ee8506e50dafe11278a",
+  "generated_from": "f5dcf1b37084119e33cd384b5a5c8da7536989cc",
   "library": "core",
   "modules": [
     {
@@ -349,7 +349,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 2724,
+      "audit_words": 3191,
       "data_classes": [
         "personal",
         "third-party"
@@ -386,7 +386,7 @@
       "network": "none.",
       "pitch": "Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.",
       "reads": "your memory files.",
-      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending",
+      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by the 'Forgetting cleanly' section, rehearsed in run 25 (2026-11-22) on the forgetting-section branch \u2014 verb choice, plan-first flow, approval scope, and closing verification exercised on a fictional store, changed surface only; the module's install path was not re-run",
       "requires": [],
       "title": "Memory Architecture",
       "version": "0.8",
