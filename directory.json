@@ -1,5 +1,5 @@
 {
-  "generated_from": "cd89c253e352b94ab74d37493c27470eff66b439",
+  "generated_from": "5310d4d0ff081c115b19d8f6c8d5925ed86e5983",
   "library": "core",
   "modules": [
     {
@@ -50,7 +50,9 @@
       "data_classes": [
         "personal"
       ],
-      "degrades_without": [],
+      "degrades_without": [
+        "instruction-file"
+      ],
       "depends_on": [],
       "dir": "modules/00-core-procedures",
       "files": [
@@ -546,14 +548,15 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 7002,
+      "audit_words": 7003,
       "data_classes": [
         "personal",
         "third-party"
       ],
       "degrades_without": [
         "scheduling",
-        "shell-python"
+        "shell-python",
+        "instruction-file"
       ],
       "depends_on": [
         "core/core-procedures",
