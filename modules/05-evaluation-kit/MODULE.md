@@ -53,6 +53,22 @@ instead of argued.
    adoption is recorded with date and source. Nothing is adopted by
    default, by silence, or by the reviewers' say-so.
 
+**When the packet is code.** The same method reviews a large code
+change, with one ordering rule: deterministic checks first. Every
+mechanical check the repository has — type checker, lint, the test
+suite — runs before any agent review, and its output is the
+reviewers' first input, ahead of the diff. Agent reviewers then
+work named lenses, one lens each — security, simplicity, edge
+cases, scope — on what the tools cannot check. The lens evidence
+is old and human: Porter, Votta & Basili (1995) found reviewers
+assigned specific fault scenarios found roughly 35% more faults
+in requirements inspections than reviewers sharing one general
+checklist. That is evidence about human inspection of
+requirements documents, not a measurement of agent reviewers;
+the kit adopts the shape, not the number. The ordering needs no
+citation: a change can pass several agent reviewers and still
+ship what a type checker would have caught, when nobody ran it.
+
 ## Track B — task runs (measured)
 
 The audit method reviews the documents. This track runs the agent.
@@ -72,6 +88,14 @@ its shape from Harbor's task runs, deliberately smaller:
   oracle check (`tools/run_eval.py`, run with `--oracle`) after
   adding or
   changing a task, before trusting anything it reports.
+- **Coverage is not a pass rate.** Repeated-sampling gains are
+  usually pass@k coverage — the share of tasks solved by *any*
+  sample. Brown et al. (2024) report issues solved rising from
+  15.9% with one sample to 56% at 250; that 56% is reachable
+  only when a verifier picks the winner, and without one that
+  can reject, selection plateaus. Cap N by gate strength: a
+  weak gate earns small N plus a human skim, not large N
+  trusted blind.
 - A **comparison** is the same tasks under the old setup and the new
   one, the model held fixed and named in the job record, at least 3
   trials per arm. Report pass rate, human interventions, and wall
