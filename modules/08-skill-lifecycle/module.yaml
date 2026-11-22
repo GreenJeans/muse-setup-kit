@@ -11,7 +11,7 @@ license: MIT
 kit_compat: [kit-1]
 depends_on: [core/core-procedures, core/memory-architecture]
 requires: []
-degrades_without: [scheduling, shell-python]
+degrades_without: [scheduling, shell-python, instruction-file]
 reads: "session transcripts, your custom skills, the decision queue, scheduled-job records."
 writes: "staged proposals (never live skills directly), a skill-usage ledger, decision-queue items, an archive folder for retired skills, and a pointer line in the agent's main instruction file (added at the Lite install)."
 network: "none."

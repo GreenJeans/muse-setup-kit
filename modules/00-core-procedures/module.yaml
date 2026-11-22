@@ -11,7 +11,7 @@ license: MIT
 kit_compat: [kit-1]
 depends_on: []
 requires: []
-degrades_without: []
+degrades_without: [instruction-file]
 reads: "your existing agent instructions and workspace layout."
 writes: "an operating-procedures file, a decision queue, SCOPE notes, a JOBS.md, a continuity handover, and a pointer line in the agent's main instruction file."
 network: "none."

@@ -72,6 +72,16 @@ known and no more.
 - The **Standard profile** (00+01+02+06+09) installed as a unit.
   Profiles need their own rehearsals — cross-module amendments
   are where breakage lives — and no ledger row installs Standard.
+- The **Duet profile** (00+06+09+10 on Claude Duet) through its
+  overlay, `platforms/duet/WIZARD.md`, and the bootstrap skill in
+  `platforms/duet/skill/`. Nothing about them has been rehearsed:
+  not the overlay's Step 1 answers, not the instruction-file
+  degradation's front door (a memory line the user states), not the
+  two routines that carry the profile's jobs, and not the skill
+  loading from a Claude account. A read-only Step 0 audit of one
+  real Duet account (2026-11-22) informed the profile; an audit
+  writes nothing and is not a rehearsal. The overlay's Unchecked
+  list names what the first run must establish.
 - **Release gate for v0.8:** the tag is not cut until a fresh
   install rehearsal runs at the release commit itself, so the
   release ships with at least one row at its own pin.

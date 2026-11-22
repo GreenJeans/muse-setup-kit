@@ -98,6 +98,9 @@ and approved.**
    the install also adds one line to the main instruction file:
    "At session start, check SETUP-PLAN.md for overdue deferred
    checks." The line is harmless when a brief also surfaces them.
+   On a platform without an `instruction-file` (Step 1), the line
+   takes the path docs/capability-profiles.md gives for that
+   degradation, and the plan names the surface that carries it.
    A deferred check with no way to surface is a failed check. Each
    verification report shows its evidence (file listings, scheduler
    output, hashes), not just PASS, and the handover names three checks
@@ -150,13 +153,17 @@ the answers for the gating step:
   machine, including session transcripts where the platform keeps them?
 - Does the platform keep a persistent persona file (a SOUL.md or
   equivalent) that the agent reads at the start of every session?
+- Is there a main instruction file — one the user or the agent can
+  edit — that the agent reads at the start of every session? (A
+  platform whose standing instructions are fixed by the platform
+  has none, even when it shows the agent some project text.)
 - Does the platform give the user persistent pages or spaces —
   a sidebar of pages, dashboards, a library — that the agent can
   create, edit, and refresh on a schedule?
 - **Which billing bucket does this session draw on?** An install is
   heavy work: it writes dozens of files, and the reading runs about
-  27,000 words for a Starter install, about 34,100 for Standard
-  (about 41,600 with module 11 added), and about 62,300 for
+  27,200 words for a Starter install, about 34,400 for Standard
+  (about 41,900 with module 11 added), and about 62,600 for
   everything on the shelf.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
@@ -187,6 +194,7 @@ Map the answers to the module.yaml requirement tokens:
 | A host the user controls | `own-host` |
 | Shell / Python 3 execution | `shell-python` |
 | A persistent persona file | `persona-file` |
+| An editable main instruction file | `instruction-file` |
 | Persistent pages / spaces | `spaces` |
 
 File-based job definitions count as `scheduling` when the platform
@@ -287,6 +295,11 @@ compute the offerable set:
   `depends_on` resolves across every configured library, not just
   its own: a dependency no configured library carries makes the
   module unofferable until that library is added.
+- A profile that carries a `platform:` field is a platform profile:
+  offer it only on that platform, through that platform's overlay
+  (its `platform_files`), and never as Starter or Standard. Its
+  audit figure includes the overlay. On any other platform, do not
+  offer it.
 - Offer the manifest's **profiles first** (Starter, then Standard),
   each with its audit word count from the manifest, then the full
   checklist. First time, the sensible default is Starter; modules can

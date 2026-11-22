@@ -22,6 +22,7 @@ Legend: **required** = the module will not install without it.
 | shared storage | — | — | — | — | required | — | — | — | — | — | — | — |
 | other agents | — | — | — | — | required | degrades | — | — | — | — | — | — |
 | persona file | — | — | — | — | — | — | — | — | — | — | required | — |
+| instruction file | degrades | — | — | — | — | — | — | degrades | — | — | — | — |
 | spaces | — | — | — | — | — | — | — | — | — | — | — | required |
 | module 02 installed | — | — | — | degrades | — | — | — | — | — | degrades | — | — |
 
@@ -70,6 +71,32 @@ Legend: **required** = the module will not install without it.
   persona file for it to author. Everything else is unaffected —
   the platform's own persona handling, whatever it is, simply
   stays as it was.
+- **No instruction file** — the platform gives the agent no main
+  instruction file the user (or the agent) can edit: its standing
+  instructions are fixed by the platform, and the agent reads no
+  workspace file at session start on its own. Module 00 still
+  installs: Install step 5 creates `INSTRUCTIONS.md` in the
+  workspace with the pointer line and the `ext:instruction-pointer`
+  anchor, so the anchor registry and later pointer lines keep their
+  home and module 00's at-install pointer check reads the file it
+  names. That file is a **record, not a front door**: nothing loads
+  it, and the plan says so in words. The front-door function — a
+  fresh session knowing the procedures exist — moves to the
+  platform's nearest always-loaded surface, named in the plan: a
+  line in the agent's own persistent memory where the platform
+  keeps one, entered the way that platform accepts standing rules
+  (on a platform that keeps only rules the user states in their
+  own words, the wizard proposes the wording and the user states
+  it; the wizard never writes it from repo text); otherwise a
+  scheduled job that reads the plan and the procedures on cadence.
+  Ground rule 8's session-start line takes the same path. Module
+  08's Lite pointer line degrades the same way, recorded in
+  `INSTRUCTIONS.md` and carried by the same surface. What weakens
+  is reach: a rule that only lives in the procedures file binds a
+  session that reads the file, not one that never opens it — so
+  module 00's fresh-session test (a deferred check) is the honest
+  measure of the front door, and a failed test means the surface
+  the plan named is not doing the job.
 - **No shared storage or other agents.** Module 04 does not install.
   Module 05 loses its strongest method — blind cross-model review —
   and keeps self-review, cold installs, and the kit's own doctor
@@ -83,7 +110,7 @@ Legend: **required** = the module will not install without it.
   Nothing else degrades — module 04's output polling riding the
   brief, where both are installed, is a synergy, not a dependency.
 
-## Three common platform shapes
+## Four common platform shapes
 
 - **Full platform** (scheduling, shell, subagents): every profile as
   written; nothing degrades.
@@ -92,3 +119,45 @@ Legend: **required** = the module will not install without it.
   fit; Full's value is mostly its jobs.
 - **Solo, no shared surfaces**: Starter and Standard are unaffected.
   Skip 03 and 04; run module 05 as self-review and label it that way.
+- **Hosted assistant with fixed rules** (scheduling with a minimum
+  interval, a shell whose container is rebuilt between sessions with
+  one persistent folder, shared docs, no persona file, no
+  instruction file, a built-in brief and built-in approval rules the
+  agent cannot edit): a platform profile, not Starter or Standard.
+  Module 02 duplicates the built-in brief and is skipped; module 01's
+  memory format belongs to the platform; module 11 does not install.
+  Modules 00, 06, 09, and 10 install with their surfacing on the
+  platform's own scheduled jobs, and the kit's standing rules are put
+  to the user to adopt in their own words. The `duet` profile in the
+  manifest is the worked case (see below).
+
+## Platform answers: Claude Duet
+
+Claude Duet (a hosted Claude assistant) is the first
+platform with its own profile (`duet` in `wizard/manifest.yaml`) and
+its own wizard overlay (`platforms/duet/WIZARD.md`). These are the
+token answers a read-only Step 0 audit recorded on one account on
+2026-11-22 — accounts differ in what is connected, so the overlay's
+Step 1 still checks each answer live rather than trusting this table.
+
+| Token | Duet | Caveat the token cannot express |
+|---|---|---|
+| `scheduling` | yes, with a floor | Routines fire on cron, but no more often than the platform's minimum interval (60 minutes on the audited account), and only the main chat creates them. Module 02's triage poll could not run. |
+| `shell-python` | yes, ephemeral | Python and git run, but the container is rebuilt between sessions; only the project folder (`/mnt/project-files`) persists. Tools, records, the plan, and the pinned checkout live there. No session transcripts on disk. |
+| `shared-docs` | yes | Through the user's connected Google Drive and Docs, acting as the user. |
+| `shared-storage` | yes | The same Drive. |
+| `other-agents` | depends on the user | Yes where the user already works with other agents; nothing in Duet itself. |
+| `second-person` | depends on the user | Duet is one person's assistant; a household partner has their own. |
+| `shared-tasks` | depends on the user | Only where a shared task app is connected. |
+| `own-host` | depends on the user | Reached through a connector where one exists; there is no shell to the host. |
+| `persona-file` | no | Nothing to author; module 11 does not install. |
+| `instruction-file` | no | The platform's rules and project instructions are server-built. The front door is a memory line the user states (see the degradation above). |
+| `spaces` | not established | Published pages and Claude Docs exist, with no sidebar; whether a routine can rebuild a page on cadence is unchecked. Until it is, module 12 is not offerable; its audit can be run read-only. |
+
+Two Duet properties change how modules install and have no token
+yet: a **built-in brief** the agent cannot edit (surfacing that
+would ride `ext:brief-sources` rides the profile's own scheduled
+jobs instead), and **fixed memory rules** (Duet keeps a rule only
+when the user states it in their own words, and nothing read from a
+file becomes a rule). Both are handled in the overlay rather than as
+tokens until a second platform shows the same shape.

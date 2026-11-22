@@ -886,6 +886,85 @@ class SelfcheckCoreTest(unittest.TestCase):
             self.assertIn("directory.json is stale", r.stdout)
 
 
+class SelfcheckPlatformProfileTest(unittest.TestCase):
+    """A platform profile's overlay files count toward its audit
+    cost, and their declaration is checked."""
+
+    def _repo(self, td, profile_lines, overlay=True):
+        SelfcheckCoreTest._core_repo(self, td)
+        manifest = os.path.join(td, "wizard", "manifest.yaml")
+        with open(manifest, "a") as fh:
+            fh.write(profile_lines)
+        if overlay:
+            pdir = os.path.join(td, "platforms", "example")
+            os.makedirs(pdir)
+            with open(os.path.join(pdir, "WIZARD.md"), "w") as fh:
+                fh.write("one two three four five\n")
+        return td
+
+    def test_overlay_words_are_counted(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._repo(td, "  - id: example\n"
+                           "    platform: example-host\n"
+                           "    modules: [core/example]\n"
+                           "    platform_files: [platforms/example/WIZARD.md]\n"
+                           "    audit_words: 0\n")
+            sys.path.insert(0, os.path.join(REPO, "tools"))
+            import kit_selfcheck as ks
+            manifest = os.path.join(td, "wizard", "manifest.yaml")
+            expect = (ks.words(manifest)
+                      + ks.count_module_words(os.path.join(
+                          td, "modules", "02-example")) + 5)
+            r = run(SELFCHECK, "--repo", td)
+            self.assertIn(f"profile example: audit cost {expect} words",
+                          r.stdout)
+            self.assertNotIn("platform file", r.stdout)
+            self.assertNotIn("platform_files", r.stdout)
+
+    def test_missing_overlay_file_is_a_finding(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._repo(td, "  - id: example\n"
+                           "    platform: example-host\n"
+                           "    modules: [core/example]\n"
+                           "    platform_files: [platforms/example/GONE.md]\n"
+                           "    audit_words: 0\n")
+            r = run(SELFCHECK, "--repo", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("platform file missing: platforms/example/GONE.md",
+                          r.stdout)
+
+    def test_overlay_outside_platforms_is_a_finding(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._repo(td, "  - id: example\n"
+                           "    platform: example-host\n"
+                           "    modules: [core/example]\n"
+                           "    platform_files: [README.md, platforms/../README.md]\n"
+                           "    audit_words: 0\n")
+            r = run(SELFCHECK, "--repo", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("'README.md' is not a path under platforms/",
+                          r.stdout)
+            self.assertIn("'platforms/../README.md' is not a path under "
+                          "platforms/", r.stdout)
+
+    def test_platform_and_files_must_come_together(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._repo(td, "  - id: hostonly\n"
+                           "    platform: example-host\n"
+                           "    modules: [core/example]\n"
+                           "    audit_words: 0\n"
+                           "  - id: filesonly\n"
+                           "    modules: [core/example]\n"
+                           "    platform_files: [platforms/example/WIZARD.md]\n"
+                           "    audit_words: 0\n")
+            r = run(SELFCHECK, "--repo", td)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("profile hostonly: platform 'example-host' "
+                          "declares no platform_files", r.stdout)
+            self.assertIn("profile filesonly: platform_files without a "
+                          "platform: field", r.stdout)
+
+
 class ModuleYamlTest(unittest.TestCase):
     def _write(self, td, name, text):
         p = os.path.join(td, name)
@@ -1705,3 +1784,52 @@ class SpacesDashboardsRegistrationTest(unittest.TestCase):
         self.assertIn("| spaces |", matrix)
         readme = open(os.path.join(REPO, "README.md")).read()
         self.assertRegex(readme, r"(?m)^\| 12 \|")
+
+
+class DuetProfileRegistrationTest(unittest.TestCase):
+    """The duet platform profile, its overlay, and the
+    instruction-file token are wired where the wizard reads them."""
+
+    def _manifest(self):
+        sys.path.insert(0, os.path.join(REPO, "tools"))
+        import module_yaml
+        return module_yaml.parse_file(
+            os.path.join(REPO, "wizard", "manifest.yaml"))
+
+    def test_duet_profile_shape(self):
+        profs = {p["id"]: p for p in self._manifest()["profiles"]}
+        duet = profs["duet"]
+        self.assertEqual(duet["platform"], "claude-duet")
+        self.assertEqual(duet["modules"],
+                         ["core/core-procedures", "core/security-pack",
+                          "core/cost-guardrails",
+                          "core/deadlines-register"])
+        self.assertIsNone(duet["rehearsed_at"])
+        for rel in duet["platform_files"]:
+            self.assertTrue(os.path.isfile(os.path.join(REPO, rel)), rel)
+
+    def test_default_profiles_carry_no_platform(self):
+        profs = {p["id"]: p for p in self._manifest()["profiles"]}
+        for pid in ("starter", "standard"):
+            self.assertNotIn("platform", profs[pid])
+            self.assertNotIn("platform_files", profs[pid])
+
+    def test_instruction_file_token_is_wired(self):
+        doc = json.load(open(os.path.join(REPO, "directory.json")))
+        entries = {m["id"]: m for m in doc["modules"]}
+        self.assertIn("instruction-file",
+                      entries["core/core-procedures"]["degrades_without"])
+        self.assertIn("instruction-file",
+                      entries["core/skill-lifecycle"]["degrades_without"])
+        matrix = open(os.path.join(
+            REPO, "docs", "capability-profiles.md")).read()
+        self.assertRegex(matrix, r"(?m)^\| instruction file \| degrades \|")
+        wizard = open(os.path.join(REPO, "wizard", "SKILL.md")).read()
+        self.assertIn("| An editable main instruction file | "
+                      "`instruction-file` |", wizard)
+
+    def test_bootstrap_skill_has_frontmatter(self):
+        text = open(os.path.join(REPO, "platforms", "duet", "skill",
+                                 "SKILL.md")).read()
+        self.assertTrue(text.startswith("---\nname: muse-setup-kit-duet\n"))
+        self.assertIn("\ndescription: ", text.split("\n---\n")[0])

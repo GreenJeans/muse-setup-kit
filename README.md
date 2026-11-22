@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 62,300
+install is heavy work — a full one reads on the order of 62,600
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -79,9 +79,26 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~27,000 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~34,100 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all twelve modules | ~62,300 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~27,200 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~34,400 words | Plus the memory schema with its linter, and the security pack. |
+| Duet | 00 + 06 + 09 + 10 | ~27,300 words | Claude Duet only, through its overlay (counted in the figure). Tickets, a decision queue, a handover, vetting and grants inventory, a bucket register, a deadlines register, surfaced by two routines; Duet's built-in brief stays. Unrehearsed. |
+| Everything | all twelve modules | ~62,600 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+
+**On Claude Duet?** Duet has no instruction file you can edit, a
+built-in brief, and its own approval rules, so it gets its own
+profile and an overlay on the wizard (`platforms/duet/`). Use this
+prompt instead, or add the bootstrap skill in
+`platforms/duet/skill/` to your Claude account:
+
+```
+Install the Muse Setup Kit for me: clone
+https://github.com/GreenJeans/muse-setup-kit, check out the latest
+release tag, then read wizard/SKILL.md and platforms/duet/WIZARD.md
+and run the setup wizard with the Duet overlay.
+```
+
+The Duet profile and overlay are unrehearsed: you would be the
+first.
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -200,6 +217,7 @@ UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
 docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (profiles + library data)
+platforms/duet/      ← WIZARD.md (the Claude Duet overlay for the duet profile) · skill/SKILL.md (bootstrap Claude skill) · README.md
 directory.json       ← generated catalog of the core library (tools/build_directory.py) · advisories.json (generated; advisories.yaml is its human-maintained source)
 modules/
   00-core-procedures/      module.yaml · MODULE.md · VERIFY.md · templates/
