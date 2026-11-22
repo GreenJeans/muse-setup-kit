@@ -18,12 +18,12 @@ profiles:
   - id: starter
     title: Starter
     modules: [core/core-procedures, core/morning-brief, core/cost-guardrails]
-    audit_words: 27800
+    audit_words: 28200
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core/core-procedures, core/morning-brief, core/cost-guardrails, core/memory-architecture, core/security-pack]
-    audit_words: 35700
+    audit_words: 36300
     pitch: "Starter, plus the compiled-memory schema with its linter, and the security pack (vetting, grants inventory, injection discipline)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle, deadlines-register, persona-soul,
