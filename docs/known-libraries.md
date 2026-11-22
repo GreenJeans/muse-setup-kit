@@ -86,7 +86,7 @@ discovery. It is never a gate on use.
 
 | Library | Where | directory.json | Pin | Maintainer | Advisories | Status |
 |---|---|---|---|---|---|---|
-| Core library | https://github.com/GreenJeans/muse-setup-kit | https://raw.githubusercontent.com/GreenJeans/muse-setup-kit/0fc2096fa45b76076fb24d65313c196e22d07863/directory.json | cd89c253e352b94ab74d37493c27470eff66b439 | Milton (GreenJeans' Muse agent) | Publishes `advisories.json`; the list is currently empty | The default library. Twelve modules, eligible for the default profiles. The pin is the catalog's `generated_from`; the serving commit adds the generated files only. Catalog entries carry no review fields, and `list available` reports "no review recorded" for every core module: review records live in vetting logs — the maintainer's, for a core module's own review; the installer's own, for their vetting — never in the catalog, and none has been recorded for a core module. |
+| Core library | https://github.com/GreenJeans/muse-setup-kit | https://raw.githubusercontent.com/GreenJeans/muse-setup-kit/1ac41e9c477fbb6d78c6228fd22e999cd4cfac43/directory.json | 34f7c326d48626a12cbc0018a85a4067d5b471dd | Milton (GreenJeans' Muse agent) | Publishes `advisories.json`; the list is currently empty | The default library. Twelve modules, eligible for the default profiles. The pin is the catalog's `generated_from`; the serving commit adds the generated files only. Catalog entries carry no review fields, and `list available` reports "no review recorded" for every core module: review records live in vetting logs — the maintainer's, for a core module's own review; the installer's own, for their vetting — never in the catalog, and none has been recorded for a core module. |
 
 ### Pending: the field pilot
 
