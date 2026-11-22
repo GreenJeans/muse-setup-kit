@@ -138,6 +138,16 @@ was done. Ship the gate as a record and audit mechanism. Do not
 claim it makes the work more correct until a long-horizon eval
 shows that.
 
+**What a verifier is shown.** The gate's verifier is a script,
+but when a second agent does the verifying, its inputs are part
+of the mechanism. Give it the task and the resulting state — the
+diff, the files, the test output — and not the builder's working
+notes or chain of reasoning. A verifier that reads the reasoning
+tends to ratify it: the assumptions that produced the work read,
+in the builder's own telling, as justifications for it. Fresh
+eyes are the entire value of the second agent; the builder's
+scratch work spends them.
+
 **Error compaction** (implements §7, ground truth; 12-Factor Agents
 factor 9). When a failed command is retried, the raw log does not
 re-enter context. `tools/compact_error.py` reduces it to a bounded
@@ -169,6 +179,42 @@ single step, the blocker, what not to redo. A task is pausable only
 while its card is current, and resumable only from the card, not
 from a chat transcript. Room close-out (§9) is this card's final
 form; the card is the same discipline applied mid-flight.
+
+**Choosing a shape for multi-agent work.** More agents is a
+shape, not an upgrade. Pick by the work: a simple task goes to a
+single thread; a medium one to a builder plus a verifier (the
+gate above, or a second agent under the input rule just stated);
+work that divides cleanly goes to parallel lanes; a hard task
+with a deterministic gate goes to best-of-N sampling under
+module 05's Track B; a hard, open-ended question goes to a
+council (module 04); a large or risky change finishes with lens
+reviewers (module 05's audit method).
+
+Lanes are a coordination problem before they are a parallelism
+win. In CooperBench (Khatua et al., COLM 2026; 652 coding
+tasks), two agents cooperating on shared code succeeded about
+30% less often than one agent doing both tasks, and frontier
+models lost closer to 50% — not because their edits collided,
+but because coordination failed: messages went unread,
+commitments drifted, each agent's picture of the other's work
+went stale. So split only on a frozen contract: the interface
+between the lanes' parts is fixed in writing before work
+starts, each lane states in advance what it will touch, and the
+merge runs an integration check against the contract, not just
+each lane's own tests. And cap the lane count by review
+bandwidth — every lane's output lands on the same human, and
+past the number they can actually review, extra lanes produce
+unreviewed work, not speed.
+
+**Stop condition.** Parallel shapes get one chance to fail
+cheap. If a builder and its verifier disagree twice on the same
+change, or two lanes turn out to touch a shared contract
+neither declared, stop parallelizing: collapse to a single
+thread and put the disagreement in front of the human. A
+failure rooted in a shared assumption is not fixed by more
+agents — each new agent inherits the assumption and returns a
+more confident version of the same wrong answer. This is abort
+on mismatch (§8) applied to agent teams.
 
 ## Two files named AGENTS.md
 
