@@ -59,7 +59,7 @@ label would make the record less checkable, not more.
 
 ## What has never been rehearsed (as of the library branch)
 
-- A fresh **full** install (all eleven modules) at any single pin.
+- A fresh **full** install (all twelve modules) at any single pin.
 - The wizard on a **small-group (Q1c)** interview.
 - A module 05 **install** (its method — blind dual review — has
   been run against the kit itself in the rounds ROADMAP records
