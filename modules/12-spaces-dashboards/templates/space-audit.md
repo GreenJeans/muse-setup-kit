@@ -13,14 +13,18 @@ actually runs.
   unreachable) / static (no machinery by design)
 - **Source of truth:** (the tracked state, register, or system
   this page claims to reflect — or "none")
+- **Actions:** (the actions the space exposes, read from the
+  space itself)
 - **Refresh machinery:** (schedule + action + source, or "none —
-  static by construction")
+  static by construction"; mode: snapshot / edit-based — flag
+  it if edit-based)
 - **Last refresh, verified:** (timestamp, and how you verified
   it: snapshot time, version history, job run record)
 - **Freshness budget it should carry:**
 - **Cross-check:** (one rendered value checked against its live
   source: value on page ___ / value at source ___ / agree?)
-- **Verdict:** keep / merge into ___ / freeze in library /
-  delete (substance carried by ___)
+- **Verdict:** keep (sidebar) / merge into ___ / move to
+  library (reference / briefing) / freeze in library
+  (machinery broken) / delete (substance carried by ___)
 - **Evidence line:** (the one line that justifies the verdict,
   naming what was checked)

@@ -11,7 +11,7 @@ identifying details are not.
 Fourteen spaces, twelve of them pinned in the sidebar. At the
 top of the sidebar sat three one-shot research pages, months
 past the questions they answered. A board whose data backend
-had been disconnected five days earlier sat frozen, still
+had been disconnected days earlier sat frozen, still
 pinned, still presenting its last state as current. Two static
 pages had never been edited since the day they were created.
 Nothing in the list said any of this; it had to be checked.
@@ -19,7 +19,7 @@ Nothing in the list said any of this; it had to be checked.
 ## The run
 
 **Research first.** The platform's own literature on spaces
-was fifteen days old and launch-only — feature announcements,
+was days old and launch-only — feature announcements,
 no retention evidence. The durable patterns came from adjacent
 systems that have run dashboards for years: self-hosted
 dashboard projects, a home-automation platform, a notes tool's
@@ -35,7 +35,7 @@ in the ways that mattered, including one page whose refresh
 had silently stopped and one whose headline number was wrong
 (below).
 
-**Design, batched.** One proposal, seven numbered questions:
+**Design, batched.** One proposal, a set of numbered questions:
 the merges, the sidebar budget, which pages would render
 content versus structure, and every proposed delete named. The
 user answered once. No page was built, moved, or deleted
@@ -43,7 +43,10 @@ before that answer.
 
 **Builds.** Three related live pages merged into one, their
 statuses becoming sections fed by the snapshot refresh that
-already existed. Three new living pages: an initiative
+already existed. The two absorbed originals were not deleted:
+demoted and frozen in the library at the user's call, their
+sections living on in the merged page — which is how the
+total below closes. Three new living pages: an initiative
 tracker; a self-monitoring page (job health as a dead man's
 switch — absence past the cadence window renders as failure);
 and a memory page (counts header, recent changes with diffs, a
@@ -64,7 +67,7 @@ call.
 
 Two results worth naming. The self-monitoring page caught a
 real failure on its first day: a nightly job that had been
-failing for two nights on a connection error, invisible
+failing unnoticed on a connection error, invisible
 because a stopped job produces nothing to notice. And the
 memory page's counts were cross-checked against independent
 probes and matched exactly — the cross-check is what makes a

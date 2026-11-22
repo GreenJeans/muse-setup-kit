@@ -19,5 +19,9 @@ page; it is a document that will rot.
   refresh preferred over edit-based refresh)
 - **Content opt-in:** structure only / content extended for
   ___ (the user's explicit choice, per page)
+- **Lineage:** (pages folded into this one: page — what was
+  carried — verified date; or "none")
+- **Composition anchors:** (anchor name — feeding module —
+  single recorded owner, per module 00; or "none")
 - **Cross-check record:** (value — page — source — date; at
   least one per page, from the build, refreshed at each audit)

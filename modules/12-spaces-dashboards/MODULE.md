@@ -39,7 +39,7 @@ slot as *living* pages — exception-first, status as an enum,
 freshness stamped, refreshed by machinery rather than memory.
 The worked run behind it is generalized in
 `docs/examples/spaces-redesign.md`: an audit of a 14-space
-sidebar that ended with 7 pages earning sidebar rent, three
+catalog (12 of them pinned) that ended with 7 pages earning sidebar rent, three
 pages merged into one, three research pages folded into a
 lineage section and deleted, and three new living pages built.
 
@@ -80,8 +80,8 @@ the audit finds a page being maintained the hard way, flag it;
 do not normalize it.
 
 **The sidebar is a budget.** Five to seven pinned pages is the
-working maximum; platform guidance and the cognitive research
-agree on "a handful". Everything else is classified: reference
+working maximum (default ceiling: 7); platform guidance
+converges on "a handful". Everything else is classified: reference
 material to the library, inactive pages frozen in the library,
 dead pages deleted with confirmation. A flat list of twelve
 pinned pages is not a sidebar, it is a pile.
@@ -101,7 +101,11 @@ per row, per page, forever — are where dashboards go to die.
 
 **Counts and structure over content — unless the user opts in.**
 Dashboards show aggregates, dates, and exceptions; raw content
-stays in its source system, one click away. A page may render
+stays in its source system, one click away. Even with a
+content opt-in, sensitive records (procedures §13 — document
+numbers, credentials, raw financial or medical payloads) stay
+pointer-only in their source systems and never render on a
+page or an audit worksheet. A page may render
 content itself (excerpts, diffs) when the user explicitly
 chooses that for that page, asked per page. The default is
 structure; content is the opt-in.
@@ -112,14 +116,15 @@ page treats absence past the cadence window (26 hours daily, 8
 days weekly) as failure in itself. Monitor only the jobs whose
 silent absence costs something; system and heartbeat noise is
 excluded by design. Show last success, last failure *with
-reason*, next expected, and whether an alert is attached. Built
-this way, the page catches real failures on its first day,
-because real failures are usually already happening.
+reason*, next expected, and whether an alert is attached. In the
+worked run, a page built this way caught a real failure on
+its first day; silent failures are usually already happening
+by the time anyone looks.
 
 **Never draw the global graph.** For memory or knowledge
 visualization, the global node graph hairballs past a few
-hundred nodes — every platform that ships one ships a beautiful
-toy. What works instead: a counts header, recent changes with
+hundred nodes — the platforms that ship one tend to ship a
+beautiful toy. What works instead: a counts header, recent changes with
 diffs, a quiet / stale / orphans health list, and at most a
 local graph seeded from one node.
 
@@ -165,20 +170,26 @@ day, in the same channel.
    those.
 3. **Design before building, questions batched.** Present the
    redesign as one proposal with numbered questions — merges,
-   the sidebar budget, per-page content opt-ins, every proposed
-   delete named. The user answers once. Deletes are approved
-   per space before any deletion happens; a bulk "clean it up"
-   is not a delete approval (module 00's ticket rule governs).
-4. **Build.** Merges first, then new living pages, each with a
+   the sidebar budget, per-page content opt-ins, and every
+   proposed delete as its own numbered item (title, slug or id,
+   substance destination). The user answers once. Deletes are
+   approved per space before any deletion happens; a bulk
+   "clean it up" is not a delete approval (module 00's ticket
+   rule governs).
+4. **Build.** Merges first, then new living pages. Every
+   living sidebar page — new, merged, or kept dynamic — gets a
    scope file (`templates/space-scope.md`): what it owns, what
    it must never show, its sources of truth, a freshness budget
    per section, its refresh machinery, the status enum it may
-   use. Cross-check one rendered value per new page against its
-   live source before calling it done, and record the check.
+   use. Cross-check at least one rendered value per new or
+   merged page against its live source before calling it done,
+   and record the check in its scope file.
 5. **Placement and deletes last.** Reorder the sidebar to the
    agreed budget (`templates/sidebar-plan.md`). Delete only
    after the surviving page is verified carrying the deleted
-   page's substance, and only the spaces individually confirmed.
+   page's substance, and reconfirm each delete at execution;
+   a space that changed since its step-3 approval has voided
+   that approval and is re-presented before it is deleted.
 
 ## Install
 
@@ -187,6 +198,19 @@ day, in the same channel.
 2. Run the audit (Procedure step 2) before proposing anything;
    the module's first deliverable is the filled worksheets plus
    a sidebar plan, not a page.
+
+## Degraded mode (without scheduling)
+
+Without scheduling, dynamic pages cannot auto-refresh on a
+cadence, and cadence-based self-monitoring does not apply. The
+module still installs: the audit, the classification, and the
+sidebar budget are the core of it. In degraded mode: (1) every
+dynamic page's scope file names its on-demand snapshot action
+and source — run manually or on session open — plus its
+freshness budget, so overdue sections still badge stale
+between runs; (2) do not build a cadence-based self-monitoring
+page; (3) VERIFY's deferred self-monitoring check is N/A until
+scheduling exists.
 
 ## Extension points (anchors)
 

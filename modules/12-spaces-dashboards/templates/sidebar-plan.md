@@ -6,6 +6,8 @@ plan. Every move names its rationale; every delete names its
 per-space confirmation.
 
 **Budget the user set:** ___ (default 7)
+**Plan approved:** ___ (date, and where the user's reply is
+recorded)
 
 ## Before
 | # | Space | Kind | Verdict |
@@ -23,9 +25,14 @@ per-space confirmation.
 |       |                                        |              |
 
 ## Deletes (each individually confirmed)
-| Space | Confirmed (date) | Substance carried by |
-|-------|------------------|----------------------|
-|       |                  |                      |
+| Space | Slug / id | Confirmed (date) | Substance carried by | Substance verified (date) |
+|-------|-----------|------------------|----------------------|---------------------------|
+|       |           |                  |                      |                           |
+
+## Corrections recorded
+(Wrong values the audit or cross-checks caught, and where each
+correction was sent — the same channel the wrong value arrived
+in.)
 
 ## Open questions for the user
 (Numbered; answered in one reply before any build.)
