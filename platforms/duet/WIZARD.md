@@ -75,6 +75,9 @@ Two orderings settle every conflict:
   `INSTRUCTIONS.md` (the record of pointer lines), the procedures,
   the decision queue, `JOBS.md`, the handover, `scopes/`,
   `security/`, `runs/`, and `tools/`.
+- In this file, `kit/...` means that path under the project folder.
+  Baseline lines in `SETUP-PLAN.md` give paths relative to the
+  workspace root, as the wizard says.
 - Run any kit tool from the workspace's `tools/` copy or the
   checkout with `python3 -I`, passing paths as arguments.
 
@@ -273,7 +276,7 @@ kit folder, per `JOBS.md`'s slim-definitions rule.
   one line to `kit/runs/kit-weekly-pass.md`. It posts one short
   message, or a single line saying nothing is due. It writes only
   under `kit/runs/`.
-- **`kit-monthly`** — monthly, in the first week. It runs module 06's
+- **`kit-monthly`** — monthly, on the 1st. It runs module 06's
   standing-grants inventory and records it in `kit/security/`, then
   posts module 09's spend-check prompt (which buckets to read, with
   the user present), and appends one line to `kit/runs/kit-monthly.md`.
