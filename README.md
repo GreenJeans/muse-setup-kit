@@ -81,7 +81,7 @@ and tools) — the reading the request above actually asks for:
 |---|---|---|---|
 | **Starter** | 00 + 02 + 09 | ~27,400 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
 | **Standard** | Starter + 01 + 06 | ~34,600 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all twelve modules | ~63,100 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10) are each offered on their own merits. |
+| Everything | all twelve modules | ~63,100 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
