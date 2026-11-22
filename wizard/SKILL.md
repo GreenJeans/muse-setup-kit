@@ -410,7 +410,7 @@ For each module:
    classes (docs/library.md), declared for it in the module's
    `module.yaml`, and the line names the class **and the owning
    module's qualified id**:
-   `- installed: <path relative to the workspace> sha256:<sha256 of the file as installed> static-verbatim <library>/<module> from:<library>/<module>:<package-relative source path>`
+   `- installed: <path relative to the workspace> sha256:<sha256 of the file as installed> static-verbatim <library>/<module> from:<library>/<module>:<library-root-relative source path>`
    for a byte-for-byte copy of a package file (the tools scripts) —
    the `from:` token names the package file the copy came from,
    and it is what repair reads; the same line ending
