@@ -205,7 +205,7 @@ description; wording in this repository is behavior.
 ## What it costs
 
 Reading: the profiles run about 27,700 words (Starter) and
-35,300 (Standard), counted on the all-files basis. No
+35,600 (Standard), counted on the all-files basis. No
 per-module word budget is set yet; each module's
 `audit_words` is printed at selection time, and that printed
 figure is the disclosure. Money: a rehearsal or an install
