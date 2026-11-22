@@ -16,7 +16,7 @@ reads: "the existing persona file if one exists, the adopter's interview answers
 writes: "the persona file (SOUL.md), drafted from the interview and written only on the adopter's approval; the soul linter, copied as a tool."
 network: "none."
 jobs: "none of its own; the periodic reread rides the brief's monthly pass or the memory linter's weekly run when either is installed."
-rehearsed_at: "library branch runs 16-18 (2026-11-21): runs 16-17 (full interview) on the branch at 41eb24e plus the module as built; run 18 (short subset, cold-start fallback) on the EX-032/033 fix-pass tree; that round's fixes are in this tree, re-rehearsal at the committed pin pending"
+rehearsed_at: "library branch runs 16-18 (2026-11-21): runs 16-17 (full interview) on the branch at 41eb24e plus the module as built; run 18 (short subset, cold-start fallback) on the EX-032/033 fix-pass tree; that round's fixes are in this tree, re-rehearsal at the committed pin pending; re-rehearsed in run 28 (2026-11-22) on the v0.14-prep branch at checkout pin 0be5410 — short subset inside a full install; soul_lint clean; examples drafted from the interview answers and marked drafted/provisional in the file"
 data_classes: [personal, third-party]
 action_classes: [none]
 files:
