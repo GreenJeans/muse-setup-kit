@@ -14,6 +14,16 @@ Kept honestly, including the gaps. Early runs predate this ledger
 and did not record per-module check counts; those rows say what is
 known and no more.
 
+Notation, since the `rehearsed_at` fields use both: **run N** is
+a row of the table below. **EX-nnn** is one of the maintainer's
+blind dual-review rounds — module 05's audit method run against
+the kit itself: two independent reviewers, one frozen packet,
+findings ingested with the disagreements kept visible. The
+rounds' packets and ingest memos are the maintainer's records
+and are not shipped in this repo; the IDs stay in the fields
+because they are the address of the evidence, and a vaguer
+label would make the record less checkable, not more.
+
 | # | Date | Kit state | Shape | Modules installed | At-install checks | Findings |
 |---|---|---|---|---|---|---|
 | 1 | 2026-11-20 | pre-v0.1 tree | Solo user, no second person, no host, no other agents; wizard end to end into a sandbox | Core set (00, 01, 02, 06 exercised; 03, 04, 07 withheld by gating). Per-module list not recorded — the gap this ledger exists to close | Not recorded per module | 16 friction findings (3 high), all fixed in the hardening phase: module 06 gained its Install section, module 01 its fresh-store path and shipped linter, verification split into at-install vs deferred |

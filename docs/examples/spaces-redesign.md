@@ -65,6 +65,19 @@ earn sidebar rent; the library holds the reference pages, the
 briefing letters, and three frozen pages kept at the user's
 call.
 
+A correction to that end state, recorded the way corrections
+are recorded in this kit — in the open, with the original
+claim left standing: the demote-and-freeze call above was the
+run's own, and it held for less than a day. Later the same
+day, in a follow-up audit of the live pages, the owner
+directed one of the two frozen originals — the GPU-projects
+page — deleted after all, once its substance was verified
+carried by the merged page. The other original stays frozen
+in the library. So the library now holds two of the run's
+frozen pages, not three, and the total stands at 13, not 14.
+Both decisions are recorded as they happened; the later one
+does not rewrite the earlier.
+
 Two results worth naming. The self-monitoring page caught a
 real failure on its first day: a nightly job that had been
 failing unnoticed on a connection error, invisible
