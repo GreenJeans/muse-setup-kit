@@ -1,12 +1,12 @@
 {
-  "generated_from": "34f7c326d48626a12cbc0018a85a4067d5b471dd",
+  "generated_from": "16fb073e432b4d90761b0ee8506e50dafe11278a",
   "library": "core",
   "modules": [
     {
       "action_classes": [
         "none"
       ],
-      "audit_words": 2070,
+      "audit_words": 2098,
       "data_classes": [
         "personal",
         "third-party"
@@ -33,7 +33,7 @@
       "network": "your cloud storage.",
       "pitch": "Multiple AI agents exchanging work through shared storage \u2014 protocol, queue, blind reviews, published pages, ingest discipline.",
       "reads": "the exchange folders and queue.",
-      "rehearsed_at": "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by orchestration-patterns additions, re-rehearsal pending",
+      "rehearsed_at": "v0.1 household dry run; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; orchestration-patterns addition (the council form) exercised end to end in run 23 (2026-11-21) on the v0.13-prep branch \u2014 blind arms, a planted canary caught by one arm, merge-best ingest with verification against the original",
       "requires": [
         "shared-storage",
         "other-agents"
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 8552,
+      "audit_words": 8575,
       "data_classes": [
         "personal"
       ],
@@ -105,7 +105,7 @@
       "network": "none.",
       "pitch": "Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.",
       "reads": "your existing agent instructions and workspace layout.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending; harness additions (verifier gate, error compaction, STATE card) exercised in run 19 on the harness branch pre-commit, changed surfaces only; EX-034/035 review fixes re-rehearsed in run 20 (gate surface) on the harness branch; changed by orchestration-patterns additions, re-rehearsal pending",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending; harness additions (verifier gate, error compaction, STATE card) exercised in run 19 on the harness branch pre-commit, changed surfaces only; EX-034/035 review fixes re-rehearsed in run 20 (gate surface) on the harness branch; orchestration-patterns additions (verifier input spec, choosing-a-shape routing incl. the no-04/05 fallback and the stop condition, best-of-N block) exercised in run 23 (2026-11-21) on the v0.13-prep branch, changed surfaces only",
       "requires": [],
       "title": "Core Procedures",
       "version": "0.9",
@@ -190,7 +190,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 4294,
+      "audit_words": 4307,
       "data_classes": [
         "personal",
         "third-party"
@@ -293,7 +293,7 @@
       "network": "a second model if used for blind review.",
       "pitch": "Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.",
       "reads": "your procedures and memory, frozen into an audit packet.",
-      "rehearsed_at": "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal; changed by orchestration-patterns additions, re-rehearsal pending",
+      "rehearsed_at": "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal; orchestration-patterns additions (coverage-honesty rule, deterministic-first lens review) exercised in run 23 (2026-11-21) on the v0.13-prep branch, changed surfaces only",
       "requires": [],
       "title": "Evaluation Kit",
       "version": "0.8",
@@ -608,7 +608,7 @@
       "action_classes": [
         "delete"
       ],
-      "audit_words": 3140,
+      "audit_words": 3232,
       "data_classes": [
         "personal"
       ],
@@ -643,7 +643,7 @@
       "network": "public web, for pattern research when the platform's own literature is thin.",
       "pitch": "Audit the pages your setup accumulates, merge and budget them, and build the few that stay alive: exception-first, enum status, freshness-stamped, auto-refreshed.",
       "reads": "the user's space catalog (each space's actions, snapshot and state, version history), the sidebar order, refresh schedules, and the tracked items or goals a page claims to reflect. Metadata and freshness first; page content only as needed.",
-      "rehearsed_at": "run 21 (2026-11-21) on the spaces-module branch pre-commit: scripted-persona audit of a fictional 9-space catalog; procedure and templates exercised, platform mechanics not. Texts and the run record amended in the EX-036/037 fix pass (branch tip b7844ce); re-rehearsal at the committed pin pending",
+      "rehearsed_at": "run 21 (2026-11-21) on the spaces-module branch pre-commit: scripted-persona audit of a fictional 9-space catalog; procedure and templates exercised, platform mechanics not. Texts and the run record amended in the EX-036/037 fix pass (branch tip b7844ce); re-rehearsed in run 22 (2026-11-21) on the v0.13-prep branch at the v0.12 release content (module byte-identical between 7214200 and c1cf88a): fresh fictional 12-space catalog, the post-review hardening exercised \u2014 cross-check disagreement handled to agreement, scope files for merged and kept-dynamic pages, a badge-first stale-render defect found as stipulated, numbered deletes with one approval voided by a post-approval edit and re-presented; one template note line added post-run (sidebar-plan deletes)",
       "requires": [
         "spaces"
       ],

@@ -16,7 +16,7 @@ reads: "your procedures and memory, frozen into an audit packet."
 writes: "packets, findings, adoption records, eval results."
 network: "a second model if used for blind review."
 jobs: "an audit reminder on cadence."
-rehearsed_at: "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal; changed by orchestration-patterns additions, re-rehearsal pending"
+rehearsed_at: "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal; orchestration-patterns additions (coverage-honesty rule, deterministic-first lens review) exercised in run 23 (2026-11-21) on the v0.13-prep branch, changed surfaces only"
 data_classes: [personal, third-party]
 action_classes: [none]
 files:

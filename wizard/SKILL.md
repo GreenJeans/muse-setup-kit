@@ -156,7 +156,7 @@ the answers for the gating step:
 - **Which billing bucket does this session draw on?** An install is
   heavy work: it writes dozens of files, and the reading runs about
   27,700 words for a Starter install, about 34,900 for Standard
-  (about 42,400 with module 11 added), and about 63,700 for
+  (about 42,400 with module 11 added), and about 63,800 for
   everything on the shelf.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
@@ -410,7 +410,7 @@ For each module:
    classes (docs/library.md), declared for it in the module's
    `module.yaml`, and the line names the class **and the owning
    module's qualified id**:
-   `- installed: <path relative to the workspace> sha256:<sha256 of the file as installed> static-verbatim <library>/<module> from:<library>/<module>:<package-relative source path>`
+   `- installed: <path relative to the workspace> sha256:<sha256 of the file as installed> static-verbatim <library>/<module> from:<library>/<module>:<library-root-relative source path>`
    for a byte-for-byte copy of a package file (the tools scripts) —
    the `from:` token names the package file the copy came from,
    and it is what repair reads; the same line ending

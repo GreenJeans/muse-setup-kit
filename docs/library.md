@@ -465,6 +465,12 @@ Implemented on the branch, against the spec above:
   the verbs it exercised — list installed, list available,
   add library, inspect, install, list upgradable, suspend /
   resume, a repair drill, audit — worked from the wizard text.
+  Run 24 has since exercised repair's restore path itself —
+  a missing static-verbatim file restored byte-for-byte from
+  the checkout pin, a recorded removal refused, and a
+  baseline/source hash mismatch aborting with nothing
+  written — so repair is now rehearsed in full, not only in
+  its class gates.
   Upgrade, uninstall, rollback, reconfigure, and remove library
   were not exercised, and neither were run 15's own friction
   fixes (the two-pin rule, the `ext:brief-sources` anchor,
@@ -500,7 +506,3 @@ Still future:
   until one has.
 - Any read-only MCP facade over the same JSON (the write path
   stays refused, per "What this design refuses").
-- A repair that actually restores a file: run 15's install held
-  no static-verbatim file, so repair's restore path itself —
-  as against its class gates, which the drill did exercise —
-  is still unrehearsed.
