@@ -146,6 +146,22 @@ plus line count of the original. The original stays where it was,
 addressable by that hash; the compact block is a locator, never a
 replacement for the source.
 
+**What compaction is, measured.** The maintainer's Track B
+comparison (module 05; records not shipped) retried failures two
+ways: 18 trials, model fixed, one arm with the full raw log, the
+other with only the compact block — about 600 characters against
+logs up to 7.5 KB and 184 lines, one log's first error a caught
+red herring placed ahead of the real failure. Both arms passed
+9/9; no pass-rate difference, and none was the claim. The block
+was diagnostically sufficient in every retry, herring included,
+at about a twelfth of the size. The claim the evidence supports
+is context economy without measured diagnostic loss, at this
+scale; production logs run far larger, and that regime is
+untested. The run also confirmed why the tool surfaces a
+traceback's exception line rather than its first error line: a
+headline can be a herring, and a bare "Traceback" line says
+nothing — diagnosis rides on the references and the tail.
+
 **Pause and resume** (12-Factor Agents factor 6). A long task keeps
 a `STATE.md` card (from `templates/STATE.template.md`) in its
 workspace: status, what is verified-done with addresses, the next
