@@ -48,6 +48,26 @@ schema in daily use in a working installation.
    live pages would be trained on a lie. If the process can't catch the
    planted one, it isn't catching real ones either.
 
+## Forgetting cleanly
+
+Remembering has a counterpart. A topic can leave memory entirely, at the user's direction, and a good platform already knows how: ask the agent to forget something and it should plan before it deletes. Expect that shape, and distrust any agent that starts deleting without one.
+
+**The flow.** A request to forget triggers a read-only planning pass first: every place the topic lives (active memory, notes, preferences, goals, scheduled work, created items) and anything that could write it back — a standing watch, a recurring job, a goal that would regenerate it. The plan comes back grouped in plain categories, irreversible steps flagged, limits stated. Silence, a partial yes, or a yes to a different scope counts as no. On an exact approval the producers stop first, then the copies are removed, then the result is verified fresh: "forgotten" is claimed only when a new search finds nothing active and nothing left that can recreate it. Email, calendar entries, device records, shared items, and another person's copy each need a separate approval; a forget request does not cover them. There is no bulk deletion: mixed files are edited, not truncated.
+
+A model request is one sentence: "Forget X — show me the plan first."
+
+**Choose the right verb.** Not every removal is forgetting.
+
+- **Supersede** when a fact changed and the trail matters. The default (idea 1): the live bullet is rewritten, the old claim moves to History with its date and source. Nothing is forgotten; the record stays honest.
+- **Park** when a topic is dormant but may recur. Close the watches, shelve the ideas, keep the records. Nothing is deleted, and the topic can wake up intact.
+- **Forget** when the topic should be gone entirely: the flow above, and only that flow.
+
+This does not contradict "history below, never deleted." That rule governs how memory handles change on its own. Forgetting is the user's explicit instruction, carried out as a plan, never as agent housekeeping.
+
+**Honest limits.** Active memory, its derived copies, and its producers can be cleaned completely. What sits outside the agent's reach remains: copies on other services, other people's copies, anything already published, and backups. A good plan names what remains instead of implying a total erasure, and each remainder has its own process.
+
+**Why users ask.** Sometimes privacy. Just as often, hygiene: a dead interest left in memory keeps resurfacing in feeds, briefs, and proactive suggestions long after the user stopped caring. Forgetting takes a topic out of the agent's attention, not just out of its files.
+
 ## Layout (adapt to your platform's conventions)
 
 - A curated long-term memory file (current state + a Superseded section).
