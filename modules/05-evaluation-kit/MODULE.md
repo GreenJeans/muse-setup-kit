@@ -60,12 +60,14 @@ suite — runs before any agent review, and its output is the
 reviewers' first input, ahead of the diff. Agent reviewers then
 work named lenses, one lens each — security, simplicity, edge
 cases, scope — on what the tools cannot check. The lens evidence
-is old and human: Porter, Votta & Basili (1995) found reviewers
-assigned specific fault scenarios found roughly 35% more faults
-in requirements inspections than reviewers sharing one general
-checklist. That is evidence about human inspection of
-requirements documents, not a measurement of agent reviewers;
-the kit adopts the shape, not the number. The ordering needs no
+is old and human: Porter, Votta & Basili (1995, *IEEE
+Transactions on Software Engineering* 21(6)) showed that
+reviewers assigned specific fault scenarios detected roughly
+35% more faults in requirements inspections than reviewers
+sharing one general checklist. That is evidence about human
+inspection of requirements documents, not a measurement of
+agent reviewers; the kit adopts the shape, not the number. The
+ordering needs no
 citation: a change can pass several agent reviewers and still
 ship what a type checker would have caught, when nobody ran it.
 
@@ -90,10 +92,13 @@ its shape from Harbor's task runs, deliberately smaller:
   changing a task, before trusting anything it reports.
 - **Coverage is not a pass rate.** Repeated-sampling gains are
   usually pass@k coverage — the share of tasks solved by *any*
-  sample. Brown et al. (2024) report issues solved rising from
-  15.9% with one sample to 56% at 250; that 56% is reachable
-  only when a verifier picks the winner, and without one that
-  can reject, selection plateaus. Cap N by gate strength: a
+  sample. Brown et al. (2024, arXiv:2407.21787), sampling a
+  code model on SWE-bench Lite, report issues solved rising
+  from 15.9% with one sample to 56% at 250; that 56% is
+  coverage, reachable only under an oracle — a perfect verifier
+  that picks the winning sample every time. A real gate lands
+  below it, and without a gate that can reject, selection
+  plateaus. Cap N by gate strength: a
   weak gate earns small N plus a human skim, not large N
   trusted blind.
 - A **comparison** is the same tasks under the old setup and the new
