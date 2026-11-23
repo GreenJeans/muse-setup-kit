@@ -55,14 +55,19 @@ schema in daily use in a working installation.
    boundary, so a quote stitched from two passages is unrepresentable
    rather than merely detectable, and a later edit to the source entry
    breaks verification loudly instead of silently altering what a claim
-   rests on. Add the fairness check: every name, date, and amount in a
-   claim must appear inside its span. That does not catch a misread
-   sentence — the fidelity sample (idea 5) owns fairness — but it
-   catches a claim quietly adding a fact its evidence does not contain,
-   a class a string-matching quote check structurally misses. The
-   check's reach is exactly the hard tokens: an added fact that is not
-   a name, date, or amount passes it untouched, and stays the
-   human-grade pass's catch.
+   rests on. Add the containment check: the claim's hard tokens must
+   appear inside its span. The reach is registered names (and
+   multiword proper names), full dates, and numbers, compared by
+   value — so a rounded restatement flags instead of passing.
+   Outside it, by design: an unregistered single name, a month
+   without a day, a number written as a word, a scale word riding
+   on a contained number — and any added fact that is not a name,
+   date, or amount at all. Those pass the checker untouched and
+   stay the human-grade pass's catch. The check does not catch a
+   misread sentence — the fidelity sample (idea 5) owns fairness —
+   but it catches a claim quietly adding a checkable fact its
+   evidence does not contain, a class a string-matching quote
+   check structurally misses.
 
 ## Forgetting cleanly
 
@@ -92,8 +97,10 @@ The compiled layer loads into every session, so its size is a standing
 cost — and, past a point, a standing risk: context spent on stale bulk
 is context not spent on the work, and a store too large to hold in
 view stops being reviewed at all. Measure the standing context by
-component (procedures, curated file, standing instructions) and set a
-size threshold on the largest component. Crossing it triggers not
+component (procedures, curated file, standing instructions); set a
+size threshold on the memory file and a token threshold on the
+injected total — the operative trigger is procedures §11. Crossing
+either triggers not
 cuts but a compaction review at the next procedures audit (§11):
 measure by component, name what each part earns, and propose what
 shrinks before anything is cut. The threshold is a review obligation,
@@ -152,7 +159,10 @@ and a hard ceiling would cut safety content first.
    in this module) in that pipeline: the drafter emits claims with quotes,
    the checker resolves each quote to a span, verifies the entry hash,
    and runs the token-containment check before a human-grade pass writes
-   anything. Sources without stable entries (web pages, exports) keep a
+   anything. Maintain the name registry the checker matches against —
+   the compiled pages' subjects are the natural seed; an unregistered
+   name is outside its reach, so the registry is part of the install,
+   not an afterthought. Sources without stable entries (web pages, exports) keep a
    plain string-match check as fallback. Existing claims convert to
    spans opportunistically when next touched — never in a bulk rewrite.
 

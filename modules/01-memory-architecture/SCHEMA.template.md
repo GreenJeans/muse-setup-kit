@@ -60,13 +60,17 @@
     a drafting or extraction lane is admitted only with a span: source
     entry, character offsets within the entry, and the entry's hash,
     recomputed at verification. A quote that crosses an entry boundary
-    cannot be represented and is rejected, not repaired. Every name,
-    date, and amount in the claim must appear inside the span; a claim
-    whose hard tokens are not contained is returned to the lane, never
-    written. The check proves the evidence exists and contains the
-    claim's hard tokens — and it sees hard tokens only: a claim that
-    adds a soft fact (a role, a reason, a relationship) passes it, and
-    that class stays with the fidelity sample and the verifying mind.
+    cannot be represented and is rejected, not repaired. The claim's
+    hard tokens must appear inside the span; a claim whose hard tokens
+    are not contained is returned to the lane, never written. The
+    check proves the evidence exists and contains the claim's hard
+    tokens — its reach is registered names and capitalized multiword
+    names, ISO and written full dates, and digit-written numbers
+    compared by value; unregistered single names, bare months, and
+    number-words sit outside it, by design. And it sees hard tokens
+    only: a claim that adds a soft fact (a role, a reason, a
+    relationship) passes it, and that class stays with the fidelity
+    sample and the verifying mind.
     Whether the claim is a *fair reading* of the span is judged by the
     fidelity sample, not the checker. Sources without stable entries
     keep the string-match quote check as a fallback. Claims written
