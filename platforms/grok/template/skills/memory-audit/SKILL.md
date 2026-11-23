@@ -15,7 +15,11 @@ the schema and the history, so audit is all there is.
    dates: this bot's profile and journal, the account-level user
    profile, and the shared stores. Name the store beside every
    fact. A private fact sitting in the account-level profile —
-   readable by every bot on the account — is a finding.
+   readable by every bot on the account — is a finding. Identify
+   stores by searching and by path (the user profile is
+   `/me/profile`), never by the memory tool's type names: the
+   taxonomy changed within a single day's session, and a type
+   name is not a stable address.
 2. **Lint.** Check the inventory for: facts that contradict each
    other; a fact superseded by a later dated fact still standing
    beside it; facts the workspace record contradicts (a journal

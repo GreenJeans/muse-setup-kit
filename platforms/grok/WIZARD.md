@@ -32,12 +32,19 @@ and in the plan.
   nothing to point at, pin, or hash; the wizard's ground rule 2
   applies to the kit checkout the install is read from, not to
   anything on the platform side.
-- **Memory is four fixed stores** (Test 3, Partial — strong):
-  per-bot profile and journal, plus an account-level user profile
-  and shared stores, all server-side. Facts are single dated
-  sentences. Changes are add, or remove-by-exact-text; there is no
-  in-place edit and no user-editable schema, and no inspectable
-  history of removed facts. Retrieval was flawless in every probe.
+- **Memory is four typed stores, as the battery found them**
+  (Test 3, Partial — strong): per-bot profile and journal, plus
+  an account-level user profile and shared stores, all
+  server-side. Facts are single dated sentences. Changes are
+  add, or remove-by-exact-text; there is no in-place edit and no
+  user-editable schema, and no inspectable history of removed
+  facts. Retrieval was flawless in every probe. The type
+  taxonomy is the platform's, not a fixed address space: it
+  changed within a single day's session (the cleanup pass found
+  a different set of types than the battery had, one store
+  retired to read-only), so everything in this pack that touches
+  memory — the audit procedures above all — keys on search and
+  on paths (`/me/profile`), never on the tool's type names.
 - **Routines are the scheduler** (Test 2, Pass): real cron,
   saved instructions that read back verbatim, runs executing in
   the bot's real workspace with working file tools. Timing is
@@ -146,20 +153,24 @@ that is the form the store holds:
    posted by routine, built from the workspace run-record and
    decision queue."
 
-**Seed carefully — removal is real only before consolidation.**
-The correction mechanism (seed 5: remove the old fact by its
-exact text, then add the corrected one) was measured working on
-a fact minutes old (Test 3). A later cleanup pass on the same
-account measured the limit: a fact in the account-level user
-profile was removed cleanly, while two facts that had
-consolidated into the bot's per-bot [profile] store refused
-exact-text removal — the tool reported that no fact with exactly
-that text was recorded — and no user-facing removal surface for
-that store was found. So treat every seed as effectively
-permanent once it has consolidated: state, in your own words,
-only rules you mean to keep, and check the quote-back before
-the conversation moves on. The moment to fix a seed is while it
-is still new; a consolidated seed may not be takeable back.
+**Seed carefully — a seed can become untakeable-back.** The
+correction mechanism (seed 5: remove the old fact by its exact
+text, then add the corrected one) was measured working (Test 3)
+— through a memory store the tool offered at the time. A later
+cleanup pass on the same account measured the failure mode: a
+fact in the account-level user profile (`/me/profile`) was
+removed cleanly, while two facts saved earlier under a
+"(profile)" store refused exact-text removal — the tool
+reported that no fact with exactly that text was recorded. The
+platform had changed its memory tool's surface mid-session: the
+tool no longer offers that store at all, and lists it read-only.
+Facts saved under a store the tool later retires are orphaned
+by the change, and no user-facing removal surface for them was
+found. So treat every seed as potentially permanent: state, in
+your own words, only rules you mean to keep, and check the
+quote-back before the conversation moves on — a seed's
+removability depends on the platform's tool surface, not on
+anything the user or the bot controls.
 
 One measured subtlety belongs in the plan: **the write target is
 phrasing-sensitive.** A fact dictated as a fact about the user
@@ -187,7 +198,11 @@ discipline runs against them:
   profile, and the shared stores. The audit names which store
   each fact sits in; a fact in the wrong store (a private fact in
   the account-level profile) is a finding, per the phrasing
-  subtlety above.
+  subtlety above. Stores are identified by search and by path,
+  never by the memory tool's type names — the taxonomy changed
+  within a single day's session, so a type name is not a stable
+  address and an audit keyed on one would silently miss whatever
+  the platform has renamed or retired.
 - *Lint.* Deterministic checks over the inventory: facts that
   contradict each other, facts superseded by a later dated fact
   still standing beside it, facts whose date makes them stale
@@ -201,11 +216,10 @@ discipline runs against them:
 - *Correction.* The platform's only edit is remove-by-exact-text
   plus add. Removal was verified real at the search layer (a
   corrected test fact was replaced, not duplicated — the count
-  proved it). That verification was on a fact minutes old: facts
-  consolidated into the per-bot [profile] store later refused
-  the same removal (see the seed caution under module 00), so a
-  correction the platform refuses is reported as refused, never
-  as applied. Whether the server retains removed facts is not
+  proved it). Facts saved under a memory store the tool later
+  retired refused the same removal (see the seed caution under
+  module 00), so a correction the platform refuses is reported
+  as refused, never as applied. Whether the server retains removed facts is not
   inspectable; the audit says so rather than claiming a deletion
   it cannot see. Every correction is proposed to the user first
   and applied on approval, as a remove/add pair the report shows
