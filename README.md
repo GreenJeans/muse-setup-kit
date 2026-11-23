@@ -81,7 +81,7 @@ and tools) — the reading the request above actually asks for:
 |---|---|---|---|
 | **Starter** | 00 + 02 + 09 | ~28,400 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
 | **Standard** | Starter + 01 + 06 | ~36,400 words | Plus the memory schema with its linter, and the security pack. |
-| **Grok Bot** | 00 + 01, in Grok forms | ~25,400 words | A platform profile for Grok Bot, through the overlay in `platforms/grok/`: module 00 as reference text plus memory seeds, module 01's audit half only, module 04 excluded (the platform's isolation test failed). Single-bot only; unrehearsed. |
+| **Grok Bot** | 00 + 01, in Grok forms | ~25,600 words | A platform profile for Grok Bot, through the overlay in `platforms/grok/`: module 00 as reference text plus memory seeds, module 01's audit half only, module 04 excluded (the platform's isolation test failed). Single-bot only; unrehearsed. |
 | Everything | all twelve modules | ~65,800 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
