@@ -123,7 +123,10 @@ alert discipline for people with a host) live in
 `docs/patterns/infra-patterns.md` as a reference document — sound
 practice, but never rehearsed as an install, so the wizard doesn't
 install it. And `docs/governance-test.md` is a standalone discipline
-check you can run against your *current* setup, kit or no kit.
+check you can run against your *current* setup, kit or no kit, and
+`docs/what-to-stop-doing.md` is its companion: the early-agent-era
+practices the field has measured and retired, each with the kit
+pattern that replaced it.
 ## Design principles
 
 One-line summaries of the kit's constitutional rules; the operative
