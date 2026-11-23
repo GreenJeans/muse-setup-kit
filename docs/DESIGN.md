@@ -27,6 +27,21 @@ Templates ship with `<PLACEHOLDERS>`, never with filled-in examples drawn
 from a real life. Where worked examples are included, they are invented
 and obviously so.
 
+## The formats are not ours
+
+The kit's three file layers — plain-Markdown project instructions
+(AGENTS.md), procedural skills (SKILL.md folders), and manifest-
+bundled plugins — are open standards, and since late 2025 they
+sit under foundation governance: MCP and AGENTS.md were donated
+to the Linux Foundation's Agentic AI Foundation (AAIF) in Dec
+2025, and Agent Skills followed in Oct 2026. That matters to a
+kit built entirely out of those files: the formats will outlive
+any one vendor's product decisions, they are stewarded in the
+open, and an install written against them is not stranded when
+a platform changes its mind. It is also why the kit pins and
+vets third-party material in these formats like dependencies
+(module 06): a shared standard is a shared supply chain.
+
 ## The defensive-wizard principle
 
 A setup wizard is an instruction surface: someone else's agent will read it
