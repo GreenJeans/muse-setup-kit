@@ -328,6 +328,76 @@ template import delivers skills, routines, and instructions, and
 the plan then creates the workspace files (procedures reference,
 decision queue, run-record) the routines read.
 
+**Choose the imported bot's name before staging.** The
+description's `<AGENT NAME>` is filled at staging, with the name
+the imported bot will carry, and a template carries no title —
+the name cannot ride the template and be decided later. The
+battery's probe measured the wrinkle (§6): a template propagates
+the *source* bot's name into the child's name and title at
+instantiation, the import flow renames the bot, and the source's
+actual title does not carry — the description is the only role
+text that survives intact. So the filled description is the one
+piece of naming that reaches the imported bot exactly as
+written; settle the name first.
+
+### Staging — how the contents become a template
+
+A template on this platform is a copy of a bot (measured, §6
+probe: Share → "Create a copy — Share a template link"). The
+repo contents therefore become a template by being loaded onto
+a source bot and staged from it. The battery's probe ran this
+sequence end to end; steps below are its shape, and anything it
+did not isolate is labeled unmeasured rather than asserted.
+
+1. **Create a scratch source bot** on the account. It is staging
+   scaffolding, deleted when the install closes — and it is not
+   a sandbox: from the moment it exists it shares the account's
+   computer, skill library, and connectors (the two warnings).
+2. **Set the source bot's description** to the text in
+   `template/description.md`, placeholders filled — the name
+   chosen above, the user's name. Role text is set by asking
+   the bot in chat (measured: it saved to the bot's own profile;
+   no settings-UI fields for it were found).
+3. **Skills need no loading onto the bot.** The skill library is
+   account-level: a skill staged into a template is one that
+   exists in the library, installed verbatim (Test 8). If a pack
+   skill is not yet in the library, add it there first, in the
+   form `template/skills/` holds it.
+4. **Create the three routines on the source bot** from
+   `template/routines.md`, saved instructions verbatim,
+   placeholders as written, left paused — and state each
+   routine's parameter declaration ("Ask the importing user
+   for: …", as the definition lists it) with the routine as you
+   create it. The pack's definitions carry the declaration as a
+   separate line for exactly this purpose.
+5. **Ask the source bot to stage a template from itself.**
+   Measured: the bot inventoried its own components and made
+   stated inclusion calls — it kept its skill and routine, and
+   excluded a fact from the account-level user profile on the
+   ground that user-profile facts are not template payload. The
+   staged template appears as an unpublished card showing the
+   description, offering Publish and View Details; it goes live
+   only when the user confirms on the review card.
+6. **Inspect before publishing.** View Details shows the whole
+   manifest (measured): Context — the Instructions field holding
+   the description text; Skills — each SKILL.md in full;
+   Routines — each routine's full text and cron, **and its
+   parameter declaration**. There is no files section and no
+   memory section; their absence is correct, not a gap. Check
+   every routine shows its declaration before anyone publishes:
+   whether the declaration attaches automatically when a routine
+   is created, or only when it is stated as in step 4, is
+   **unmeasured** — the battery observed the declaration present
+   in a staged manifest and the prompt asked at import, and did
+   not isolate the mechanism. The manifest check is therefore
+   the control: a routine without its declaration showing is not
+   ready, whatever the cause.
+7. **Publish (the user's click, ticketed as above) and import.**
+   Instantiating the template creates the new bot; the declared
+   parameters are asked at import, and the routines arrive
+   paused (measured). Enabling each routine afterwards is the
+   user's act, per the jobs section.
+
 ## Deferred checks on Grok
 
 There is no instruction file to carry the wizard's session-start
