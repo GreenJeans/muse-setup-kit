@@ -74,26 +74,28 @@ bundled benchmark judges against human gold labels and found
 false-positive rates of at least 45% for WebVoyager's judge and
 at least 22% for WebJudge — and the same agent scored 74% under
 WebVoyager's official judge and 38% under their stricter
-verifier. A judge that passes that many wrong runs is a lens,
+verifier (figures from the authors' talk). A judge that passes that many wrong runs is a lens,
 not a gate: deterministic checks run first where they exist
 (below), and adoption stays with the user (step 5).
 
-**Measure a judge by defect class, not in aggregate.** When a
-judge's error rates are measured — and an unmeasured judge is a
+**Measure any judge or gate by defect class, not in aggregate.** When a
+judge's or gate's error rates are measured — and an unmeasured one is a
 lens of unknown strength — report the false-positive and
 false-negative rates split by defect class, because the
 aggregate conceals the class the judge is blind to. The
-maintainer measured one deterministic judge this way, a
+maintainer measured one deterministic gate this way, a
 quote-verification gate in a memory ingest lane, on a held-out
-set written for the trial: aggregate false positives 13.3%,
-false negatives 20% — and both numbers lied by averaging.
+set written for the trial: aggregate false positives 13.3%
+(4 of 30 held-out rejects), false negatives 20% (6 of 30
+held-out clean cases) — and both numbers lied by averaging.
 Split by class, the same gate caught every fabrication (0 of
 26 passed) and passed every misleading truncation (4 of 4): a
 quote that is a genuine substring but drops a negation or a
 hedge sitting just outside it passes an existence check by
 construction, so that class is uncatchable by that gate and
 belongs to a different layer of the design. Every false
-negative sat in a single formatting class. The aggregate said
+negative sat in a single formatting class (single-marker
+emphasis). The aggregate said
 "a fairly good gate"; the split said which failures it will
 never see — the second statement is the one a design can use.
 
@@ -133,13 +135,16 @@ ship what a type checker would have caught, when nobody ran it.
 **Measure detective controls by seeding them.** Some controls
 prevent; others only detect — a reconciliation matching sent
 mail against ticket records (module 00, §2), a post-run audit
-of what a lane actually did. A detective control's value is
+of what a lane actually did (the lane audits in
+docs/patterns/infra-patterns.md are that control's worked
+form). A detective control's value is
 its recall, and recall is not established by the control
 existing, or by a quiet month: quiet is consistent with
 nothing to catch and with catching nothing. Prove it the way
 the canary (step 2) proves a reviewer: seed violations the
 control should catch — sends with no ticket record are the
-standing example — planted by the user, who holds the key
+standing example, and seeded sends go only to recipients the
+user controls — planted by the user, who holds the key
 outside the system, spread across one control cycle, and
 measure what fraction it flags, how fast, and what it flags
 wrongly. Register the bar before seeding and report the result
@@ -197,11 +202,12 @@ its shape from Harbor's task runs, deliberately smaller:
   tasks passed, never cost per attempt. A setup passing 90% of
   tasks once and 40% across three trials is a different setup
   from one passing 70% and 65%, and the headline rate hides
-  which. Published production evals (2026) treat the pass@1 to
-  pass^k drop as the harness's reliability signature — 9 to 16
-  points on one data-engineering bench — and price a harness by
-  what a success costs in it, because the same model can cost
-  several times more in one harness than in another.
+  which. On Snowflake's data-eng-bench (6 Aug 2026, 103 tasks),
+  every harness+model pairing lost 8.8–15.8 points from pass@1
+  to pass^3, and the same model cost ~4× more in one harness
+  than another. Treat the pass@1 to pass^k drop as the
+  harness's reliability signature, and price a harness by what
+  a success costs in it.
 - **Score the sub-behaviors separately.** A task's oracle is
   usually all-or-nothing over several distinct behaviors, and
   the aggregate hides splits that matter. On one task mined
@@ -212,11 +218,12 @@ its shape from Harbor's task runs, deliberately smaller:
   while a convention behavior — leaving the system's own
   housekeeping edits unreported — was inferred by only two of
   three, and the all-or-nothing oracle reported pass^3 = 0.0.
-  Both numbers are true and both are incomplete descriptions
+  Detection 3/3 and oracle pass^3 = 0.0 are both true, and
+  both are incomplete descriptions
   of the same performance. Report the per-behavior scores
   beside the task score, or a single convention miss reads as
-  total failure — and a clean sweep can hide a behavior that
-  never worked at all.
+  total failure — and a clean sweep can hide a behavior the
+  oracle never checks.
 - Decide the adoption rule before running, and record negative
   results with the same care as positive ones. A change adopted
   without a comparison is labelled **provisional** wherever it is
