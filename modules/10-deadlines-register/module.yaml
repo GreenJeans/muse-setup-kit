@@ -16,7 +16,7 @@ reads: "the register file; a source document when its date needs re-reading at t
 writes: "the register — one local file, updated in place."
 network: "none."
 jobs: "none of its own; surfacing rides module 02's brief when installed."
-rehearsed_at: "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending"
+rehearsed_at: "v0.9 run 13 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; re-rehearsed in run 28 (2026-11-22) on the v0.14-prep branch at checkout pin 0be5410 — a seeded register surfaced end to end by the rehearsal brief (expired item in Failures; lead-window and undated items in Today)"
 data_classes: [personal, third-party]
 action_classes: [none]
 files:

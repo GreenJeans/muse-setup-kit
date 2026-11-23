@@ -34,8 +34,9 @@
 6. **Tag uncertainty inline.** `[inference]` and `[hypothesis]` mark
    claims that are not established fact. Untagged means fact. No numeric
    confidence scores, no decay functions, no auto-archiving.
-7. **Time-bound claims** carry `(review-by: YYYY-MM-DD)` instead of a
-   score.
+7. **Time-bound claims** carry a review-by date instead of a
+   score (format: `review-by: YYYY-MM-DD`, the marker in
+   parentheses).
 8. **One identity, several writers.** Other agents and background jobs
    produce *sources* (verbatim quotes, attributed). One identity verifies
    and writes the compiled store. Background write paths are attributed in
@@ -52,7 +53,7 @@
     personal records are never copied into compiled pages *or* daily
     logs. What memory records is that a holding exists, where it
     lives, a `(verify: ...)` pointer to it, and its
-    `(review-by: ...)` date — the linter's review-by check reads
+    review-by date — the linter's review-by check reads
     compiled pages, which is what makes a local holding's review-by
     surface. Exact figures are read from the holding at need.
 

@@ -7,8 +7,9 @@
       merge / move to library / freeze / delete) and an evidence
       line that names what was checked at the source — not a
       summary of a summary. For every live or dynamic space the
-      worksheet's cross-check field is filled: one rendered
-      value checked against its live source.
+      worksheet's cross-check fields are filled: the refresh
+      machinery checked, and one rendered value checked against
+      its live source.
 - [ ] Every space in the final sidebar has a named source of
       truth and either live refresh machinery (or, without
       scheduling, a named on-demand snapshot action and a

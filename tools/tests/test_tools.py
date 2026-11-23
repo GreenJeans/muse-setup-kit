@@ -43,6 +43,19 @@ found, so the fix cannot silently regress:
     caller's working directory instead of the feature list's, so
     a finished feature failed from any other folder; the gate
     now runs each verifier from the list's own directory;
+  - the v0.14 fixture round on the catalog generator (four
+    static-audit leads, each confirmed against a live fixture
+    before it was fixed): the allowlist binding only top-level
+    keys, so a review field nested in a files/tiers item or an
+    advisory reached the published catalog; the generator
+    emitting records it never validated (id shape, dir binding,
+    class vocabularies, file confinement); a committed symlink
+    at an output path redirecting the write outside the repo;
+    and a .git-less tree nested in another repository stamping
+    the ancestor's HEAD as its pin. The same round fixed the
+    memory linter's defaults resolving to the user's home
+    directory instead of the install workspace (run 26), and
+    the shipped schema's example strings tripping check D;
   - the EX-030..033 final round's module 11 findings: the
     soul linter counted blockquote lines instead of exchanges
     (two exchanges plus an anti-example totaling eight lines
@@ -136,6 +149,55 @@ class LinterTest(unittest.TestCase):
             self.assertIn(f"review-by {past} has passed", r.stdout)
             self.assertIn("unparseable review-by date 'soon'", r.stdout)
             self.assertNotIn(f"review-by {future} has passed", r.stdout)
+
+    def test_linter_defaults_name_the_install_workspace(self):
+        # Run 26: the defaults resolved to the user's home
+        # directory, so a textbook install's first linter run
+        # linted the machine's real memory store and produced a
+        # valid-looking report about the wrong memory. Defaults
+        # now resolve to the workspace the linter is installed
+        # into (two levels above the script), and the run
+        # receipt names the store it scanned.
+        with tempfile.TemporaryDirectory() as td:
+            ws = os.path.join(td, "ws")
+            tools = os.path.join(ws, "tools")
+            mem = os.path.join(ws, "memory")
+            os.makedirs(tools)
+            os.makedirs(mem)
+            shutil.copy(LINT, os.path.join(tools, "memory_lint.py"))
+            with open(os.path.join(mem, "one.md"), "w") as fh:
+                fh.write("<!-- schema_version: 1.1 | last_verified: 2026-11-20 -->\n"
+                         "# One\n\n## Facts\n- A current fact.\n")
+            with open(os.path.join(ws, "JOBS.md"), "w") as fh:
+                fh.write("- morning-brief — daily\n")
+            with open(os.path.join(ws, "OPERATING_PROCEDURES.md"),
+                      "w") as fh:
+                fh.write("# Procedures\n")
+            r = run(os.path.join(tools, "memory_lint.py"), cwd=td)
+            self.assertEqual(r.returncode, 0, r.stdout + r.stderr)
+            self.assertIn(f"memory_dir={mem}", r.stdout)
+            self.assertIn("No findings", r.stdout)
+
+    def test_shipped_schema_template_trips_no_review_by_check(self):
+        # Run 26: the shipped schema's own documentation carried
+        # the literal example strings "(review-by: YYYY-MM-DD)"
+        # and "(review-by: ...)", which check D read as
+        # unparseable dates — two false positives on a textbook
+        # install. The examples were the wrong side: check D's
+        # strictness is its documented behavior (a date the
+        # linter cannot read protects nothing), so the template
+        # now states the format without a live token.
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("memory_lint",
+                                                      LINT)
+        lint = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(lint)
+        template = os.path.join(
+            REPO, "modules/01-memory-architecture/SCHEMA.template.md")
+        with open(template, encoding="utf-8") as fh:
+            text = fh.read()
+        findings = lint.check_review_by([(template, text)], today=TODAY)
+        self.assertEqual(findings, [])
 
 
 class CuratorTest(unittest.TestCase):
@@ -663,6 +725,171 @@ class BuildDirectoryTest(unittest.TestCase):
             r = run(BUILD_DIR, "--repo", td, "--library", "core")
             self.assertEqual(r.returncode, 1)
             self.assertIn("capped", r.stderr)
+
+    def _repo_with_yaml(self, td, yaml_text, extra_files=None):
+        make_repo(td, [("example", "core/example")])
+        p = os.path.join(td, "modules", "example", "module.yaml")
+        with open(p, "w") as fh:
+            fh.write(yaml_text)
+        for rel, text in (extra_files or {}).items():
+            fp = os.path.join(td, "modules", "example", rel)
+            os.makedirs(os.path.dirname(fp), exist_ok=True)
+            with open(fp, "w") as fh:
+                fh.write(text)
+        git(td, "add", "-A")
+        git(td, "commit", "-qm", "custom records")
+
+    def test_nested_and_advisory_keys_stop_generation(self):
+        # v0.14 fixture round: the allowlist bound only top-level
+        # keys, so a self-asserted reviewed_by nested in a files
+        # or tiers item — or attached to an advisory, with a
+        # severity for company — was published verbatim in the
+        # catalog. The fixture confirmed all three paths against
+        # the unfixed generator before this fix.
+        base = MODULE_FIXTURE.format(mid="core/example",
+                                     folder="example")
+        cases = [
+            ("files item", base.replace(
+                "files: []\n",
+                "files:\n  - path: MODULE.md\n"
+                "    class: static-verbatim\n"
+                "    reviewed_by: Self Asserted\n"),
+             {"MODULE.md": "# Example\n"}),
+            ("tiers item", base.replace(
+                "files: []\n",
+                "tiers:\n  - id: lite\n"
+                "    description: \"The lite tier.\"\n"
+                "    reviewed_by: Self Asserted\nfiles: []\n"),
+             {}),
+        ]
+        for name, yaml_text, extra in cases:
+            with self.subTest(case=name):
+                with tempfile.TemporaryDirectory() as td:
+                    self._repo_with_yaml(td, yaml_text, extra)
+                    r = run(BUILD_DIR, "--repo", td, "--library",
+                            "core")
+                    self.assertEqual(r.returncode, 1, r.stdout)
+                    self.assertIn("allowlist", r.stderr)
+        with tempfile.TemporaryDirectory() as td:
+            make_repo(td, [("example", "core/example")])
+            with open(os.path.join(td, "advisories.yaml"), "w") as fh:
+                fh.write("advisories:\n"
+                         "  - id: ADV-2026-001\n"
+                         "    module: core/example\n"
+                         "    pin: all\n"
+                         "    date: 2026-11-21\n"
+                         "    reason: a bad pin shipped\n"
+                         "    remedy: suspend it\n"
+                         "    reviewed_by: Self Asserted\n"
+                         "    severity: critical\n")
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "advisory with extra keys")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("advisory allowlist", r.stderr)
+
+    def test_unvalidated_catalog_fields_stop_generation(self):
+        # v0.14 fixture round: collect_entries copied declared
+        # values into the trusted catalog without any of the
+        # validation the selfcheck applies to the same records,
+        # so a fixture module declaring an unqualified id shape,
+        # a dir naming another folder, a scalar data_classes, an
+        # unknown class, an escaping file path, an unresolved
+        # dependency, and an undeclared shipped file generated
+        # cleanly. Each case below is one of those values.
+        base = MODULE_FIXTURE.format(mid="core/example",
+                                     folder="example")
+        cases = [
+            ("id shape", MODULE_FIXTURE.format(mid="core/a/b",
+                                               folder="example"),
+             {}, "not a qualified"),
+            ("dir mismatch", base.replace(
+                "dir: modules/example", "dir: modules/other"),
+             {}, "does not match its folder"),
+            ("scalar classes", base.replace(
+                "data_classes: [personal]", "data_classes: personal"),
+             {}, "not a list of class names"),
+            ("unknown class", base.replace(
+                "data_classes: [personal]", "data_classes: [bogus]"),
+             {}, "unknown class in data_classes"),
+            ("escaping file", base.replace(
+                "files: []\n",
+                "files:\n  - path: ../outside.txt\n"
+                "    class: static-verbatim\n"),
+             {}, "escapes the module directory"),
+            ("unknown file class", base.replace(
+                "files: []\n",
+                "files:\n  - path: MODULE.md\n    class: bogus\n"),
+             {"MODULE.md": "# Example\n"}, "unknown class"),
+            ("missing declared file", base.replace(
+                "files: []\n",
+                "files:\n  - path: MODULE.md\n"
+                "    class: static-verbatim\n"),
+             {}, "declared file missing"),
+            ("unknown dependency", base.replace(
+                "depends_on: []", "depends_on: [core/missing]"),
+             {}, "depends_on names unknown module"),
+            ("undeclared shipped file", base,
+             {"tools/extra.py": "# shipped but undeclared\n"},
+             "not declared in files"),
+        ]
+        for name, yaml_text, extra, needle in cases:
+            with self.subTest(case=name):
+                with tempfile.TemporaryDirectory() as td:
+                    self._repo_with_yaml(td, yaml_text, extra)
+                    r = run(BUILD_DIR, "--repo", td, "--library",
+                            "core")
+                    self.assertEqual(r.returncode, 1, r.stdout)
+                    self.assertIn(needle, r.stderr)
+
+    def test_symlink_output_is_refused_and_target_untouched(self):
+        # v0.14 fixture round: directory.json committed as a
+        # symlink satisfied the clean-tree gate, and dump()
+        # followed the link, truncating a file outside the repo
+        # and replacing it with catalog JSON.
+        with tempfile.TemporaryDirectory() as td, \
+                tempfile.TemporaryDirectory() as od:
+            make_repo(td, [("example", "core/example")])
+            dummy = os.path.join(od, "dummy.txt")
+            with open(dummy, "w") as fh:
+                fh.write("SENTINEL\n")
+            os.symlink(dummy, os.path.join(td, "directory.json"))
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "planted symlink")
+            r = run(BUILD_DIR, "--repo", td, "--library", "core")
+            self.assertEqual(r.returncode, 1)
+            self.assertIn("symlink", r.stderr)
+            with open(dummy) as fh:
+                self.assertEqual(fh.read(), "SENTINEL\n")
+
+    def test_ancestor_repo_pin_is_refused(self):
+        # v0.14 fixture round: a .git-less tree nested inside
+        # another repository, ignored by it so its status read
+        # clean, generated a catalog stamped with the ancestor's
+        # HEAD — a commit that does not contain the records.
+        with tempfile.TemporaryDirectory() as td:
+            git(td, "init", "-q")
+            git(td, "config", "user.email", "t@example.com")
+            git(td, "config", "user.name", "Test")
+            with open(os.path.join(td, ".gitignore"), "w") as fh:
+                fh.write("inner/\n")
+            git(td, "add", "-A")
+            git(td, "commit", "-qm", "outer")
+            inner = os.path.join(td, "inner")
+            wiz = os.path.join(inner, "wizard")
+            os.makedirs(wiz)
+            with open(os.path.join(wiz, "manifest.yaml"), "w") as fh:
+                fh.write("library: core\n")
+            mdir = os.path.join(inner, "modules", "example")
+            os.makedirs(mdir)
+            with open(os.path.join(mdir, "module.yaml"), "w") as fh:
+                fh.write(MODULE_FIXTURE.format(mid="core/example",
+                                               folder="example"))
+            r = run(BUILD_DIR, "--repo", inner)
+            self.assertEqual(r.returncode, 1)
+            self.assertIn(".git", r.stderr)
+            self.assertFalse(os.path.exists(
+                os.path.join(inner, "directory.json")))
 
 
 class SelfcheckFieldTest(unittest.TestCase):

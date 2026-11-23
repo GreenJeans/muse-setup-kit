@@ -176,6 +176,21 @@ traceback's exception line rather than its first error line: a
 headline can be a herring, and a bare "Traceback" line says
 nothing — diagnosis rides on the references and the tail.
 
+**Declare the check before an unattended run.** No task enters
+an unattended run (a retry loop, a scheduled job that acts, a
+best-of-N sampling) without its pass/fail check written down
+first: the command or test whose output decides whether the run
+did what it claimed. The check is declared where the task is
+declared (the feature list, the job record, the run's opening
+note), before the work starts, never reconstructed from the
+result afterward. When a run fails, the failure return carries
+the check's output itself, not a summary of it: the output is
+the evidence, and a summary of evidence is a claim. A loop that
+fails its check three times exits blocked and reports rather
+than grinding. Three failures against one declared check is a
+fact about the task or about the check, and either way it
+belongs in front of a human, not inside a fourth attempt.
+
 **Pause and resume** (12-Factor Agents factor 6). A long task keeps
 a `STATE.md` card (from `templates/STATE.template.md`) in its
 workspace: status, what is verified-done with addresses, the next
@@ -229,6 +244,24 @@ each lane's own tests. And cap the lane count by review
 bandwidth — every lane's output lands on the same human, and
 past the number they can actually review, extra lanes produce
 unreviewed work, not speed.
+
+**Lane results carry a typed status.** When a coordinator
+dispatches work to a lane (a runner that calls a model or
+provider on its behalf), the result comes back headed by a
+status from a fixed vocabulary, so the coordinator acts on it
+without interpreting a free-text report. **ok**: usable output.
+**failed**: the call ran and errored; the error travels with
+the result. **timeout**: no answer inside the window.
+**empty**: the call succeeded and returned nothing usable.
+**limit**: a rate or spend limit stopped the call; fall back
+to the next lane, and never loop-retry the lane that just
+reported limit. **auth**: the credentials were rejected;
+surface it to the human, because no fallback lane fixes it.
+**model**: the named model does not exist or is not available;
+switch the model id, since waiting never helps. Each status
+carries its prescribed response, and a result with no status
+is treated as failed: an unclassified result gets no second
+interpretation.
 
 **Stop condition.** Multi-agent shapes get one chance to fail
 cheap. If a builder and a second-agent verifier disagree twice

@@ -21,8 +21,13 @@ actually runs.
 - **Last refresh, verified:** (timestamp, and how you verified
   it: snapshot time, version history, job run record)
 - **Freshness budget it should carry:**
-- **Cross-check:** (one rendered value checked against its live
-  source: value on page ___ / value at source ___ / agree?)
+- **Cross-check (machinery):** (the refresh path itself: did
+  the last refresh fire when expected, and does the page render
+  from its machinery rather than a stale snapshot — how
+  checked ___ / agree?)
+- **Cross-check (values):** (one rendered value checked against
+  its live source: value on page ___ / value at source ___ /
+  agree?)
 - **Verdict:** keep (sidebar) / merge into ___ / move to
   library (reference / briefing) / freeze in library
   (machinery broken) / delete (substance carried by ___)

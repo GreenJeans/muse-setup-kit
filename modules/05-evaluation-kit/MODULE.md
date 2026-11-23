@@ -34,6 +34,18 @@ instead of argued.
    reference to a job or rule that has since been retired. A reviewer who
    doesn't catch the canary wasn't reading closely; weight their findings
    accordingly.
+
+   **Weighted down, defined.** Every finding carries a basis, one of
+   four, strongest first: **measured** (a number from an actual run),
+   **reproduced** (someone made it happen again), **reviewed** (an
+   independent second check agrees — convergence in step 4 is the
+   usual case), **reasoned** (argued from the material, unchecked).
+   A finding is *weighted down* when its basis is reasoned only. A
+   weighted-down finding is reported in full, like any other; it is
+   never prioritized ahead of a better-based one. The canary rule
+   above is the standing example: a reviewer who missed the canary
+   has shown their reading was not close, so their solo findings
+   stand at reasoned until something checks them.
 3. **Review blind, twice.** Two independent reviewers — ideally two
    different models (the Exchange, module 04, is the natural channel) —
    get the identical packet and brief: find contradictions, stale
@@ -52,6 +64,16 @@ instead of argued.
    numbered list ("adopt 1–12"). Each adopted change is applied, and the
    adoption is recorded with date and source. Nothing is adopted by
    default, by silence, or by the reviewers' say-so.
+
+**One snapshot per round.** A review under this method runs against
+one recorded snapshot: the frozen packet for a document audit, a
+named commit or tree for code. The snapshot is recorded before the
+review starts, and findings cite it. Anything that lands after the
+snapshot is a new round, not a silent amendment to the one under
+review. A finding is a claim about a specific state of the work;
+made against a moving target, it cannot be checked afterward, and
+neither reviewer nor maintainer can say which version it belongs
+to.
 
 **When the packet is code.** The same method reviews a large code
 change, with one ordering rule: deterministic checks first. Every

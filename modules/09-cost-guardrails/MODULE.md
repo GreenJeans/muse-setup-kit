@@ -58,6 +58,16 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    installed; without scheduling it is a manual chore with a named
    owner. Its sibling is the usage audit (module 05) — jobs ranked
    by load, no figures invented; money here, load there.
+7. **Metered lanes log one cost line per run.** A dispatch lane
+   that bills per use (an API lane, a router lane) appends a
+   single line to its run log for every run: the model, tokens in
+   and out, and the cost the provider reports for that run. Never
+   an estimate, and never a figure reconstructed afterward from
+   memory. A subscription lane exposes no per-run metering and
+   logs nothing; a missing line is honest, an invented one is a
+   false record. The monthly spend check (rule 6) reads the run
+   logs, so its comparisons rest on recorded runs rather than
+   recall.
 
 **Billing data is a financial record (procedures §13).** Usage
 figures live in the register and on the providers' pages; a spend

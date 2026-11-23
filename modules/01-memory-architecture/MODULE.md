@@ -96,10 +96,16 @@ This does not contradict "history below, never deleted." That rule governs how m
    carries a provenance header, (b) live bullets containing figures carry
    a source or `(verify: ...)` pointer, (c) job names in the procedures
    exist in `JOBS.md`, the scheduler-of-record the wizard maintains,
-   (d) time-bound claims whose `(review-by: ...)` date has passed are
+   (d) time-bound claims whose review-by date has passed are
    flagged for re-verification or retirement. It
    is read-only and writes only its report; every report opens with a
-   run receipt (timestamp, files scanned, checks run, findings count).
+   run receipt (timestamp, the store scanned, files scanned, checks
+   run, findings count). Its default paths resolve to the workspace
+   it is installed into — the folder two levels above the script —
+   never to your home directory: a default that silently lints a
+   different store produces a valid-looking report about the wrong
+   memory. Pass explicit flags to lint any other store, and check
+   the receipt's named store before trusting a quiet report.
    Schedule it weekly and record the job in `JOBS.md`.
 4. Create `memory/fidelity-test-log.md`; ask the user to plant one
    fidelity test case in a dedicated test page whose filename contains
