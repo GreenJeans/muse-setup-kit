@@ -330,6 +330,11 @@ prepared in the repo:
 - `template/routines.md` — the routine definitions, each with its
   schedule, its parameter prompts, and its saved instruction
   verbatim.
+- `template/workspace.md` — the starter contents for the
+  workspace files a template cannot carry (run-record, decision
+  queue, setup plan), in the formats the routines and skills
+  read, plus the install step that creates the watch routine's
+  target when its answer names a workspace file.
 
 Publishing the template in the app is a separate ticketed step,
 outside this install; the repo remains the source of truth, and
@@ -429,8 +434,11 @@ read back as the user confirmed them; each routine created
 paused-then-enabled per the plan, its saved instruction read back
 verbatim against the approved text; the run-record file created
 with its header; the procedures reference and decision queue in
-the workspace; the egress decision recorded (signed in, with the
-token warning shown — or not signed in).
+the workspace, created from the `template/workspace.md`
+starters; the watch routine's target in place as its import
+answer describes it, before the watch is enabled; the egress
+decision recorded (signed in, with the token warning shown — or
+not signed in).
 
 *Deferred:* the first brief run lands inside its window and
 appends its line; the first silent-watch line appears with no

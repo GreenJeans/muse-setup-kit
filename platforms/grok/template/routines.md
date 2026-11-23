@@ -49,7 +49,11 @@ items surfaced> surfaced`.
 The silent-watch slot: one instance per thing watched, renamed
 for what it watches. It posts nothing unless its condition
 trips — silence is the success state, and the run-record line
-is the proof it ran.
+is the proof it ran. The target named at import must exist
+before the routine is first enabled; when it is a workspace
+file, creating it is an install step (`template/workspace.md`),
+because a watch over a missing file cannot tell "nothing to
+report" from "nothing there".
 
 - **Schedule:** daily — `CRON_TZ=<TIMEZONE> 15 9 * * *`, plus the
   server's window.
