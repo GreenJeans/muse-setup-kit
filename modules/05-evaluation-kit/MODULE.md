@@ -86,7 +86,12 @@ snapshot is a new round, not a silent amendment to the one under
 review. A finding is a claim about a specific state of the work;
 made against a moving target, it cannot be checked afterward, and
 neither reviewer nor maintainer can say which version it belongs
-to.
+to. The benchmark literature learned the same lesson the hard
+way: scores are comparable only within a pinned version of a
+task set — Terminal-Bench's maintainers warn against comparing
+across its own versions, which churned four times in a year —
+and a result quoted without its task-set version is not a
+measurement. A review is a measurement; this rule is its pin.
 
 **When the packet is code.** The same method reviews a large code
 change, with one ordering rule: deterministic checks first. Every
