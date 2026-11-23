@@ -58,4 +58,4 @@ finding with a date on it.
 Not retired, despite periodic obituaries: prompt chaining,
 routing, and parallelisation as named workflow patterns;
 few-shot examples; and retrieval itself — all survive as
-components inside the stack above.
+components inside the context-engineering stack.

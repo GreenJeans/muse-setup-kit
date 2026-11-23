@@ -186,6 +186,12 @@ check that does not trust the lane's own report:
   overlapping spans is one event, however many spans recorded
   it) get a second look at human cadence.
 
+Whether the audit itself catches what it should is a recall
+question, and recall is proven by seeding, not by quiet
+months: module 05's audit method ("Measure detective controls
+by seeding them") carries that discipline, and it applies to
+this audit exactly as it does to the lanes it watches.
+
 ## If you adopt these
 
 Work them as their own project, under the kit's normal rules:
