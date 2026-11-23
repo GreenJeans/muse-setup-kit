@@ -32,10 +32,11 @@ A profile (`grok` in `wizard/manifest.yaml`) plus this folder:
   audit figure.
 - `template/` — the contents of a bot template, prepared in the
   repo: the bot description (which is the template's instructions
-  field), the skill set, and the routine definitions. Publishing
-  the template in the Grok app is a separate, ticketed step and is
-  not part of this pack's install. The template files are counted
-  in the profile's audit figure.
+  field), the skill set, the routine definitions, and the starter
+  contents for the workspace files a template cannot carry.
+  Publishing the template in the Grok app is a separate, ticketed
+  step and is not part of this pack's install. The template files
+  are counted in the profile's audit figure.
 - This README is for people; the installing agent does not need it.
 
 ## How the kit maps onto Grok, as measured
@@ -51,7 +52,14 @@ surface it uses.
   in their own words in chat. Memory-saved rules were measured to
   bind in chat *and* in unattended routine runs — the strongest
   instruction-surface result the battery has recorded on any
-  platform it has run on.
+  platform it has run on. Seed carefully, though: removal on this
+  platform is real only before a fact consolidates — a cleanup
+  pass removed a fact from the account-level user profile
+  cleanly, while facts consolidated into the bot's own profile
+  store refused exact-text removal, with no user-facing removal
+  surface found. A seed is effectively permanent once it
+  consolidates; the overlay carries the caution in full where
+  the seed list lives.
 - **Module 01** ships its *audit half only*: lint and fidelity
   checks over Grok's memory stores, which are legible, dated, and
   searchable, so audits are runnable. The architecture half does
