@@ -86,6 +86,20 @@ This does not contradict "history below, never deleted." That rule governs how m
 
 **Why users ask.** Sometimes privacy. Just as often, hygiene: a dead interest left in memory keeps resurfacing in feeds, briefs, and proactive suggestions long after the user stopped caring. Forgetting takes a topic out of the agent's attention, not just out of its files.
 
+## Standing context is a budget
+
+The compiled layer loads into every session, so its size is a standing
+cost — and, past a point, a standing risk: context spent on stale bulk
+is context not spent on the work, and a store too large to hold in
+view stops being reviewed at all. Measure the standing context by
+component (procedures, curated file, standing instructions) and set a
+size threshold on the largest component. Crossing it triggers not
+cuts but a compaction review at the next procedures audit (§11):
+measure by component, name what each part earns, and propose what
+shrinks before anything is cut. The threshold is a review obligation,
+not a cap — the memory and procedures are themselves control layers,
+and a hard ceiling would cut safety content first.
+
 ## Layout (adapt to your platform's conventions)
 
 - A curated long-term memory file (current state + a Superseded section).

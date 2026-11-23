@@ -188,6 +188,15 @@ stays however the user keeps it, and this section is inert.)*
 - Audits are blind where possible (module 05): a reviewer who did not
   write the procedures reads a frozen packet and reports findings; the
   user adopts or rejects each change explicitly.
+- **Context-size review trigger.** The standing context is measured by
+  component (the procedures, the curated memory file, the standing
+  instructions) on the audit cycle. When the memory file passes its
+  set size threshold — the maintainer's is 100 KB — or the injected
+  total passes its token threshold, a compaction review is owed at
+  the next audit: measure by component, and propose what shrinks
+  before anything is cut. The trigger obliges a review, never an
+  automatic cut; the context carries the control layer itself, and a
+  hard ceiling would cut safety content first.
 
 <!-- ext:billing-buckets — extension anchor (registered in module
      00's extension-point registry). Module 09, when installed,
