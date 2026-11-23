@@ -146,6 +146,46 @@ work running on a host you control, trace it:
   injection-evidence leak in one. Record the metadata; sample
   content deliberately, when a diagnosis needs it.
 
+## Audit the lanes after they run
+
+Some lanes act on instructions alone — an inbox triage that
+must never send mail or create drafts, a household watch that
+must never write to the shared surfaces it reads. Their
+prohibitions are prose, and a prose prohibition deserves a
+check that does not trust the lane's own report:
+
+- **A deterministic, read-only audit, run after the fact.**
+  Nothing blocks the lane; the audit reads records and flags
+  for human review. Build wake spans from the detector logs —
+  a wake plus the window a worker could plausibly act in —
+  then read the live systems for effects inside those spans:
+  messages sent or drafted, shared records created or
+  modified. An effect timestamped inside a span is flagged,
+  with the attribution stated as what it is: circumstantial.
+  A flag means *review this*, not *proven*.
+- **State the coverage limits in the record.** Some legs have
+  no ground-truth source — a click leaves no trace in any
+  system the audit can read; a shared document may carry no
+  per-edit authorship. The audit reports those legs as partial
+  rather than claiming a check it did not make. An audit that
+  hides its blind legs is worse than none: it converts "not
+  checked" into "checked".
+- **Cadence beats depth.** A monthly audit of a lane that runs
+  daily permits a full cycle of undetected violation, so
+  audit per run: a script-first detector polls on a short
+  cycle, audits each wake once its span has fully closed, and
+  records every wake's result — silent when clean, waking a
+  reporter only on a flag. A leg that cannot be read is
+  retried a bounded number of times across polls, then
+  recorded **UNVERIFIED** as its final state and surfaced in
+  rollups — never silently dropped, and never reported as
+  clean.
+- **Roll the per-run records up.** A monthly pass reads the
+  per-run log plus one full-window cross-check run, so slow
+  drift and attribution edge cases (one event inside
+  overlapping spans is one event, however many spans recorded
+  it) get a second look at human cadence.
+
 ## If you adopt these
 
 Work them as their own project, under the kit's normal rules:
