@@ -13,7 +13,7 @@ copied from other summaries, and contradictions nobody noticed. This module
 is the discipline that keeps the compiled layer honest, distilled from a
 schema in daily use in a working installation.
 
-## The five ideas
+## The six ideas
 
 1. **Current state at the top; history below, never deleted.** When a fact
    changes, rewrite the live bullet and move the old claim to a History /
@@ -47,6 +47,22 @@ schema in daily use in a working installation.
    page: the test exists to check the sampler, and a sampler that reads
    live pages would be trained on a lie. If the process can't catch the
    planted one, it isn't catching real ones either.
+6. **Evidence is a span, not a copy.** When a machine drafts or extracts
+   claims for the compiled layer — a migration pass, an ingest lane —
+   each claim's evidence is stored as a span: the source entry, the
+   character offsets inside it, and a hash of the entry's full text,
+   recomputed on every verification. A span cannot cross an entry
+   boundary, so a quote stitched from two passages is unrepresentable
+   rather than merely detectable, and a later edit to the source entry
+   breaks verification loudly instead of silently altering what a claim
+   rests on. Add the fairness check: every name, date, and amount in a
+   claim must appear inside its span. That does not catch a misread
+   sentence — the fidelity sample (idea 5) owns fairness — but it
+   catches a claim quietly adding a fact its evidence does not contain,
+   a class a string-matching quote check structurally misses. The
+   check's reach is exactly the hard tokens: an added fact that is not
+   a name, date, or amount passes it untouched, and stays the
+   human-grade pass's catch.
 
 ## Forgetting cleanly
 
@@ -78,6 +94,9 @@ This does not contradict "history below, never deleted." That rule governs how m
 - One page per person and per group, with Facts and History sections.
 - A `SCHEMA.md` stating the rules (template included).
 - The linter under a tools folder, with its run receipts kept.
+- Spans recorded alongside staged drafts (a `spans.json` next to each
+  checked draft), so the evidence for a compiled claim can be re-verified
+  against its source at any time.
 
 ## Install
 
@@ -114,6 +133,14 @@ This does not contradict "history below, never deleted." That rule governs how m
    Record the true value in the test log, wire the weekly sample to
    reserve one slot for the test page, and confirm the process finds
    the plant.
+5. If anything machine-drafts claims for the store (a page migration, a
+   pre-ingest extractor), install the span checker (`tools/span_evidence.py`
+   in this module) in that pipeline: the drafter emits claims with quotes,
+   the checker resolves each quote to a span, verifies the entry hash,
+   and runs the token-containment check before a human-grade pass writes
+   anything. Sources without stable entries (web pages, exports) keep a
+   plain string-match check as fallback. Existing claims convert to
+   spans opportunistically when next touched — never in a bulk rewrite.
 
 ## Verify
 

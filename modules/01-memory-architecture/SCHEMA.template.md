@@ -56,6 +56,22 @@
     review-by date — the linter's review-by check reads
     compiled pages, which is what makes a local holding's review-by
     surface. Exact figures are read from the holding at need.
+13. **Machine-drafted claims carry span evidence.** A claim produced by
+    a drafting or extraction lane is admitted only with a span: source
+    entry, character offsets within the entry, and the entry's hash,
+    recomputed at verification. A quote that crosses an entry boundary
+    cannot be represented and is rejected, not repaired. Every name,
+    date, and amount in the claim must appear inside the span; a claim
+    whose hard tokens are not contained is returned to the lane, never
+    written. The check proves the evidence exists and contains the
+    claim's hard tokens — and it sees hard tokens only: a claim that
+    adds a soft fact (a role, a reason, a relationship) passes it, and
+    that class stays with the fidelity sample and the verifying mind.
+    Whether the claim is a *fair reading* of the span is judged by the
+    fidelity sample, not the checker. Sources without stable entries
+    keep the string-match quote check as a fallback. Claims written
+    before this rule convert to spans when next touched; there is no
+    bulk conversion.
 
 ## The linter (deterministic, read-only)
 
@@ -75,6 +91,16 @@ and a run that produces no report is a failure, not a pass. Findings are
 candidates for a mind to adjudicate, never auto-fixes. A healthy store
 lints quiet: persistent findings mean the linter or the store is wrong,
 and either way the discrepancy gets fixed, not tolerated.
+
+## The span checker (deterministic, read-only)
+
+Where a lane drafts claims (page migrations, ingest extractors), a
+second deterministic checker resolves each draft claim's quote to a
+span in its cited source, verifies the entry hash, and checks token
+containment (rule 13). A reference implementation ships with this
+module (`tools/span_evidence.py`). Like the linter, it proposes and
+never writes: failures go back to the verifying mind with the reason
+(not found, crosses entry, stale entry, token not contained).
 
 ## The fidelity test case
 

@@ -82,6 +82,7 @@ import unittest
 
 REPO = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
 LINT = os.path.join(REPO, "modules/01-memory-architecture/tools/memory_lint.py")
+SPAN = os.path.join(REPO, "modules/01-memory-architecture/tools/span_evidence.py")
 CURATOR = os.path.join(REPO, "modules/08-skill-lifecycle/tools/curator.py")
 STAGE = os.path.join(REPO, "modules/08-skill-lifecycle/tools/stage_check.py")
 DOCTOR = os.path.join(REPO, "modules/05-evaluation-kit/tools/kit_doctor.py")
@@ -198,6 +199,68 @@ class LinterTest(unittest.TestCase):
             text = fh.read()
         findings = lint.check_review_by([(template, text)], today=TODAY)
         self.assertEqual(findings, [])
+
+
+class SpanEvidenceTest(unittest.TestCase):
+    # Module 01's span checker (v0.15 fold-in from the source
+    # installation, where the pattern runs daily): the three
+    # behaviors VERIFY.md's span self-test names — a quote stitched
+    # across an entry boundary is rejected, a hard token the span
+    # does not contain is flagged, and an edit to the source entry
+    # makes an issued span verify as stale rather than passing.
+
+    SOURCE = ("The orchard crew planted forty trees in the spring.\n"
+              "\n"
+              "The well on the north parcel was drilled in 1962 by "
+              "a local contractor.\n")
+
+    def load(self):
+        import importlib.util
+        spec = importlib.util.spec_from_file_location("span_evidence",
+                                                      SPAN)
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+
+    def test_quote_resolves_and_verifies(self):
+        span = self.load()
+        found, reason = span.resolve_span(
+            "log.md", self.SOURCE, "drilled in 1962 by a local contractor")
+        self.assertIsNone(reason)
+        self.assertEqual(found["entry"], 1)
+        ok, evidence = span.verify_span(self.SOURCE, found)
+        self.assertTrue(ok)
+        self.assertEqual(evidence, "drilled in 1962 by a local contractor")
+
+    def test_stitched_quote_is_rejected(self):
+        span = self.load()
+        found, reason = span.resolve_span(
+            "log.md", self.SOURCE,
+            "planted forty trees in the spring. The well on the north "
+            "parcel")
+        self.assertIsNone(found)
+        self.assertIn(reason, ("crosses_entry", "not_found"))
+
+    def test_uncontained_token_is_flagged(self):
+        span = self.load()
+        missing = span.token_containment(
+            "The well was drilled in 1962 at a cost of $4,500.",
+            "The well on the north parcel was drilled in 1962 by a "
+            "local contractor.")
+        self.assertTrue(any("4500" in m or "4,500" in m
+                            for m in missing), missing)
+        self.assertEqual(span.token_containment(
+            "The well was drilled in 1962.",
+            "The well on the north parcel was drilled in 1962."), [])
+
+    def test_edited_entry_verifies_stale(self):
+        span = self.load()
+        found, _ = span.resolve_span(
+            "log.md", self.SOURCE, "drilled in 1962 by a local contractor")
+        edited = self.SOURCE.replace("1962", "1963")
+        ok, reason = span.verify_span(edited, found)
+        self.assertFalse(ok)
+        self.assertEqual(reason, "stale")
 
 
 class CuratorTest(unittest.TestCase):
