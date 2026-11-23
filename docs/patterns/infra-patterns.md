@@ -107,6 +107,45 @@ exception, and the periodic full read — never on the polling.
   service watches the jobs (a job that stops checking in pages
   exactly like a job that failed).
 
+## Tracing agent work
+
+Module 02's watches make a job's silence detectable; they do
+not say what happened inside a run that did execute. For agent
+work running on a host you control, trace it:
+
+- **One trace per operation, a span per step.** Model calls,
+  tool executions, retrievals, and sub-agent spawns are child
+  spans carrying token counts (split input / output /
+  cache-read — the splits are priced differently), latency,
+  and a typed error. Multi-turn sessions correlate as threads
+  of traces, so a failure mid-chain has an address instead of
+  a shrug.
+- **Emit OpenTelemetry GenAI conventions** (the `gen_ai.*`
+  attributes — operation name, provider, model, token usage)
+  rather than a proprietary schema, so the backend stays
+  interchangeable. **Pin with your eyes open:** as of late
+  2026 every GenAI convention is still marked Development, not
+  Stable; the conventions moved to their own repository in
+  Jun 2026, which has no tagged release. Pin to a commit or a
+  dated snapshot, and expect attribute churn — dashboards
+  built on the conventions may need migration as they settle.
+- **Attribute cost from the spans.** Aggregate tokens to run,
+  agent, and feature from the same records (module 09's run
+  logs are the small-install form of this). Cost per
+  *successful* outcome is the figure worth charting; per-attempt
+  totals reward setups that fail cheaply and often.
+- **Classify every failed run.** A failure taxonomy, not
+  anecdotes: framework, model routing, memory, ingestion,
+  tools, execution, observability — plus the agent-specific
+  classes, coordination failures and judge failures. A class
+  that recurs is a finding with a basis; a pile of unclassified
+  failures is weather.
+- **Content capture is opt-in, with redaction, never
+  default-on.** Traces that record full prompts and tool
+  payloads by default are a privacy leak and an
+  injection-evidence leak in one. Record the metadata; sample
+  content deliberately, when a diagnosis needs it.
+
 ## If you adopt these
 
 Work them as their own project, under the kit's normal rules:
