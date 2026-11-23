@@ -1,5 +1,5 @@
 {
-  "generated_from": "cc55833f5650631ad62b9225a70cff6edd95b804",
+  "generated_from": "573ecf9cf2dc64976968a7d26ddd403424eb570a",
   "library": "core",
   "modules": [
     {
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 8900,
+      "audit_words": 9004,
       "data_classes": [
         "personal"
       ],
@@ -115,7 +115,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 1658,
+      "audit_words": 1710,
       "data_classes": [
         "financial"
       ],
@@ -190,7 +190,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 4558,
+      "audit_words": 4922,
       "data_classes": [
         "personal",
         "third-party"
@@ -505,7 +505,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 4468,
+      "audit_words": 5028,
       "data_classes": [
         "none"
       ],
