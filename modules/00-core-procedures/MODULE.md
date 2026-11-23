@@ -142,6 +142,23 @@ was done. Ship the gate as a record and audit mechanism. Do not
 claim it makes the work more correct until a long-horizon eval
 shows that.
 
+**The gate on live work.** The comparison above ran on
+fixtures; the gate has since run on live work, and the example
+is worth having for shape rather than weight. In the
+maintainer's installation, one real workstream — a multi-week
+program of work, not an eval task — kept a live feature list,
+and three features were flipped to done only through the gate:
+each verifier a check against artifacts on disk (a report
+carrying the figures its record claimed; one feature whose
+acceptance was, self-referentially, that a gated flip had been
+recorded at all — the honest shape of a first live exercise).
+What it establishes is that the mechanics bind outside a
+fixture: on real work, statuses changed by verifier runs and
+never by the agent's say-so. One workstream is an anecdote
+beside a 30-trial comparison, and the classification above
+stands unchanged — a record and audit mechanism, its
+correctness benefit unproven.
+
 **What a verifier is shown.** The gate's verifier is a script,
 but when a second agent does the verifying, its inputs are part
 of the mechanism. Give it the task and the resulting state — the
