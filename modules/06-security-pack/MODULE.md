@@ -68,6 +68,35 @@ the vetting workflow, the records that prove it happened, and the monthly
 grants inventory. Installing core-procedures gives you the law; installing
 this pack gives you the habit and the paper trail.
 
+## The Rule of Two: a design check for any session
+
+The rules above govern what gets installed and granted. This
+frame governs how a working session is shaped, and it comes
+from Meta ("Agents Rule of Two", 31 Oct 2025), building on
+Simon Willison's "lethal trifecta" (16 Jun 2025). Prompt
+injection has no reliable filter — instructions and data share
+one token channel — so safety is structural: count how many of
+three legs a session stands on.
+
+- **[A] Untrustworthy input** — the agent processes content an
+  outsider could have shaped: web pages, mail, files, another
+  system's output.
+- **[B] Sensitive access** — the agent can reach private data
+  or sensitive systems.
+- **[C] State change or external communication** — the agent
+  can send, post, buy, delete, or otherwise act outside itself.
+
+A session may stand on at most two legs autonomously. A
+session that needs all three must not run unattended: either
+remove a leg (a quarantined reader summarizes the untrusted
+content and never touches the data; the acting agent works
+from the summary and never sees the raw input), or put a
+human approval on the state-changing step — in this kit, the
+ticket rule (module 00) is that approval. When you design a
+job, a watch, or a dispatch lane, count its legs in the plan;
+a three-legged design that nobody counted is the finding,
+whatever it goes on to do.
+
 ## Install
 
 1. Create a `security/` folder in the workspace with `VETTING.md` from
