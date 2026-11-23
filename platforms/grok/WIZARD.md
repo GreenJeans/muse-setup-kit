@@ -280,6 +280,16 @@ like this:
   the kit's brief and run-record make the reporting checkable
   rather than conversational.
 
+One scope question is **unmeasured: whether the Auto-review
+lists are per-bot or account-wide.** The battery set and read
+the lists on one bot (Test 5); nothing measured what a second
+bot on the same account would show, and this pack does not
+guess. Until that is measured, the install records the lists
+**as found, before changing them**, in `SETUP-PLAN.md` — so a
+later reading (a second bot's settings, a post-install check)
+can be compared against the as-found state instead of against
+the install's intention.
+
 **The warning, at full strength, because the battery measured it
 in the kit's own release flow:** Auto-review governs connector
 calls. **The shell path is unreviewed — a push is a send.** In
@@ -414,7 +424,8 @@ surfaces the checks instead, or the install does not close.
 
 *At install:* the seed conversation completed, each seed quoted
 back with provenance and its store recorded; the Auto-review
-lists read back as the user confirmed them; each routine created
+lists recorded as found before the install changed them, and
+read back as the user confirmed them; each routine created
 paused-then-enabled per the plan, its saved instruction read back
 verbatim against the approved text; the run-record file created
 with its header; the procedures reference and decision queue in
