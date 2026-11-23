@@ -78,6 +78,25 @@ verifier. A judge that passes that many wrong runs is a lens,
 not a gate: deterministic checks run first where they exist
 (below), and adoption stays with the user (step 5).
 
+**Measure a judge by defect class, not in aggregate.** When a
+judge's error rates are measured — and an unmeasured judge is a
+lens of unknown strength — report the false-positive and
+false-negative rates split by defect class, because the
+aggregate conceals the class the judge is blind to. The
+maintainer measured one deterministic judge this way, a
+quote-verification gate in a memory ingest lane, on a held-out
+set written for the trial: aggregate false positives 13.3%,
+false negatives 20% — and both numbers lied by averaging.
+Split by class, the same gate caught every fabrication (0 of
+26 passed) and passed every misleading truncation (4 of 4): a
+quote that is a genuine substring but drops a negation or a
+hedge sitting just outside it passes an existence check by
+construction, so that class is uncatchable by that gate and
+belongs to a different layer of the design. Every false
+negative sat in a single formatting class. The aggregate said
+"a fairly good gate"; the split said which failures it will
+never see — the second statement is the one a design can use.
+
 **One snapshot per round.** A review under this method runs against
 one recorded snapshot: the frozen packet for a document audit, a
 named commit or tree for code. The snapshot is recorded before the
