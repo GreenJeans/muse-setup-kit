@@ -65,6 +65,19 @@ instead of argued.
    adoption is recorded with date and source. Nothing is adopted by
    default, by silence, or by the reviewers' say-so.
 
+**Judges advise; they do not gate.** Where a reviewer is a model,
+its verdict enters this method as a finding with a basis, never as
+a decision. The measurement behind that stance is recent and
+stark: Rosset et al. (Microsoft Research and Browserbase, Apr
+2026; the Universal Verifier work, arXiv:2604.06240) scored
+bundled benchmark judges against human gold labels and found
+false-positive rates of at least 45% for WebVoyager's judge and
+at least 22% for WebJudge — and the same agent scored 74% under
+WebVoyager's official judge and 38% under their stricter
+verifier. A judge that passes that many wrong runs is a lens,
+not a gate: deterministic checks run first where they exist
+(below), and adoption stays with the user (step 5).
+
 **One snapshot per round.** A review under this method runs against
 one recorded snapshot: the frozen packet for a document audit, a
 named commit or tree for code. The snapshot is recorded before the
@@ -126,7 +139,13 @@ its shape from Harbor's task runs, deliberately smaller:
 - A **comparison** is the same tasks under the old setup and the new
   one, the model held fixed and named in the job record, at least 3
   trials per arm. Report pass rate, human interventions, and wall
-  time. A single run is a smoke test, not a measurement.
+  time. A single run is a smoke test, not a measurement. Where the
+  arms differ in shape — one agent against several — hold the spend
+  roughly equal across arms, or record plainly that the comparison
+  is not equal-spend: token usage alone explained about 80% of the
+  performance variance in Anthropic's BrowseComp decomposition
+  (Jun 2025), so an unequal-spend comparison measures the budget,
+  not the shape.
 - Decide the adoption rule before running, and record negative
   results with the same care as positive ones. A change adopted
   without a comparison is labelled **provisional** wherever it is

@@ -263,6 +263,18 @@ carries its prescribed response, and a result with no status
 is treated as failed: an unclassified result gets no second
 interpretation.
 
+**Report the spend with the win.** A multi-agent result quoted
+without its token multiplier is marketing, not measurement.
+Anthropic's own decomposition of its BrowseComp results (Jun
+2025) found token usage alone explained about 80% of the
+performance variance — much of a multi-agent win is permission
+to spend more, in parallel fresh windows, and their figures put
+a multi-agent system at roughly 15x a single chat's tokens. So
+compare shapes at roughly equal spend, or say plainly that the
+comparison did not: the honest baseline for a multi-agent run
+is a single agent allowed a comparable budget, not a single
+agent at default settings.
+
 **Stop condition.** Multi-agent shapes get one chance to fail
 cheap. If a builder and a second-agent verifier disagree twice
 on the same change, or two lanes turn out to touch a shared
