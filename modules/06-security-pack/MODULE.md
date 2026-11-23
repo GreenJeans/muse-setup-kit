@@ -320,6 +320,43 @@ schemas in full and re-decide. A manifest change nobody has
 re-vetted is treated like an unvetted install: stop, and tell the
 user.
 
+**Protocol currency: what a current MCP server looks like.**
+Three properties of the 2025–26 protocol generation belong in
+a vetting entry, as selection criteria alongside the checks
+above. Their absence is a limitation to record, not by itself
+a reject — servers migrate at different speeds, and dual-era
+operation is normal — but a server that has none of them is
+behind the spec, and the entry should say so.
+
+- *Stateless core.* The MCP revision of 2026-07-28 removed the
+  session handshake; every request self-describes, and any
+  state between calls rides in an explicit server-minted
+  handle passed as an ordinary tool argument. A handle
+  round-trips through the client and the model, so a sound
+  server treats it as untrusted (signed or encrypted), and a
+  sound vetting asks whether it does. A server pinned to a
+  protocol session — sticky routing, state held in server
+  memory keyed by session — is built on a removed foundation.
+- *Deferred tool loading.* Current clients discover tools on
+  demand (Anthropic's Tool Search Tool) instead of loading
+  every definition into every prompt; in Anthropic's worked
+  example (Nov 2025), presenting servers as discoverable code
+  APIs cut the tool surface from about 150,000 tokens to about
+  2,000. Prefer servers and clients that support discovery;
+  a setup that loads dozens of servers' full schemas up front
+  is paying for definitions it rarely uses, in the scarcest
+  resource it has.
+- *Programmatic tool calling for data-heavy flows.* Where a
+  tool's intermediate results are large, the current pattern
+  is code execution: the model writes code that calls the
+  tools inside a sandbox, filters and aggregates there, and
+  only the final output enters context (Anthropic, 24 Nov
+  2025: about 37% fewer tokens on complex tasks, and whole
+  inference passes eliminated). Direct tool calls remain the
+  right shape for small, judgment-heavy steps. In a vetting,
+  this is a question about the client and the workflow, not
+  the server alone — record which flows, if any, qualify.
+
 **Walk-away criteria.** Walk away — do not install, and do not
 run the item's code — when any of these hold:
 
