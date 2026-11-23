@@ -1,5 +1,5 @@
 {
-  "generated_from": "573ecf9cf2dc64976968a7d26ddd403424eb570a",
+  "generated_from": "6a0ac6dd0c793bd6ba0c824bb03346bde1cee6d7",
   "library": "core",
   "modules": [
     {
@@ -46,7 +46,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 9004,
+      "audit_words": 9590,
       "data_classes": [
         "personal"
       ],
@@ -105,7 +105,7 @@
       "network": "none.",
       "pitch": "Ticket rule for irreversible actions, decision queue, ground-truth and abort-on-mismatch rules, room close-out, standing security rules, the sensitive-records rule, a continuity handover.",
       "reads": "your existing agent instructions and workspace layout.",
-      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending; harness additions (verifier gate, error compaction, STATE card) exercised in run 19 on the harness branch pre-commit, changed surfaces only; EX-034/035 review fixes re-rehearsed in run 20 (gate surface) on the harness branch; orchestration-patterns additions (verifier input spec, choosing-a-shape routing incl. the no-04/05 fallback and the stop condition, best-of-N block) exercised in run 23 (2026-11-21) on the v0.13-prep branch, changed surfaces only; full install path re-rehearsed in runs 26-28 (2026-11-22) on the v0.14-prep branch at checkout pin 0be5410",
+      "rehearsed_at": "v0.4 Starter dry run; v0.5 install-uninstall run; v0.8 runs 11-12 at df56774; v0.9 runs 13-14 at abb9f86; changed since (friction fixes), re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-020/021 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by token-efficiency fold-in, re-rehearsal pending; harness additions (verifier gate, error compaction, STATE card) exercised in run 19 on the harness branch pre-commit, changed surfaces only; EX-034/035 review fixes re-rehearsed in run 20 (gate surface) on the harness branch; orchestration-patterns additions (verifier input spec, choosing-a-shape routing incl. the no-04/05 fallback and the stop condition, best-of-N block) exercised in run 23 (2026-11-21) on the v0.13-prep branch, changed surfaces only; full install path re-rehearsed in runs 26-28 (2026-11-22) on the v0.14-prep branch at checkout pin 0be5410; changed by the Consumer C fold-in (tapped-approval clause, ticket records, gated sends; 2026-11-23), re-rehearsal pending",
       "requires": [],
       "title": "Core Procedures",
       "version": "0.9",
@@ -190,7 +190,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 4922,
+      "audit_words": 5447,
       "data_classes": [
         "personal",
         "third-party"
@@ -293,7 +293,7 @@
       "network": "a second model if used for blind review.",
       "pitch": "Blind dual-review audits of your own procedures, seeded-error tests, memory fidelity checks, adoption workflow.",
       "reads": "your procedures and memory, frozen into an audit packet.",
-      "rehearsed_at": "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal; orchestration-patterns additions (coverage-honesty rule, deterministic-first lens review) exercised in run 23 (2026-11-21) on the v0.13-prep branch, changed surfaces only; the module's full install path rehearsed in run 26 (2026-11-22) on the v0.14-prep branch \u2014 install with its dependency chain, kit_doctor clean, Track B oracle 3/3 (every verifier fails on its seed and passes on its solution); re-rehearsed in run 28's full install at the same checkout pin 0be5410",
+      "rehearsed_at": "harness branch run 19 (2026-11-21): Track B oracle and one smoke trial exercised on the branch pre-commit, changed surfaces only; the module install path remains unrehearsed; EX-034/035 review fixes covered by run 20's gate re-rehearsal; orchestration-patterns additions (coverage-honesty rule, deterministic-first lens review) exercised in run 23 (2026-11-21) on the v0.13-prep branch, changed surfaces only; the module's full install path rehearsed in run 26 (2026-11-22) on the v0.14-prep branch \u2014 install with its dependency chain, kit_doctor clean, Track B oracle 3/3 (every verifier fails on its seed and passes on its solution); re-rehearsed in run 28's full install at the same checkout pin 0be5410; changed by the Consumer C fold-in (defect-class judge measurement, sub-behavior scoring, detective-control seeding; 2026-11-23), re-rehearsal pending",
       "requires": [],
       "title": "Evaluation Kit",
       "version": "0.8",
@@ -349,7 +349,7 @@
       "action_classes": [
         "none"
       ],
-      "audit_words": 3601,
+      "audit_words": 5522,
       "data_classes": [
         "personal",
         "third-party"
@@ -374,6 +374,10 @@
         {
           "class": "static-verbatim",
           "path": "tools/memory_lint.py"
+        },
+        {
+          "class": "static-verbatim",
+          "path": "tools/span_evidence.py"
         }
       ],
       "id": "core/memory-architecture",
@@ -384,12 +388,12 @@
       "license": "MIT",
       "maintainer": "Muse Setup Kit maintainer",
       "network": "none.",
-      "pitch": "Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample.",
+      "pitch": "Compiled-memory schema with provenance and supersession, span-based evidence for machine-drafted claims, plus a deterministic linter and a weekly fidelity sample.",
       "reads": "your memory files.",
-      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by the 'Forgetting cleanly' section, rehearsed in run 25 (2026-11-22) at pin 25ced3b on the forgetting-section branch \u2014 verb choice, plan-first flow, approval scope, and closing verification exercised on a fictional store, changed surface only; the module's install path was not re-run; full install path re-rehearsed in runs 26-28 (2026-11-22) on the v0.14-prep branch at checkout pin 0be5410",
+      "rehearsed_at": "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by the 'Forgetting cleanly' section, rehearsed in run 25 (2026-11-22) at pin 25ced3b on the forgetting-section branch \u2014 verb choice, plan-first flow, approval scope, and closing verification exercised on a fictional store, changed surface only; the module's install path was not re-run; full install path re-rehearsed in runs 26-28 (2026-11-22) on the v0.14-prep branch at checkout pin 0be5410; changed by the span-evidence addition (from the source installation, 2026-11-23), re-rehearsal pending",
       "requires": [],
       "title": "Memory Architecture",
-      "version": "0.8",
+      "version": "0.9",
       "writes": "a schema file, header stamps, a linter and its reports."
     },
     {
