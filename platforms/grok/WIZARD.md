@@ -120,14 +120,21 @@ that is the form the store holds:
    the agent sends, deletes, purchases, books, files, cancels, or
    submits anything — the exact action, the exact total, and the
    fallback stated first."
-3. The reporting format the user wants, if any. The battery's
-   worked example: "The user wants every status report to begin
-   with 'Reporting:' followed by the weekday." A rule in exactly
-   this shape was saved to memory, quoted back with provenance,
-   followed in chat, and followed by an unattended run
-   (`Reporting: Monday` + the run's payload, correct weekday).
-   It is the pack's proof that the seed mechanism works; the
-   user's own format, if they want one, takes its place.
+3. The reporting format the user wants, if any. Worked example:
+   "The user wants every status report to end with a one-line
+   count of the open decision-queue items." The example is
+   illustrative, not the battery's rule: the battery proved the
+   mechanism with a format rule of its own (Test 1, Pass — saved
+   to memory, quoted back with provenance, followed in chat, and
+   followed by an unattended run the same day), and this list
+   deliberately does not reuse that rule as its example. An
+   example that doubles as a test canary makes seed and leftover
+   indistinguishable — if a report follows the format, behaviour
+   alone cannot prove whether the user's seed or an old test
+   fact is doing the work. What is actually stored is verified
+   through the audit inventory (module 01, below), never
+   inferred from behaviour. The user's own format, if they want
+   one, takes the example's place.
 4. The decision-queue fact: "The user clears non-urgent decisions
    from a numbered queue in the workspace file <QUEUE FILE>, and
    silence is never approval for an irreversible action."
@@ -138,6 +145,21 @@ that is the form the store holds:
    wants a failures-first morning brief at <TIME> in <TIMEZONE>,
    posted by routine, built from the workspace run-record and
    decision queue."
+
+**Seed carefully — removal is real only before consolidation.**
+The correction mechanism (seed 5: remove the old fact by its
+exact text, then add the corrected one) was measured working on
+a fact minutes old (Test 3). A later cleanup pass on the same
+account measured the limit: a fact in the account-level user
+profile was removed cleanly, while two facts that had
+consolidated into the bot's per-bot [profile] store refused
+exact-text removal — the tool reported that no fact with exactly
+that text was recorded — and no user-facing removal surface for
+that store was found. So treat every seed as effectively
+permanent once it has consolidated: state, in your own words,
+only rules you mean to keep, and check the quote-back before
+the conversation moves on. The moment to fix a seed is while it
+is still new; a consolidated seed may not be takeable back.
 
 One measured subtlety belongs in the plan: **the write target is
 phrasing-sensitive.** A fact dictated as a fact about the user
@@ -179,7 +201,11 @@ discipline runs against them:
 - *Correction.* The platform's only edit is remove-by-exact-text
   plus add. Removal was verified real at the search layer (a
   corrected test fact was replaced, not duplicated — the count
-  proved it). Whether the server retains removed facts is not
+  proved it). That verification was on a fact minutes old: facts
+  consolidated into the per-bot [profile] store later refused
+  the same removal (see the seed caution under module 00), so a
+  correction the platform refuses is reported as refused, never
+  as applied. Whether the server retains removed facts is not
   inspectable; the audit says so rather than claiming a deletion
   it cannot see. Every correction is proposed to the user first
   and applied on approval, as a remove/add pair the report shows
