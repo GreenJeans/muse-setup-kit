@@ -130,6 +130,26 @@ ordering needs no
 citation: a change can pass several agent reviewers and still
 ship what a type checker would have caught, when nobody ran it.
 
+**Measure detective controls by seeding them.** Some controls
+prevent; others only detect — a reconciliation matching sent
+mail against ticket records (module 00, §2), a post-run audit
+of what a lane actually did. A detective control's value is
+its recall, and recall is not established by the control
+existing, or by a quiet month: quiet is consistent with
+nothing to catch and with catching nothing. Prove it the way
+the canary (step 2) proves a reviewer: seed violations the
+control should catch — sends with no ticket record are the
+standing example — planted by the user, who holds the key
+outside the system, spread across one control cycle, and
+measure what fraction it flags, how fast, and what it flags
+wrongly. Register the bar before seeding and report the result
+against it, whatever it is; the maintainer's seeded-send
+design, adopted from an outside review, seeds five unticketed
+sends across one reconciliation cycle with a pre-registered
+bar of five of five flagged. A detective control that has
+never been seeded carries an unmeasured recall — say so
+wherever its quiet is cited as evidence that nothing is wrong.
+
 ## Track B — task runs (measured)
 
 The audit method reviews the documents. This track runs the agent.
