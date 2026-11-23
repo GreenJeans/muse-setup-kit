@@ -182,6 +182,21 @@ its shape from Harbor's task runs, deliberately smaller:
   points on one data-engineering bench — and price a harness by
   what a success costs in it, because the same model can cost
   several times more in one harness than in another.
+- **Score the sub-behaviors separately.** A task's oracle is
+  usually all-or-nothing over several distinct behaviors, and
+  the aggregate hides splits that matter. On one task mined
+  from a production failure, the maintainer ran the comparison
+  twice: with the governing rule stated in the instruction,
+  3/3 trials passed (pass^3 = 1.0); with the rule removed, the
+  core detection behavior stayed perfect in all three trials
+  while a convention behavior — leaving the system's own
+  housekeeping edits unreported — was inferred by only two of
+  three, and the all-or-nothing oracle reported pass^3 = 0.0.
+  Both numbers are true and both are incomplete descriptions
+  of the same performance. Report the per-behavior scores
+  beside the task score, or a single convention miss reads as
+  total failure — and a clean sweep can hide a behavior that
+  never worked at all.
 - Decide the adoption rule before running, and record negative
   results with the same care as positive ones. A change adopted
   without a comparison is labelled **provisional** wherever it is
