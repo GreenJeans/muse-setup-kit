@@ -151,6 +151,18 @@ its shape from Harbor's task runs, deliberately smaller:
   performance variance in Anthropic's BrowseComp decomposition
   (Jun 2025), so an unequal-spend comparison measures the budget,
   not the shape.
+- **Report reliability, not just the headline rate.** Alongside
+  pass rate, report **pass^k** — the share of tasks that succeed
+  in *all* k trials (the τ-bench lineage) — and **cost per
+  success**: the total spend across every trial divided by the
+  tasks passed, never cost per attempt. A setup passing 90% of
+  tasks once and 40% across three trials is a different setup
+  from one passing 70% and 65%, and the headline rate hides
+  which. Published production evals (2026) treat the pass@1 to
+  pass^k drop as the harness's reliability signature — 9 to 16
+  points on one data-engineering bench — and price a harness by
+  what a success costs in it, because the same model can cost
+  several times more in one harness than in another.
 - Decide the adoption rule before running, and record negative
   results with the same care as positive ones. A change adopted
   without a comparison is labelled **provisional** wherever it is
