@@ -1,10 +1,11 @@
 # Module 00 — Core Procedures
 
 **Reads:** your existing agent instructions and workspace layout.
-**Writes:** an operating-procedures file, a decision queue, SCOPE notes,
-a JOBS.md, a continuity handover, and a pointer line in the agent's
-main instruction file.
-**Network:** none. **Jobs:** none.
+**Writes:** an operating-procedures file, a decision queue, a tickets.md
+record per topic workspace, SCOPE notes, a JOBS.md, a continuity
+handover, and a pointer line in the agent's main instruction file.
+**Network:** none. **Jobs:** none required; optional sent-folder
+reconciliation (template §2).
 **Data classes:** personal. **Action classes:** none.
 
 ## Purpose

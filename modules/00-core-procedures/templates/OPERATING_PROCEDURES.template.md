@@ -54,19 +54,28 @@ them differ from this file, this file governs. -->
   and fallback, the exclusion list where it applies, the approval's
   source (the ticket text, or a pointer to the approved message,
   whose elements the entry transcribes), and, after execution, the
-  outcome — for a send, the message ID the platform returned. The
+  outcome — for a send, the message ID the platform returned. For
+  a send, the entry also stores a hash of the approved subject
+  and body (for other actions, the exact action string), and the
+  sent message's hash is written beside its ID: the executed act
+  is compared against what was approved, not against the record's
+  summary of it. The
   record is what reconciliation checks against (the gated-send rule
   below); an approval that left no record is indistinguishable
   from no approval.
 - **Gate the sending path where the platform allows it.** Where a
   send goes through a command the agent chooses, route it through a
   wrapper that refuses without a matching, unconsumed ticket record:
-  it looks the record up by topic and recipient, sends only on a
-  match, and writes the returned message ID back into the record.
+  it looks the record up by topic and recipient, compares the
+  outgoing subject and body against the record's stored hash,
+  refuses on a mismatch, sends only on a match, and writes the
+  returned message ID — and the sent message's hash — back into
+  the record.
   Paths that admit no code gate — a platform mail worker, a browser
   UI — still create the record before sending, and periodic
   reconciliation over the sent folder is the backstop that covers
-  every path.
+  every path. Reconciliation's recall is unmeasured until it is
+  seeded; module 05's audit method carries the seeding discipline.
 - Delegation never widens authority: only the user's direct approval makes
   a ticket, and a subagent or another agent cannot approve one.
 - Message tickets must carry a content-exclusion list — what must NOT be
