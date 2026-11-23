@@ -101,3 +101,10 @@ label would make the record less checkable, not more.
 - **Release gate for v0.8:** the tag is not cut until a fresh
   install rehearsal runs at the release commit itself, so the
   release ships with at least one row at its own pin.
+- The **Grok Bot platform profile** (`grok` in the manifest, the
+  overlay and template contents under `platforms/grok/`). The
+  platform itself was measured by a ten-test battery on a live
+  account (7 Pass, 2 Partial, 1 Fail — the isolation failure is
+  why module 04 is excluded); no agent has installed through the
+  pack, and its memory-seed conversation, routine creation, and
+  audit run are all unrehearsed as an install.
