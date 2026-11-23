@@ -1,7 +1,8 @@
 # Module 01 — Memory Architecture
 
 **Reads:** your memory files. **Writes:** a schema file, header stamps,
-a linter and its reports. **Network:** none. **Jobs:** one weekly linter run.
+a linter and its reports, span records (spans.json) alongside staged
+drafts. **Network:** none. **Jobs:** one weekly linter run.
 **Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose

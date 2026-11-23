@@ -1,11 +1,12 @@
 # Module 00 — Core Procedures
 
-**Reads:** your existing agent instructions and workspace layout.
+**Reads:** your existing agent instructions and workspace layout;
+if reconciliation is adopted, the mail account's sent folder.
 **Writes:** an operating-procedures file, a decision queue, a tickets.md
 record per topic workspace, SCOPE notes, a JOBS.md, a continuity
 handover, and a pointer line in the agent's main instruction file.
-**Network:** none. **Jobs:** none required; optional sent-folder
-reconciliation (template §2).
+**Network:** none. **Jobs:** optional: periodic sent-folder
+reconciliation, if reconciliation is adopted.
 **Data classes:** personal. **Action classes:** none.
 
 ## Purpose
