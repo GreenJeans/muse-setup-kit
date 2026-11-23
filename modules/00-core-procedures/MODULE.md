@@ -1,10 +1,12 @@
 # Module 00 — Core Procedures
 
-**Reads:** your existing agent instructions and workspace layout.
-**Writes:** an operating-procedures file, a decision queue, SCOPE notes,
-a JOBS.md, a continuity handover, and a pointer line in the agent's
-main instruction file.
-**Network:** none. **Jobs:** none.
+**Reads:** your existing agent instructions and workspace layout;
+if reconciliation is adopted, the mail account's sent folder.
+**Writes:** an operating-procedures file, a decision queue, a tickets.md
+record per topic workspace, SCOPE notes, a JOBS.md, a continuity
+handover, and a pointer line in the agent's main instruction file.
+**Network:** none. **Jobs:** optional: periodic sent-folder
+reconciliation, if reconciliation is adopted.
 **Data classes:** personal. **Action classes:** none.
 
 ## Purpose
@@ -31,7 +33,11 @@ summary has a bug.
   submissions — need a *ticket*: the exact action, the exact total, the
   exact fallback, and a content-exclusion list for messages, approved by the
   user in the topic's home. A ticket authorizes exactly one execution and
-  is void if any detail changes.
+  is void if any detail changes. An approval counts only when the
+  approved message itself carries the elements — a tap on an incomplete
+  message approves a draft, not a ticket — and every executed ticket is
+  recorded in the topic's `tickets.md`, so the approval can be checked
+  against the act later.
 - **The decision queue.** Non-urgent decisions go into a numbered queue
   file. The user clears them by number in one reply ("3: yes, 7: park").
   An item may print a low-stakes default; silence is consent only to that
@@ -137,6 +143,23 @@ seed task still read "pending" in 3 of 3 trials after the work
 was done. Ship the gate as a record and audit mechanism. Do not
 claim it makes the work more correct until a long-horizon eval
 shows that.
+
+**The gate on live work.** The comparison above ran on
+fixtures; the gate has since run on live work, and the example
+is worth having for shape rather than weight. In the
+maintainer's installation, one real workstream — a multi-week
+program of work, not an eval task — kept a live feature list,
+and three features were flipped to done only through the gate:
+each verifier a check against artifacts on disk (a report
+carrying the figures its record claimed; one feature whose
+acceptance was, self-referentially, that a gated flip had been
+recorded at all — the honest shape of a first live exercise).
+What it establishes is that the mechanics bind outside a
+fixture: on real work, statuses changed by verifier runs and
+never by the agent's say-so. One workstream is an anecdote
+beside a 30-trial comparison, and the classification above
+stands unchanged — a record and audit mechanism, its
+correctness benefit unproven.
 
 **What a verifier is shown.** The gate's verifier is a script,
 but when a second agent does the verifying, its inputs are part
@@ -262,6 +285,18 @@ switch the model id, since waiting never helps. Each status
 carries its prescribed response, and a result with no status
 is treated as failed: an unclassified result gets no second
 interpretation.
+
+**Report the spend with the win.** A multi-agent result quoted
+without its token multiplier is marketing, not measurement.
+Anthropic's own decomposition of its BrowseComp results (Jun
+2025) found token usage alone explained about 80% of the
+performance variance — much of a multi-agent win is permission
+to spend more, in parallel fresh windows, and their figures put
+a multi-agent system at roughly 15x a single chat's tokens. So
+compare shapes at roughly equal spend, or say plainly that the
+comparison did not: the honest baseline for a multi-agent run
+is a single agent allowed a comparable budget, not a single
+agent at default settings.
 
 **Stop condition.** Multi-agent shapes get one chance to fail
 cheap. If a builder and a second-agent verifier disagree twice

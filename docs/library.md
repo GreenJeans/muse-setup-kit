@@ -354,6 +354,13 @@ label in `module.yaml`; versions are for display and for
 in for a pin. Mixed pins across an install are normal (they
 already are, under `UPGRADING.md`).
 
+When a version does move: a module's version bumps when its
+installed surface changes — a shipped file added or materially
+changed, a schema rule, a verify check, or a static-rendered
+template whose change alters operative meaning. Method-text-only
+changes do not move a version; they take a `rehearsed_at` note
+in `module.yaml` instead.
+
 ## Extension points
 
 Field modules amend core files only at declared anchors

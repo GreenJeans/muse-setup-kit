@@ -1,7 +1,8 @@
 # Module 01 — Memory Architecture
 
 **Reads:** your memory files. **Writes:** a schema file, header stamps,
-a linter and its reports. **Network:** none. **Jobs:** one weekly linter run.
+a linter and its reports, span records (spans.json) alongside staged
+drafts. **Network:** none. **Jobs:** one weekly linter run.
 **Data classes:** personal, third-party. **Action classes:** none.
 
 ## Purpose
@@ -13,7 +14,7 @@ copied from other summaries, and contradictions nobody noticed. This module
 is the discipline that keeps the compiled layer honest, distilled from a
 schema in daily use in a working installation.
 
-## The five ideas
+## The six ideas
 
 1. **Current state at the top; history below, never deleted.** When a fact
    changes, rewrite the live bullet and move the old claim to a History /
@@ -47,6 +48,27 @@ schema in daily use in a working installation.
    page: the test exists to check the sampler, and a sampler that reads
    live pages would be trained on a lie. If the process can't catch the
    planted one, it isn't catching real ones either.
+6. **Evidence is a span, not a copy.** When a machine drafts or extracts
+   claims for the compiled layer — a migration pass, an ingest lane —
+   each claim's evidence is stored as a span: the source entry, the
+   character offsets inside it, and a hash of the entry's full text,
+   recomputed on every verification. A span cannot cross an entry
+   boundary, so a quote stitched from two passages is unrepresentable
+   rather than merely detectable, and a later edit to the source entry
+   breaks verification loudly instead of silently altering what a claim
+   rests on. Add the containment check: the claim's hard tokens must
+   appear inside its span. The reach is registered names (and
+   multiword proper names), full dates, and numbers, compared by
+   value — so a rounded restatement flags instead of passing.
+   Outside it, by design: an unregistered single name, a month
+   without a day, a number written as a word, a scale word riding
+   on a contained number — and any added fact that is not a name,
+   date, or amount at all. Those pass the checker untouched and
+   stay the human-grade pass's catch. The check does not catch a
+   misread sentence — the fidelity sample (idea 5) owns fairness —
+   but it catches a claim quietly adding a checkable fact its
+   evidence does not contain, a class a string-matching quote
+   check structurally misses.
 
 ## Forgetting cleanly
 
@@ -70,6 +92,22 @@ This does not contradict "history below, never deleted." That rule governs how m
 
 **Why users ask.** Sometimes privacy. Just as often, hygiene: a dead interest left in memory keeps resurfacing in feeds, briefs, and proactive suggestions long after the user stopped caring. Forgetting takes a topic out of the agent's attention, not just out of its files.
 
+## Standing context is a budget
+
+The compiled layer loads into every session, so its size is a standing
+cost — and, past a point, a standing risk: context spent on stale bulk
+is context not spent on the work, and a store too large to hold in
+view stops being reviewed at all. Measure the standing context by
+component (procedures, curated file, standing instructions); set a
+size threshold on the memory file and a token threshold on the
+injected total — the operative trigger is procedures §11. Crossing
+either triggers not
+cuts but a compaction review at the next procedures audit (§11):
+measure by component, name what each part earns, and propose what
+shrinks before anything is cut. The threshold is a review obligation,
+not a cap — the memory and procedures are themselves control layers,
+and a hard ceiling would cut safety content first.
+
 ## Layout (adapt to your platform's conventions)
 
 - A curated long-term memory file (current state + a Superseded section).
@@ -78,6 +116,9 @@ This does not contradict "history below, never deleted." That rule governs how m
 - One page per person and per group, with Facts and History sections.
 - A `SCHEMA.md` stating the rules (template included).
 - The linter under a tools folder, with its run receipts kept.
+- Spans recorded alongside staged drafts (a `spans.json` next to each
+  checked draft), so the evidence for a compiled claim can be re-verified
+  against its source at any time.
 
 ## Install
 
@@ -114,6 +155,17 @@ This does not contradict "history below, never deleted." That rule governs how m
    Record the true value in the test log, wire the weekly sample to
    reserve one slot for the test page, and confirm the process finds
    the plant.
+5. If anything machine-drafts claims for the store (a page migration, a
+   pre-ingest extractor), install the span checker (`tools/span_evidence.py`
+   in this module) in that pipeline: the drafter emits claims with quotes,
+   the checker resolves each quote to a span, verifies the entry hash,
+   and runs the token-containment check before a human-grade pass writes
+   anything. Maintain the name registry the checker matches against —
+   the compiled pages' subjects are the natural seed; an unregistered
+   name is outside its reach, so the registry is part of the install,
+   not an afterthought. Sources without stable entries (web pages, exports) keep a
+   plain string-match check as fallback. Existing claims convert to
+   spans opportunistically when next touched — never in a bulk rewrite.
 
 ## Verify
 

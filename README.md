@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 65,600
+install is heavy work — a full one reads on the order of 70,300
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -79,9 +79,9 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~28,200 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~36,300 words | Plus the memory schema with its linter, and the security pack. |
-| Everything | all twelve modules | ~65,600 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~29,100 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~40,000 words | Plus the memory schema with its linter and span checker, and the security pack. |
+| Everything | all twelve modules | ~70,300 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -123,7 +123,10 @@ alert discipline for people with a host) live in
 `docs/patterns/infra-patterns.md` as a reference document — sound
 practice, but never rehearsed as an install, so the wizard doesn't
 install it. And `docs/governance-test.md` is a standalone discipline
-check you can run against your *current* setup, kit or no kit.
+check you can run against your *current* setup, kit or no kit, and
+`docs/what-to-stop-doing.md` is its companion: the early-agent-era
+practices the field has measured and retired, each with the kit
+pattern that replaced it.
 ## Design principles
 
 One-line summaries of the kit's constitutional rules; the operative

@@ -4,8 +4,8 @@
 id: core/memory-architecture
 dir: modules/01-memory-architecture
 title: Memory Architecture
-pitch: "Compiled-memory schema with provenance and supersession, plus a deterministic linter and a weekly fidelity sample."
-version: "0.8"
+pitch: "Compiled-memory schema with provenance and supersession, span-based evidence for machine-drafted claims, plus a deterministic linter and a weekly fidelity sample."
+version: "0.9"
 maintainer: Muse Setup Kit maintainer
 license: MIT
 kit_compat: [kit-1]
@@ -13,10 +13,10 @@ depends_on: [core/core-procedures]
 requires: []
 degrades_without: [scheduling, shell-python]
 reads: "your memory files."
-writes: "a schema file, header stamps, a linter and its reports."
+writes: "a schema file, header stamps, a linter and its reports, span records (spans.json) alongside staged drafts."
 network: "none."
 jobs: "one weekly linter run."
-rehearsed_at: "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by the 'Forgetting cleanly' section, rehearsed in run 25 (2026-11-22) at pin 25ced3b on the forgetting-section branch — verb choice, plan-first flow, approval scope, and closing verification exercised on a fictional store, changed surface only; the module's install path was not re-run; full install path re-rehearsed in runs 26-28 (2026-11-22) on the v0.14-prep branch at checkout pin 0be5410"
+rehearsed_at: "v0.1 wizard dry runs; seeded in later runs, not re-installed; changed in v0.8, re-rehearsal pending; changed by EX-018/019 review fixes, re-rehearsal pending; changed by EX-022/023 review fixes, re-rehearsal pending; changed by the 'Forgetting cleanly' section, rehearsed in run 25 (2026-11-22) at pin 25ced3b on the forgetting-section branch — verb choice, plan-first flow, approval scope, and closing verification exercised on a fictional store, changed surface only; the module's install path was not re-run; full install path re-rehearsed in runs 26-28 (2026-11-22) on the v0.14-prep branch at checkout pin 0be5410; changed by the span-evidence addition (from the source installation, 2026-11-23), re-rehearsal pending"
 data_classes: [personal, third-party]
 action_classes: [none]
 files:
@@ -25,4 +25,6 @@ files:
   - path: MEMORY.template.md
     class: accumulating
   - path: tools/memory_lint.py
+    class: static-verbatim
+  - path: tools/span_evidence.py
     class: static-verbatim

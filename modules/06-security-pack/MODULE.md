@@ -68,6 +68,40 @@ the vetting workflow, the records that prove it happened, and the monthly
 grants inventory. Installing core-procedures gives you the law; installing
 this pack gives you the habit and the paper trail.
 
+## The Rule of Two: a design check for any session
+
+The rules above govern what gets installed and granted. This
+frame governs how a working session is shaped, and it comes
+from Meta ("Agents Rule of Two", 31 Oct 2025), building on
+Simon Willison's "lethal trifecta" (16 Jun 2025). Prompt
+injection has no reliable filter — instructions and data share
+one token channel — so safety is structural: count how many of
+three legs a session stands on.
+
+- **[A] Untrustworthy input** — the agent processes content an
+  outsider could have shaped: web pages, mail, files, another
+  system's output.
+- **[B] Sensitive access** — the agent can reach private data
+  or sensitive systems.
+- **[C] State change or external communication** — the agent
+  can send, post, buy, delete, or otherwise act outside itself.
+
+A session may stand on at most two legs autonomously. A
+session that needs all three must not run unattended: either
+remove a leg (a quarantined reader summarizes the untrusted
+content into constrained fields — enumerated values,
+extracted figures, not free text — and never touches the
+data; the acting agent works from those fields and never
+sees the raw input), or put a
+human approval on every state-changing (leg-C) step. For
+irreversible steps that approval is a ticket (module 00);
+leg C also includes reversible writes the ticket rule alone
+does not reach, and those need the human's approval too, in
+whatever lighter form the setup gives it. When you design a
+job, a watch, or a dispatch lane, count its legs in the plan;
+a three-legged design that nobody counted is the finding,
+whatever it goes on to do.
+
 ## Install
 
 1. Create a `security/` folder in the workspace with `VETTING.md` from
@@ -290,6 +324,46 @@ differs from the record, re-read the changed descriptions and
 schemas in full and re-decide. A manifest change nobody has
 re-vetted is treated like an unvetted install: stop, and tell the
 user.
+
+**Protocol currency: what a current MCP server looks like.**
+Three properties of the 2025–26 protocol generation belong in
+a vetting entry, as selection criteria alongside the checks
+above. Only the first is a property of the server and the
+spec; the other two are criteria for the client and the
+workflow — record each against the side it belongs to. Their
+absence is a limitation to record, not by itself
+a reject — servers migrate at different speeds, and dual-era
+operation is normal — but a server that is not stateless is
+behind the spec, and the entry should say so.
+
+- *Stateless core.* The MCP revision of 2026-07-28 removed the
+  session handshake; every request self-describes, and any
+  state between calls rides in an explicit server-minted
+  handle passed as an ordinary tool argument. A handle
+  round-trips through the client and the model, so a sound
+  server treats it as untrusted (signed or encrypted), and a
+  sound vetting asks whether it does. A server pinned to a
+  protocol session — sticky routing, state held in server
+  memory keyed by session — is built on a removed foundation.
+- *Deferred tool loading.* Current clients discover tools on
+  demand (Anthropic's Tool Search Tool) instead of loading
+  every definition into every prompt; in Anthropic's worked
+  example (Nov 2025), code execution with MCP cut the
+  presented tool surface from about 150,000 tokens to about
+  2,000. Prefer servers and clients that support discovery;
+  a setup that loads dozens of servers' full schemas up front
+  is paying for definitions it rarely uses, in the scarcest
+  resource it has.
+- *Programmatic tool calling for data-heavy flows.* Where a
+  tool's intermediate results are large, the current pattern
+  is code execution: the model writes code that calls the
+  tools inside a sandbox, filters and aggregates there, and
+  only the final output enters context (Anthropic, 24 Nov
+  2025: about 37% fewer tokens on complex tasks, and whole
+  inference passes eliminated). Direct tool calls remain the
+  right shape for small, judgment-heavy steps. In a vetting,
+  this is a question about the client and the workflow, not
+  the server alone — record which flows, if any, qualify.
 
 **Walk-away criteria.** Walk away — do not install, and do not
 run the item's code — when any of these hold:

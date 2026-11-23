@@ -107,6 +107,91 @@ exception, and the periodic full read — never on the polling.
   service watches the jobs (a job that stops checking in pages
   exactly like a job that failed).
 
+## Tracing agent work
+
+Module 02's watches make a job's silence detectable; they do
+not say what happened inside a run that did execute. For agent
+work running on a host you control, trace it:
+
+- **One trace per operation, a span per step.** Model calls,
+  tool executions, retrievals, and sub-agent spawns are child
+  spans carrying token counts (split input / output /
+  cache-read — the splits are priced differently), latency,
+  and a typed error. Multi-turn sessions correlate as threads
+  of traces, so a failure mid-chain has an address instead of
+  a shrug.
+- **Emit OpenTelemetry GenAI conventions** (the `gen_ai.*`
+  attributes — operation name, provider, model, token usage)
+  rather than a proprietary schema, so the backend stays
+  interchangeable. **Pin with your eyes open:** as of late
+  2026 every GenAI convention is still marked Development, not
+  Stable; the conventions moved to their own repository in
+  Jun 2026, which has no tagged release. Pin to a commit or a
+  dated snapshot, and expect attribute churn — dashboards
+  built on the conventions may need migration as they settle.
+- **Attribute cost from the spans.** Aggregate tokens to run,
+  agent, and feature from the same records (module 09's run
+  logs are the small-install form of this). Cost per
+  *successful* outcome is the figure worth charting; per-attempt
+  totals reward setups that fail cheaply and often.
+- **Classify every failed run.** A failure taxonomy, not
+  anecdotes: framework, model routing, memory, ingestion,
+  tools, execution, observability — plus the agent-specific
+  classes, coordination failures and judge failures. A class
+  that recurs is a finding with a basis; a pile of unclassified
+  failures is weather.
+- **Content capture is opt-in, with redaction, never
+  default-on.** Traces that record full prompts and tool
+  payloads by default are a privacy leak and an
+  injection-evidence leak in one. Record the metadata; sample
+  content deliberately, when a diagnosis needs it.
+
+## Audit the lanes after they run
+
+Some lanes act on instructions alone — an inbox triage that
+must never send mail or create drafts, a household watch that
+must never write to the shared surfaces it reads. Their
+prohibitions are prose, and a prose prohibition deserves a
+check that does not trust the lane's own report:
+
+- **A deterministic, read-only audit, run after the fact.**
+  Nothing blocks the lane; the audit reads records and flags
+  for human review. Build wake spans from the detector logs —
+  a wake plus the window a worker could plausibly act in —
+  then read the live systems for effects inside those spans:
+  messages sent or drafted, shared records created or
+  modified. An effect timestamped inside a span is flagged,
+  with the attribution stated as what it is: circumstantial.
+  A flag means *review this*, not *proven*.
+- **State the coverage limits in the record.** Some legs have
+  no ground-truth source — a click leaves no trace in any
+  system the audit can read; a shared document may carry no
+  per-edit authorship. The audit reports those legs as partial
+  rather than claiming a check it did not make. An audit that
+  hides its blind legs is worse than none: it converts "not
+  checked" into "checked".
+- **Cadence beats depth.** A monthly audit of a lane that runs
+  daily permits a full cycle of undetected violation, so
+  audit per run: a script-first detector polls on a short
+  cycle, audits each wake once its span has fully closed, and
+  records every wake's result — silent when clean, waking a
+  reporter only on a flag. A leg that cannot be read is
+  retried a bounded number of times across polls, then
+  recorded **UNVERIFIED** as its final state and surfaced in
+  rollups — never silently dropped, and never reported as
+  clean.
+- **Roll the per-run records up.** A monthly pass reads the
+  per-run log plus one full-window cross-check run, so slow
+  drift and attribution edge cases (one event inside
+  overlapping spans is one event, however many spans recorded
+  it) get a second look at human cadence.
+
+Whether the audit itself catches what it should is a recall
+question, and recall is proven by seeding, not by quiet
+months: module 05's audit method ("Measure detective controls
+by seeding them") carries that discipline, and it applies to
+this audit exactly as it does to the lanes it watches.
+
 ## If you adopt these
 
 Work them as their own project, under the kit's normal rules:

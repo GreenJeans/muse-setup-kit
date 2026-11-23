@@ -67,7 +67,12 @@ too. Nobody acted in bad faith. The bucket was simply never checked.
    logs nothing; a missing line is honest, an invented one is a
    false record. The monthly spend check (rule 6) reads the run
    logs, so its comparisons rest on recorded runs rather than
-   recall.
+   recall. This is the small form of 2026 production practice:
+   cost derived per run and aggregated per agent, because a
+   single retry-looping lane can spend heavily before a human
+   notices, and per-attempt totals hide it — what a deployment
+   can act on is cost per successful outcome, which only
+   per-run records can produce.
 
 **Billing data is a financial record (procedures §13).** Usage
 figures live in the register and on the providers' pages; a spend
