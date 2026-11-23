@@ -31,7 +31,11 @@ summary has a bug.
   submissions — need a *ticket*: the exact action, the exact total, the
   exact fallback, and a content-exclusion list for messages, approved by the
   user in the topic's home. A ticket authorizes exactly one execution and
-  is void if any detail changes.
+  is void if any detail changes. An approval counts only when the
+  approved message itself carries the elements — a tap on an incomplete
+  message approves a draft, not a ticket — and every executed ticket is
+  recorded in the topic's `tickets.md`, so the approval can be checked
+  against the act later.
 - **The decision queue.** Non-urgent decisions go into a numbered queue
   file. The user clears them by number in one reply ("3: yes, 7: park").
   An item may print a low-stakes default; silence is consent only to that

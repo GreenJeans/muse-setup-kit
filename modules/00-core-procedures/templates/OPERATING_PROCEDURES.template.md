@@ -40,6 +40,33 @@ them differ from this file, this file governs. -->
   in the topic's home chat. A ticket is void if any detail changes.
   Executing beyond the fallback is overreach even if it works out.
 - A ticket authorizes exactly one execution. There are no standing tickets.
+- **A tapped approval counts as a ticket only when the approved message
+  is the ticket.** An approval in the home chat — a tap on an approval
+  card, an "approved" reply — executes a ticket only if the message
+  being approved itself states the exact action, the exact total where
+  money applies, and the exact fallback — and, for sends, the
+  content-exclusion list below. Approval of a message missing any
+  element is approval of a draft, not a ticket: it authorizes nothing,
+  and the ticket is reissued complete before anything executes.
+- **Every executed ticket leaves a record.** Keep a `tickets.md` in
+  each topic's workspace: one entry per approved action, written
+  before execution — the date, the topic, the exact action, total,
+  and fallback, the exclusion list where it applies, the approval's
+  source (the ticket text, or a pointer to the approved message,
+  whose elements the entry transcribes), and, after execution, the
+  outcome — for a send, the message ID the platform returned. The
+  record is what reconciliation checks against (the gated-send rule
+  below); an approval that left no record is indistinguishable
+  from no approval.
+- **Gate the sending path where the platform allows it.** Where a
+  send goes through a command the agent chooses, route it through a
+  wrapper that refuses without a matching, unconsumed ticket record:
+  it looks the record up by topic and recipient, sends only on a
+  match, and writes the returned message ID back into the record.
+  Paths that admit no code gate — a platform mail worker, a browser
+  UI — still create the record before sending, and periodic
+  reconciliation over the sent folder is the backstop that covers
+  every path.
 - Delegation never widens authority: only the user's direct approval makes
   a ticket, and a subagent or another agent cannot approve one.
 - Message tickets must carry a content-exclusion list — what must NOT be
