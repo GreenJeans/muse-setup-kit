@@ -155,8 +155,8 @@ the answers for the gating step:
   create, edit, and refresh on a schedule?
 - **Which billing bucket does this session draw on?** An install is
   heavy work: it writes dozens of files, and the reading runs about
-  28,400 words for a Starter install, about 37,000 for Standard
-  (about 44,500 with module 11 added), and about 66,700 for
+  28,900 words for a Starter install, about 39,500 for Standard
+  (about 47,000 with module 11 added), and about 69,800 for
   everything on the shelf.
   If neither you nor the user can name the bucket (subscription, API
   org, router), pause and check before planning — this is module 09's
