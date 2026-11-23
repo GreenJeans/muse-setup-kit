@@ -103,29 +103,41 @@ def entry_hash(entry_text):
 
 def resolve_span(source_rel, source_text, quote):
     """Locate quote in source_text and return (span, None) or (None, reason).
-    Reasons: 'not_found', 'crosses_entry', 'empty_quote'."""
+    Reasons: 'not_found', 'crosses_entry', 'empty_quote'.
+
+    Occurrences are tried in order: an early occurrence that straddles
+    an entry boundary does not condemn the quote when a later
+    occurrence sits cleanly inside one entry. (Kit fix, 2026-11-23,
+    EX-046/047 fix item 18; the source installation's copy does not
+    carry this yet — it flows back.)"""
     if not quote or not norm(quote):
         return None, "empty_quote"
     nsrc, idx = norm_with_map(source_text)
     nq = norm(quote)
-    at = nsrc.find(nq)
-    if at == -1:
-        return None, "not_found"
-    raw_start = idx[at]
-    raw_end = idx[at + len(nq) - 1] + 1
-    for n, (es, ee) in enumerate(segment_entries(source_text)):
-        if es <= raw_start and raw_end <= ee:
-            entry_text = source_text[es:ee]
-            return {
-                "source": source_rel,
-                "entry": n,
-                "start": raw_start - es,
-                "end": raw_end - es,
-                "entry_hash": entry_hash(entry_text),
-            }, None
-        if es <= raw_start < ee or es < raw_end <= ee:
-            return None, "crosses_entry"
-    return None, "crosses_entry"
+    entries = segment_entries(source_text)
+    found = False
+    start = 0
+    while True:
+        at = nsrc.find(nq, start)
+        if at == -1:
+            break
+        found = True
+        raw_start = idx[at]
+        raw_end = idx[at + len(nq) - 1] + 1
+        for n, (es, ee) in enumerate(entries):
+            if es <= raw_start and raw_end <= ee:
+                entry_text = source_text[es:ee]
+                return {
+                    "source": source_rel,
+                    "entry": n,
+                    "start": raw_start - es,
+                    "end": raw_end - es,
+                    "entry_hash": entry_hash(entry_text),
+                }, None
+        start = at + 1
+    if found:
+        return None, "crosses_entry"
+    return None, "not_found"
 
 def verify_span(source_text, span):
     """Re-check a span against the (possibly edited) source.
@@ -169,16 +181,22 @@ def _dates_in(text):
             out.add((int(m.group(3)), mon, int(m.group(1))))
     return out
 
-def _numbers_in(text):
-    """Digit-strings of every number in text, commas removed ('3472282')."""
-    out = set()
-    for m in re.finditer(r"\$?\d[\d,]*\.?\d*\s?%?", text):
-        digits = re.sub(r"[^\d]", "", m.group(0).split(".")[0])
-        if digits:
-            out.add(digits)
-        dec = m.group(0)
-        if "." in dec:
-            out.add(re.sub(r"[^\d]", "", dec))
+def _number_values(text):
+    """Number tokens in the text as {display string: Decimal value}.
+
+    Decimals keep their point and containment compares by VALUE — fixed
+    2026-11-23 after the EX-047 blind review: the old digit-string form
+    stripped the point, so "$1.50" yielded {'1', '150'} and a fabricated
+    "$150" claim passed against "$1.50" evidence. Commas are grouping
+    only: 1,250 == 1250 and 1.50 == 1.5, but 150 != 1.50."""
+    from decimal import Decimal
+    out = {}
+    for m in re.finditer(r"\d[\d,]*(?:\.\d+)?", text):
+        raw = m.group(0).replace(",", "")
+        try:
+            out[raw] = Decimal(raw)
+        except Exception:
+            pass
     return out
 
 def _names_in(claim, registry_names):
@@ -207,21 +225,20 @@ def token_containment(claim, evidence_text, registry_names=(), context_dates=())
     missing = []
     ev_low = evidence_text.lower()
     ev_dates = _dates_in(evidence_text) | set(context_dates)
-    ev_numbers = _numbers_in(evidence_text)
+    ev_values = set(_number_values(evidence_text).values())
     for d in _dates_in(claim):
         if d not in ev_dates:
             missing.append(f"date {d[0]}-{d[1]:02d}" + (f"-{d[2]:02d}" if d[2] else ""))
-    claim_numbers = _numbers_in(claim)
     # a number that is just a date component is already covered by the date check
     date_parts = set()
     for (y, m, dd) in _dates_in(claim):
         date_parts |= {str(y), str(m), f"{m:02d}", str(dd) if dd else "",
                        f"{dd:02d}" if dd else ""}
-    for num in claim_numbers:
-        if num in date_parts:
+    for raw, value in _number_values(claim).items():
+        if raw.split(".")[0] in date_parts:
             continue
-        if num not in ev_numbers:
-            missing.append(f"number {num}")
+        if value not in ev_values:
+            missing.append(f"number {raw}")
     for name in _names_in(claim, registry_names):
         if name.lower() not in ev_low:
             missing.append(f"name {name}")

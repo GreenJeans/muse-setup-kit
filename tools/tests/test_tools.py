@@ -253,6 +253,34 @@ class SpanEvidenceTest(unittest.TestCase):
             "The well was drilled in 1962.",
             "The well on the north parcel was drilled in 1962."), [])
 
+    def test_decimal_amount_does_not_collapse(self):
+        # Regression (EX-047 F2): number extraction once stripped the
+        # decimal point, so a fabricated $150 passed containment
+        # against $1.50 evidence. Values compare as decimals now.
+        span = self.load()
+        missing = span.token_containment(
+            "The fee was $150.",
+            "The fee was $1.50.")
+        self.assertTrue(any("150" in m for m in missing), missing)
+        self.assertEqual(span.token_containment(
+            "The fee was $1.5.",
+            "The fee was $1.50."), [])
+
+    def test_later_occurrence_resolves(self):
+        # Regression (EX-046 L13): the first occurrence of this quote
+        # straddles the entry 0/1 boundary; a later occurrence sits
+        # cleanly inside entry 2 and must resolve, not be rejected
+        # as crosses_entry on the first occurrence's account.
+        span = self.load()
+        source = ("alpha beta\n"
+                  "\n"
+                  "gamma delta\n"
+                  "\n"
+                  "beta gamma\n")
+        found, reason = span.resolve_span("log.md", source, "beta gamma")
+        self.assertIsNone(reason)
+        self.assertEqual(found["entry"], 2)
+
     def test_edited_entry_verifies_stale(self):
         span = self.load()
         found, _ = span.resolve_span(
