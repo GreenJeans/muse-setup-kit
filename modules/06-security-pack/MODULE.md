@@ -89,10 +89,15 @@ three legs a session stands on.
 A session may stand on at most two legs autonomously. A
 session that needs all three must not run unattended: either
 remove a leg (a quarantined reader summarizes the untrusted
-content and never touches the data; the acting agent works
-from the summary and never sees the raw input), or put a
-human approval on the state-changing step — in this kit, the
-ticket rule (module 00) is that approval. When you design a
+content into constrained fields — enumerated values,
+extracted figures, not free text — and never touches the
+data; the acting agent works from those fields and never
+sees the raw input), or put a
+human approval on every state-changing (leg-C) step. For
+irreversible steps that approval is a ticket (module 00);
+leg C also includes reversible writes the ticket rule alone
+does not reach, and those need the human's approval too, in
+whatever lighter form the setup gives it. When you design a
 job, a watch, or a dispatch lane, count its legs in the plan;
 a three-legged design that nobody counted is the finding,
 whatever it goes on to do.
@@ -323,9 +328,12 @@ user.
 **Protocol currency: what a current MCP server looks like.**
 Three properties of the 2025–26 protocol generation belong in
 a vetting entry, as selection criteria alongside the checks
-above. Their absence is a limitation to record, not by itself
+above. Only the first is a property of the server and the
+spec; the other two are criteria for the client and the
+workflow — record each against the side it belongs to. Their
+absence is a limitation to record, not by itself
 a reject — servers migrate at different speeds, and dual-era
-operation is normal — but a server that has none of them is
+operation is normal — but a server that is not stateless is
 behind the spec, and the entry should say so.
 
 - *Stateless core.* The MCP revision of 2026-07-28 removed the
@@ -340,8 +348,8 @@ behind the spec, and the entry should say so.
 - *Deferred tool loading.* Current clients discover tools on
   demand (Anthropic's Tool Search Tool) instead of loading
   every definition into every prompt; in Anthropic's worked
-  example (Nov 2025), presenting servers as discoverable code
-  APIs cut the tool surface from about 150,000 tokens to about
+  example (Nov 2025), code execution with MCP cut the
+  presented tool surface from about 150,000 tokens to about
   2,000. Prefer servers and clients that support discovery;
   a setup that loads dozens of servers' full schemas up front
   is paying for definitions it rarely uses, in the scarcest
