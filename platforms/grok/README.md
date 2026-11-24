@@ -85,8 +85,11 @@ surface it uses.
   confirmation card at all, in a class the bot itself listed as
   stop-first.
 
-**Status: unrehearsed.** The platform was measured; no fresh agent
-has installed through this pack. docs/REHEARSALS.md lists the pack
-under what has never been rehearsed. The capability answers behind
+**Status: rehearsed — run 29 (2026-11-23) at b1efc3b.** The
+platform was measured by the battery; the pack was then installed
+end to end on a live account through the template front door, and
+the imported bot is the live install. docs/REHEARSALS.md row 29
+is the record; the front door's parameter declarations are the
+weakest surface the run found. The capability answers behind
 the profile are in docs/capability-profiles.md (Platform answers:
 Grok Bot).
