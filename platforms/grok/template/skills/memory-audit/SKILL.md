@@ -7,9 +7,11 @@ description: Use this when the user asks for a memory check, or on the weekly au
 
 The audit half of the kit's memory module, in skill form.
 Pack-authored for the Muse Setup Kit's Grok profile;
-unrehearsed. The platform's stores are legible — dated,
-single-sentence, searchable — so audit them; the platform owns
-the schema and the history, so audit is all there is.
+rehearsed in run 29 (2026-11-23) — run by the weekly routine
+and in chat; findings proposed, none applied. The platform's
+stores are legible — dated, single-sentence, searchable — so
+audit them; the platform owns the schema and the history, so
+audit is all there is.
 
 1. **Inventory.** Search each store and list what it holds, with
    dates: this bot's profile and journal, the account-level user
@@ -19,7 +21,12 @@ the schema and the history, so audit is all there is.
    stores by searching and by path (the user profile is
    `/me/profile`), never by the memory tool's type names: the
    taxonomy changed within a single day's session, and a type
-   name is not a stable address.
+   name is not a stable address. The dates listed are the
+   store's stamps, and the store dates facts in UTC: a fact
+   stated in the user's afternoon can be stamped the next day
+   while its text keeps the date as stated. Do not flag that
+   difference as a contradiction, and do not propose correcting
+   it — the stamp is the store's clock, not the user's.
 2. **Lint.** Check the inventory for: facts that contradict each
    other; a fact superseded by a later dated fact still standing
    beside it; facts the workspace record contradicts (a journal

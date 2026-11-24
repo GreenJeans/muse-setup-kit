@@ -5,7 +5,9 @@ description: Use this at the start of a session or routine run when the bot need
 
 # Kit bootstrap
 
-Pack-authored for the Muse Setup Kit's Grok profile; unrehearsed.
+Pack-authored for the Muse Setup Kit's Grok profile;
+rehearsed in run 29 (2026-11-23) — invoked by name at install,
+and its report followed the steps below as written.
 
 1. Read the workspace run-record's most recent lines. State, in
    one or two lines, which routines ran, which are overdue

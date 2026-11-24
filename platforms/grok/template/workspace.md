@@ -69,9 +69,22 @@ in, the date. -->
 
 ## Auto-review lists
 
-<!-- As found, before the install changed them (their scope —
-per-bot or account-wide — is unmeasured; see the overlay):
-then as confirmed by the user. -->
+<!-- One dated sub-entry per reading or change — never an
+annotation underneath an earlier state. An "(empty)" line with
+a rule noted below it reads as a self-contradiction to a later
+audit (measured, run 29); dated sub-entries do not. -->
+
+### As found — <DATE>
+
+<!-- Approvals mode and both lists, exactly as the user read
+them in the app and dictated them — the bot cannot read its
+own Auto-review settings. Their scope (per-bot or
+account-wide) is unmeasured; see the overlay. -->
+
+### Confirmed — <DATE>
+
+<!-- The lists as the user confirmed them after the install's
+changes. Every later change gets its own dated sub-entry. -->
 
 ## Egress
 
