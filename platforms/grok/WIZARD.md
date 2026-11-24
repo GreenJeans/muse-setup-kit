@@ -51,12 +51,17 @@ and in the plan.
   approximate — dailies drifted minutes inside their windows and
   an "exact" one-off fired about ten minutes late. Every job this
   pack installs tolerates at least ten minutes of drift.
-- **Skills are account-shared and install verbatim** (Test 8,
-  Pass): a SKILL.md with name/description frontmatter in the
-  account-level library; the body installs byte-for-byte, and any
-  platform-added frontmatter is disclosed. Invocation is by name;
-  auto-discovery appeared after a list refresh, so discovery is a
-  deferred check, never an at-install claim.
+- **Skills are account-shared; their content installs verbatim**
+  (Test 8, Pass): a SKILL.md with name/description frontmatter in
+  the account-level library; the body installs byte-for-byte.
+  The library save rewrites frontmatter *formatting* (run 29,
+  disclosed by the bot at save: description as a wrapped YAML
+  block, the blank line after the closing `---` dropped) —
+  library form ≠ repo form, semantically identical, so a
+  formatting diff at read-back is not drift and content is the
+  comparison. Invocation is by name; auto-discovery appeared
+  after a list refresh, so discovery is a deferred check, never
+  an at-install claim.
 - **Approvals are Auto-review** (Test 5, Pass with a caveat):
   Always Ask and Allow without Asking rule lists, per-app
   permissions, rule changes drafted on a card and effective only
@@ -153,6 +158,20 @@ that is the form the store holds:
    posted by routine, built from the workspace run-record and
    decision queue."
 
+**Phrase every seed as a fact or a rule — never as an
+instruction to act.** A seed is stored only when it is stated as
+a statement about the user, as the six above are. Dictated as an
+imperative ("every morning, post a brief…"), it is *actioned
+instead of stored* (measured, run 29: the brief seed, phrased as
+an instruction, made the bot enable the brief routine on the
+spot rather than save a fact — disclosed and reversible there,
+and still not a stored seed). The installer warns the user
+before the seed conversation starts: state each seed as what
+you want standing, not as a command to do it now; if a dictation
+comes out as an imperative, restate it as a fact before moving
+on, and record in the seed log any seed that was actioned rather
+than stored.
+
 **Seed carefully — a seed can become untakeable-back.** The
 correction mechanism (seed 5: remove the old fact by its exact
 text, then add the corrected one) was measured working (Test 3)
@@ -202,7 +221,13 @@ discipline runs against them:
   never by the memory tool's type names — the taxonomy changed
   within a single day's session, so a type name is not a stable
   address and an audit keyed on one would silently miss whatever
-  the platform has renamed or retired.
+  the platform has renamed or retired. The dates in the inventory
+  are the store's stamps, and **the store dates facts in UTC**
+  (run 29, two observations): a fact stated in the user's
+  afternoon is stamped the next day, while the fact's own text
+  keeps the date as stated. Read a stamp as the store's clock,
+  not the user's — the stamp/text difference is the platform's
+  dating, not a contradiction, and not a fact to correct.
 - *Lint.* Deterministic checks over the inventory: facts that
   contradict each other, facts superseded by a later dated fact
   still standing beside it, facts whose date makes them stale
@@ -255,12 +280,20 @@ Jobs install as routines from `template/routines.md`. Three
 disciplines, all measured:
 
 - **Verbatim saved instructions.** A routine's saved instruction
-  is read back from storage after creation and compared word for
-  word with the approved text (the battery's routines matched).
-  The instruction is self-contained: it names the workspace files
-  it reads, the record it appends, and what it posts — because a
-  run is a fresh context that holds only its instruction, the
-  memory that reaches it, and the files it is told to read.
+  is read back from storage after creation and compared with the
+  approved text (the battery's routines matched). Judge the
+  comparison against what import actually delivers (run 29):
+  a routine saved directly holds the approved text word for
+  word, but an *imported* routine's saved instruction is the
+  template text **plus two platform-added lines** — the
+  routine's one-line description prepended, and a closing line
+  naming where its results post. Those two lines are the
+  platform's, disclosed by the bot at read-back; anything
+  beyond them is drift. The instruction is self-contained: it
+  names the workspace files it reads, the record it appends,
+  and what it posts — because a run is a fresh context that
+  holds only its instruction, the memory that reaches it, and
+  the files it is told to read.
 - **The run-record pattern.** Every routine appends one line per
   run to a workspace record file — name, timestamp, one-line
   outcome — whether or not it posts anything. A silent routine
@@ -286,7 +319,16 @@ like this:
   with the user present; a rule change is drafted on a card and
   takes effect only on the user's click, and the plan records the
   lists as the user confirmed them, not as the agent proposed
-  them.
+  them. The record step is necessarily **user-mediated**: a bot
+  cannot read its own Auto-review settings (measured, run 29 —
+  asked to record them, the bot left the section empty rather
+  than guess), so the user reads the lists in the app and
+  dictates the values, and the bot records them labeled as
+  stated by the user. The bot's account of *where* settings live
+  in the app is likewise unreliable (same run: it named the
+  wrong settings section against the app's actual page) —
+  verify settings locations against the app itself, never the
+  bot's say-so.
 - **Allow without Asking:** reads, searches, and workspace file
   writes inside the install's scope — the reversible tier the
   ticket rule pre-authorizes.
@@ -330,12 +372,20 @@ not need egress does not sign in.
 ## The template front door
 
 A Grok template carries the bot's **description (= its
-instructions field), its skills verbatim, and its routines
-verbatim** — imported **paused**, with import-time parameter
-prompts the template declares (measured: "Ask the importing user
-for: Timezone"). It does not carry the title, any memory, or any
-workspace file. `template/` in this pack holds the contents,
-prepared in the repo:
+instructions field), its skills (content verbatim; the library
+save normalizes frontmatter formatting — see the surfaces
+section), and its routines** — imported **paused**, with
+import-time parameter prompts the template declares (measured:
+"Ask the importing user for: Timezone"). It does not carry the
+title, any memory, or any workspace file. **Declarations are
+advisory, not declarative** (run 29): the platform parses them
+heuristically — one declared parameter never became a parameter
+at all, another was pattern-matched into an unrelated platform
+variable — import prompts may not fire, and staged values may
+carry silently into the child. The manifest inspection at
+staging and the read-backs after import are the control; the
+declaration is not. `template/` in this pack holds the
+contents, prepared in the repo:
 
 - `template/description.md` — the description text, which is the
   instructions an imported bot starts with.
@@ -356,6 +406,15 @@ file-based kit state still ships by the workspace route — a
 template import delivers skills, routines, and instructions, and
 the plan then creates the workspace files (procedures reference,
 decision queue, run-record) the routines read.
+
+**A published template dies with its source bot** (measured,
+run 29: the template link stopped working the day the source
+bot was deleted). Publishing is therefore not the end of the
+source bot's life: it stays alive for as long as the template
+must live, and deleting it retires the template. An install
+that publishes a template records that dependency in the plan;
+an install that does not publish one owes the source bot no
+such afterlife.
 
 **Choose the imported bot's name before staging.** The
 description's `<AGENT NAME>` is filled at staging, with the name
@@ -379,26 +438,57 @@ sequence end to end; steps below are its shape, and anything it
 did not isolate is labeled unmeasured rather than asserted.
 
 1. **Create a scratch source bot** on the account. It is staging
-   scaffolding, deleted when the install closes — and it is not
-   a sandbox: from the moment it exists it shares the account's
-   computer, skill library, and connectors (the two warnings).
+   scaffolding — and it is not a sandbox: from the moment it
+   exists it shares the account's computer, skill library, and
+   connectors (the two warnings). It is deleted when the
+   install closes *only if no published template depends on
+   it*: a template published from it dies with it (front door,
+   above), so a source bot whose template must live stays
+   alive, and the plan records which case the install is in.
 2. **Set the source bot's description** to the text in
-   `template/description.md`, placeholders filled — the name
-   chosen above, the user's name. Role text is set by asking
-   the bot in chat (measured: it saved to the bot's own profile;
-   no settings-UI fields for it were found).
+   `template/description.md`, placeholders filled — the agent
+   name chosen above, the user's name. Role text is set by
+   asking the bot in chat (measured: it saved to the bot's own
+   profile; no settings-UI fields for it were found). What
+   survives staging differs by placeholder: the agent name
+   reaches the child exactly as written, but **user-name
+   references do not — staging generalizes them** (measured,
+   run 29: the source's "<USER NAME>'s personal agent" was
+   staged as "the user's personal agent", the only substitution
+   in an otherwise verbatim text), and the generalized text is
+   what the imported bot carries. For a shareable template the
+   generalization is arguably correct; for this install it
+   means the child's description will not carry the user's
+   name, and the plan does not claim otherwise.
 3. **Skills need no loading onto the bot.** The skill library is
    account-level: a skill staged into a template is one that
-   exists in the library, installed verbatim (Test 8). If a pack
-   skill is not yet in the library, add it there first, in the
-   form `template/skills/` holds it.
+   exists in the library, its content installed verbatim
+   (Test 8). If a pack skill is not yet in the library, add it
+   there first, in the form `template/skills/` holds it. The
+   library save normalizes frontmatter *formatting* (measured,
+   run 29, disclosed by the bot at save: the description is
+   rewritten as a wrapped YAML block, and the blank line after
+   the closing `---` is dropped) — the library form is not the
+   repo form, and it is semantically identical; a formatting
+   diff at read-back is not drift.
 4. **Create the three routines on the source bot** from
-   `template/routines.md`, saved instructions verbatim,
-   placeholders as written, left paused — and state each
-   routine's parameter declaration ("Ask the importing user
-   for: …", as the definition lists it) with the routine as you
-   create it. The pack's definitions carry the declaration as a
-   separate line for exactly this purpose.
+   `template/routines.md`, saved instructions verbatim, left
+   paused — with **real schedule values filled in**: routine
+   creation requires a valid cron expression, so the
+   definitions' placeholder schedules (`<TIMEZONE> <MINUTE>
+   <HOUR>`) cannot be stored literally (measured, run 29 — the
+   staging bot rejected them and filled real values). Choose
+   the timezone and the times with the user at staging; the
+   staged values are what the child will hold unless an import
+   prompt overrides them, and per the front door, it may not.
+   State each routine's parameter declaration ("Ask the
+   importing user for: …", as the definition lists it) with the
+   routine as you create it — the pack's definitions carry the
+   declaration as a separate line for exactly this purpose —
+   and expect the declaration to be unverifiable from the
+   routine's saved view (run 29: it attached as the routine's
+   note, which the saved view does not show). Step 6's manifest
+   inspection is where its presence is confirmed.
 5. **Ask the source bot to stage a template from itself.**
    Measured: the bot inventoried its own components and made
    stated inclusion calls — it kept its skill and routine, and
@@ -409,23 +499,43 @@ did not isolate is labeled unmeasured rather than asserted.
    only when the user confirms on the review card.
 6. **Inspect before publishing.** View Details shows the whole
    manifest (measured): Context — the Instructions field holding
-   the description text; Skills — each SKILL.md in full;
-   Routines — each routine's full text and cron, **and its
-   parameter declaration**. There is no files section and no
-   memory section; their absence is correct, not a gap. Check
-   every routine shows its declaration before anyone publishes:
-   whether the declaration attaches automatically when a routine
-   is created, or only when it is stated as in step 4, is
-   **unmeasured** — the battery observed the declaration present
-   in a staged manifest and the prompt asked at import, and did
-   not isolate the mechanism. The manifest check is therefore
-   the control: a routine without its declaration showing is not
-   ready, whatever the cause.
+   the description text; Skills — each SKILL.md in full, in its
+   library form (step 3's formatting note applies — compare
+   content, not formatting); Routines — each routine's full text
+   and cron, **and its parsed parameter declaration**. There is
+   no files section and no memory section; their absence is
+   correct, not a gap. Three checks, all load-bearing: the
+   description shown is the *staged* text — user-name references
+   generalized (step 2) — so check it as the text the child will
+   actually carry, not against the source bot's; every routine
+   shows a declaration, because whether the declaration attaches
+   automatically when a routine is created, or only when it is
+   stated as in step 4, is **unmeasured** — the battery observed
+   the declaration present in a staged manifest and the prompt
+   asked at import, and did not isolate the mechanism; and each
+   parsed declaration names the parameters the definition
+   intends, because the parsing is heuristic (run 29: one
+   routine's "Brief time" never parsed as a parameter, and the
+   watch's trip placeholder was pattern-matched into an
+   unrelated platform variable in both the instruction text and
+   the ask-list — a directed restage did not repair it, and the
+   defect shipped in the template; the importing bot later
+   repaired the text itself and disclosed the repair). A
+   routine whose text or declaration is wrong in the manifest
+   is not ready, whatever the cause; publish only when the
+   manifest passes, or record the deviation and name who fixes
+   the child after import.
 7. **Publish (the user's click, ticketed as above) and import.**
-   Instantiating the template creates the new bot; the declared
-   parameters are asked at import, and the routines arrive
-   paused (measured). Enabling each routine afterwards is the
-   user's act, per the jobs section.
+   Instantiating the template creates the new bot; the routines
+   arrive paused (measured). The declared parameters **may** be
+   asked at import — in run 29 no prompts fired at all, and the
+   staged schedules and values carried silently into the child;
+   where a value did not carry (the watch's target), the
+   imported bot said so on arrival. After import, read back
+   every routine's saved instruction and schedule before
+   enabling anything: the read-back, not the declaration, is
+   the control. Enabling each routine afterwards is the user's
+   act, per the jobs section.
 
 ## Deferred checks on Grok
 
@@ -444,15 +554,18 @@ surfaces the checks instead, or the install does not close.
 *At install:* the seed conversation completed, each seed quoted
 back with provenance and its store recorded; the Auto-review
 lists recorded as found before the install changed them, and
-read back as the user confirmed them; each routine created
-paused-then-enabled per the plan, its saved instruction read back
-verbatim against the approved text; the run-record file created
-with its header; the procedures reference and decision queue in
-the workspace, created from the `template/workspace.md`
-starters; the watch routine's target in place as its import
-answer describes it, before the watch is enabled; the egress
-decision recorded (signed in, with the token warning shown — or
-not signed in).
+read back as the user confirmed them — recorded from the user's
+dictation, since the bot cannot read its own settings (see
+Approvals); each routine created paused-then-enabled per the
+plan, its saved instruction read back against the approved text
+(the two platform-added lines on an imported routine allowed;
+anything beyond them is drift — see the jobs layer); the
+run-record file created with its header; the procedures
+reference and decision queue in the workspace, created from the
+`template/workspace.md` starters; the watch routine's target in
+place as its import answer describes it, before the watch is
+enabled; the egress decision recorded (signed in, with the
+token warning shown — or not signed in).
 
 *Deferred:* the first brief run lands inside its window and
 appends its line; the first silent-watch line appears with no
