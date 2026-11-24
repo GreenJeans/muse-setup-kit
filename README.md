@@ -81,6 +81,7 @@ and tools) — the reading the request above actually asks for:
 |---|---|---|---|
 | **Starter** | 00 + 02 + 09 | ~29,100 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
 | **Standard** | Starter + 01 + 06 | ~40,000 words | Plus the memory schema with its linter and span checker, and the security pack. |
+| **Grok Bot** | 00 + 01, in Grok forms | ~27,100 words | A platform profile for Grok Bot, through the overlay in `platforms/grok/`: module 00 as reference text plus memory seeds, module 01's audit half only, module 04 excluded (the platform's isolation test failed). Single-bot only; rehearsed in run 29 (2026-11-23). |
 | Everything | all twelve modules | ~70,300 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
@@ -203,6 +204,7 @@ UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
 docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (profiles + library data)
+platforms/           ← platform packs: grok/ (README for people · WIZARD.md overlay · template contents)
 directory.json       ← generated catalog of the core library (tools/build_directory.py) · advisories.json (generated; advisories.yaml is its human-maintained source)
 modules/
   00-core-procedures/      module.yaml · MODULE.md · VERIFY.md · templates/

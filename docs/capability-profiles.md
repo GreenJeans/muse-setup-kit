@@ -92,3 +92,33 @@ Legend: **required** = the module will not install without it.
   fit; Full's value is mostly its jobs.
 - **Solo, no shared surfaces**: Starter and Standard are unaffected.
   Skip 03 and 04; run module 05 as self-review and label it that way.
+
+## Platform answers: Grok Bot
+
+Grok Bot (xAI's consumer agent app, on Cursor's platform) has its
+own profile (`grok` in `wizard/manifest.yaml`) and its own wizard
+overlay (`platforms/grok/WIZARD.md`). These are the token answers
+a ten-test battery measured on one live account on 2026-11-23 —
+accounts differ in what is connected, so the overlay's Step 1
+still checks each answer live rather than trusting this table.
+
+| Token | Grok Bot | Caveat the token cannot express |
+|---|---|---|
+| `scheduling` | yes | Routines are real cron with verbatim saved instructions, but timing is approximate: dailies drift minutes inside their windows and an "exact" one-off fired about ten minutes late. A run's own history is not inspectable from inside the bot; the run-record file pattern is the history and the detector. |
+| `shell-python` | yes | A real shell and file tools on a hosted computer, in chat and in runs. The platform volunteers that the computer is occasionally swapped and some folders cleared; a day of testing falsified none of it, and multi-day file survival is unmeasured. |
+| `second-person` | no | One user per account for this pack's purposes. Bots on the account are the same person's conversations, not other people's agents. |
+| `shared-docs` / `shared-tasks` / `shared-storage` | not used | Connectors exist on the platform, but no surface in this profile shares through them; the modules that require these tokens are not in the profile. |
+| `other-agents` | present, adversely | Every bot on the account can read every other bot's files, fire its skills, and reach its connectors — measured, Test 6 Fail. Module 04 is excluded from the profile on exactly this evidence: no coordination layer is designed on assumed isolation. |
+| `persona-file` | no | The bot's description is editable text and doubles as the template instructions field; it is not a persona file read as standing instructions. Module 11 is not offered. |
+| `spaces` | no | No persistent user pages the agent maintains. |
+
+Two Grok properties change how modules install and have no token
+yet: **standing instructions live in platform memory**, stated by
+the user in their own words (there is no instruction file at
+all — module 00 installs as reference text plus the memory-seed
+list in the overlay), and **the approval surface does not cover
+the shell** — Auto-review gates connector calls, while shell
+actions, pushes included, run uncarded, so the pack's ticket
+discipline for egress is procedural. Both are handled in the
+overlay rather than as tokens until a second platform shows the
+same shape.

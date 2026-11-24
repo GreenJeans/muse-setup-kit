@@ -43,6 +43,14 @@ defect the kit's review rounds kept finding by hand:
      the counts recomputed from the tree. Audit cost counts every
      installed file: the wizard, the manifest, and each module's
      MODULE.md, VERIFY.md, module.yaml, templates, and tools.
+     A platform profile (one carrying `platform:`) also declares
+     its overlay files in `platform_files` — paths under
+     platforms/ — and those files count toward its audit cost:
+     the overlay is read on that platform, so leaving it out
+     would understate the figure the wizard prints. Each declared
+     file must exist inside platforms/; a platform profile with no
+     declared overlay, or overlay files on a profile with no
+     platform, is a finding.
   6. The README's printed audit figures match the manifest's
      (Starter, Standard) and the recomputed all-modules figure
      (Everything) exactly — the numbers a stranger reads are the
@@ -143,6 +151,49 @@ def count_module_words(mdir):
 
 def round100(n):
     return int(round(n / 100.0)) * 100
+
+
+def platform_file_words(repo, prof):
+    """Audit words in a platform profile's overlay files, plus the
+    findings its platform/platform_files fields raise. Returns
+    (words, findings). A profile with neither field returns
+    (0, [])."""
+    pid = prof.get("id")
+    platform = prof.get("platform")
+    files = prof.get("platform_files")
+    out = []
+    if files is None:
+        files = []
+    if not isinstance(files, list):
+        return 0, [f"profile {pid}: platform_files is not a list"]
+    if files and not platform:
+        out.append(f"profile {pid}: platform_files without a "
+                   f"platform: field — overlay files belong to a "
+                   f"platform profile")
+    if platform and not files:
+        out.append(f"profile {pid}: platform {platform!r} declares "
+                   f"no platform_files — a platform profile's "
+                   f"overlay must be declared so its reading cost "
+                   f"is counted")
+    total = 0
+    root = os.path.realpath(os.path.join(repo, "platforms"))
+    for rel in files:
+        if not isinstance(rel, str) or os.path.isabs(rel) \
+                or ".." in rel.split("/") \
+                or not rel.startswith("platforms/"):
+            out.append(f"profile {pid}: platform file {rel!r} is not "
+                       f"a path under platforms/")
+            continue
+        target = os.path.realpath(os.path.join(repo, rel))
+        if not target.startswith(root + os.sep):
+            out.append(f"profile {pid}: platform file {rel} resolves "
+                       f"outside platforms/")
+            continue
+        if not os.path.isfile(target):
+            out.append(f"profile {pid}: platform file missing: {rel}")
+            continue
+        total += words(target)
+    return total, out
 
 
 def parse_manifest(path):
@@ -425,8 +476,10 @@ def main():
         + words(manifest_path)
     for prof in profiles:
         stated = int(prof.get("audit_words", 0))
-        actual = base_words + sum(module_words.get(m, 0)
-                                  for m in prof.get("modules", []))
+        overlay, overlay_findings = platform_file_words(repo, prof)
+        findings.extend(overlay_findings)
+        actual = base_words + overlay + sum(module_words.get(m, 0)
+                                            for m in prof.get("modules", []))
         if stated and abs(actual - stated) > 0.10 * stated:
             findings.append(f"profile {prof['id']}: audit_words {stated} "
                             f"vs recomputed {actual} (>10% drift)")
