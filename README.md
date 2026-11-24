@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 70,300
+install is heavy work — a full one reads on the order of 70,500
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -79,10 +79,10 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~29,100 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~40,000 words | Plus the memory schema with its linter and span checker, and the security pack. |
-| **Grok Bot** | 00 + 01, in Grok forms | ~27,100 words | A platform profile for Grok Bot, through the overlay in `platforms/grok/`: module 00 as reference text plus memory seeds, module 01's audit half only, module 04 excluded (the platform's isolation test failed). Single-bot only; rehearsed in run 29 (2026-11-23). |
-| Everything | all twelve modules | ~70,300 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~29,300 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~40,100 words | Plus the memory schema with its linter and span checker, and the security pack. |
+| **Grok Bot** | 00 + 01, in Grok forms | ~30,100 words | A platform profile for Grok Bot, through the overlay in `platforms/grok/`: module 00 as reference text plus memory seeds, module 01's audit half only, module 04 excluded (the platform's isolation test failed). Single-bot only; rehearsed in run 29 (2026-11-23). |
+| Everything | all twelve modules | ~70,500 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
