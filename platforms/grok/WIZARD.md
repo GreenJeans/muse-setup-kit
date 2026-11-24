@@ -24,6 +24,17 @@ and in the plan.
    bot already on the account, because each one holds the access
    this install is about to use.
 
+Warning 2 reaches past the files a bot chooses to write. Tool
+results generally, not only connector reads, can persist as
+files in the bot's agent asset store on the account's shared
+computer, automatically, whether or not the bot copies or saves
+anything. Measured, not conjectured (2026-11-23): a connector
+read, a tool-catalog listing, and a spreadsheet read all
+persisted. By warning 2, every bot on the account can read
+those files. Treat any read as leaving a file behind; write
+tasks and briefs that involve sensitive material on that
+assumption.
+
 ## What Grok has instead of the kit's usual surfaces
 
 - **No instruction file, no settings field for standing
