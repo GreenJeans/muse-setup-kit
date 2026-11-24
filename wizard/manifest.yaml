@@ -36,7 +36,7 @@ profiles:
     platform: grok-bot
     modules: [core/core-procedures, core/memory-architecture]
     platform_files: [platforms/grok/WIZARD.md, platforms/grok/template/description.md, platforms/grok/template/skills/kit-bootstrap/SKILL.md, platforms/grok/template/skills/memory-audit/SKILL.md, platforms/grok/template/routines.md, platforms/grok/template/workspace.md]
-    audit_words: 25600
+    audit_words: 27100
     rehearsed_at: "run 29 (2026-11-23) on the grok-profile branch at b1efc3b"
     pitch: "For Grok Bot, single-bot only. Module 00 as reference text plus a memory-seed list the user states in their own words (Grok has no instruction file; memory-saved rules were measured binding in chat and in unattended runs), module 01's audit half only (the architecture is platform-owned), routine templates as the jobs layer, and Auto-review recipes. Module 04 is excluded: the platform's isolation test failed — every bot on the account can read everything every other bot can read. Rehearsed in run 29 (2026-11-23)."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
