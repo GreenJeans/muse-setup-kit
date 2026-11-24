@@ -2,11 +2,22 @@
 
 Each definition below is complete as a template would carry it:
 the schedule, the import-time parameter prompts (declared in the
-template; the importing user is asked at import), and the saved
-instruction **verbatim**, in the code block — the exact text to
-save, with `<PLACEHOLDERS>` the import fills from the parameter
-answers. Routines import **paused**; enabling one is the user's
-act, after they have read its instruction.
+template), and the saved instruction **verbatim**, in the code
+block — the exact text to save, with `<PLACEHOLDERS>` the import
+fills from the parameter answers. Two staging facts qualify
+that shape (both measured, run 29; the overlay's front door
+carries them in full): the declarations are parsed
+heuristically — the prompts may not fire at import at all, and
+staged values may carry silently into the child — and the
+placeholder schedules cannot be stored literally, because
+routine creation requires a valid cron expression, so real
+schedule values are chosen and filled at staging. Read-backs
+are the control for both: after import, a routine's saved
+instruction should read as this text **plus two platform-added
+lines** — its one-line description prepended and a closing line
+naming where its results post — and anything beyond those two
+lines is drift. Routines import **paused**; enabling one is the
+user's act, after they have read its instruction.
 
 Every instruction is self-contained, because a run is a fresh
 context: it names the files it reads, the record it appends, and
@@ -53,7 +64,13 @@ is the proof it ran. The target named at import must exist
 before the routine is first enabled; when it is a workspace
 file, creating it is an install step (`template/workspace.md`),
 because a watch over a missing file cannot tell "nothing to
-report" from "nothing there".
+report" from "nothing there". The match is pinned
+**case-sensitive, the condition as written** — the instruction
+says so, because the rehearsal's bot had to flag the ambiguity
+unprompted (run 29). An installer who wants a case-insensitive
+match changes the instruction deliberately and records the
+change in `SETUP-PLAN.md`; nobody silently inherits a looser
+match.
 
 - **Schedule:** daily — `CRON_TZ=<TIMEZONE> 15 9 * * *`, plus the
   server's window.
@@ -62,7 +79,9 @@ report" from "nothing there".
   trip).
 
 ---BEGIN INSTRUCTION---
-Check <WATCH TARGET> for <TRIP CONDITION>. Append one line to
+Check <WATCH TARGET> for <TRIP CONDITION>. The condition is
+matched exactly as written — the match is case-sensitive.
+Append one line to
 `run-record.txt`: `kit-watch-record run at <current date and
 time> — nothing to report`, or, if the condition trips,
 `kit-watch-record run at <current date and time> — TRIPPED:
