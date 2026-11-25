@@ -4,11 +4,12 @@ This overlay adapts the wizard to Grok Bot. It governs the `grok`
 profile in `wizard/manifest.yaml` (modules 00 and 01, in the forms
 below). Where this overlay and the wizard differ, this overlay
 governs on Grok; where this overlay is silent, the wizard governs.
-Every platform claim below is a measured result from a ten-test
-battery run on a live account (2026-11-23; 7 Pass, 2 Partial,
-1 Fail), and the score is named where the claim is load-bearing.
-Anything the battery did not measure is labeled unmeasured, here
-and in the plan.
+Every platform claim below carries its grade: measured by a
+ten-test battery run on a live account (2026-11-23; 7 Pass,
+2 Partial, 1 Fail — the score is named where the claim is
+load-bearing), vendor changelog, vendor-stated, field report,
+or observed in the UI. Anything with none of those grades is
+labeled unmeasured, here and in the plan.
 
 ## The two warnings (state them in the plan, verbatim in effect)
 
@@ -89,8 +90,11 @@ Recorded from the battery; the overlay's Step 1 still checks each
 answer live, because accounts differ in what is connected:
 
 - `scheduling`: yes — routines. A routine's own run history is
-  not inspectable from inside the bot; the run-record pattern
-  below is the history and the detector.
+  not inspectable from inside the bot — changelog 1.2.3 lets a
+  routine read earlier messages in its own chat thread, but
+  cross-routine and silent-run history stay uninspectable
+  without the run-record pattern below, which is the history
+  and the detector.
 - `shell-python`: yes — a real shell and file tools on the hosted
   computer, in chat and in runs. Persistence caveat, volunteered
   by the platform and not falsified in a day of testing: the
@@ -104,7 +108,7 @@ answer live, because accounts differ in what is connected:
   recovery burning most of a weekly usage budget, and a second
   report of the same link-triggered wipe losing months of work.
   Two first-person reports in one thread, uncorroborated as a
-  platform fact, and graded that way here. The caution stands
+  platform fact, and labeled unmeasured here. The caution stands
   regardless: treat linking anything new, or changing account
   state, as potentially destructive until an off-platform copy
   of the workspace exists. The community's settled mitigation —
@@ -238,10 +242,11 @@ The account-level user profile (`/me/profile`) is a designed
 shared store — shared by design, not by leak — so a fact landing
 there is the platform working as built, and the seed guidance
 treats it as account-visible on purpose, never as a private
-note that escaped. The per-bot separation that does exist is
-narrower than the warnings might suggest: each bot has its own
-desktop and browser screen. The two warnings stand unchanged —
-they are about data reach, and data reach is account-wide.
+note that escaped. Beyond the conversation and private memory,
+each bot also has its own desktop and browser screen, a display
+separation on the same shared computer, not a data one. The two
+warnings stand unchanged: they are about data reach, and data
+reach is account-wide.
 
 Chat-granted standing permission is conversation-scoped and does
 not carry to routine runs (Test 5). A routine that needs an
@@ -353,19 +358,21 @@ disciplines, all measured:
   inside ten minutes, and the brief's detector windows are set
   wider than the drift.
 
-**Quota mechanics — vendor-stated, not battery-measured, and
-load-bearing for cadence.** Every routine run counts against
-the account's weekly usage pool, test runs included, and work
-keeps running in the cloud after the app is closed. The weekly
-allowance is not a published number: the vendor's support
-position, in writing, is that the included usage is "not fixed
+**Quota mechanics — vendor-stated and secondary-sourced, not
+battery-measured, and load-bearing for cadence.** Every routine
+run counts against the account's weekly usage pool, test runs
+included, and work keeps running in the cloud after the app is
+closed. The weekly allowance is not a published number: the
+vendor's support position, as quoted in a user forum, is that
+the included usage is "not fixed
 and may change over time" and is set to be at least the value
 of the plan price. No absolute allowance is published anywhere
 to plan against. So cadence is a budget decision made against
 an unpublished, variable allowance: the plan states each
 routine's cadence and what it is expected to spend, prefers
 fewer runs with complete instructions over frequent thin ones,
-and treats the run-record as the spend ledger — it shows what
+and treats the run-record as the run ledger; the usage screen
+is the meter; the plan checks both — the record shows what
 actually ran, which is the only check the pool's size does not
 provide. A routine added casually spends weekly, forever,
 until someone pauses it.
@@ -385,7 +392,9 @@ like this:
   admin's MCP allowlist can gate which tools the built-in
   GitHub connector offers at all — off unless a rule allows it
   (same changelog); the plan records any tool the admin has
-  limited, as the bot reports it. The install sets these rules
+  limited as bot-reported, confirmed by the user in the app.
+  The four settings' semantics are changelog-described and
+  unmeasured by this pack. The install sets these rules
   with the user present; a rule change is drafted on a card and
   takes effect only on the user's click, and the plan records
   the lists and per-tool settings as the user confirmed them,
@@ -404,7 +413,10 @@ like this:
   the install's scope — the reversible tier the ticket rule
   pre-authorizes — set tool by tool where the connector offers
   the setting, with the Allow without Asking lists carrying the
-  same tier at list level.
+  same tier at list level. Always allow is chosen over per-tool
+  Auto-review for this tier because the tier is pre-authorized
+  by the ticket rule; per-tool Auto-review's behavior is
+  unmeasured (see the scope question below).
 - **Report-afterwards** is the platform default for that tier;
   the kit's brief and run-record make the reporting checkable
   rather than conversational.
@@ -452,16 +464,17 @@ An install that does not need egress does not sign in.
 
 **Dated observation — Tailscale reach (2026-11-23, unmeasured by
 this pack).** A Tailscale plugin ships in the Grok Bot desktop
-app (changelog v0.78.5, 2026-11-04), built on Tailscale OAuth
-apps: the bot joins the tailnet as a device under the
-authorizing user's identity, no pasted keys, with the documented
-purpose of reaching MCP servers that live on the tailnet.
-Scoping is by tailnet policy, not by the app: bot devices carry
-the posture attribute `custom:grokbot`, and with
-`defaultSrcPosture` the user's existing grants do not apply to
-the bot device — only explicit exceptions, such as designated
-MCP servers, reach it. That is a real least-privilege control,
-of a kind the connector layer does not offer. One detailed
+app, built on Tailscale OAuth apps: the bot joins the tailnet
+as a device under the authorizing user's identity, no pasted
+keys, with the documented purpose of reaching MCP servers that
+live on the tailnet. Scoping is by tailnet policy, not by the
+app: Tailscale's published example gives bot devices the
+posture attribute `custom:grokbot`, and with `defaultSrcPosture`
+the bot device reaches only explicit exceptions, such as
+designated MCP servers; the scoping account rests on
+reproductions of that post. That is a real least-privilege
+control — a data-scope control of a kind the connector layer
+does not offer. One detailed
 field report cuts the promise down (r/GrokBot, 2026-11-23,
 single poster): Connected, with an allow-all ACL, non-standard
 ports timed out and a hostname resolved wrong, while the same
@@ -668,8 +681,9 @@ lists and any per-tool connector settings recorded as found
 before the install changed them, and read back as the user
 confirmed them — recorded from the user's dictation, since the
 bot cannot read its own settings (see Approvals); each routine
-created paused-then-enabled per the plan, its saved instruction
-read back against the approved text (the two platform-added
+created paused-then-enabled per the plan, its cadence and
+expected spend in the plan's routines section, its saved
+instruction read back against the approved text (the two platform-added
 lines on an imported routine allowed; anything beyond them is
 drift — see the jobs layer); the run-record file created with
 its header; the procedures reference and decision queue in the
@@ -677,8 +691,10 @@ workspace, created from the `template/workspace.md` starters;
 the watch routine's target in place as its import answer
 describes it, before the watch is enabled; the egress decision
 recorded (signed in, with the token warning shown — or not
-signed in), and an off-platform copy of the workspace in place
-before any account-linking change is made (see Step 1).
+signed in), the identity the box pushes as recorded, and an
+off-platform copy of the workspace in place before any
+account-linking or account-state change (team creation
+included) is made (see Step 1).
 
 *Deferred:* the first brief run lands inside its window and
 appends its line; the first silent-watch line appears with no

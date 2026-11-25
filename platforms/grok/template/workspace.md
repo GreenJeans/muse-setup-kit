@@ -79,7 +79,8 @@ audit (measured, run 29); dated sub-entries do not. -->
 <!-- Approvals mode, both lists, and any per-tool connector
 settings (Always allow / Auto-review / Needs approval /
 Blocked), exactly as the user read them in the app and dictated
-them — the bot cannot read its own Auto-review settings. Their
+them — the bot cannot read its own Auto-review settings — and
+any tools an admin has limited, as the bot reported them. Their
 scope (per-bot or account-wide) is unmeasured; see the
 overlay. -->
 
@@ -93,7 +94,20 @@ own dated sub-entry. -->
 
 <!-- Signed in for shell git access, with the token warning
 shown — or not signed in. The user's decision, recorded either
-way. -->
+way. The identity the box pushes as, recorded — every push is
+attributed to it. -->
+
+## Backup
+
+<!-- Where the off-platform copy of the workspace is, and its
+date. The backup exists before any account-linking or
+account-state change (see the overlay's Step 1). -->
+
+## Routines and cadence
+
+<!-- One line per routine: name, schedule, expected spend
+against the weekly pool. Cadence is a budget decision; every
+run counts, test runs included. -->
 
 ## Deferred checks
 

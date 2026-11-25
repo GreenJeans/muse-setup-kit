@@ -46,9 +46,11 @@ A profile (`grok` in `wizard/manifest.yaml`) plus this folder:
 ## How the kit maps onto Grok, as measured
 
 The platform was measured with a ten-test battery on a live account
-(2026-11-23): 7 Pass, 2 Partial, 1 Fail. The pack is built only
-from those results; the overlay states the score behind each
-surface it uses.
+(2026-11-23): 7 Pass, 2 Partial, 1 Fail. The pack is built from
+those results plus dated later observations, each carrying its
+grade in the overlay (battery-measured, vendor changelog,
+vendor-stated, field report, or observed in the UI); the overlay
+states the score behind each surface it uses.
 
 - **Module 00** ships as *reference text + a memory-seed list*.
   Grok has no instruction file and no settings field for standing
@@ -83,13 +85,25 @@ surface it uses.
   settings included.
 - **Approvals are Auto-review recipes** — Always Ask for sends,
   deletes, and purchases, with rule changes confirmed by the user
-  on a card — plus one warning the overlay teaches at full
-  strength: **the shell path is unreviewed. A push is a send.**
-  Measured: branch and tag pushes over the shell ran with no
-  confirmation card at all, in a class the bot itself listed as
-  stop-first.
+  on a card, and per-tool connector settings (changelog 1.2.3)
+  set tool by tool where the connector offers them — plus one
+  warning the overlay teaches at full strength: **the shell path
+  is unreviewed. A push is a send.** Measured: branch and tag
+  pushes over the shell ran with no confirmation card at all, in
+  a class the bot itself listed as stop-first.
+- **Backup first.** Field reports describe the shared computer
+  wiped on account-linking changes; the overlay's Step 1 puts an
+  off-platform copy in place before any linking or account-state
+  change.
+- **Quota.** Every routine run counts against the weekly pool,
+  test runs included, against an unpublished allowance — cadence
+  is a budget decision (vendor-stated and secondary-sourced, not
+  battery-measured).
+- A dated Tailscale-reach observation (2026-11-23, unmeasured)
+  sits in the overlay's Approvals section.
 
-**Status: rehearsed — run 29 (2026-11-23) at b1efc3b.** The
+**Status: rehearsed — run 29 (2026-11-23) at b1efc3b; the rev2
+revision text is unrehearsed.** The
 platform was measured by the battery; the pack was then installed
 end to end on a live account through the template front door, and
 the imported bot is the live install. docs/REHEARSALS.md row 29

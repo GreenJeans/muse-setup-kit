@@ -26,12 +26,12 @@ run-record — `<name> run at <timestamp> — <one-line outcome>` —
 whether or not it posts. A missing line is how a silent failure
 is detected; an instruction that omits the append is a defect.
 
-A brief's first read cannot obey the brief's own tool rules:
-the bot reads the brief before it knows them. Briefs and
-routine instructions written for this platform therefore exempt
-the bootstrap read explicitly — the first read of the brief
-itself, by whatever tool reaches it, is not a violation of the
-brief's tool rules — and are written so that first read is safe
+A pasted task brief's first read cannot obey the brief's own
+tool rules: the bot reads the brief before it knows them.
+Routine instructions that carry tool rules exempt the bootstrap
+read explicitly — the first read of the brief itself, by
+whatever tool reaches it, is not a violation of the brief's
+tool rules — and briefs are written so that first read is safe
 under any tool. A tool rule the first read cannot follow is a
 rule stated one read too early; state it after the read it
 governs, or exempt the read that delivers it.
