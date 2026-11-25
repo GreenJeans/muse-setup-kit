@@ -124,10 +124,12 @@ answer live, because accounts differ in what is connected:
   to record, and the plan must not imply one.
 - `other-agents`: present on the platform in the worst way — every
   bot sees every bot — and module 04 is excluded anyway (below).
-- `persona-file`: no. The bot's description is editable text and
-  doubles as the template instructions field; it is not a persona
-  file the agent reads as standing instructions, and module 11 is
-  not offered.
+- `persona-file`: no. The bot's description is server-side text,
+  edited by asking the bot — not a settings field, and not the
+  on-computer `profile.json`, which is a lagging mirror (R1,
+  2026-11-23). It doubles as the template instructions field; it
+  is not a persona file the agent reads as standing instructions,
+  and module 11 is not offered.
 - `spaces`: no.
 - Billing bucket (wizard Step 1's stop condition) applies
   unchanged: name the bucket in the plan, user-stated.
@@ -431,6 +433,10 @@ configurational: pushes and tags are ticketed in the workspace
 record before they run, the ticket is the control, and the plan
 must never state that the platform will card a push.
 
+The vendor's own docs describe an approval card for terminal
+commands; in measured sessions on 2026-11-23 that card never
+appeared — do not rely on the documented card.
+
 The same test priced the egress path: shell git access required
 a device-code sign-in whose token (scopes: gist, read:org, repo)
 is stored in plain text in the `gh` config on the shared
@@ -547,8 +553,14 @@ did not isolate is labeled unmeasured rather than asserted.
 2. **Set the source bot's description** to the text in
    `template/description.md`, placeholders filled — the agent
    name chosen above, the user's name. Role text is set by
-   asking the bot in chat (measured: it saved to the bot's own
-   profile; no settings-UI fields for it were found). What
+   asking the bot in chat. The description lives server-side;
+   the bot is the editor (R1, 2026-11-23). There is no
+   settings field for a human to view or edit it — a personal
+   bot's settings nav has no profile or description section —
+   and the on-computer `profile.json` is a lagging mirror, not
+   the source. Verify by asking the bot to quote the
+   description back, not by opening Settings and not by
+   reading `profile.json`. What
    survives staging differs by placeholder: the agent name
    reaches the child exactly as written, but **user-name
    references do not — staging generalizes them** (measured,
