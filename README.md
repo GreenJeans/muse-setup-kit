@@ -51,7 +51,7 @@ exactly, and stop if it doesn't.
 
 One more thing before you start: know which billing bucket the
 install session draws on (subscription, API key, a router). An
-install is heavy work — a full one reads on the order of 70,500
+install is heavy work — a full one reads on the order of 70,600
 words of kit — and the wizard's first step will ask. If you don't
 know, that's worth finding out before, not after.
 
@@ -79,10 +79,11 @@ and tools) — the reading the request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
-| **Starter** | 00 + 02 + 09 | ~29,300 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
-| **Standard** | Starter + 01 + 06 | ~40,200 words | Plus the memory schema with its linter and span checker, and the security pack. |
-| **Grok Bot** | 00 + 01, in Grok forms | ~32,400 words | A platform profile for Grok Bot, through the overlay in `platforms/grok/`: module 00 as reference text plus memory seeds, module 01's audit half only, module 04 excluded (the platform's isolation test failed). Single-bot only; rehearsed in run 29 (2026-11-23); rev2 text unrehearsed. |
-| Everything | all twelve modules | ~70,500 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
+| **Starter** | 00 + 02 + 09 | ~29,400 words | Tickets and a decision queue, a failures-first brief, a bucket register. No memory migration, no second person, no host. |
+| **Standard** | Starter + 01 + 06 | ~40,300 words | Plus the memory schema with its linter and span checker, and the security pack. |
+| **Grok Bot** | 00 + 01, in Grok forms | ~32,500 words | A platform profile for Grok Bot, through the overlay in `platforms/grok/`: module 00 as reference text plus memory seeds, module 01's audit half only, module 04 excluded (the platform's isolation test failed). Single-bot only; rehearsed in run 29 (2026-11-23); rev2 text unrehearsed. |
+| **OpenBot** | 00 + 01, in OpenBot forms | ~29,200 words | A platform profile for OpenBot, through the overlay in `platforms/openbot/`: module 00 as an AGENTS.md seed, module 01 both halves (files are the memory), module 04 excluded (the platform's isolation test failed). Single-agent only; battery-measured 2026-11-25 at v0.78.0; not rehearsed. |
+| Everything | all twelve modules | ~70,600 words | Module 08 at Full is ~7,000 of that; at its default Lite tier it reads far less (the Full-only sections are labeled and skippable). The remaining modules (03, 04, 05, 08, 10, 11, 12) are each offered on their own merits. |
 
 Modules can be added later, one at a time (see `UPGRADING.md`).
 Each module's rehearsal status is in `docs/REHEARSALS.md`; the
@@ -204,7 +205,7 @@ UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
 docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (profiles + library data)
-platforms/           ← platform packs: grok/ (README for people · WIZARD.md overlay · template contents)
+platforms/           ← platform packs: grok/, openbot/ (README for people · WIZARD.md overlay · template contents)
 directory.json       ← generated catalog of the core library (tools/build_directory.py) · advisories.json (generated; advisories.yaml is its human-maintained source)
 modules/
   00-core-procedures/      module.yaml · MODULE.md · VERIFY.md · templates/

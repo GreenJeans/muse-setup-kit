@@ -18,12 +18,12 @@ profiles:
   - id: starter
     title: Starter
     modules: [core/core-procedures, core/morning-brief, core/cost-guardrails]
-    audit_words: 29300
+    audit_words: 29400
     pitch: "Tickets and a decision queue, a failures-first morning brief, and a billing-bucket register. No memory migration, no second person, no host."
   - id: standard
     title: Standard
     modules: [core/core-procedures, core/morning-brief, core/cost-guardrails, core/memory-architecture, core/security-pack]
-    audit_words: 40200
+    audit_words: 40300
     pitch: "Starter, plus the compiled-memory schema with its linter and span checker, and the security pack (vetting, grants inventory, injection discipline)."
   # Platform profiles carry `platform:` and are offered only on
   # that platform, through its overlay; they are never Starter or
@@ -36,9 +36,17 @@ profiles:
     platform: grok-bot
     modules: [core/core-procedures, core/memory-architecture]
     platform_files: [platforms/grok/WIZARD.md, platforms/grok/MISMATCHES.md, platforms/grok/template/description.md, platforms/grok/template/skills/kit-bootstrap/SKILL.md, platforms/grok/template/skills/memory-audit/SKILL.md, platforms/grok/template/routines.md, platforms/grok/template/workspace.md]
-    audit_words: 32400
+    audit_words: 32500
     rehearsed_at: "run 29 (2026-11-23) on the grok-profile branch at b1efc3b"
     pitch: "For Grok Bot, single-bot only. Module 00 as reference text plus a memory-seed list the user states in their own words (Grok has no instruction file; memory-saved rules were measured binding in chat and in unattended runs), module 01's audit half only (the architecture is platform-owned), routine templates as the jobs layer, and Auto-review recipes. Module 04 is excluded: the platform's isolation test failed — every bot on the account can read everything every other bot can read. Rehearsed in run 29 (2026-11-23); the rev2 revision text is unrehearsed."
+  - id: openbot
+    title: OpenBot
+    platform: openbot
+    modules: [core/core-procedures, core/memory-architecture]
+    platform_files: [platforms/openbot/WIZARD.md, platforms/openbot/template/agents-md.md, platforms/openbot/template/skills/kit-bootstrap/SKILL.md, platforms/openbot/template/skills/memory-audit/SKILL.md, platforms/openbot/template/routines.md, platforms/openbot/template/workspace.md]
+    audit_words: 29200
+    rehearsed_at: null
+    pitch: "For OpenBot, single-agent only. Module 00 as an AGENTS.md seed (binds in interactive chat; routine templates embed their own rule copies, because AGENTS.md does not reach routine runs), module 01 both halves (no platform memory schema — the kit's markdown memory lives in the workspace, and the audit runs over files), routine templates as the jobs layer, and Access-mode plus credential-grant recipes. Module 04 is excluded: the platform's isolation test failed — every agent in one container can read every other agent's files. Battery-measured 2026-11-25 at v0.78.0; not rehearsed."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle, deadlines-register, persona-soul,
   # spaces-dashboards) is offered

@@ -122,3 +122,39 @@ actions, pushes included, run uncarded, so the pack's ticket
 discipline for egress is procedural. Both are handled in the
 overlay rather than as tokens until a second platform shows the
 same shape.
+
+## Platform answers: OpenBot
+
+OpenBot (a self-hosted, local-first workspace that runs other
+vendors' agent CLIs) has its own profile (`openbot` in
+`wizard/manifest.yaml`) and its own wizard overlay
+(`platforms/openbot/WIZARD.md`). These are the token answers a
+ten-test battery measured on a pinned Docker staging on
+2026-11-25 (OpenBot v0.78.0) — installs differ in what is
+connected and which provider CLI is in use, so the overlay's
+Step 1 still checks each answer live rather than trusting this
+table.
+
+| Token | OpenBot | Caveat the token cannot express |
+|---|---|---|
+| `scheduling` | yes | Routines are real schedules with verbatim saved instructions, full tool access in runs, and fires measured at 0–3 seconds of drift. Fires while the host sleeps do not run. The agent's own list of its routines included a fabricated entry — reconciliation reads the routines store, never asks the agent. |
+| `shell-python` | yes | A real shell and file tools in the agent's workspace, in chat and in runs; results verified on disk. Kit state lives in workspace files on the data volume; survival across a version upgrade is unmeasured (migrations are one-way), so the plan backs the volume up before upgrades. |
+| `second-person` | not used | The profile is single-agent and single-user. Team surfaces exist on the platform (vendor-documented), but no surface in this profile shares through them, and the battery did not exercise them. |
+| `shared-docs` / `shared-tasks` / `shared-storage` | not used | Native connectors are thin (vendor-documented: no Gmail/Drive/Calendar natively) and unmeasured by the battery; the modules that require these tokens are not in the profile. |
+| `other-agents` | present, adversely | Every agent in one container runs as one user and can read every other agent's files — measured, Test 6 Fail. Module 04 is excluded from the profile on exactly this evidence; isolation means one container per agent. |
+| `persona-file` | instruction file only | `AGENTS.md` is auto-loaded and binds in interactive chat (Test 1), but it is the procedures surface in this profile, not a persona file; it does not reach routine runs. Module 11 is not offered, and its fit is unmeasured. |
+| `spaces` | no | Unmeasured — the battery did not test persistent page or space surfaces. Module 12 is not offered. |
+
+Three OpenBot properties change how modules install and have no
+token yet: **standing instructions bind in chat only** —
+`AGENTS.md` is honored interactively and does not reach routine
+runs, so every routine template embeds its own rule copies;
+**silence is a token, not an instruction** — a watcher told to
+post nothing posted anyway, and the documented `[[no-update]]`
+token is untested, so watchers pair the token with a run-record
+line; and **there is no standing pre-approval** — commitment
+points stop at a credential-grant prompt ("Only this agent",
+never "All agents (Vault)"), and the ticket rule rides in
+`AGENTS.md` and in routine instructions rather than in platform
+machinery. All three are handled in the overlay rather than as
+tokens until a second platform shows the same shape.
