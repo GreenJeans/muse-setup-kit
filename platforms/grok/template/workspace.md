@@ -76,15 +76,18 @@ audit (measured, run 29); dated sub-entries do not. -->
 
 ### As found — <DATE>
 
-<!-- Approvals mode and both lists, exactly as the user read
-them in the app and dictated them — the bot cannot read its
-own Auto-review settings. Their scope (per-bot or
-account-wide) is unmeasured; see the overlay. -->
+<!-- Approvals mode, both lists, and any per-tool connector
+settings (Always allow / Auto-review / Needs approval /
+Blocked), exactly as the user read them in the app and dictated
+them — the bot cannot read its own Auto-review settings. Their
+scope (per-bot or account-wide) is unmeasured; see the
+overlay. -->
 
 ### Confirmed — <DATE>
 
-<!-- The lists as the user confirmed them after the install's
-changes. Every later change gets its own dated sub-entry. -->
+<!-- The lists and per-tool settings as the user confirmed
+them after the install's changes. Every later change gets its
+own dated sub-entry. -->
 
 ## Egress
 

@@ -30,6 +30,10 @@ A profile (`grok` in `wizard/manifest.yaml`) plus this folder:
   profile (modules 00 and 01, in the forms below). The installing
   agent reads it after the wizard. It is counted in the profile's
   audit figure.
+- `MISMATCHES.md` — the rehearsal-divergence ledger: places where
+  the overlay at the pinned commit and a live install diverge, one
+  entry per mismatch, statuses edited in place. It is counted in
+  the profile's audit figure.
 - `template/` — the contents of a bot template, prepared in the
   repo: the bot description (which is the template's instructions
   field), the skill set, the routine definitions, and the starter

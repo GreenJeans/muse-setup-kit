@@ -26,10 +26,26 @@ run-record — `<name> run at <timestamp> — <one-line outcome>` —
 whether or not it posts. A missing line is how a silent failure
 is detected; an instruction that omits the append is a defect.
 
+A brief's first read cannot obey the brief's own tool rules:
+the bot reads the brief before it knows them. Briefs and
+routine instructions written for this platform therefore exempt
+the bootstrap read explicitly — the first read of the brief
+itself, by whatever tool reaches it, is not a violation of the
+brief's tool rules — and are written so that first read is safe
+under any tool. A tool rule the first read cannot follow is a
+rule stated one read too early; state it after the read it
+governs, or exempt the read that delivers it.
+
 Timing is the server's and it drifts: dailies run inside windows,
 and even an "exact" schedule fired about ten minutes late in
 testing. No routine here is time-critical inside ten minutes,
 and the brief's overdue windows are set wider than the drift.
+
+Every run counts against the account's weekly usage pool —
+test runs included — and the pool's size is not a published
+number (the overlay's jobs section carries the vendor's stated
+position). Cadence is a budget decision: a routine that runs
+daily spends daily, whether or not it posts.
 
 ## kit-morning-brief
 

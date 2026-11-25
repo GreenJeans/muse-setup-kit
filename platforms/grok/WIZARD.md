@@ -74,11 +74,14 @@ assumption.
   after a list refresh, so discovery is a deferred check, never
   an at-install claim.
 - **Approvals are Auto-review** (Test 5, Pass with a caveat):
-  Always Ask and Allow without Asking rule lists, per-app
-  permissions, rule changes drafted on a card and effective only
-  on the user's click. Reversible in-scope work is done and
-  reported afterwards by default. The caveat is the next section
-  but one; it is not a footnote.
+  Always Ask and Allow without Asking rule lists, and per-tool
+  connector permissions — each tool on a connector's page can
+  be set to Always allow, Auto-review, Needs approval, or
+  Blocked (changelog 1.2.3, 2026-11-18; finer than the per-app
+  picture the battery recorded) — with rule changes drafted on
+  a card and effective only on the user's click. Reversible
+  in-scope work is done and reported afterwards by default. The
+  caveat is the next section but one; it is not a footnote.
 
 ## Step 1 on Grok — capability answers
 
@@ -94,11 +97,31 @@ answer live, because accounts differ in what is connected:
   computer is occasionally swapped and some folders are cleared;
   multi-day file survival is unmeasured. Kit state that must
   survive lives in the workspace files the routines read, and the
-  plan says which.
+  plan says which. Backup-first caution, from field reports the
+  battery did not test: users have reported the shared computer
+  wiped on account-linking changes — one account wiped twice,
+  once on team creation and once on linking another tool, with
+  recovery burning most of a weekly usage budget, and a second
+  report of the same link-triggered wipe losing months of work.
+  Two first-person reports in one thread, uncorroborated as a
+  platform fact, and graded that way here. The caution stands
+  regardless: treat linking anything new, or changing account
+  state, as potentially destructive until an off-platform copy
+  of the workspace exists. The community's settled mitigation —
+  a private repository with a nightly sync, instruction backups
+  kept off-platform — is cheap insurance, and the plan records
+  the backup before it records any linking step.
 - `second-person`, `shared-docs`, `shared-tasks`,
   `shared-storage`: not used by this profile. The pack is
   single-bot and single-user; connected accounts exist on the
   platform, but no kit surface in this pack shares through them.
+  One intra-service fact belongs in the plan anyway, for any
+  adopter who connects a service on their own: connecting a
+  service exposes that account's data within the service
+  all-or-nothing. The Drive connector, as observed in the
+  Connect Apps UI, offers no folder scoping and no read-only
+  mode — account-wide or nothing. There is no narrower grant
+  to record, and the plan must not imply one.
 - `other-agents`: present on the platform in the worst way — every
   bot sees every bot — and module 04 is excluded anyway (below).
 - `persona-file`: no. The bot's description is editable text and
@@ -209,6 +232,14 @@ landed in the account-level user profile — readable by every bot
 Seeds the user intends as private to this bot must not be phrased
 as user-profile facts, and the plan records which store each seed
 was confirmed in, from the bot's quote-back, not from assumption.
+The account-level user profile (`/me/profile`) is a designed
+shared store — shared by design, not by leak — so a fact landing
+there is the platform working as built, and the seed guidance
+treats it as account-visible on purpose, never as a private
+note that escaped. The per-bot separation that does exist is
+narrower than the warnings might suggest: each bot has its own
+desktop and browser screen. The two warnings stand unchanged —
+they are about data reach, and data reach is account-wide.
 
 Chat-granted standing permission is conversation-scoped and does
 not carry to routine runs (Test 5). A routine that needs an
@@ -320,42 +351,72 @@ disciplines, all measured:
   inside ten minutes, and the brief's detector windows are set
   wider than the drift.
 
+**Quota mechanics — vendor-stated, not battery-measured, and
+load-bearing for cadence.** Every routine run counts against
+the account's weekly usage pool, test runs included, and work
+keeps running in the cloud after the app is closed. The weekly
+allowance is not a published number: the vendor's support
+position, in writing, is that the included usage is "not fixed
+and may change over time" and is set to be at least the value
+of the plan price. No absolute allowance is published anywhere
+to plan against. So cadence is a budget decision made against
+an unpublished, variable allowance: the plan states each
+routine's cadence and what it is expected to spend, prefers
+fewer runs with complete instructions over frequent thin ones,
+and treats the run-record as the spend ledger — it shows what
+actually ran, which is the only check the pool's size does not
+provide. A routine added casually spends weekly, forever,
+until someone pauses it.
+
 ## Approvals — Auto-review recipes, and the warning
 
 The ticket rule (module 00, procedures §2) maps onto Auto-review
 like this:
 
-- **Always Ask:** sends of every kind, deletes, purchases, form
-  submissions — the ticket classes. The install sets these rules
+- **Needs approval, per tool — and Always Ask at list level:**
+  sends of every kind, deletes, purchases, form submissions —
+  the ticket classes. Where a connector offers per-tool
+  settings (changelog 1.2.3, 2026-11-18), the install sets them
+  tool by tool: send-class tools to Needs approval, and tools
+  the install must never use to Blocked. The Always Ask lists
+  carry the same classes at list level. On a team account, an
+  admin's MCP allowlist can gate which tools the built-in
+  GitHub connector offers at all — off unless a rule allows it
+  (same changelog); the plan records any tool the admin has
+  limited, as the bot reports it. The install sets these rules
   with the user present; a rule change is drafted on a card and
-  takes effect only on the user's click, and the plan records the
-  lists as the user confirmed them, not as the agent proposed
-  them. The record step is necessarily **user-mediated**: a bot
-  cannot read its own Auto-review settings (measured, run 29 —
-  asked to record them, the bot left the section empty rather
-  than guess), so the user reads the lists in the app and
-  dictates the values, and the bot records them labeled as
-  stated by the user. The bot's account of *where* settings live
-  in the app is likewise unreliable (same run: it named the
-  wrong settings section against the app's actual page) —
-  verify settings locations against the app itself, never the
-  bot's say-so.
-- **Allow without Asking:** reads, searches, and workspace file
-  writes inside the install's scope — the reversible tier the
-  ticket rule pre-authorizes.
+  takes effect only on the user's click, and the plan records
+  the lists and per-tool settings as the user confirmed them,
+  not as the agent proposed them. The record step is
+  necessarily **user-mediated**: a bot cannot read its own
+  Auto-review settings (measured, run 29 — asked to record
+  them, the bot left the section empty rather than guess), so
+  the user reads the lists and settings in the app and dictates
+  the values, and the bot records them labeled as stated by the
+  user. The bot's account of *where* settings live in the app
+  is likewise unreliable (same run: it named the wrong settings
+  section against the app's actual page) — verify settings
+  locations against the app itself, never the bot's say-so.
+- **Always allow, per tool — and Allow without Asking at list
+  level:** reads, searches, and workspace file writes inside
+  the install's scope — the reversible tier the ticket rule
+  pre-authorizes — set tool by tool where the connector offers
+  the setting, with the Allow without Asking lists carrying the
+  same tier at list level.
 - **Report-afterwards** is the platform default for that tier;
   the kit's brief and run-record make the reporting checkable
   rather than conversational.
 
 One scope question is **unmeasured: whether the Auto-review
-lists are per-bot or account-wide.** The battery set and read
-the lists on one bot (Test 5); nothing measured what a second
-bot on the same account would show, and this pack does not
-guess. Until that is measured, the install records the lists
-**as found, before changing them**, in `SETUP-PLAN.md` — so a
-later reading (a second bot's settings, a post-install check)
-can be compared against the as-found state instead of against
-the install's intention.
+lists and per-tool settings are per-bot or account-wide.** The
+battery set and read the lists on one bot (Test 5); nothing
+measured what a second bot on the same account would show, and
+this pack does not guess. Until that is measured, the install
+records the lists and any per-tool settings **as found, before
+changing them**, in `SETUP-PLAN.md` — so a later reading (a
+second bot's settings, a post-install check) can be compared
+against the as-found state instead of against the install's
+intention.
 
 **The warning, at full strength, because the battery measured it
 in the kit's own release flow:** Auto-review governs connector
@@ -374,11 +435,38 @@ The same test priced the egress path: shell git access required
 a device-code sign-in whose token (scopes: gist, read:org, repo)
 is stored in plain text in the `gh` config on the shared
 computer — account-wide, not repo-scoped, and readable by every
-bot on the account, per the warnings at the top. The plan names
-the token's location and blast radius, recommends signing in only
-when a release is actually being made and revoking afterwards,
-and records the user's decision either way. An install that does
-not need egress does not sign in.
+bot on the account, per the warnings at the top. Shell git rides
+whatever `gh` sign-in is on the box, and every push is
+attributed to that identity: whose push it appears to be is part
+of the send. The plan names the token's location and blast
+radius, records the identity the box pushes as, recommends
+signing in only when a release is actually being made and
+revoking afterwards, and records the user's decision either way.
+An install that does not need egress does not sign in.
+
+**Dated observation — Tailscale reach (2026-11-23, unmeasured by
+this pack).** A Tailscale plugin ships in the Grok Bot desktop
+app (changelog v0.78.5, 2026-11-04), built on Tailscale OAuth
+apps: the bot joins the tailnet as a device under the
+authorizing user's identity, no pasted keys, with the documented
+purpose of reaching MCP servers that live on the tailnet.
+Scoping is by tailnet policy, not by the app: bot devices carry
+the posture attribute `custom:grokbot`, and with
+`defaultSrcPosture` the user's existing grants do not apply to
+the bot device — only explicit exceptions, such as designated
+MCP servers, reach it. That is a real least-privilege control,
+of a kind the connector layer does not offer. One detailed
+field report cuts the promise down (r/GrokBot, 2026-11-23,
+single poster): Connected, with an allow-all ACL, non-standard
+ports timed out and a hostname resolved wrong, while the same
+user's phone on the same tailnet worked; vendor support, as
+reported by the poster, holds that the bot's computer allows
+only standard HTTPS out, UDP blocked — a known tracked issue.
+The pack's verdict, stated as an observation and not a
+capability claim: HTTPS-shaped reach from the same shared
+computer for now, and the isolation picture is unchanged — a
+bot on the tailnet is still every bot on the account, per the
+warnings at the top. Revisit on the pack's own measurement.
 
 ## The template front door
 
@@ -564,19 +652,21 @@ surfaces the checks instead, or the install does not close.
 
 *At install:* the seed conversation completed, each seed quoted
 back with provenance and its store recorded; the Auto-review
-lists recorded as found before the install changed them, and
-read back as the user confirmed them — recorded from the user's
-dictation, since the bot cannot read its own settings (see
-Approvals); each routine created paused-then-enabled per the
-plan, its saved instruction read back against the approved text
-(the two platform-added lines on an imported routine allowed;
-anything beyond them is drift — see the jobs layer); the
-run-record file created with its header; the procedures
-reference and decision queue in the workspace, created from the
-`template/workspace.md` starters; the watch routine's target in
-place as its import answer describes it, before the watch is
-enabled; the egress decision recorded (signed in, with the
-token warning shown — or not signed in).
+lists and any per-tool connector settings recorded as found
+before the install changed them, and read back as the user
+confirmed them — recorded from the user's dictation, since the
+bot cannot read its own settings (see Approvals); each routine
+created paused-then-enabled per the plan, its saved instruction
+read back against the approved text (the two platform-added
+lines on an imported routine allowed; anything beyond them is
+drift — see the jobs layer); the run-record file created with
+its header; the procedures reference and decision queue in the
+workspace, created from the `template/workspace.md` starters;
+the watch routine's target in place as its import answer
+describes it, before the watch is enabled; the egress decision
+recorded (signed in, with the token warning shown — or not
+signed in), and an off-platform copy of the workspace in place
+before any account-linking change is made (see Step 1).
 
 *Deferred:* the first brief run lands inside its window and
 appends its line; the first silent-watch line appears with no
