@@ -57,10 +57,11 @@ and time> — <number of items surfaced> surfaced`.
 ## kit-watch-record
 
 The silent-watch slot: one instance per thing watched,
-renamed for what it watches. It posts nothing unless its
-condition trips — silence is the success state, expressed as
-the `[[no-update]]` token plus the run-record line, which is
-the proof it ran. The target named at creation must exist
+renamed for what it watches. It is meant to post nothing
+unless its condition trips; whether the `[[no-update]]`
+token suppresses the post is untested, and the first silent
+run is the probe — the run-record line is the proof it ran
+either way. The target named at creation must exist
 before the routine is first enabled; when it is a workspace
 file, creating it is an install step (`template/workspace.md`),
 because a watch over a missing file cannot tell "nothing to

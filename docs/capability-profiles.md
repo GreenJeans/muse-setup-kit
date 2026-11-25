@@ -157,4 +157,12 @@ points stop at a credential-grant prompt ("Only this agent",
 never "All agents (Vault)"), and the ticket rule rides in
 `AGENTS.md` and in routine instructions rather than in platform
 machinery. All three are handled in the overlay rather than as
-tokens until a second platform shows the same shape.
+tokens until a second platform shows the same shape. Checked
+against that test at this profile's build: two of the three
+now appear on a second platform in the same shape —
+procedural ticket discipline where the platform's review
+surface has a hole (Grok's shell path; OpenBot's grant stops
+with no standing pre-approval), and standing rules that bind
+in chat but not in runs (Grok's memory seeds; OpenBot's
+`AGENTS.md`). They stay overlay-handled here; promoting
+either to a token is a maintainer call, not made here.

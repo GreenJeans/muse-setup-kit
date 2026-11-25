@@ -63,6 +63,12 @@ pin <PIN>. Platform: OpenBot <VERSION> (image tag pinned);
 provider CLI: <PROVIDER + VERSION at install>. Billing
 bucket: <BUCKET, user-stated>.
 
+## Agents in this container
+
+<!-- Every agent already in this container, named at install
+— each one holds the access this install uses (warning 1).
+Later additions get their own dated entries. -->
+
 ## AGENTS.md seed log
 
 <!-- The seed as put in place: the text, the date, and the
@@ -90,21 +96,24 @@ Every later change gets its own dated sub-entry. -->
 
 ## Egress
 
-<!-- Human-landed until a scoped-token push is exercised
-(overlay, Egress). Credential granted: none / "Only this
-agent" — the user's decision, recorded either way. -->
+<!-- Egress measured (overlay, Egress; Test 7, Pass):
+branch + tag push under a scoped "Only this agent" grant.
+Credential granted: none / "Only this agent" (scope: <SCOPE>)
+— the user's decision, recorded either way. Egress rides
+the ticket rule. Analytics: off at first run (confirmed
+<DATE>) — recorded as known egress either way. -->
 
 ## Backup
 
-<!-- Where the backup of the data volume is, and its date.
-The backup exists before any upgrade; migrations are
-one-way. -->
+<!-- Where the backup of the data volume (/data) is, and
+its date. The backup exists before any upgrade; migrations
+are one-way. -->
 
 ## Routines and cadence
 
 <!-- One line per routine: name, schedule as read back from
-the routines store, expected spend. Reconciliation reads
-the store, never the agent. -->
+the routines store. Reconciliation reads the store, never
+the agent. -->
 
 ## Deferred checks
 

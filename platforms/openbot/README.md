@@ -33,8 +33,8 @@ conjectured:**
 > carries its full instructions, including the rules it needs.
 
 > **License: OpenBot is PolyForm Noncommercial 1.0.0 —
-> personal, research, and evaluation use only. Running it
-> commercially breaches its license.** This pack is
+> personal, research, and evaluation use only. Commercial
+> use needs a separate license from the vendor.** This pack is
 > documentation and templates; the constraint is on the
 > platform underneath it, and it is yours to respect.
 
@@ -58,8 +58,8 @@ folder:
 ## How the kit maps onto OpenBot, as measured
 
 The platform was measured with a ten-test battery on a pinned
-Docker staging (2026-11-25, OpenBot v0.78.0): 3 Pass,
-4 Partial, 2 Fail, 1 Open. The pack is built from those
+Docker staging (2026-11-25, OpenBot v0.78.0): 4 Pass,
+4 Partial, 2 Fail. The pack is built from those
 results, each claim carrying its grade in the overlay
 (battery-measured, vendor-documented, or unmeasured); the
 overlay states the score behind each surface it uses.
@@ -81,7 +81,8 @@ overlay states the score behind each surface it uses.
   state, Superseded, verify pointers) lives in the agent
   workspace untouched, and the audit half (lint and fidelity
   over files, with a real shell) runs against it. This is
-  the strongest memory substrate the battery has measured.
+  the strongest memory result of the four platforms
+  measured so far.
 - **Module 04 is excluded.** The battery's isolation test
   failed: a coordination layer designed on assumed isolation
   would be designed on a fiction. This is a single-agent
@@ -103,15 +104,18 @@ overlay states the score behind each surface it uses.
   afterwards, which is the kit's default posture. Commitment
   points stop at a credential-grant prompt, and the grant
   discipline is "Only this agent", never "All agents
-  (Vault)" — warning 1 is why (Test 5, Partial). There is no
+  (Vault)" — warning 1 is why (grant stop: Test 5, Partial;
+  discipline: Test 6, Fail). There is no
   standing pre-approval on this platform, and the pack does
   not pretend otherwise; the ticket rule rides in
   `AGENTS.md` and in the grant prompts.
-- **Egress is human-landed for now.** A branch-and-tag push
-  from the agent was not exercised (Test 7, Open); what is
-  measured is that no push happens without a credential grant
-  (Test 5). Until egress is exercised, releases are landed
-  by a human, and the plan says so.
+- **Egress is measured and ticketed.** A branch-and-tag push
+  from the agent is measured (Test 7, Pass): under a scoped
+  "Only this agent" credential the agent pushed both refs,
+  verified from outside the container, and the grant
+  persisted for the agent. No push happens without a
+  credential grant (Test 5); egress still rides the ticket
+  rule, and the plan records the decision.
 - **The pin is soft.** Support covers the latest release
   only, provider CLIs auto-update hourly outside the pin, and
   database migrations are one-way. The overlay carries the

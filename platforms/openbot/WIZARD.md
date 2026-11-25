@@ -6,8 +6,8 @@ in the forms below). Where this overlay and the wizard differ,
 this overlay governs on OpenBot; where this overlay is silent,
 the wizard governs. Every platform claim below carries its
 grade: measured by a ten-test battery on a pinned Docker
-staging (2026-11-25, OpenBot v0.78.0; 3 Pass, 4 Partial,
-2 Fail, 1 Open — the score is named where the claim is
+staging (2026-11-25, OpenBot v0.78.0; 4 Pass, 4 Partial,
+2 Fail — the score is named where the claim is
 load-bearing), vendor-documented, or unmeasured. Anything with
 none of those grades is labeled unmeasured, here and in the
 plan.
@@ -19,9 +19,11 @@ plan.
    files (battery Test 6, Fail: a bystander agent read the
    working agent's canary across workspaces; the only barrier
    was the model choosing not to). Isolation is one container
-   per agent. Whether the Workspace only Access mode changes
-   this is unmeasured (the 6b probe was not run), so this
-   warning stands at full strength until it is.
+   per agent. The Workspace only Access mode does not change
+   this on a server: on the Linux Docker deployment it is
+   unavailable ("available for this provider on macOS only",
+   measured 2026-11-25), so the warning stands at full
+   strength there; on the macOS desktop it is unmeasured.
 2. **Silence is a token, not an instruction.** A watcher told
    to post nothing posted a "nothing posted" message anyway
    (Test 10, Fail). The platform documents a `[[no-update]]`
@@ -37,7 +39,8 @@ plan.
    the rules it needs.
 4. **License: OpenBot is PolyForm Noncommercial 1.0.0 —
    personal, research, and evaluation use only; commercial
-   use breaches its license** (vendor-documented, the
+   use needs a separate license from the vendor**
+   (vendor-documented, the
    platform's LICENSE). The plan states this where the user
    will see it before the install closes.
 
@@ -74,7 +77,8 @@ on that assumption.
   saved instructions, full tool access in runs, fires
   measured at 0–3 seconds of drift. One staging caveat:
   scheduled fires while the host sleeps do not run
-  (battery-observed); server or container staging on an
+  (unmeasured here — the battery staged on an always-on
+  server); server or container staging on an
   always-on host avoids that. Webhook-triggered routines are
   vendor-documented (signed, Standard Webhooks format) and
   were not exercised by the battery — unmeasured.
@@ -113,7 +117,8 @@ and which provider CLI is in use:
   volume, and the plan says which. Survival across a version
   upgrade is unmeasured — database migrations are one-way
   (vendor-documented), so the plan records a backup of the
-  data volume before any upgrade (see the update posture).
+  data volume (/data) before any upgrade (see the update
+  posture).
 - `second-person`, `shared-docs`, `shared-tasks`,
   `shared-storage`: not used by this profile. The pack is
   single-agent and single-user. Native connectors are thin
@@ -232,7 +237,9 @@ wants more than one credentialed agent runs **one container
 per agent** — the vendor's own documented remedy
 (vendor-documented) — and coordinates between containers,
 never inside one. If a future battery re-measures isolation
-(for example the Workspace only mode, unmeasured here) and
+(for example the Workspace only mode on the macOS desktop —
+on the Linux Docker server it is unavailable, measured
+2026-11-25) and
 it passes, the exclusion is revisited then — on evidence,
 not on a platform announcement.
 
@@ -288,7 +295,10 @@ OpenBot's approval surfaces like this (Test 5, Partial):
 - **Full access** does local reversible work unasked and
   reports afterwards — the kit's default posture for the
   reversible tier. **Ask first** and **Workspace only** exist
-  as stricter modes (vendor-documented names; the battery
+  as stricter modes (vendor-documented names; Workspace
+  only is unavailable on the Linux Docker server — macOS
+  desktop only, measured 2026-11-25, untested there; the
+  battery
   exercised the grant stops, not every mode's full
   semantics — unmeasured beyond Test 5). The install sets
   the mode with the user present and records it in
@@ -298,8 +308,11 @@ OpenBot's approval surfaces like this (Test 5, Partial):
   "Only this agent" or "All agents (Vault)". **The grant
   discipline is "Only this agent", always** — warning 1 is
   why: a Vault-wide grant is readable by every agent in the
-  container. The plan records each grant, its scope, and
-  the user's decision.
+  container. Whether an "Only this agent" grant resists a
+  same-UID bystander is unmeasured; the discipline is kept
+  because the Vault-wide alternative is measured-readable,
+  not because the scoped grant is measured-safe. The plan
+  records each grant, its scope, and the user's decision.
 - **No standing pre-approval exists.** There is no
   approve-this-class-forever setting and no
   approve-now-run-later queue (Test 5). The ticket rule
@@ -319,19 +332,25 @@ OpenBot's approval surfaces like this (Test 5, Partial):
   produces an attachment as leaving a copy behind in a
   shared place, per warning 1.
 
-## Egress — human-landed until measured
+## Egress — measured, scoped-grant, still ticketed
 
-A branch-and-tag push from the agent was not exercised
-(Test 7, **Open** — unexercised by decision, not by failure).
-What is measured: no push happens without a credential grant
-(Test 5), and the grant discipline above applies to any
-future egress credential. Until a scoped-token push is
-exercised and verified from outside the container, **releases
-are landed by a human**, and the plan says so instead of
-discovering it mid-release. The plan records the egress
-decision (no credential granted / credential granted to this
-agent only), and an install that does not need egress grants
-nothing.
+A branch-and-tag push from the agent is measured (Test 7,
+**Pass**, 2026-11-25): under a single scoped credential
+granted "Only this agent" (a fine-grained token for one
+repository), the agent pushed a branch and an annotated tag
+on the same commit, verified from outside the container;
+the grant persisted for the agent, so the tag push needed
+no second prompt. Two shape notes from the same run: an
+attempt without a credential bounced on unauthenticated
+errors with no prompt — the grant prompt appears when the
+agent attempts an authenticated operation — and the scoped
+grant's isolation against a bystander agent is unmeasured
+(see Approvals). Egress therefore runs under the ticket
+rule like any other irreversible action: exact action,
+exact total, exact fallback, approved in conversation. The
+plan records the egress decision (no credential granted /
+credential granted to this agent only, with its scope), and
+an install that does not need egress grants nothing.
 
 ## Update posture and staging — the pin is soft
 
@@ -349,9 +368,11 @@ at the measured pin; the battery did not exercise an upgrade:
   on it.
 - **Database migrations are one-way**, with no pre-upgrade
   backup taken by the platform. **Pin the image tag, and
-  back up the data volume before any upgrade**; the plan
+  back up the data volume (/data) before any upgrade**; the
+  plan
   records the backup's location and date.
-- **Docker is the documented staging shape**: the pinned
+- **Docker is the kit's staging shape** (from the vetting
+  record, not a vendor requirement): the pinned
   image (`ghcr.io/nightly-labs/openbot:<tag>`), build
   provenance verified before first run (`gh attestation
   verify`), the compose and seccomp files taken from the
@@ -375,7 +396,9 @@ repo. They become an install in this order:
 
 1. **Stage the platform** per the update posture above
    (pinned image, attestation verified, no published ports)
-   and create the agent. The plan names every agent already
+   and create the agent. Turn analytics off at first run and
+   record it in the plan as known egress either way (see
+   Update posture). The plan names every agent already
    in the container, because each one holds the access this
    install is about to use (warning 1).
 2. **Write the `AGENTS.md` seed** from
@@ -386,8 +409,11 @@ repo. They become an install in this order:
    — the battery's own check (Test 1).
 3. **Create the workspace files** from
    `template/workspace.md` starters: the run-record with its
-   header, the decision queue, `SETUP-PLAN.md`, and the
-   memory files (module 01's templates, in the workspace).
+   header, the decision queue, `SETUP-PLAN.md`, the memory
+   files (module 01's templates, in the workspace), and the
+   watch routine's target file — creating it is an install
+   step, because a watch over a missing file cannot tell
+   "nothing to report" from "nothing there".
 4. **Add the skills** from `template/skills/` verbatim. Read
    each back from the library and compare content — the
    platform generates its frontmatter from the skill text,
@@ -402,8 +428,8 @@ repo. They become an install in this order:
 6. **Set the Access mode and record the grants** — as found
    first, then as confirmed — in `SETUP-PLAN.md`, with the
    user present (see Approvals). Confirm the local-scripts
-   API is off. Record the egress decision (human-landed;
-   no credential, or "Only this agent").
+   API is off. Record the egress decision (no credential,
+   or "Only this agent" with its scope — Test 7, Pass).
 
 ## Deferred checks on OpenBot
 
@@ -437,8 +463,10 @@ created from the `template/workspace.md` starters and module
 compared, frontmatter excepted); the watch routine's target
 in place as its definition describes it, before the watch is
 enabled; jobs reconciliation read from the routines store or
-UI — not from the agent; the egress decision recorded
-(human-landed, per Test 7 Open); the data-volume backup
+UI — not from the agent; analytics confirmed off at first
+run and recorded as known egress; the egress decision
+recorded (no credential, or "Only this agent" with its
+scope — Test 7, Pass); the data-volume (/data) backup
 recorded before any upgrade is contemplated.
 
 *Deferred:* the first brief run lands inside its window and
