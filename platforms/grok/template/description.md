@@ -14,9 +14,10 @@ user-name references in the text (measured, run 29 — "<USER
 NAME>'s personal agent" was staged as "the user's personal
 agent", the only substitution in an otherwise verbatim text),
 and the generalized text is what the imported bot carries. Fill
-it in on the source bot so the staging bot reads naturally, but
-expect the child's description to say "the user's", not the
-name. The standing rules that must bind beyond this text live in
+it in on the source bot by asking the bot in chat, the same
+path the overlay's staging step 2 describes, so the staging bot
+reads naturally, but expect the child's description to say
+"the user's", not the name. The standing rules that must bind beyond this text live in
 memory, stated by the user in their own words — the description
 says so, because an importing user who never states them has a
 bot with no standing rules but these.
