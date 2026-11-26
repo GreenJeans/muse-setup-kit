@@ -22,9 +22,11 @@ conjectured:**
 > **Silence is a token, not an instruction.** A watcher told to
 > post nothing posted a "nothing posted" message anyway
 > (Test 10, Fail). The platform documents a `[[no-update]]`
-> token for staying silent; it is untested. This pack's
-> watchers answer the token *and* write a run-record line, so
-> silence is both intended and detectable.
+> token for staying silent; a follow-up probe measured it
+> working (2026-11-25: the token suppressed the post, the
+> run-record line landed). This pack's watchers answer the
+> token *and* write a run-record line, so silence is both
+> intended and detectable.
 
 > **AGENTS.md rules don't reach routine runs.** A rule in
 > `AGENTS.md` bound in every fresh interactive conversation and

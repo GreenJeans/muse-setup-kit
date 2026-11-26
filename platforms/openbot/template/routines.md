@@ -58,10 +58,12 @@ and time> — <number of items surfaced> surfaced`.
 
 The silent-watch slot: one instance per thing watched,
 renamed for what it watches. It is meant to post nothing
-unless its condition trips; whether the `[[no-update]]`
-token suppresses the post is untested, and the first silent
-run is the probe — the run-record line is the proof it ran
-either way. The target named at creation must exist
+unless its condition trips; silence runs on the
+`[[no-update]]` token (measured working, 2026-11-25: the
+token suppressed the post and the record line landed), and
+the first silent run on a new install still confirms it
+there — the run-record line is the proof it ran either
+way. The target named at creation must exist
 before the routine is first enabled; when it is a workspace
 file, creating it is an install step (`template/workspace.md`),
 because a watch over a missing file cannot tell "nothing to

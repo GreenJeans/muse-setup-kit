@@ -151,8 +151,8 @@ token yet: **standing instructions bind in chat only** —
 runs, so every routine template embeds its own rule copies;
 **silence is a token, not an instruction** — a watcher told to
 post nothing posted anyway, and the documented `[[no-update]]`
-token is untested, so watchers pair the token with a run-record
-line; and **there is no standing pre-approval** — commitment
+token is measured working (2026-11-25 probe), so watchers
+pair the token with a run-record line; and **there is no standing pre-approval** — commitment
 points stop at a credential-grant prompt ("Only this agent",
 never "All agents (Vault)"), and the ticket rule rides in
 `AGENTS.md` and in routine instructions rather than in platform

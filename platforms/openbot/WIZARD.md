@@ -28,7 +28,9 @@ plan.
    to post nothing posted a "nothing posted" message anyway
    (Test 10, Fail). The platform documents a `[[no-update]]`
    token for staying silent (vendor-documented, in the UI);
-   the battery did not test it. Watchers in this pack answer
+   the battery did not test it, and a follow-up probe did
+   (2026-11-25): the token suppressed the post and the
+   run-record line landed. Watchers in this pack answer
    the token *and* write a run-record line — the record line
    itself was written correctly in the same test.
 3. **AGENTS.md rules don't reach routine runs.** A rule in
@@ -267,11 +269,13 @@ disciplines, all measured unless labeled:
   correctly even in the run where silence failed (Test 10).
 - **Silence is a token.** A watcher that has nothing to
   report answers `[[no-update]]` and appends its run-record
-  line. The token is vendor-documented (in the UI) and
-  **untested**: instruction-only silence posted anyway
-  (Test 10, Fail). The first silent-watch run after install
-  is therefore a deferred check with teeth — if it posts,
-  that is a finding to surface, not a pass to assume.
+  line. The token is measured working (follow-up probe,
+  2026-11-25: the token suppressed the post, the record
+  line landed). Instruction-only silence posted anyway
+  (Test 10, Fail) — the token is not optional. The first
+  silent-watch run after install is therefore a deferred
+  check with teeth — if it posts, that is a finding to
+  surface, not a pass to assume.
 - **Timing.** Fires measured 0–3 seconds of drift (Test 2) —
   detector windows can be tight, and the run-record detector
   is kept anyway. Fires while the host sleeps do not run;
@@ -471,8 +475,9 @@ recorded before any upgrade is contemplated.
 
 *Deferred:* the first brief run lands inside its window and
 appends its line; the first silent-watch run appends its
-line with no post — the `[[no-update]]` probe, where a post
-is a finding, not a pass; the first memory audit runs and
+line with no post — confirming the measured `[[no-update]]`
+mechanism on this install, where a post is a finding, not
+a pass; the first memory audit runs and
 its findings are decided; a skill invoked in a fresh session
 and in an unattended run; the first fire after a host sleep
 gap surfaced as missed rather than silently caught up. Each
