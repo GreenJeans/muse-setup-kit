@@ -49,7 +49,7 @@ review**: two outside models, a frozen packet, a planted false
 claim (the canary) they have to catch. Findings are verified at
 source before a single word changes.
 
-![Battery scorecard: Grok Bot, OpenBot, Gemini Tasks](docs/assets/scorecard.svg)
+![Battery scorecard: Muse, Grok Bot, OpenBot, Gemini Tasks](docs/assets/scorecard.svg)
 
 The failures shape the packs as much as the passes. Test 6 fails
 on every platform measured — no platform isolates one agent from
@@ -57,7 +57,12 @@ another — so the coordination module is excluded from both
 platform profiles, and the packs say so on page one. Gemini Tasks
 measured as a pattern set, not a profile, so there is no Gemini
 profile. The kit would rather ship less, honestly graded, than
-more, hopefully described.
+more, hopefully described. Muse itself — the home platform the
+kit was distilled from — ran the same battery on 2026-11-25 and
+scored 4 Pass / 4 Partial / 2 Fail: strongest on routines,
+egress, self-visibility, and silence; weakest exactly where the
+kit's disciplines compensate, per-chat instruction loading and
+isolation.
 
 ## Before / after
 
