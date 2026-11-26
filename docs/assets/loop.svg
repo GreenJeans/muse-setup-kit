@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="150" viewBox="0 0 760 150" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="760" height="150" rx="10" fill="#f6f8fa"/>
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#57606a"/>
+    </marker>
+  </defs>
+  <!-- boxes -->
+  <g>
+    <rect x="20" y="45" width="150" height="60" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <text x="95" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Brief</text>
+    <text x="95" y="90" text-anchor="middle" font-size="11" fill="#57606a">failures first, daily</text>
+
+    <rect x="215" y="45" width="150" height="60" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <text x="290" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Decisions</text>
+    <text x="290" y="90" text-anchor="middle" font-size="11" fill="#57606a">numbered queue, your call</text>
+
+    <rect x="410" y="45" width="150" height="60" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <text x="485" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Tickets</text>
+    <text x="485" y="90" text-anchor="middle" font-size="11" fill="#57606a">exact action, total, fallback</text>
+
+    <rect x="605" y="45" width="140" height="60" rx="8" fill="#ffffff" stroke="#d0d7de"/>
+    <text x="675" y="70" text-anchor="middle" font-size="15" font-weight="600" fill="#1f2328">Verified</text>
+    <text x="675" y="90" text-anchor="middle" font-size="11" fill="#57606a">done = checked live</text>
+  </g>
+  <!-- arrows -->
+  <line x1="172" y1="75" x2="211" y2="75" stroke="#57606a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="367" y1="75" x2="406" y2="75" stroke="#57606a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="562" y1="75" x2="601" y2="75" stroke="#57606a" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- return arc -->
+  <path d="M675,108 C675,138 95,138 95,110" fill="none" stroke="#57606a" stroke-width="2" stroke-dasharray="5,4" marker-end="url(#arr)"/>
+  <text x="385" y="142" text-anchor="middle" font-size="11" fill="#57606a">every outcome lands back in the record — and tomorrow's brief reads it</text>
+</svg>

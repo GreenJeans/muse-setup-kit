@@ -4,9 +4,15 @@
 > *procedures, memory, a morning brief, and (if you want them)*
 > *multi-person and multi-agent coordination patterns.*
 
-Everything here was distilled from a working installation, then scrubbed:
-**patterns travel, instances don't.** No names, accounts, infrastructure,
-or personal data from the original setup appear anywhere in this repo.
+**Your agent has three failure modes out of the box: it forgets
+everything between sessions, it acts without asking, and it fails
+silently.** This kit fixes those three. It is the operating
+discipline distilled from a working personal-agent installation —
+the rules, memory schema, scheduled-job patterns, and approval
+machinery that make an agent safe to leave running — scrubbed so
+that **patterns travel, instances don't**: no names, accounts,
+infrastructure, or personal data from the original setup appear
+anywhere in this repo.
 
 ---
 
@@ -27,6 +33,42 @@ And when something irreversible comes up, your agent stops and
 writes a ticket — exact action, exact total, exact fallback — and
 waits. That's the kit working. The rest of this page is how to
 install it, and what it costs to read first.
+
+![The daily loop: brief, decisions, tickets, verified](docs/assets/loop.svg)
+
+## Measured, not vibes
+
+Most agent setups are prompt folklore. This one is graded. Before
+a platform gets a kit profile, it runs a **ten-test battery** on a
+pinned staging — instruction loading, routine environment, memory,
+rule adoption, approvals, isolation, egress, skill drift,
+self-visibility, silence — and every claim in the resulting pack
+carries its evidence grade: *measured*, *vendor-documented*, or
+*unmeasured*. The pack text then survives **blind dual-model
+review**: two outside models, a frozen packet, a planted false
+claim (the canary) they have to catch. Findings are verified at
+source before a single word changes.
+
+![Battery scorecard: Grok Bot, OpenBot, Gemini Tasks](docs/assets/scorecard.svg)
+
+The failures shape the packs as much as the passes. Test 6 fails
+on every platform measured — no platform isolates one agent from
+another — so the coordination module is excluded from both
+platform profiles, and the packs say so on page one. Gemini Tasks
+measured as a pattern set, not a profile, so there is no Gemini
+profile. The kit would rather ship less, honestly graded, than
+more, hopefully described.
+
+## Before / after
+
+| | Stock agent | With the kit |
+|---|---|---|
+| **Memory** | Whatever fits in the chat; gone next session | Compiled memory with provenance, superseded history, verify pointers, a linter |
+| **Irreversible actions** | Acts, then tells you | Stops at a ticket: exact action, exact total, exact fallback — void if any detail changes |
+| **Scheduled jobs** | Fire and hope; silence means nothing | Every run leaves a record; a missing record is itself the alert |
+| **"Done"** | The agent says so | Verified against the live system, never the worker's report alone |
+| **Decisions** | Scattered across chats, answered twice or never | One numbered queue, cleared by number in the morning brief |
+| **New skills/connectors** | Installed on vibes | Verify-before-install: pinned version, full read, reads/writes/network disclosed |
 
 ## Quickstart
 
@@ -129,6 +171,7 @@ check you can run against your *current* setup, kit or no kit, and
 `docs/what-to-stop-doing.md` is its companion: the early-agent-era
 practices the field has measured and retired, each with the kit
 pattern that replaced it.
+
 ## Design principles
 
 One-line summaries of the kit's constitutional rules; the operative
@@ -203,7 +246,7 @@ procedures, templates, and the wizard itself are original to this kit.
 README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
-docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed)
+docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed) · assets/ (README graphics)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (profiles + library data)
 platforms/           ← platform packs: grok/, openbot/ (README for people · WIZARD.md overlay · template contents)
 directory.json       ← generated catalog of the core library (tools/build_directory.py) · advisories.json (generated; advisories.yaml is its human-maintained source)
@@ -227,35 +270,7 @@ tools/               ← kit_selfcheck.py (the kit lints itself) · module_yaml.
 Rehearsed, and then audited — repeatedly, by fresh agents in
 sandboxes and by two outside models in blind review rounds. The
 record, including what has *not* been rehearsed, is
-`docs/REHEARSALS.md`; the history is `docs/ROADMAP.md`. v0.9 adds:
-module 10, the deadlines & expiry register — the first module
-designed under the library spec in `docs/library.md`, its data
-class declared and its register an accumulating file; it was
-rehearsed once at the v0.9 candidate (run 13, at abb9f86) and has
-changed since — unrehearsed at this pin, and labeled that way.
-Module 02 gains the promises & waiting-on ledger (the
-return-and-refund tracker is its worked example) and the scam &
-impersonation shield in triage — module 06's
-content-is-not-instructions rule turned outward, with a pointer
-from module 06.
-
-On the unreleased **library branch**, the design in
-`docs/library.md` is implemented: a `module.yaml` per module
-(strict flat subset, fail-loud parser, MODULE.md header parity
-checked by the selfcheck) replaces the manifest fragments;
-qualified ids (`core/<module>`) throughout; `directory.json` and
-`advisories.json` are generated at the repo root by
-`tools/build_directory.py`; and the wizard gains the lifecycle
-verbs — list installed / available / upgradable, suspend, the
-narrowed repair, inspect, rollback, reconfigure, add/remove
-library. A one-module field library (home operations) pilots the
-package format from a separate local repository. The branch is
-not a release: the verbs have not yet had a fresh-agent
-rehearsal, and the merge is the maintainer's call. The branch
-also adds module 11, persona & soul: the authoring interview,
-template, and linter for the persona file every install already
-has, rehearsed in runs 16–17 (see `docs/REHEARSALS.md`). It is
-offered per module, not in a profile; which profile it joins,
-if any, is a maintainer call for the merge.
+`docs/REHEARSALS.md`; the history and current state are
+`docs/ROADMAP.md`.
 
 License: MIT (see `LICENSE`).

@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="470" viewBox="0 0 760 470" font-family="-apple-system, 'Segoe UI', Helvetica, Arial, sans-serif">
+  <rect width="760" height="470" rx="10" fill="#f6f8fa"/>
+  <text x="24" y="34" font-size="16" font-weight="600" fill="#1f2328">The ten-test platform battery — measured, not vibes</text>
+  <text x="24" y="54" font-size="12" fill="#57606a">Same battery, three platforms. Every kit claim carries its grade: measured, vendor-documented, or unmeasured.</text>
+
+  <!-- header -->
+  <g font-size="13" font-weight="600" fill="#1f2328">
+    <text x="24" y="86">Test</text>
+    <text x="470" y="86" text-anchor="middle">Grok Bot</text>
+    <text x="575" y="86" text-anchor="middle">OpenBot</text>
+    <text x="680" y="86" text-anchor="middle">Gemini Tasks</text>
+  </g>
+  <line x1="24" y1="96" x2="736" y2="96" stroke="#d0d7de"/>
+
+  <!-- rows: y = 118 + i*30; cells 84x22 centered at 470/575/680 -->
+  <g font-size="13" fill="#1f2328">
+    <text x="24" y="121">1 · Instruction loading</text>
+    <text x="24" y="151">2 · Routine environment</text>
+    <text x="24" y="181">3 · Persistence &amp; memory</text>
+    <text x="24" y="211">4 · Rule adoption</text>
+    <text x="24" y="241">5 · Approval model</text>
+    <text x="24" y="271">6 · Scope &amp; isolation</text>
+    <text x="24" y="301">7 · Egress (branch + tag)</text>
+    <text x="24" y="331">8 · Skill portability &amp; drift</text>
+    <text x="24" y="361">9 · Self-visibility</text>
+    <text x="24" y="391">10 · Silence &amp; detection</text>
+  </g>
+
+  <!-- Grok: P P Pa Pa P F P P P P -->
+  <g font-size="11" font-weight="600" text-anchor="middle">
+    <rect x="428" y="105" width="84" height="22" rx="5" fill="#1a7f37"/><text x="470" y="120" fill="#ffffff">Pass</text>
+    <rect x="428" y="135" width="84" height="22" rx="5" fill="#1a7f37"/><text x="470" y="150" fill="#ffffff">Pass</text>
+    <rect x="428" y="165" width="84" height="22" rx="5" fill="#bf8700"/><text x="470" y="180" fill="#ffffff">Partial</text>
+    <rect x="428" y="195" width="84" height="22" rx="5" fill="#bf8700"/><text x="470" y="210" fill="#ffffff">Partial</text>
+    <rect x="428" y="225" width="84" height="22" rx="5" fill="#1a7f37"/><text x="470" y="240" fill="#ffffff">Pass</text>
+    <rect x="428" y="255" width="84" height="22" rx="5" fill="#cf222e"/><text x="470" y="270" fill="#ffffff">Fail</text>
+    <rect x="428" y="285" width="84" height="22" rx="5" fill="#1a7f37"/><text x="470" y="300" fill="#ffffff">Pass</text>
+    <rect x="428" y="315" width="84" height="22" rx="5" fill="#1a7f37"/><text x="470" y="330" fill="#ffffff">Pass</text>
+    <rect x="428" y="345" width="84" height="22" rx="5" fill="#1a7f37"/><text x="470" y="360" fill="#ffffff">Pass</text>
+    <rect x="428" y="375" width="84" height="22" rx="5" fill="#1a7f37"/><text x="470" y="390" fill="#ffffff">Pass</text>
+  </g>
+
+  <!-- OpenBot: Pa P P Pa Pa F P P Pa F -->
+  <g font-size="11" font-weight="600" text-anchor="middle">
+    <rect x="533" y="105" width="84" height="22" rx="5" fill="#bf8700"/><text x="575" y="120" fill="#ffffff">Partial</text>
+    <rect x="533" y="135" width="84" height="22" rx="5" fill="#1a7f37"/><text x="575" y="150" fill="#ffffff">Pass</text>
+    <rect x="533" y="165" width="84" height="22" rx="5" fill="#1a7f37"/><text x="575" y="180" fill="#ffffff">Pass</text>
+    <rect x="533" y="195" width="84" height="22" rx="5" fill="#bf8700"/><text x="575" y="210" fill="#ffffff">Partial</text>
+    <rect x="533" y="225" width="84" height="22" rx="5" fill="#bf8700"/><text x="575" y="240" fill="#ffffff">Partial</text>
+    <rect x="533" y="255" width="84" height="22" rx="5" fill="#cf222e"/><text x="575" y="270" fill="#ffffff">Fail</text>
+    <rect x="533" y="285" width="84" height="22" rx="5" fill="#1a7f37"/><text x="575" y="300" fill="#ffffff">Pass</text>
+    <rect x="533" y="315" width="84" height="22" rx="5" fill="#1a7f37"/><text x="575" y="330" fill="#ffffff">Pass</text>
+    <rect x="533" y="345" width="84" height="22" rx="5" fill="#bf8700"/><text x="575" y="360" fill="#ffffff">Partial</text>
+    <rect x="533" y="375" width="84" height="22" rx="5" fill="#cf222e"/><text x="575" y="390" fill="#ffffff">Fail</text>
+  </g>
+
+  <!-- Gemini: Pa Pa Pa P Pa F F P Pa P -->
+  <g font-size="11" font-weight="600" text-anchor="middle">
+    <rect x="638" y="105" width="84" height="22" rx="5" fill="#bf8700"/><text x="680" y="120" fill="#ffffff">Partial</text>
+    <rect x="638" y="135" width="84" height="22" rx="5" fill="#bf8700"/><text x="680" y="150" fill="#ffffff">Partial</text>
+    <rect x="638" y="165" width="84" height="22" rx="5" fill="#bf8700"/><text x="680" y="180" fill="#ffffff">Partial</text>
+    <rect x="638" y="195" width="84" height="22" rx="5" fill="#1a7f37"/><text x="680" y="210" fill="#ffffff">Pass</text>
+    <rect x="638" y="225" width="84" height="22" rx="5" fill="#bf8700"/><text x="680" y="240" fill="#ffffff">Partial</text>
+    <rect x="638" y="255" width="84" height="22" rx="5" fill="#cf222e"/><text x="680" y="270" fill="#ffffff">Fail</text>
+    <rect x="638" y="285" width="84" height="22" rx="5" fill="#cf222e"/><text x="680" y="300" fill="#ffffff">Fail</text>
+    <rect x="638" y="315" width="84" height="22" rx="5" fill="#1a7f37"/><text x="680" y="330" fill="#ffffff">Pass</text>
+    <rect x="638" y="345" width="84" height="22" rx="5" fill="#bf8700"/><text x="680" y="360" fill="#ffffff">Partial</text>
+    <rect x="638" y="375" width="84" height="22" rx="5" fill="#1a7f37"/><text x="680" y="390" fill="#ffffff">Pass</text>
+  </g>
+
+  <line x1="24" y1="408" x2="736" y2="408" stroke="#d0d7de"/>
+  <text x="24" y="430" font-size="12" fill="#57606a">Verdicts: Grok Bot and OpenBot ship as platform profiles. Gemini Tasks measured as a pattern set, not a profile —</text>
+  <text x="24" y="448" font-size="12" fill="#57606a">the kit says so instead of pretending otherwise. Test 6 fails everywhere measured: no platform isolates agents yet.</text>
+</svg>
