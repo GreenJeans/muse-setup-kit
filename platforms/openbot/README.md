@@ -34,11 +34,12 @@ conjectured:**
 > Standing rules seed into `AGENTS.md` for chat; every routine
 > carries its full instructions, including the rules it needs.
 
-> **License: OpenBot is PolyForm Noncommercial 1.0.0 —
-> personal, research, and evaluation use only. Commercial
-> use needs a separate license from the vendor.** This pack is
-> documentation and templates; the constraint is on the
-> platform underneath it, and it is yours to respect.
+> **License: the platform (OpenBot) is PolyForm
+> Noncommercial 1.0.0 — personal, research, and evaluation
+> use only. Commercial use needs a separate license from the
+> vendor.** The license is the platform's, not this pack's:
+> the pack is documentation and templates, and the constraint
+> is on the platform underneath it, yours to respect.
 
 ## What this pack is
 
@@ -126,8 +127,13 @@ overlay states the score behind each surface it uses.
   "this OpenBot version plus the provider CLI versions at run
   time."
 
-**Status: battery-measured 2026-11-25 at v0.78.0; not
-rehearsed.** The platform was measured by the battery; no
-end-to-end install of this pack has run. The capability
-answers behind the profile are in
-docs/capability-profiles.md (Platform answers: OpenBot).
+**Status: battery-measured 2026-11-25 at v0.78.0; rehearsed
+2026-11-25 (run 30).** A fresh agent installed this pack
+end-to-end from the pack alone (at main `5749fcb`); the run's
+friction fixes landed in the same pass, so the fixed text is
+unrehearsed — the ledger is docs/REHEARSALS.md. The pack is
+not yet in a release tag: the wizard will offer
+install-from-main at a pinned commit, and its pin rule stops
+before it does. The capability answers behind the profile
+are in docs/capability-profiles.md (Platform answers:
+OpenBot).

@@ -4,12 +4,19 @@ Each definition below is complete as an install would create
 it: the schedule, and the saved instruction **verbatim**, in
 the code block — the exact text to save, with
 `<PLACEHOLDERS>` filled at creation from the user's answers.
-Routines are created paused, their saved instructions read
-back against this text before anything is enabled, and
-enabling one is the user's act, after they have read its
-instruction (battery Test 2, Pass: saved instructions read
-back verbatim, runs execute with full tools, fires measured
-at 0–3 seconds of drift).
+Routines are created paused; each saved instruction is
+compared byte-for-byte with the text below (placeholders
+filled) and the comparison is shown to the user before
+anything is enabled — any other difference (paths
+substituted, glosses added, lines appended) is a failed
+check until the user approves the diff. An instruction that
+paraphrases the template is drift, however reasonable the
+paraphrase reads (run 30's installer paraphrased all three
+and disclosed one change). The installer does not enable
+routines: enabling one is the user's act, after they have
+read its instruction (battery Test 2, Pass: saved
+instructions read back verbatim, runs execute with full
+tools, fires measured at 0–3 seconds of drift).
 
 Every instruction is self-contained, because a run is a fresh
 context and `AGENTS.md` does not reach it (Test 1, Partial):
@@ -24,11 +31,14 @@ missed by the brief, never silently caught up.
 
 Silence is a token, not an instruction: a routine with
 nothing to report answers `[[no-update]]` and appends its
-run-record line. The token is vendor-documented and untested
-(Test 10, Fail: instruction-only silence posted anyway; the
-record line was written correctly) — the first silent run
-after install is the probe, and a post where silence was
-intended is a finding, not a pass.
+run-record line. The token is measured working (follow-up
+probe, 2026-11-25: the token suppressed the post, the record
+line landed; Test 10, Fail, was instruction-only silence
+posting anyway). The first *scheduled* silent run after
+install confirms it on this install — a manual test fire
+does not, because an agent may choose to report a manual run
+(run 30) — and a post where silence was intended is a
+finding, not a pass.
 
 ## kit-morning-brief
 
@@ -61,8 +71,9 @@ renamed for what it watches. It is meant to post nothing
 unless its condition trips; silence runs on the
 `[[no-update]]` token (measured working, 2026-11-25: the
 token suppressed the post and the record line landed), and
-the first silent run on a new install still confirms it
-there — the run-record line is the proof it ran either
+the first *scheduled* silent run on a new install still
+confirms it there — a manual test fire does not discharge
+the check — the run-record line is the proof it ran either
 way. The target named at creation must exist
 before the routine is first enabled; when it is a workspace
 file, creating it is an install step (`template/workspace.md`),
@@ -93,6 +104,13 @@ reporting is the whole job.
 ---END INSTRUCTION---
 
 ## kit-memory-audit
+
+The instruction invokes the memory-audit skill by name.
+Inlining the skill's steps into the instruction instead is
+drift: the skill is the maintained text, and the deferred
+check "a skill invoked in an unattended run" depends on the
+routine actually invoking it (run 30's audit ran an inlined
+procedure; the skill never loaded).
 
 - **Schedule:** weekly (`<TIMEZONE>`, `<TIME>` chosen at
   creation and read back from the routines store).

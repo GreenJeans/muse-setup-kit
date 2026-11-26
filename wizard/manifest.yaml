@@ -44,9 +44,9 @@ profiles:
     platform: openbot
     modules: [core/core-procedures, core/memory-architecture]
     platform_files: [platforms/openbot/WIZARD.md, platforms/openbot/template/agents-md.md, platforms/openbot/template/skills/kit-bootstrap/SKILL.md, platforms/openbot/template/skills/memory-audit/SKILL.md, platforms/openbot/template/routines.md, platforms/openbot/template/workspace.md]
-    audit_words: 29200
-    rehearsed_at: null
-    pitch: "For OpenBot, single-agent only. Module 00 as an AGENTS.md seed (binds in interactive chat; routine templates embed their own rule copies, because AGENTS.md does not reach routine runs), module 01 both halves (no platform memory schema — the kit's markdown memory lives in the workspace, and the audit runs over files), routine templates as the jobs layer, and Access-mode plus credential-grant recipes. Module 04 is excluded: the platform's isolation test failed — every agent in one container can read every other agent's files. Battery-measured 2026-11-25 at v0.78.0; not rehearsed."
+    audit_words: 30300
+    rehearsed_at: "run 30 (2026-11-25) on main at 5749fcb; fix-pass text changed since, re-rehearsal pending"
+    pitch: "For OpenBot, single-agent only. Module 00 as an AGENTS.md seed (binds in interactive chat; routine templates embed their own rule copies, because AGENTS.md does not reach routine runs), module 01 both halves (no platform memory schema — the kit's markdown memory lives in the workspace, and the audit runs over files), routine templates as the jobs layer, and Access-mode plus credential-grant recipes. Module 04 is excluded: the platform's isolation test failed — every agent in one container can read every other agent's files. Battery-measured 2026-11-25 at v0.78.0; rehearsed in run 30 (2026-11-25); the fix-pass text is unrehearsed."
   # Everything else (household-hq, ai-exchange, evaluation-kit,
   # skill-lifecycle, deadlines-register, persona-soul,
   # spaces-dashboards) is offered

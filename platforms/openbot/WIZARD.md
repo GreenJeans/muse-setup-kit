@@ -39,12 +39,15 @@ plan.
    Partial). Standing rules seed into `AGENTS.md` for chat;
    every routine carries its full instructions, including
    the rules it needs.
-4. **License: OpenBot is PolyForm Noncommercial 1.0.0 —
-   personal, research, and evaluation use only; commercial
-   use needs a separate license from the vendor**
-   (vendor-documented, the
-   platform's LICENSE). The plan states this where the user
-   will see it before the install closes.
+4. **License: the platform (OpenBot) is PolyForm
+   Noncommercial 1.0.0 — personal, research, and evaluation
+   use only; commercial use needs a separate license from
+   the vendor** (vendor-documented, the platform's LICENSE).
+   The license is the platform's, not this pack's — the pack
+   is documentation and templates. State it that way in the
+   plan, where the user will see it before the install
+   closes; "the profile is PolyForm" is a misreading the
+   rehearsal produced twice.
 
 Warning 1 reaches past the files an agent chooses to write. In
 the battery, a copy of a test canary file landed in
@@ -153,8 +156,9 @@ and which provider CLI is in use:
   recommends API-key auth for SDK-driven use; vendor-
   documented). Billing is invisible from inside the agent
   (Test 9, Partial: honestly unreadable); usage lives in the
-  app's Settings, not the agent. Name the bucket in the
-  plan, user-stated.
+  app's Settings, not the agent. Ask the user and name the
+  bucket in the plan; an install does not close with the
+  bucket unstated (run 30's install never asked).
 
 ## Module 00 on OpenBot — an AGENTS.md seed
 
@@ -214,7 +218,12 @@ The audit half runs over those files with a real shell:
   as current beside its replacement, precise figures without
   verify pointers, a log entry claiming work no run-record
   line supports. The module's reference linter runs as-is —
-  there is a shell to run it with. Findings are candidates;
+  there is a shell to run it with — scoped to the memory
+  files (the long-term file, the daily logs, the person and
+  group pages), not the whole workspace: the kit checkout
+  and the skill folders are not memory files, and a
+  workspace-wide sweep buries the findings (run 30: ~115
+  out-of-scope findings). Findings are candidates;
   a mind decides each one — module 01's rule, unchanged.
 - *Fidelity.* Sample claims at random and check each against
   its source: the daily log, the run-record, the user's own
@@ -252,13 +261,24 @@ disciplines, all measured unless labeled:
 
 - **Verbatim saved instructions.** A routine's saved
   instruction is read back from storage after creation and
-  compared with the approved text (Test 2, Pass: instructions
-  matched, and a canary was quoted from storage). The
-  instruction is self-contained: it names the workspace
-  files it reads, the record it appends, and what it posts —
-  because a run is a fresh context that holds only its
-  instruction and the files it is told to read, and
-  `AGENTS.md` does not reach it (Test 1).
+  compared byte-for-byte with the template text, placeholders
+  filled (Test 2, Pass: instructions matched, and a canary
+  was quoted from storage). An instruction that paraphrases
+  the template — however reasonable the paraphrase — is
+  drift, and drift the user has not seen as a diff is a
+  defect (run 30: all three instructions paraphrased, one
+  change disclosed). The instruction is self-contained: it
+  names the workspace files it reads, the record it appends,
+  and what it posts — because a run is a fresh context that
+  holds only its instruction and the files it is told to
+  read, and `AGENTS.md` does not reach it (Test 1).
+- **The audit routine invokes the skill.** Its saved
+  instruction names the memory-audit skill; inlining the
+  skill's steps into the instruction is drift of the same
+  kind — the skill is the maintained text, and the deferred
+  check "a skill invoked in an unattended run" depends on
+  the routine actually invoking it (run 30's audit ran an
+  inlined procedure; the skill never loaded).
 - **The run-record pattern.** Every routine appends one line
   per run to a workspace record file — name, timestamp,
   one-line outcome — whether or not it posts anything. A
@@ -273,9 +293,12 @@ disciplines, all measured unless labeled:
   2026-11-25: the token suppressed the post, the record
   line landed). Instruction-only silence posted anyway
   (Test 10, Fail) — the token is not optional. The first
-  silent-watch run after install is therefore a deferred
-  check with teeth — if it posts, that is a finding to
-  surface, not a pass to assume.
+  *scheduled* silent-watch run after install is therefore a
+  deferred check with teeth — if it posts, that is a finding
+  to surface, not a pass to assume. A manual test fire is
+  not evidence for this check: run 30's manual fire posted,
+  because the agent judged a manual run should report. The
+  check discharges only on a scheduled run.
 - **Timing.** Fires measured 0–3 seconds of drift (Test 2) —
   detector windows can be tight, and the run-record detector
   is kept anyway. Fires while the host sleeps do not run;
@@ -390,8 +413,10 @@ at the measured pin; the battery did not exercise an upgrade:
 - **Analytics**: production builds send metadata events, the
   opt-in starts ticked for US users, and turning it off
   still sends anonymous install events (vendor-documented).
-  The install turns it off at first run and the plan records
-  it as known egress either way.
+  The control is "Link analytics to my account": the install
+  unlinks it at first run — there is no full off — and the
+  plan records the remaining anonymous metadata as known
+  egress either way (run 30 read the setting's own text).
 
 ## Install steps — how the template contents become an install
 
@@ -400,11 +425,14 @@ repo. They become an install in this order:
 
 1. **Stage the platform** per the update posture above
    (pinned image, attestation verified, no published ports)
-   and create the agent. Turn analytics off at first run and
-   record it in the plan as known egress either way (see
-   Update posture). The plan names every agent already
-   in the container, because each one holds the access this
-   install is about to use (warning 1).
+   and create the agent. Unlink analytics from the account
+   at first run and record the remaining anonymous metadata
+   in the plan as known egress (see Update posture). The
+   plan names every agent already in the container — read
+   from the app or the store, not from the installing
+   agent's account — because each one holds the access this
+   install is about to use (warning 1). Run 30's installer
+   left this unchecked; the Verify list carries it.
 2. **Write the `AGENTS.md` seed** from
    `template/agents-md.md`, placeholders filled, put in
    place by the user (or written by the agent and read back
@@ -423,12 +451,20 @@ repo. They become an install in this order:
    platform generates its frontmatter from the skill text,
    so a frontmatter diff is not drift (Test 8).
 5. **Create the routines** from `template/routines.md`,
-   saved instructions verbatim, left paused. Read each
-   saved instruction back against the approved text before
-   enabling anything; enabling each routine afterwards is
-   the user's act, after they have read its instruction.
-   Real schedule values are chosen with the user at
-   creation; the plan records each routine's cadence.
+   saved instructions verbatim, left paused. Compare each
+   saved instruction byte-for-byte with the template text
+   (placeholders filled) and show the comparison to the
+   user before enabling anything: any other difference —
+   paths substituted, glosses added, lines appended — is a
+   failed check until the user approves the diff. Run 30's
+   installer paraphrased every instruction and disclosed one
+   of the changes; the byte-compare is what catches the
+   rest. The installer does not enable routines: enabling
+   each one is the user's act, after they have read its
+   instruction — even where the platform lets the agent
+   enable them. Real schedule values are chosen with the
+   user at creation; the plan records each routine's
+   cadence.
 6. **Set the Access mode and record the grants** — as found
    first, then as confirmed — in `SETUP-PLAN.md`, with the
    user present (see Approvals). Confirm the local-scripts
@@ -453,13 +489,19 @@ instead, or the install does not close.
 ## Verify (this pack)
 
 *At install:* the `AGENTS.md` seed in place, read back, and
-shown binding in a fresh interactive conversation; the
-Access mode and any credential grants recorded as found
+shown binding in a fresh interactive conversation; every
+agent already in the container named in the plan (read from
+the app or the store, not the installing agent's account);
+the Access mode and any credential grants recorded as found
 before the install changed them, and read back as the user
-confirmed them; the local-scripts API confirmed off; each
-routine created paused-then-enabled per the plan, its saved
-instruction read back verbatim against the approved text and
-its cadence in the plan's routines section; the run-record
+confirmed them; the local-scripts API confirmed off (from
+the agent's settings surface — if the installer cannot read
+it, the user confirms in the app and the plan records who
+confirmed); each routine created paused and enabled by the
+user per the plan, its saved instruction compared
+byte-for-byte with the template text (placeholders filled,
+the comparison shown to the user) and its cadence in the
+plan's routines section; the run-record
 file created with its header; the decision queue,
 `SETUP-PLAN.md`, and the memory files in the workspace,
 created from the `template/workspace.md` starters and module
@@ -467,17 +509,19 @@ created from the `template/workspace.md` starters and module
 compared, frontmatter excepted); the watch routine's target
 in place as its definition describes it, before the watch is
 enabled; jobs reconciliation read from the routines store or
-UI — not from the agent; analytics confirmed off at first
-run and recorded as known egress; the egress decision
+UI — not from the agent; analytics unlinked from the
+account at first run, the remaining anonymous metadata
+recorded as known egress; the egress decision
 recorded (no credential, or "Only this agent" with its
 scope — Test 7, Pass); the data-volume (/data) backup
 recorded before any upgrade is contemplated.
 
 *Deferred:* the first brief run lands inside its window and
-appends its line; the first silent-watch run appends its
-line with no post — confirming the measured `[[no-update]]`
-mechanism on this install, where a post is a finding, not
-a pass; the first memory audit runs and
+appends its line; the first *scheduled* silent-watch run
+appends its line with no post — confirming the measured
+`[[no-update]]` mechanism on this install, where a post is
+a finding, not a pass, and where a manual test fire does
+not discharge the check; the first memory audit runs and
 its findings are decided; a skill invoked in a fresh session
 and in an unattended run; the first fire after a host sleep
 gap surfaced as missed rather than silently caught up. Each

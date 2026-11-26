@@ -66,8 +66,9 @@ bucket: <BUCKET, user-stated>.
 ## Agents in this container
 
 <!-- Every agent already in this container, named at install
-— each one holds the access this install uses (warning 1).
-Later additions get their own dated entries. -->
+— read from the app or the store, not from the installing
+agent's account; each one holds the access this install uses
+(warning 1). Later additions get their own dated entries. -->
 
 ## AGENTS.md seed log
 
@@ -100,8 +101,9 @@ Every later change gets its own dated sub-entry. -->
 branch + tag push under a scoped "Only this agent" grant.
 Credential granted: none / "Only this agent" (scope: <SCOPE>)
 — the user's decision, recorded either way. Egress rides
-the ticket rule. Analytics: off at first run (confirmed
-<DATE>) — recorded as known egress either way. -->
+the ticket rule. Analytics: unlinked from the account at
+first run (confirmed <DATE>); anonymous metadata still
+flows — recorded as known egress either way. -->
 
 ## Backup
 
@@ -119,7 +121,13 @@ the agent. -->
 
 <!-- One line per check: what will be verified, its due
 date, and what surfaces it. A check with no routine to
-surface it is a failed check. -->
+surface it is a failed check. The standard set, copied at
+install (run 30's ledger omitted one): the first brief run
+lands in its window; the first *scheduled* silent-watch run
+appends its line with no post (a manual fire does not
+discharge it); the first memory audit runs; a skill invoked
+in a fresh session and in an unattended run; the first fire
+after a host sleep gap surfaced as missed. -->
 ---END FILE---
 
 ## Memory files — module 01's shapes, in the workspace

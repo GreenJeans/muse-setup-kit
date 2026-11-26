@@ -11,7 +11,10 @@ kit's own. Pack-authored for the Muse Setup Kit's OpenBot
 profile; the platform surfaces it uses were measured in the
 2026-11-25 battery (OpenBot v0.78.0: no platform memory
 schema, files plus `AGENTS.md` are the memory, real shell in
-runs); the skill itself is unrehearsed.
+runs); rehearsed as part of the pack in run 30 (2026-11-25)
+— installed verbatim, with its unattended invocation still
+owed (that run's audit executed an inlined procedure; the
+pack's routines template now names that a defect).
 
 1. **Inventory.** List the memory files and what each holds:
    the long-term file (`MEMORY.md`), the daily logs in
@@ -25,7 +28,11 @@ runs); the skill itself is unrehearsed.
    dates, or amounts without a `(verify: ...)` pointer; a
    log entry claiming work no run-record line supports. The
    module's reference linter may be run over the files — the
-   shell is there to run it. Findings are candidates, listed
+   shell is there to run it — scoped to the memory files
+   only (`MEMORY.md`, `memory/logs/`, `memory/people/`,
+   `memory/groups/`): the kit checkout and the skill folders
+   are not memory files, and a workspace-wide sweep buries
+   the findings. Findings are candidates, listed
    with both sides quoted. Decide nothing yourself.
 3. **Fidelity.** Pick a sample of claims at random and check
    each against its source — the daily log, the run-record,
