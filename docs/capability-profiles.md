@@ -8,6 +8,11 @@ the degradation actually is. It is generated from the modules'
 fields); if the two ever disagree, the `module.yaml` wins and this
 page has a bug.
 
+The platform answers behind this matrix are measured, not
+assumed: each platform runs the Ten-Test Battery
+(`docs/method.md`) on a pinned staging before it gets a
+profile, and every claim here carries its evidence grade.
+
 Legend: **required** = the module will not install without it.
 **degrades** = installs and works; the named function weakens.
 **—** = unaffected.

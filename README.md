@@ -1,8 +1,9 @@
 # 🧰 Muse Setup Kit
 
-> *Turn a fresh Muse install into a disciplined personal agent —*
-> *procedures, memory, a morning brief, and (if you want them)*
-> *multi-person and multi-agent coordination patterns.*
+> *A modular discipline layer for personal agents — procedures,
+> memory, a morning brief, and (if you want them) multi-person
+> and multi-agent coordination patterns — measured platform by
+> platform before anything is designed on top of it.*
 
 **Your agent has three failure modes out of the box: it forgets
 everything between sessions, it acts without asking, and it fails
@@ -13,6 +14,37 @@ machinery that make an agent safe to leave running — scrubbed so
 that **patterns travel, instances don't**: no names, accounts,
 infrastructure, or personal data from the original setup appear
 anywhere in this repo.
+
+## What this is — three layers
+
+The kit started on Muse (Meta's personal agent) and now runs,
+in different forms, on several platforms. It is three things,
+and they separate cleanly:
+
+1. **A discipline layer.** Ticket rules for irreversible
+   actions, compiled memory with provenance, verification
+   before "done", engineered silence, evidence grading.
+   Platform-independent ideas, expressed in each platform's
+   native forms — a SOUL/AGENTS file here, memory seeds
+   there, an `AGENTS.md` seed somewhere else.
+2. **A measurement method.** The **Ten-Test Battery**
+   (`docs/method.md`): ten tests that grade what a platform
+   actually does — instruction loading, routines, memory,
+   approvals, isolation, egress, skill drift, self-visibility,
+   silence — plus blind dual review and a rehearsals ledger.
+   The method decides what may be designed on a platform
+   before anything is designed. It is usable without the kit.
+3. **Adapters.** The wizard plus per-platform packs. Modules
+   declare the capabilities they need; platforms are measured
+   for what they have; the wizard installs only what fits,
+   and names every degradation instead of hiding it.
+
+"Muse Setup Kit" is the flagship distribution's name — the
+origin, not the scope. Muse is one adapter among several,
+graded by the same battery, warts included (see the scorecard
+below). If you run a personal agent on any platform, start
+with the profile table in Quickstart; if you are evaluating a
+platform, start with `docs/method.md`.
 
 ---
 
@@ -39,15 +71,19 @@ install it, and what it costs to read first.
 ## Measured, not vibes
 
 Most agent setups are prompt folklore. This one is graded. Before
-a platform gets a kit profile, it runs a **ten-test battery** on a
-pinned staging — instruction loading, routine environment, memory,
-rule adoption, approvals, isolation, egress, skill drift,
-self-visibility, silence — and every claim in the resulting pack
-carries its evidence grade: *measured*, *vendor-documented*, or
-*unmeasured*. The pack text then survives **blind dual-model
-review**: two outside models, a frozen packet, a planted false
-claim (the canary) they have to catch. Findings are verified at
-source before a single word changes.
+a platform gets a kit profile, it runs the **Ten-Test Battery**
+(`docs/method.md` — the method, versioned separately from the
+kit, and usable without it) on a pinned staging — instruction
+loading, routine environment, memory, rule adoption, approvals,
+isolation, egress, skill drift, self-visibility, silence — and
+every claim in the resulting pack carries its evidence grade:
+*measured*, *vendor-documented*, or *unmeasured*. The pack text
+then survives **blind dual-model review**: two outside models, a
+frozen packet, a planted false claim (the canary) they have to
+catch. Findings are verified at source before a single word
+changes. Installs are rehearsed by fresh agents working from
+the pack alone, and the ledger — including what has *not* been
+rehearsed — is `docs/REHEARSALS.md`.
 
 ![Battery scorecard: Muse, Grok Bot, OpenBot, Gemini Tasks](docs/assets/scorecard.svg)
 
@@ -93,7 +129,7 @@ are in docs/capability-profiles.md):
 
 ## Quickstart
 
-Copy this to your Muse. That's the whole install step:
+Copy this to your agent. That's the whole install step:
 
 ```
 Install the Muse Setup Kit for me: clone
@@ -107,8 +143,15 @@ plan before anything is installed, so you can compare it against
 the release page if you want to. Nothing installs before you
 approve that plan.
 
+On Grok Bot or OpenBot, the same prompt works: the wizard reads
+the platform's adapter pack (`platforms/grok/`,
+`platforms/openbot/`) after `wizard/SKILL.md`, and the overlay
+governs where the platforms differ. Read the pack's warnings
+first — each one states, on page one, what the battery measured
+about that platform.
+
 Want an exact pin instead of the latest tag? The release page
-carries the full hash for each release. Give it to your Muse with
+carries the full hash for each release. Give it to your agent with
 the prompt and the wizard will verify the checkout matches it
 exactly, and stop if it doesn't.
 
@@ -135,10 +178,14 @@ that the pinned-commit, plan-before-changes, and nothing-fetched-at-
 install-time rules are intact; if any is missing, you're looking at a
 fork that dropped the safety properties.
 
-**First time? Install a profile, not the whole shelf.** The audit
-cost below is the wizard, the manifest, and every file an install
-reads in that profile's modules (MODULE.md, VERIFY.md, templates,
-and tools) — the reading the request above actually asks for:
+**First time? Install a profile, not the whole shelf.** A
+profile is the kit's modules in one platform's forms — Starter
+and Standard are the Muse forms; Grok Bot and OpenBot are
+adapters, the same modules reshaped by what their batteries
+measured. The audit cost below is the wizard, the manifest, and
+every file an install reads in that profile's modules
+(MODULE.md, VERIFY.md, templates, and tools) — the reading the
+request above actually asks for:
 
 | Profile | Modules | Audit cost | What you get |
 |---|---|---|---|
@@ -267,7 +314,7 @@ procedures, templates, and the wizard itself are original to this kit.
 README.md            ← you are here
 UPGRADING.md         ← moving an existing install to a newer pin
 UNINSTALL.md         ← removing an install, verified clean
-docs/                ← DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed) · assets/ (README graphics)
+docs/                ← method.md (the Ten-Test Battery — the measurement method, usable without the kit) · DESIGN.md (reasoning) · ROADMAP.md (status) · REHEARSALS.md (what's been rehearsed, honestly) · library.md (the module-library design) · capability-profiles.md (the capability matrix) · governance-test.md (standalone check) · examples/ (a worked example from a real rehearsal) · patterns/ (reference, not installed) · assets/ (README graphics)
 wizard/              ← SKILL.md (the wizard) · manifest.yaml (profiles + library data)
 platforms/           ← platform packs: grok/, openbot/ (README for people · WIZARD.md overlay · template contents)
 directory.json       ← generated catalog of the core library (tools/build_directory.py) · advisories.json (generated; advisories.yaml is its human-maintained source)
