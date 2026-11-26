@@ -64,6 +64,22 @@ egress, self-visibility, and silence; weakest exactly where the
 kit's disciplines compensate, per-chat instruction loading and
 isolation.
 
+What each grade means for you, test by test (per-platform causes
+are in docs/capability-profiles.md):
+
+| Test | The question | If it doesn't pass |
+|---|---|---|
+| 1 · Instruction loading | Do standing rules you write bind in every conversation and every scheduled run? | Rules live only where the platform auto-loads them; the pack puts them there, and routines carry their own copies |
+| 2 · Routine environment | Do scheduled runs get the same files and tools as chat? | Routines can't be trusted with real work; jobs stay interactive |
+| 3 · Persistence & memory | Does the agent remember across sessions, in a store you can read and fix? | Memory is platform-owned or absent; the kit's audit half may not run |
+| 4 · Rule adoption | Does a rule in a file bind, or only rules you state in conversation? | File rules are documentation, not law; standing rules go in the auto-loaded surface |
+| 5 · Approval model | Does the platform stop before irreversible actions and ask? | The stop is procedure, not machinery; the ticket rule rides in text and credential grants |
+| 6 · Scope & isolation | Can one agent read another's files and credentials? | It can, everywhere measured; the kit designs single-agent and excludes coordination |
+| 7 · Egress | Can the agent push a branch and tag under a scoped credential? | No repo work from the agent; egress stays manual |
+| 8 · Skill drift | Does a saved skill stay word-for-word and load unattended? | Skills get rewritten on save; pin and diff them, or expect elaboration |
+| 9 · Self-visibility | Can the agent read its own billing, jobs, and connections? | Spend and jobs are reconciled from outside, never by asking the agent |
+| 10 · Silence & detection | Can a watcher stay silent, and can you tell silence from death? | Silence needs a mechanism (a token plus a run-record), not an instruction |
+
 ## Before / after
 
 | | Stock agent | With the kit |
